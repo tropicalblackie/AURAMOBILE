@@ -581,6 +581,73 @@ html,body{
 .badge-desc{font-size:.58rem;color:var(--t4);line-height:1.2}
 .badge-date{font-size:.55rem;color:var(--or);font-weight:600;margin-top:2px}
 
+/* ══════ EXERCISE LIBRARY & BUILDER ══════ */
+.exlib-ov{position:absolute;inset:0;z-index:3600;display:none;flex-direction:column;background:var(--bg)}
+.exlib-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.exlib-search{margin:0 20px 10px;padding:.7rem 1rem .7rem 2.4rem;background:var(--s8);border:1px solid var(--s7);border-radius:12px;color:var(--t1);font-size:.88rem;font-family:var(--fb);outline:none;width:calc(100% - 40px);box-sizing:border-box;transition:border-color .2s}
+.exlib-search:focus{border-color:var(--or)}
+.exlib-search-wrap{position:relative}
+.exlib-search-wrap svg{position:absolute;left:32px;top:50%;transform:translateY(-50%);color:var(--t4)}
+.exlib-filters{display:flex;gap:6px;padding:0 20px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.exlib-filters::-webkit-scrollbar{display:none}
+.exf{padding:.45rem .85rem;font-size:.72rem;font-weight:700;border-radius:50px;background:var(--s8);color:var(--t3);cursor:pointer;border:1px solid transparent;white-space:nowrap;transition:all .2s}
+.exf.on{background:#f9731615;color:var(--or);border-color:var(--or)}
+.ex-card{display:flex;gap:12px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:16px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.ex-card:active{transform:scale(.98);border-color:var(--or)}
+.ex-thumb{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--s8);display:flex;align-items:center;justify-content:center}
+.ex-thumb img{width:100%;height:100%;object-fit:cover}
+.ex-thumb-emoji{font-size:1.8rem}
+.ex-info{flex:1;min-width:0}
+.ex-info-name{font-weight:700;font-size:.88rem;margin-bottom:2px}
+.ex-info-muscle{font-size:.68rem;color:var(--or);font-weight:600}
+.ex-info-desc{font-size:.7rem;color:var(--t3);margin-top:3px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ex-info-meta{display:flex;gap:8px;margin-top:5px;font-size:.62rem;color:var(--t4)}
+.ex-info-meta span{display:flex;align-items:center;gap:3px}
+.ex-add-btn{width:34px;height:34px;border-radius:50%;background:var(--or);color:#fff;border:none;font-size:1.1rem;cursor:pointer;flex-shrink:0;align-self:center;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ex-add-btn:active{transform:scale(.9);background:var(--or2)}
+
+/* Exercise detail modal */
+.exdet-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
+.exdet-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.exdet-hero{height:200px;background:var(--s8);display:flex;align-items:center;justify-content:center;position:relative}
+.exdet-hero img{height:100%;object-fit:contain}
+.exdet-hero-emoji{font-size:4rem}
+.exdet-body{padding:20px}
+.exdet-name{font-family:var(--fd);font-size:1.3rem;font-weight:800;margin-bottom:4px}
+.exdet-muscle{font-size:.78rem;color:var(--or);font-weight:600;margin-bottom:10px}
+.exdet-desc{font-size:.85rem;color:var(--t2);line-height:1.5;margin-bottom:16px}
+.exdet-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.exdet-step{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;color:var(--t2)}
+.exdet-step-num{width:24px;height:24px;border-radius:50%;background:var(--or);color:#fff;font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Workout builder */
+.wb-ov{position:absolute;inset:0;z-index:3500;display:none;flex-direction:column;background:var(--bg)}
+.wb-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.wb-empty{text-align:center;padding:32px 16px;color:var(--t4);font-size:.82rem}
+.wb-empty b{display:block;font-size:1rem;color:var(--t2);margin-bottom:6px}
+.wb-plan{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:14px;margin-bottom:10px}
+.wb-plan-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.wb-plan-name{font-family:var(--fd);font-weight:800;font-size:1rem}
+.wb-plan-count{font-size:.7rem;color:var(--t4)}
+.wb-plan-exercises{display:flex;flex-direction:column;gap:6px}
+.wb-ex-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--s8);border-radius:10px;font-size:.82rem}
+.wb-ex-name{flex:1;font-weight:600}
+.wb-ex-detail{font-size:.7rem;color:var(--t3)}
+.wb-ex-del{color:var(--re);font-size:.8rem;cursor:pointer;background:none;border:none;padding:4px}
+.wb-plan-actions{display:flex;gap:8px;margin-top:10px}
+.wb-plan-actions button{flex:1;padding:.6rem;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;transition:all .18s}
+.wb-start-btn{background:var(--or);color:#fff}
+.wb-start-btn:active{background:var(--or2)}
+.wb-del-plan{background:var(--s8);color:var(--re)}
+.wb-del-plan:active{background:#ef444415}
+.wb-new-plan{width:100%;padding:.85rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s}
+.wb-new-plan:active{background:var(--or2);transform:scale(.97)}
+
+/* New plan form */
+.wb-form{margin-bottom:14px}
+.wb-form-row{display:flex;gap:8px;margin-bottom:10px}
+.wb-form-row .ep-input{font-size:.85rem;padding:.65rem .8rem}
+
 /* ══════ LEGAL PAGES ══════ */
 .legal-ov{
   position:absolute;inset:0;z-index:4000;
@@ -916,9 +983,17 @@ html,body{
         </div>
 
         <!-- CTA -->
-        <button class="cta pulse" id="start-btn" style="margin-bottom:10px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Inizia Workout Live IA
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <button class="cta pulse" id="start-btn" style="flex:1;margin-bottom:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Workout Live IA
+          </button>
+          <button class="cta" style="flex:1;margin-bottom:0;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openWorkoutBuilder()">
+            📋 Le Mie Schede
+          </button>
+        </div>
+        <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,var(--or),var(--or2))" onclick="openExerciseLibrary()">
+          📚 Libreria Esercizi
         </button>
 
         <!-- Workout live -->
@@ -1551,6 +1626,44 @@ html,body{
   </div>
 </div>
 
+<!-- ═══ EXERCISE LIBRARY OVERLAY ═══ -->
+<div class="exlib-ov" id="exlib-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeExerciseLibrary()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">Libreria Esercizi</div>
+  </div>
+  <div class="exlib-search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="exlib-search" type="text" id="exlib-search" placeholder="Cerca esercizio..." oninput="renderExerciseLibrary()">
+  </div>
+  <div class="exlib-filters" id="exlib-filters"></div>
+  <div class="legal-scroll" style="padding:0 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="exlib-list"></div>
+</div>
+
+<!-- ═══ EXERCISE DETAIL OVERLAY ═══ -->
+<div class="exdet-ov" id="exdet-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeExDetail()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title" id="exdet-title">Esercizio</div>
+  </div>
+  <div class="legal-scroll" style="padding:0" id="exdet-content"></div>
+</div>
+
+<!-- ═══ WORKOUT BUILDER OVERLAY ═══ -->
+<div class="wb-ov" id="wb-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeWorkoutBuilder()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">Le Mie Schede</div>
+  </div>
+  <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="wb-content"></div>
+</div>
+
 <!-- ═══ EDIT PROFILE OVERLAY ═══ -->
 <div class="legal-ov" id="editprof-ov">
   <div class="legal-topbar">
@@ -1651,6 +1764,242 @@ html,body{
 // ═══════════════════════════════════════════════════
 
 const S = { tab:'home', hydration:1.2, hydGoal:2.5, workoutOn:false, wSec:0, wTimer:null, pIdx:0, bpm:72 };
+
+// ── EXERCISE LIBRARY DATA ───────────────────────
+const EXERCISES = [
+  // PETTO
+  {id:'bench',name:'Panca Piana',muscle:'Petto',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bench-Press.gif',
+   desc:'Esercizio fondamentale per il petto. Sdraiati sulla panca, impugna il bilanciere a larghezza spalle, abbassa al petto e spingi.',
+   steps:['Sdraiati sulla panca con i piedi a terra','Impugna il bilanciere leggermente piu largo delle spalle','Abbassa il bilanciere al centro del petto controllando il movimento','Spingi esplosivamente fino alla distensione completa delle braccia']},
+  {id:'incline_db',name:'Panca Inclinata Manubri',muscle:'Petto',emoji:'💪',diff:'Intermedio',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif',
+   desc:'Variante su panca inclinata a 30-45 gradi per enfatizzare il petto alto.',
+   steps:['Imposta la panca a 30-45 gradi','Impugna i manubri e portali alle spalle','Spingi verso l\'alto convergendo leggermente i manubri','Abbassa lentamente fino a sentire lo stretch del petto']},
+  {id:'pushup',name:'Piegamenti (Push-Up)',muscle:'Petto',emoji:'🧑‍💻',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Push-Up.gif',
+   desc:'Esercizio a corpo libero fondamentale per petto, spalle e tricipiti.',
+   steps:['Posizionati in plank con braccia tese','Mani leggermente piu larghe delle spalle','Abbassa il corpo piegando i gomiti fino a sfiorare il pavimento','Spingi esplosivamente tornando in posizione di plank']},
+  {id:'cable_fly',name:'Croci ai Cavi',muscle:'Petto',emoji:'⚔️',diff:'Intermedio',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Crossover.gif',
+   desc:'Isolamento del petto con tensione costante grazie ai cavi.',
+   steps:['Posizionati al centro dei cavi regolati in alto','Inclina leggermente il busto in avanti','Porta le mani al centro con movimento ad arco','Torna lentamente alla posizione di partenza']},
+  // SCHIENA
+  {id:'deadlift',name:'Stacco da Terra',muscle:'Schiena',emoji:'💪',diff:'Avanzato',sets:4,reps:'5-6',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Deadlift.gif',
+   desc:'Re degli esercizi multiarticolari. Coinvolge schiena, gambe e core.',
+   steps:['Piedi alla larghezza delle spalle, bilanciere sulle tibie','Afferra la barra con presa alternata o doppia pronata','Distendi anche e ginocchia simultaneamente mantenendo la schiena neutra','Completa il movimento con le anche completamente estese']},
+  {id:'pullup',name:'Trazioni alla Sbarra',muscle:'Schiena',emoji:'🧗',diff:'Avanzato',sets:4,reps:'6-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pull-Up.gif',
+   desc:'Esercizio fondamentale per dorsali e bicipiti a corpo libero.',
+   steps:['Impugna la sbarra con presa prona piu larga delle spalle','Parti da braccia completamente distese','Tira il corpo verso l\'alto portando il mento sopra la sbarra','Scendi controllando il movimento fino a braccia distese']},
+  {id:'row',name:'Rematore con Bilanciere',muscle:'Schiena',emoji:'🚣',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bent-Over-Row.gif',
+   desc:'Esercizio fondamentale per lo spessore della schiena.',
+   steps:['Inclina il busto a 45 gradi con schiena neutra','Impugna il bilanciere a larghezza spalle','Tira il bilanciere verso l\'ombelico stringendo le scapole','Abbassa controllando il peso']},
+  {id:'lat_pull',name:'Lat Machine',muscle:'Schiena',emoji:'⬇️',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif',
+   desc:'Alternativa guidata alle trazioni per i dorsali.',
+   steps:['Seduto alla macchina, impugna la barra larga','Tira la barra verso il petto sporgendo leggermente il busto','Stringi le scapole in fondo al movimento','Risali lentamente controllando il peso']},
+  // GAMBE
+  {id:'squat',name:'Squat con Bilanciere',muscle:'Gambe',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/BARBELL-SQUAT.gif',
+   desc:'Esercizio fondamentale per quadricipiti, glutei e core.',
+   steps:['Posiziona il bilanciere sulle spalle (trapezio alto)','Piedi alla larghezza delle spalle, punte leggermente in fuori','Scendi piegando anche e ginocchia fino a cosce parallele','Risali spingendo con talloni mantenendo il petto alto']},
+  {id:'leg_press',name:'Leg Press',muscle:'Gambe',emoji:'🦵',diff:'Principiante',sets:4,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Leg-Press.gif',
+   desc:'Pressa per le gambe con guida per sicurezza.',
+   steps:['Seduto sulla macchina, piedi alla larghezza delle spalle sulla pedana','Rilascia i fermi di sicurezza','Piega le ginocchia portando la pedana verso il petto','Spingi la pedana senza bloccare le ginocchia']},
+  {id:'lunge',name:'Affondi con Manubri',muscle:'Gambe',emoji:'🏃',diff:'Principiante',sets:3,reps:'12 per gamba',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lunges.gif',
+   desc:'Esercizio unilaterale per quadricipiti e glutei.',
+   steps:['In piedi con manubri ai fianchi','Fai un passo avanti lungo con una gamba','Abbassa il ginocchio posteriore verso il pavimento','Spingi col tallone anteriore per tornare in posizione']},
+  {id:'rdl',name:'Stacco Rumeno',muscle:'Gambe',emoji:'🦶',diff:'Intermedio',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/06/Barbell-Romanian-Deadlift.gif',
+   desc:'Esercizio per femorali e glutei con enfasi sull\'eccentrica.',
+   steps:['In piedi con bilanciere, ginocchia leggermente flesse','Inclina il busto in avanti spingendo il bacino indietro','Scendi fino a sentire lo stretch nei femorali','Risali contraendo i glutei in cima al movimento']},
+  // SPALLE
+  {id:'ohp',name:'Military Press',muscle:'Spalle',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Overhead-Press.gif',
+   desc:'Esercizio fondamentale per i deltoidi.',
+   steps:['In piedi, bilanciere all\'altezza delle clavicole','Core attivo, piedi alla larghezza delle spalle','Spingi il bilanciere sopra la testa fino a braccia distese','Abbassa lentamente fino alle clavicole']},
+  {id:'lat_raise',name:'Alzate Laterali',muscle:'Spalle',emoji:'🧑‍✈️',diff:'Principiante',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif',
+   desc:'Isolamento dei deltoidi laterali per l\'ampiezza delle spalle.',
+   steps:['In piedi con manubri ai fianchi','Alza le braccia lateralmente fino a parallelo con il pavimento','Mantieni una leggera flessione dei gomiti','Abbassa lentamente resistendo alla gravita']},
+  {id:'face_pull',name:'Face Pull',muscle:'Spalle',emoji:'🎯',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif',
+   desc:'Esercizio per deltoidi posteriori e salute delle spalle.',
+   steps:['Al cavo alto con corda, impugna con presa neutra','Tira la corda verso il viso separando le mani','Ruota esternamente le spalle in fondo al movimento','Torna lentamente alla posizione di partenza']},
+  // BRACCIA
+  {id:'curl',name:'Curl con Bilanciere',muscle:'Braccia',emoji:'💪',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Curl.gif',
+   desc:'Esercizio fondamentale per i bicipiti.',
+   steps:['In piedi con bilanciere in presa supina','Gomiti fissi ai fianchi','Fletti le braccia portando il bilanciere alle spalle','Abbassa lentamente controllando la fase eccentrica']},
+  {id:'hammer',name:'Curl a Martello',muscle:'Braccia',emoji:'🔨',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Hammer-Curl.gif',
+   desc:'Variante del curl per brachiale e brachioradiale.',
+   steps:['In piedi con manubri ai fianchi in presa neutra','Fletti alternando le braccia mantenendo i polsi dritti','Porta i manubri alle spalle senza ruotare','Abbassa controllando il movimento']},
+  {id:'tri_push',name:'Push-down Tricipiti',muscle:'Braccia',emoji:'⬇️',diff:'Principiante',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pushdown.gif',
+   desc:'Isolamento dei tricipiti al cavo.',
+   steps:['Al cavo alto con barra dritta o corda','Gomiti fissi ai fianchi','Distendi le braccia spingendo il peso verso il basso','Torna lentamente alla posizione di partenza']},
+  {id:'dips',name:'Dips alle Parallele',muscle:'Braccia',emoji:'🤸',diff:'Avanzato',sets:3,reps:'8-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Chest-Dip.gif',
+   desc:'Esercizio composto per tricipiti e petto.',
+   steps:['Sospenditi alle parallele con braccia distese','Inclina leggermente il busto in avanti','Piega i gomiti fino a 90 gradi','Spingi tornando alla posizione di partenza']},
+  // CORE
+  {id:'plank',name:'Plank',muscle:'Core',emoji:'🧘',diff:'Principiante',sets:3,reps:'30-60 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Front-Plank.gif',
+   desc:'Esercizio isometrico fondamentale per la stabilita del core.',
+   steps:['Avambracci e punte dei piedi a terra','Corpo in linea retta dalla testa ai piedi','Core e glutei contratti','Mantieni la posizione senza lasciar cadere i fianchi']},
+  {id:'crunch',name:'Crunch',muscle:'Core',emoji:'🦴',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Crunch.gif',
+   desc:'Esercizio classico per i muscoli addominali.',
+   steps:['Sdraiato a terra con ginocchia piegate','Mani dietro la testa o incrociate sul petto','Solleva le spalle dal pavimento contraendo gli addominali','Torna lentamente alla posizione di partenza']},
+  // CARDIO
+  {id:'run',name:'Corsa',muscle:'Cardio',emoji:'🏃',diff:'Principiante',sets:1,reps:'20-40 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Run.gif',
+   desc:'Attivita cardiovascolare fondamentale per resistenza e consumo calorico.',
+   steps:['Riscaldamento di 5 minuti a passo veloce','Mantieni un ritmo costante in zona cardiaca 2-3','Postura eretta, braccia rilassate oscillanti','Defaticamento di 5 minuti a passo lento']},
+  {id:'burpee',name:'Burpees',muscle:'Cardio',emoji:'🔥',diff:'Avanzato',sets:4,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Burpee.gif',
+   desc:'Esercizio ad alta intensita full-body.',
+   steps:['In piedi, scendi in posizione di squat con mani a terra','Lancia i piedi indietro in posizione di plank','Esegui un piegamento (opzionale)','Riporta i piedi vicino alle mani e salta esplosivamente']},
+  {id:'jump_rope',name:'Salto con la Corda',muscle:'Cardio',emoji:'⭕',diff:'Principiante',sets:3,reps:'2-3 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2022/02/Jump-Rope.gif',
+   desc:'Cardio ad alta efficienza per coordinazione e resistenza.',
+   steps:['Impugna la corda con le mani ai fianchi','Ruota la corda con i polsi, non con le braccia','Salta con piccoli rimbalzi sugli avampiedi','Mantieni il core attivo e le ginocchia morbide']},
+];
+
+const MUSCLE_GROUPS = ['Tutti','Petto','Schiena','Gambe','Spalle','Braccia','Core','Cardio'];
+let exlibFilter = 'Tutti';
+
+function openExerciseLibrary() {
+  const ov = document.getElementById('exlib-ov');
+  ov.classList.add('on');
+  // render filters
+  const fBox = document.getElementById('exlib-filters');
+  fBox.innerHTML = MUSCLE_GROUPS.map(g => '<div class="exf' + (g===exlibFilter?' on':'') + '" onclick="setExFilter(\'' + g + '\')">' + g + '</div>').join('');
+  document.getElementById('exlib-search').value = '';
+  renderExerciseLibrary();
+}
+function closeExerciseLibrary() { document.getElementById('exlib-ov').classList.remove('on'); }
+function setExFilter(g) {
+  exlibFilter = g;
+  document.querySelectorAll('.exf').forEach(el => el.classList.toggle('on', el.textContent === g));
+  renderExerciseLibrary();
+}
+function renderExerciseLibrary() {
+  const q = (document.getElementById('exlib-search').value||'').toLowerCase();
+  const list = EXERCISES.filter(e => {
+    if (exlibFilter !== 'Tutti' && e.muscle !== exlibFilter) return false;
+    if (q && !e.name.toLowerCase().includes(q) && !e.muscle.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const el = document.getElementById('exlib-list');
+  if (list.length === 0) { el.innerHTML = '<div class="prog-empty"><b>Nessun esercizio trovato</b>Prova un altro filtro</div>'; return; }
+  el.innerHTML = list.map(e => {
+    const thumb = e.gif ? '<img src="'+e.gif+'" alt="'+e.name+'" loading="lazy">' : '<span class="ex-thumb-emoji">'+e.emoji+'</span>';
+    return '<div class="ex-card" onclick="openExDetail(\'' + e.id + '\')">' +
+      '<div class="ex-thumb">' + thumb + '</div>' +
+      '<div class="ex-info"><div class="ex-info-name">' + e.name + '</div>' +
+      '<div class="ex-info-muscle">' + e.muscle + ' · ' + e.diff + '</div>' +
+      '<div class="ex-info-desc">' + e.desc + '</div>' +
+      '<div class="ex-info-meta"><span>📊 ' + e.sets + 'x' + e.reps + '</span></div></div>' +
+      '<button class="ex-add-btn" onclick="event.stopPropagation();addExToCurrentPlan(\'' + e.id + '\')">+</button></div>';
+  }).join('');
+}
+
+function openExDetail(id) {
+  const e = EXERCISES.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById('exdet-title').textContent = e.name;
+  const hero = e.gif ? '<img src="'+e.gif+'" alt="'+e.name+'" style="height:100%;object-fit:contain">' : '<span class="exdet-hero-emoji">'+e.emoji+'</span>';
+  document.getElementById('exdet-content').innerHTML =
+    '<div class="exdet-hero">' + hero + '</div>' +
+    '<div class="exdet-body">' +
+    '<div class="exdet-name">' + e.name + '</div>' +
+    '<div class="exdet-muscle">' + e.muscle + ' · ' + e.diff + ' · ' + e.sets + 'x' + e.reps + '</div>' +
+    '<div class="exdet-desc">' + e.desc + '</div>' +
+    '<div style="font-weight:700;font-size:.85rem;margin-bottom:8px">Come eseguirlo</div>' +
+    '<div class="exdet-steps">' + e.steps.map((s,i) => '<div class="exdet-step"><div class="exdet-step-num">'+(i+1)+'</div><div>'+s+'</div></div>').join('') + '</div>' +
+    '<button class="ep-save" onclick="addExToCurrentPlan(\'' + e.id + '\');closeExDetail()">+ Aggiungi alla Scheda</button>' +
+    '</div>';
+  document.getElementById('exdet-ov').classList.add('on');
+}
+function closeExDetail() { document.getElementById('exdet-ov').classList.remove('on'); }
+
+// ── WORKOUT BUILDER ──────────────────────────
+const WB_KEY = 'aura_workouts';
+function getWorkouts() {
+  try { return JSON.parse(localStorage.getItem(WB_KEY)) || []; } catch { return []; }
+}
+function saveWorkouts(w) { localStorage.setItem(WB_KEY, JSON.stringify(w)); }
+
+let wbEditingIdx = -1; // -1 = none, >= 0 = editing plan index
+
+function openWorkoutBuilder() {
+  document.getElementById('wb-ov').classList.add('on');
+  wbEditingIdx = -1;
+  renderWorkoutBuilder();
+}
+function closeWorkoutBuilder() { document.getElementById('wb-ov').classList.remove('on'); }
+
+function renderWorkoutBuilder() {
+  const plans = getWorkouts();
+  const el = document.getElementById('wb-content');
+  if (plans.length === 0 && wbEditingIdx < 0) {
+    el.innerHTML = '<div class="wb-empty"><b>Nessuna scheda creata</b>Crea la tua prima scheda personalizzata</div>' +
+      '<button class="wb-new-plan" onclick="startNewPlan()">+ Crea Nuova Scheda</button>';
+    return;
+  }
+  let html = '';
+  plans.forEach((p, pi) => {
+    html += '<div class="wb-plan"><div class="wb-plan-hd"><div class="wb-plan-name">' + p.name + '</div><div class="wb-plan-count">' + p.exercises.length + ' esercizi</div></div>';
+    html += '<div class="wb-plan-exercises">';
+    p.exercises.forEach((ex, ei) => {
+      const e = EXERCISES.find(x => x.id === ex.id);
+      const name = e ? e.name : ex.id;
+      html += '<div class="wb-ex-row"><span>' + (e?e.emoji:'') + '</span><span class="wb-ex-name">' + name + '</span><span class="wb-ex-detail">' + ex.sets + 'x' + ex.reps + (ex.rest?' · ' + ex.rest + 's rest':'') + '</span><button class="wb-ex-del" onclick="removeExFromPlan(' + pi + ',' + ei + ')">✕</button></div>';
+    });
+    html += '</div>';
+    html += '<div class="wb-plan-actions"><button class="wb-start-btn" onclick="openExerciseLibrary();wbEditingIdx=' + pi + '">+ Esercizi</button><button class="wb-del-plan" onclick="deletePlan(' + pi + ')">Elimina</button></div></div>';
+  });
+  html += '<button class="wb-new-plan" onclick="startNewPlan()">+ Crea Nuova Scheda</button>';
+  el.innerHTML = html;
+}
+
+function startNewPlan() {
+  const name = prompt('Nome della scheda:');
+  if (!name || !name.trim()) return;
+  const plans = getWorkouts();
+  plans.push({ name: name.trim(), exercises: [] });
+  saveWorkouts(plans);
+  wbEditingIdx = plans.length - 1;
+  renderWorkoutBuilder();
+  toast('📋 Scheda "' + name.trim() + '" creata!', 'gr');
+}
+
+function addExToCurrentPlan(exId) {
+  const plans = getWorkouts();
+  if (plans.length === 0) {
+    const name = prompt('Crea prima una scheda. Nome:');
+    if (!name || !name.trim()) return;
+    plans.push({ name: name.trim(), exercises: [] });
+    wbEditingIdx = 0;
+  }
+  if (wbEditingIdx < 0 || wbEditingIdx >= plans.length) {
+    // Ask which plan
+    if (plans.length === 1) { wbEditingIdx = 0; }
+    else {
+      const names = plans.map((p,i) => (i+1) + '. ' + p.name).join('\n');
+      const choice = prompt('A quale scheda? Inserisci il numero:\n' + names);
+      const idx = parseInt(choice) - 1;
+      if (isNaN(idx) || idx < 0 || idx >= plans.length) { toast('Scheda non valida','re'); return; }
+      wbEditingIdx = idx;
+    }
+  }
+  const e = EXERCISES.find(x => x.id === exId);
+  if (!e) return;
+  plans[wbEditingIdx].exercises.push({ id: exId, sets: e.sets, reps: e.reps, rest: 90 });
+  saveWorkouts(plans);
+  toast(e.emoji + ' ' + e.name + ' aggiunto!', 'gr');
+}
+
+function removeExFromPlan(pi, ei) {
+  const plans = getWorkouts();
+  plans[pi].exercises.splice(ei, 1);
+  saveWorkouts(plans);
+  renderWorkoutBuilder();
+}
+
+function deletePlan(pi) {
+  const plans = getWorkouts();
+  const name = plans[pi].name;
+  plans.splice(pi, 1);
+  saveWorkouts(plans);
+  if (wbEditingIdx === pi) wbEditingIdx = -1;
+  else if (wbEditingIdx > pi) wbEditingIdx--;
+  renderWorkoutBuilder();
+  toast('Scheda "' + name + '" eliminata', 're');
+}
 
 // ── LEGAL PAGES ───────────────────────────────────────
 function openLegal(id) {
