@@ -370,6 +370,83 @@ html,body{
 .scan-t{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--t1)}
 .scan-s{font-size:.78rem;color:var(--t3)}
 
+/* ══════ AUTH SCREENS ══════ */
+#auth-screen{
+  position:absolute;inset:0;z-index:3000;
+  display:flex;flex-direction:column;
+  background:var(--bg);
+  transition:opacity .4s ease,transform .4s ease;
+}
+#auth-screen.hidden{opacity:0;pointer-events:none;transform:scale(1.03)}
+.auth-scroll{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px env(safe-area-inset-bottom,24px);
+  min-height:100%;
+}
+.auth-logo{
+  font-family:var(--fd);font-size:2.4rem;font-weight:800;letter-spacing:5px;
+  background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:6px;
+}
+.auth-tagline{font-size:.82rem;color:var(--t3);margin-bottom:36px;text-align:center}
+.auth-card{
+  background:var(--s9);border:1px solid var(--s8);border-radius:24px;
+  padding:28px 22px;width:100%;max-width:380px;
+}
+.auth-tabs{
+  display:flex;background:var(--s8);border-radius:12px;padding:3px;margin-bottom:24px;
+}
+.auth-tab{
+  flex:1;padding:.6rem;border-radius:10px;border:none;
+  font-family:var(--fd);font-size:.82rem;font-weight:700;
+  background:transparent;color:var(--t3);cursor:pointer;transition:all .25s;
+}
+.auth-tab.on{background:var(--or);color:#fff;box-shadow:0 4px 14px #f9731630}
+.auth-form{display:none;flex-direction:column;gap:14px}
+.auth-form.on{display:flex}
+.a-field{display:flex;flex-direction:column;gap:5px}
+.a-label{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3)}
+.a-input{
+  padding:.75rem 1rem;background:var(--s8);border:1px solid var(--s7);
+  border-radius:12px;color:var(--t1);font-size:.88rem;font-family:var(--fb);
+  outline:none;transition:border-color .2s;
+}
+.a-input:focus{border-color:var(--or);box-shadow:0 0 0 3px #f9731618}
+.a-input::placeholder{color:var(--t4)}
+.a-input.err{border-color:var(--re);box-shadow:0 0 0 3px #f43f5e18}
+.a-error{font-size:.68rem;color:var(--re);min-height:.68rem;line-height:1.2}
+.a-row{display:flex;align-items:center;justify-content:space-between}
+.a-check{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--t2);cursor:pointer}
+.a-check input{accent-color:var(--or);width:15px;height:15px}
+.a-forgot{font-size:.76rem;color:var(--or);background:none;border:none;cursor:pointer;font-family:var(--fb)}
+.a-forgot:hover{text-decoration:underline}
+.a-divider{
+  display:flex;align-items:center;gap:12px;
+  font-size:.68rem;color:var(--t4);margin:4px 0;
+}
+.a-divider::before,.a-divider::after{content:'';flex:1;height:1px;background:var(--s7)}
+.a-social{
+  display:flex;gap:10px;
+}
+.a-social-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:.7rem;background:var(--s8);border:1px solid var(--s7);
+  border-radius:12px;color:var(--t2);font-size:.78rem;font-weight:600;
+  cursor:pointer;transition:all .18s;font-family:var(--fb);border:1px solid var(--s7);
+}
+.a-social-btn:active{background:var(--s7);transform:scale(.97)}
+.pwd-wrap{position:relative}
+.pwd-wrap .a-input{padding-right:44px}
+.pwd-toggle{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--t4);cursor:pointer;padding:4px;
+  display:flex;align-items:center;
+}
+.pwd-str{display:flex;gap:4px;margin-top:2px}
+.pwd-str-bar{flex:1;height:3px;border-radius:2px;background:var(--s7);transition:background .3s}
+.auth-footer{text-align:center;margin-top:20px;font-size:.72rem;color:var(--t4)}
+
 /* DESKTOP CENTERING */
 @media(min-width:431px){
   body{background:#010410;display:flex;align-items:center;justify-content:center;min-height:100vh}
@@ -379,6 +456,101 @@ html,body{
 </head>
 <body>
 <div class="app">
+
+  <!-- ══ AUTH SCREEN ══ -->
+  <div id="auth-screen">
+    <div class="auth-scroll">
+      <div class="auth-logo">AURA</div>
+      <div class="auth-tagline">Il tuo coach IA per corpo e mente</div>
+
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab on" data-auth="login">Accedi</button>
+          <button class="auth-tab" data-auth="register">Registrati</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form class="auth-form on" id="form-login" autocomplete="on" novalidate>
+          <div class="a-field">
+            <label class="a-label" for="login-email">Email</label>
+            <input class="a-input" id="login-email" type="email" placeholder="nome@email.com" autocomplete="email" required/>
+            <div class="a-error" id="login-email-err"></div>
+          </div>
+          <div class="a-field">
+            <label class="a-label" for="login-pwd">Password</label>
+            <div class="pwd-wrap">
+              <input class="a-input" id="login-pwd" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+              <button type="button" class="pwd-toggle" data-target="login-pwd" aria-label="Mostra password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="a-error" id="login-pwd-err"></div>
+          </div>
+          <div class="a-row">
+            <label class="a-check"><input type="checkbox" id="login-remember" checked/> Ricordami</label>
+            <button type="button" class="a-forgot" id="forgot-btn">Password dimenticata?</button>
+          </div>
+          <button type="submit" class="cta" style="margin-top:6px">Accedi</button>
+          <div class="a-divider">oppure</div>
+          <div class="a-social">
+            <button type="button" class="a-social-btn" onclick="socialLogin('Google')">G · Google</button>
+            <button type="button" class="a-social-btn" onclick="socialLogin('Apple')">🍎 Apple</button>
+          </div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form class="auth-form" id="form-register" autocomplete="on" novalidate>
+          <div class="a-field">
+            <label class="a-label" for="reg-name">Nome completo</label>
+            <input class="a-input" id="reg-name" type="text" placeholder="Es. Luca Pipia" autocomplete="name" required/>
+            <div class="a-error" id="reg-name-err"></div>
+          </div>
+          <div class="a-field">
+            <label class="a-label" for="reg-email">Email</label>
+            <input class="a-input" id="reg-email" type="email" placeholder="nome@email.com" autocomplete="email" required/>
+            <div class="a-error" id="reg-email-err"></div>
+          </div>
+          <div class="a-field">
+            <label class="a-label" for="reg-pwd">Password</label>
+            <div class="pwd-wrap">
+              <input class="a-input" id="reg-pwd" type="password" placeholder="Min. 8 caratteri" autocomplete="new-password" required minlength="8"/>
+              <button type="button" class="pwd-toggle" data-target="reg-pwd" aria-label="Mostra password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pwd-str"><div class="pwd-str-bar"></div><div class="pwd-str-bar"></div><div class="pwd-str-bar"></div><div class="pwd-str-bar"></div></div>
+            <div class="a-error" id="reg-pwd-err"></div>
+          </div>
+          <div class="a-field">
+            <label class="a-label" for="reg-pwd2">Conferma password</label>
+            <div class="pwd-wrap">
+              <input class="a-input" id="reg-pwd2" type="password" placeholder="Ripeti la password" autocomplete="new-password" required/>
+              <button type="button" class="pwd-toggle" data-target="reg-pwd2" aria-label="Mostra password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="a-error" id="reg-pwd2-err"></div>
+          </div>
+          <div class="a-field">
+            <label class="a-label">Obiettivo</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="massa" checked style="display:none"/><span class="goal-chip" data-v="massa">💪 Massa</span></label>
+              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="dimagrimento" style="display:none"/><span class="goal-chip" data-v="dimagrimento">🔥 Dimagrimento</span></label>
+              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="benessere" style="display:none"/><span class="goal-chip" data-v="benessere">🧘 Benessere</span></label>
+            </div>
+          </div>
+          <button type="submit" class="cta" style="margin-top:6px">Crea Account</button>
+          <div class="a-divider">oppure</div>
+          <div class="a-social">
+            <button type="button" class="a-social-btn" onclick="socialLogin('Google')">G · Google</button>
+            <button type="button" class="a-social-btn" onclick="socialLogin('Apple')">🍎 Apple</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="auth-footer">Continuando accetti i <a href="#" style="color:var(--or)" onclick="event.preventDefault()">Termini</a> e la <a href="#" style="color:var(--or)" onclick="event.preventDefault()">Privacy Policy</a></div>
+    </div>
+  </div>
 
   <!-- STATUS BAR -->
   <div class="statusbar">
@@ -815,7 +987,7 @@ html,body{
           <div class="sitem"><span>🎯 Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
           <div class="sitem"><span>🌙 Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
           <div class="sitem" onclick="toast('🔒 Email di reset inviata.','bl')"><span>🔒 Sicurezza & Privacy</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="showModal('🚪','Esci da AURA','Sei sicuro di voler uscire?','Esci','var(--re)')"><span style="color:var(--re)">Esci dall'account</span><span class="sarr" style="color:var(--re)">›</span></div>
+          <div class="sitem" id="logout-btn"><span style="color:var(--re)">Esci dall'account</span><span class="sarr" style="color:var(--re)">›</span></div>
         </div>
 
         <div style="height:8px"></div>
@@ -958,7 +1130,11 @@ function closeModal() {
   box.style.transform = 'translateY(100%)';
   setTimeout(() => { ov.style.display = 'none'; ov.classList.remove('on'); box.style.transform = ''; }, 350);
 }
-function modalCta() { closeModal(); toast('✅ Richiesta inviata! Ti contatteremo presto.', 'gr'); }
+let _modalCtaAction = null;
+function modalCta() {
+  if (_modalCtaAction) { _modalCtaAction(); _modalCtaAction = null; }
+  else { closeModal(); toast('✅ Richiesta inviata! Ti contatteremo presto.', 'gr'); }
+}
 
 // Swipe down to close modal
 (function() {
@@ -1252,9 +1428,242 @@ document.getElementById('scan-btn').addEventListener('click', () => {
   }, 900);
 });
 
-// ── INIT NOTIFICATIONS ─────────────────────────────
-setTimeout(() => toast('👋 Bentornato Luca! Streak 7 giorni 🔥', 'or'), 900);
-setTimeout(() => toast('🤖 AURA: Recupero 68%. Scheda adattata.', 'bl'), 2400);
+// ═══════════════════════════════════════════════════
+//  AUTH — Login / Registrazione
+// ═══════════════════════════════════════════════════
+
+const AUTH_KEY = 'aura_user';
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch { return null; }
+}
+
+function setUser(u) {
+  localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+}
+
+function clearUser() {
+  localStorage.removeItem(AUTH_KEY);
+}
+
+// Apply user data across the app
+function applyUserData(u) {
+  if (!u) return;
+  const first = u.name.split(' ')[0];
+  const initial = first.charAt(0).toUpperCase();
+  // Home greeting
+  const gName = document.querySelector('.greeting-name');
+  if (gName) gName.textContent = first + ' 👋';
+  // Avatars
+  document.querySelectorAll('#topbar-av, .prof-header .av').forEach(el => el.textContent = initial);
+  document.querySelector('.home-header .av').textContent = initial;
+  // Profile
+  const profName = document.querySelector('.prof-name');
+  if (profName) profName.textContent = u.name;
+  const profTag = document.querySelector('.prof-tag');
+  if (profTag && u.goal) {
+    const goals = { massa:'💪 Massa Muscolare', dimagrimento:'🔥 Dimagrimento', benessere:'🧘 Benessere' };
+    profTag.textContent = '⚡ Livello 5 — ' + (goals[u.goal] || 'Macchina');
+  }
+}
+
+// Show / hide auth screen
+function showAuth() {
+  document.getElementById('auth-screen').classList.remove('hidden');
+}
+function hideAuth() {
+  document.getElementById('auth-screen').classList.add('hidden');
+}
+
+// Auth tabs
+document.querySelectorAll('.auth-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('on'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('on'));
+    tab.classList.add('on');
+    document.getElementById('form-' + tab.dataset.auth).classList.add('on');
+  });
+});
+
+// Password visibility toggles
+document.querySelectorAll('.pwd-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const inp = document.getElementById(btn.dataset.target);
+    const isHidden = inp.type === 'password';
+    inp.type = isHidden ? 'text' : 'password';
+    btn.innerHTML = isHidden
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  });
+});
+
+// Goal chip styling
+document.querySelectorAll('input[name="goal"]').forEach(radio => {
+  function updateChips() {
+    document.querySelectorAll('.goal-chip').forEach(c => {
+      const checked = c.closest('label').querySelector('input').checked;
+      c.closest('label').style.background = checked ? '#f9731625' : 'var(--s8)';
+      c.closest('label').style.borderColor = checked ? 'var(--or)' : 'transparent';
+      c.closest('label').style.border = checked ? '1px solid var(--or)' : '1px solid var(--s7)';
+      c.style.color = checked ? 'var(--or)' : 'var(--t3)';
+    });
+  }
+  radio.addEventListener('change', updateChips);
+  updateChips();
+});
+
+// Password strength meter
+function pwdStrength(pwd) {
+  let s = 0;
+  if (pwd.length >= 8) s++;
+  if (/[A-Z]/.test(pwd)) s++;
+  if (/[0-9]/.test(pwd)) s++;
+  if (/[^A-Za-z0-9]/.test(pwd)) s++;
+  return s;
+}
+document.getElementById('reg-pwd').addEventListener('input', function() {
+  const bars = document.querySelectorAll('.pwd-str-bar');
+  const s = pwdStrength(this.value);
+  const colors = ['var(--s7)','var(--re)','var(--or)','var(--or3)','var(--gr)'];
+  bars.forEach((b, i) => { b.style.background = i < s ? colors[s] : 'var(--s7)'; });
+});
+
+// Validation helpers
+function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function showFieldErr(id, msg) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = msg;
+  const inp = document.getElementById(id.replace('-err',''));
+  if (inp) inp.classList.toggle('err', !!msg);
+}
+function clearErrs(prefix) {
+  document.querySelectorAll('[id^="'+prefix+'"][id$="-err"]').forEach(el => {
+    el.textContent = '';
+    const inp = document.getElementById(el.id.replace('-err',''));
+    if (inp) inp.classList.remove('err');
+  });
+}
+
+// ── LOGIN ──
+document.getElementById('form-login').addEventListener('submit', function(e) {
+  e.preventDefault();
+  clearErrs('login');
+  const email = document.getElementById('login-email').value.trim();
+  const pwd = document.getElementById('login-pwd').value;
+  let ok = true;
+  if (!email) { showFieldErr('login-email-err','Inserisci la tua email.'); ok = false; }
+  else if (!isEmail(email)) { showFieldErr('login-email-err','Email non valida.'); ok = false; }
+  if (!pwd) { showFieldErr('login-pwd-err','Inserisci la password.'); ok = false; }
+  else if (pwd.length < 6) { showFieldErr('login-pwd-err','Password troppo corta.'); ok = false; }
+  if (!ok) return;
+
+  // Simulate auth (check stored accounts or accept any)
+  const stored = JSON.parse(localStorage.getItem('aura_accounts') || '[]');
+  const account = stored.find(a => a.email === email);
+  if (account && account.pwd !== pwd) {
+    showFieldErr('login-pwd-err','Password errata.'); return;
+  }
+  const user = account || { name: email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), email, goal:'massa' };
+  setUser(user);
+  applyUserData(user);
+  hideAuth();
+  toast('👋 Bentornato ' + user.name.split(' ')[0] + '! Streak 7 giorni 🔥', 'or');
+  setTimeout(() => toast('🤖 AURA: Recupero 68%. Scheda adattata.', 'bl'), 1500);
+});
+
+// ── REGISTER ──
+document.getElementById('form-register').addEventListener('submit', function(e) {
+  e.preventDefault();
+  clearErrs('reg');
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pwd = document.getElementById('reg-pwd').value;
+  const pwd2 = document.getElementById('reg-pwd2').value;
+  const goal = (document.querySelector('input[name="goal"]:checked') || {}).value || 'massa';
+  let ok = true;
+  if (!name || name.length < 2) { showFieldErr('reg-name-err','Inserisci il tuo nome.'); ok = false; }
+  if (!email) { showFieldErr('reg-email-err','Inserisci la tua email.'); ok = false; }
+  else if (!isEmail(email)) { showFieldErr('reg-email-err','Email non valida.'); ok = false; }
+  if (!pwd) { showFieldErr('reg-pwd-err','Scegli una password.'); ok = false; }
+  else if (pwd.length < 8) { showFieldErr('reg-pwd-err','Minimo 8 caratteri.'); ok = false; }
+  else if (pwdStrength(pwd) < 2) { showFieldErr('reg-pwd-err','Aggiungi maiuscole o numeri.'); ok = false; }
+  if (!pwd2) { showFieldErr('reg-pwd2-err','Conferma la password.'); ok = false; }
+  else if (pwd !== pwd2) { showFieldErr('reg-pwd2-err','Le password non corrispondono.'); ok = false; }
+  if (!ok) return;
+
+  // Check duplicate
+  const stored = JSON.parse(localStorage.getItem('aura_accounts') || '[]');
+  if (stored.find(a => a.email === email)) {
+    showFieldErr('reg-email-err','Email già registrata. Accedi invece.'); return;
+  }
+  // Save account
+  stored.push({ name, email, pwd, goal });
+  localStorage.setItem('aura_accounts', JSON.stringify(stored));
+  const user = { name, email, goal };
+  setUser(user);
+  applyUserData(user);
+  hideAuth();
+  toast('🎉 Benvenuto in AURA, ' + name.split(' ')[0] + '!', 'gr');
+  setTimeout(() => toast('🤖 Ho creato il tuo piano personalizzato.', 'bl'), 1500);
+});
+
+// ── FORGOT PASSWORD ──
+document.getElementById('forgot-btn').addEventListener('click', () => {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email || !isEmail(email)) {
+    showFieldErr('login-email-err','Inserisci prima l\'email.');
+    document.getElementById('login-email').focus();
+    return;
+  }
+  toast('📧 Link di reset inviato a ' + email, 'bl');
+});
+
+// ── SOCIAL LOGIN (simulated) ──
+function socialLogin(provider) {
+  toast('⏳ Connessione a ' + provider + '...', 'bl');
+  setTimeout(() => {
+    const user = { name: 'Utente ' + provider, email: provider.toLowerCase() + '@example.com', goal:'massa' };
+    setUser(user);
+    applyUserData(user);
+    hideAuth();
+    toast('✅ Accesso con ' + provider + ' riuscito!', 'gr');
+  }, 1200);
+}
+
+// ── LOGOUT ──
+document.getElementById('logout-btn').addEventListener('click', () => {
+  showModal('🚪','Esci da AURA','Sei sicuro di voler uscire dal tuo account?','Esci','var(--re)');
+  _modalCtaAction = () => {
+    closeModal();
+    clearUser();
+    // Reset to home tab
+    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(v => v.classList.remove('on'));
+    document.querySelector('.nb[data-tab="home"]').classList.add('on');
+    document.getElementById('tab-home').classList.add('on');
+    S.tab = 'home';
+    // Clear form fields
+    document.querySelectorAll('#auth-screen input:not([type=radio]):not([type=checkbox])').forEach(i => i.value = '');
+    clearErrs('login'); clearErrs('reg');
+    // Show auth
+    showAuth();
+    toast('👋 A presto!', 'bl');
+  };
+});
+
+// ── INIT — Check stored session ──────────────────
+(function initAuth() {
+  const user = getUser();
+  if (user) {
+    applyUserData(user);
+    hideAuth();
+    setTimeout(() => toast('👋 Bentornato ' + user.name.split(' ')[0] + '! Streak 7 giorni 🔥', 'or'), 900);
+    setTimeout(() => toast('🤖 AURA: Recupero 68%. Scheda adattata.', 'bl'), 2400);
+  } else {
+    showAuth();
+  }
+})();
 </script>
 </body>
 </html>
