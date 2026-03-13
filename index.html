@@ -243,6 +243,30 @@ html,body{
 .cam-stat-val{font-family:var(--fd);font-size:1.3rem;font-weight:800;line-height:1}
 .cam-stat-label{font-size:.62rem;color:var(--t3);margin-top:3px}
 .cam-exercise-select{width:100%;padding:.65rem .9rem;background:var(--s9);color:var(--t1);border:1px solid var(--s8);border-radius:12px;font-size:.85rem;font-weight:600;font-family:var(--fb);margin-bottom:10px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.cam-target-row{display:flex;gap:8px;align-items:center;padding:0 16px 8px}
+.cam-target-row label{font-size:.78rem;color:var(--t3);white-space:nowrap;font-weight:600}
+.cam-target-input{width:60px;padding:.5rem .6rem;background:var(--s9);color:var(--t1);border:1px solid var(--s8);border-radius:10px;font-size:.9rem;font-weight:700;font-family:var(--fd);text-align:center}
+.cam-target-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.cam-progress-bar{height:6px;background:var(--s8);border-radius:3px;overflow:hidden;flex:1}
+.cam-progress-fill{height:100%;background:var(--or);border-radius:3px;transition:width .3s}
+.cam-progress-label{font-size:.7rem;color:var(--t4);font-weight:700;min-width:40px;text-align:right}
+.cam-summary-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
+.cam-summary-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.cam-summary-body{padding:40px 20px;text-align:center;flex:1;overflow-y:auto}
+.cam-summary-grade{font-size:4rem;margin-bottom:8px}
+.cam-summary-title{font-family:var(--fd);font-weight:800;font-size:1.4rem;margin-bottom:4px}
+.cam-summary-sub{font-size:.85rem;color:var(--t3);margin-bottom:28px}
+.cam-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.cam-summary-card{background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:16px 10px}
+.cam-summary-card-val{font-family:var(--fd);font-weight:800;font-size:1.3rem;color:var(--or)}
+.cam-summary-card-lbl{font-size:.7rem;color:var(--t4);margin-top:2px}
+.cam-summary-tips{text-align:left;background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px;margin-bottom:20px}
+.cam-summary-tips-title{font-weight:700;font-size:.85rem;margin-bottom:8px}
+.cam-summary-tip{font-size:.78rem;color:var(--t2);padding:4px 0;display:flex;align-items:flex-start;gap:6px}
+.cam-summary-close{width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer}
+.cam-start-btn{width:calc(100% - 32px);margin:8px 16px 12px;padding:.95rem;background:linear-gradient(135deg,var(--or),#e8622d);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;font-family:var(--fb);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px #f9731640;transition:transform .15s,opacity .15s}
+.cam-start-btn:active{transform:scale(.97)}
+.cam-start-btn.running{background:var(--s8);color:var(--t2);box-shadow:none}
 
 /* ══════ DIET ══════ */
 .diet-header{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:flex-end}
@@ -1096,6 +1120,20 @@ html,body{
         </select>
       </div>
 
+      <!-- Target reps -->
+      <div class="cam-target-row">
+        <label>🎯 Ripetizioni:</label>
+        <input type="number" class="cam-target-input" id="cam-target-reps" value="12" min="1" max="100">
+        <div class="cam-progress-bar"><div class="cam-progress-fill" id="cam-progress-fill" style="width:0%"></div></div>
+        <div class="cam-progress-label" id="cam-progress-label">0/12</div>
+      </div>
+
+      <!-- Start button -->
+      <button class="cam-start-btn" id="cam-start-btn" onclick="toggleCamSession()">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg>
+        Avvia Sessione
+      </button>
+
       <!-- Viewport -->
       <div class="vp" id="vp">
         <div class="vgrid"></div>
@@ -1157,6 +1195,17 @@ html,body{
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Camera Summary Overlay -->
+    <div class="cam-summary-ov" id="cam-summary-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeCamSummary()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Riepilogo Esercizio</div>
+      </div>
+      <div class="cam-summary-body" id="cam-summary-body"></div>
     </div>
 
     <!-- ══ DIET ══ -->
@@ -2989,6 +3038,13 @@ document.getElementById('start-btn').addEventListener('click', function() {
 // ── AI CAMERA — MEDIAPIPE POSE ─────────────────────
 let cameraStream = null;
 let cameraActive = false;
+// Preload voices for speech synthesis
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.getVoices();
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
+  }
+}
 let mpPose = null;
 let mpCamera = null;
 let poseRunning = false;
@@ -2997,7 +3053,9 @@ let poseRunning = false;
 const CAM = {
   reps: 0, phase: 'up', formScore: 0, symScore: 0, calories: 0,
   repStartTime: 0, lastFeedback: 0, lowLight: false, frameScores: [],
-  exercise: 'squat', angles: {}
+  exercise: 'squat', angles: {}, targetReps: 12,
+  lastVoiceTime: 0, lastVoiceMsg: '', voiceEnabled: true,
+  sessionActive: false, failedChecks: {}, startTime: 0
 };
 
 // Exercise definitions for angle analysis
@@ -3012,9 +3070,9 @@ const POSE_EXERCISES = {
     repAngle: 'knee_l',
     downThresh: 100, upThresh: 155,
     checks: [
-      { name: 'Ginocchia', fn: function(a) { return Math.abs((a.knee_l||180)-(a.knee_r||180)) < 15; }, ok: '✓ Ginocchia simmetriche', warn: '⚠ Ginocchia asimmetriche' },
-      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 110; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più' },
-      { name: 'Schiena', fn: function(a) { return (a.hip||0) > 60; }, ok: '✓ Schiena dritta', warn: '⚠ Schiena troppo inclinata' }
+      { name: 'Ginocchia', fn: function(a) { return Math.abs((a.knee_l||180)-(a.knee_r||180)) < 15; }, ok: '✓ Ginocchia simmetriche', warn: '⚠ Ginocchia asimmetriche', voice: 'Ginocchia asimmetriche! Allineale.' },
+      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 110; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più! Cosce parallele al pavimento.' },
+      { name: 'Schiena', fn: function(a) { return (a.hip||0) > 60; }, ok: '✓ Schiena dritta', warn: '⚠ Schiena troppo inclinata', voice: 'Tieni la schiena più dritta!' }
     ]
   },
   pushup: {
@@ -3027,9 +3085,9 @@ const POSE_EXERCISES = {
     repAngle: 'elbow_l',
     downThresh: 95, upThresh: 155,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici' },
-      { name: 'Corpo', fn: function(a) { return (a.body||180) > 150; }, ok: '✓ Corpo allineato', warn: '⚠ Alza i fianchi' },
-      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) < 100; }, ok: '✓ Buona ampiezza', warn: '⚠ Scendi di più' }
+      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Allineali.' },
+      { name: 'Corpo', fn: function(a) { return (a.body||180) > 150; }, ok: '✓ Corpo allineato', warn: '⚠ Alza i fianchi', voice: 'Alza i fianchi! Corpo dritto come una tavola.' },
+      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) < 100; }, ok: '✓ Buona ampiezza', warn: '⚠ Scendi di più', voice: 'Scendi di più con il petto!' }
     ]
   },
   deadlift: {
@@ -3042,9 +3100,9 @@ const POSE_EXERCISES = {
     repAngle: 'hip_l',
     downThresh: 90, upThresh: 160,
     checks: [
-      { name: 'Anche', fn: function(a) { return Math.abs((a.hip_l||180)-(a.hip_r||180)) < 12; }, ok: '✓ Anche simmetriche', warn: '⚠ Anche sbilanciate' },
-      { name: 'Ginocchia', fn: function(a) { return (a.knee_l||180) > 140; }, ok: '✓ Gambe ok', warn: '⚠ Non piegare troppo le ginocchia' },
-      { name: 'Schiena', fn: function(a) { return (a.hip_l||180) > 60; }, ok: '✓ Schiena neutra', warn: '⚠ Schiena troppo arrotondata' }
+      { name: 'Anche', fn: function(a) { return Math.abs((a.hip_l||180)-(a.hip_r||180)) < 12; }, ok: '✓ Anche simmetriche', warn: '⚠ Anche sbilanciate', voice: 'Anche sbilanciate! Distribuisci il peso.' },
+      { name: 'Ginocchia', fn: function(a) { return (a.knee_l||180) > 140; }, ok: '✓ Gambe ok', warn: '⚠ Non piegare troppo le ginocchia', voice: 'Non piegare troppo le ginocchia!' },
+      { name: 'Schiena', fn: function(a) { return (a.hip_l||180) > 60; }, ok: '✓ Schiena neutra', warn: '⚠ Schiena troppo arrotondata', voice: 'Schiena troppo arrotondata! Mantienila neutra.' }
     ]
   },
   shoulder_press: {
@@ -3057,9 +3115,9 @@ const POSE_EXERCISES = {
     repAngle: 'elbow_l',
     downThresh: 85, upThresh: 160,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Braccia simmetriche', warn: '⚠ Braccia asimmetriche' },
-      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) > 155; }, ok: '✓ Estensione completa', warn: '⚠ Estendi di più' },
-      { name: 'Postura', fn: function(a) { return (a.shoulder_l||0) > 70; }, ok: '✓ Postura ok', warn: '⚠ Non inclinare il busto' }
+      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Braccia simmetriche', warn: '⚠ Braccia asimmetriche', voice: 'Braccia asimmetriche! Spingi in modo uniforme.' },
+      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) > 155; }, ok: '✓ Estensione completa', warn: '⚠ Estendi di più', voice: 'Estendi di più le braccia in alto!' },
+      { name: 'Postura', fn: function(a) { return (a.shoulder_l||0) > 70; }, ok: '✓ Postura ok', warn: '⚠ Non inclinare il busto', voice: 'Non inclinare il busto! Tieniti dritto.' }
     ]
   },
   bicep_curl: {
@@ -3072,9 +3130,9 @@ const POSE_EXERCISES = {
     repAngle: 'elbow_l',
     downThresh: 55, upThresh: 145,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 20; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici' },
-      { name: 'Braccio fermo', fn: function(a) { return (a.shoulder_l||0) < 30; }, ok: '✓ Braccio fermo', warn: '⚠ Non muovere il braccio' },
-      { name: 'Contrazione', fn: function(a) { return (a.elbow_l||180) < 60; }, ok: '✓ Buona contrazione', warn: '⚠ Contrai di più' }
+      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 20; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Mantienili fermi.' },
+      { name: 'Braccio fermo', fn: function(a) { return (a.shoulder_l||0) < 30; }, ok: '✓ Braccio fermo', warn: '⚠ Non muovere il braccio', voice: 'Non muovere il braccio! Solo l\'avambraccio.' },
+      { name: 'Contrazione', fn: function(a) { return (a.elbow_l||180) < 60; }, ok: '✓ Buona contrazione', warn: '⚠ Contrai di più', voice: 'Contrai di più! Porta il peso più in alto.' }
     ]
   },
   lunge: {
@@ -3087,9 +3145,9 @@ const POSE_EXERCISES = {
     repAngle: 'knee_l',
     downThresh: 95, upThresh: 160,
     checks: [
-      { name: 'Ginocchio ant.', fn: function(a) { return (a.knee_l||180) > 80; }, ok: '✓ Ginocchio ok', warn: '⚠ Ginocchio troppo avanti' },
-      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 105; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più' },
-      { name: 'Busto', fn: function(a) { return (a.hip_l||0) > 75; }, ok: '✓ Busto eretto', warn: '⚠ Tieni il busto dritto' }
+      { name: 'Ginocchio ant.', fn: function(a) { return (a.knee_l||180) > 80; }, ok: '✓ Ginocchio ok', warn: '⚠ Ginocchio troppo avanti', voice: 'Ginocchio troppo avanti! Non superare la punta del piede.' },
+      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 105; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più in basso!' },
+      { name: 'Busto', fn: function(a) { return (a.hip_l||0) > 75; }, ok: '✓ Busto eretto', warn: '⚠ Tieni il busto dritto', voice: 'Tieni il busto dritto! Non piegarti in avanti.' }
     ]
   }
 };
@@ -3118,6 +3176,91 @@ function checkBrightness(video) {
     var avg = sum / (data.length / 16);
     return avg;
   } catch(e) { return 128; }
+}
+
+// ── VOICE COACH ─────────────────────────────
+function speak(text) {
+  if (!CAM.voiceEnabled) return;
+  if (!('speechSynthesis' in window)) return;
+  var now = Date.now();
+  // Throttle: no same message within 6s, no any message within 3s
+  if (now - CAM.lastVoiceTime < 3000) return;
+  if (text === CAM.lastVoiceMsg && now - CAM.lastVoiceTime < 6000) return;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'it-IT';
+  u.rate = 1.1;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  // Try to find an Italian voice
+  var voices = window.speechSynthesis.getVoices();
+  var itVoice = voices.find(function(v) { return v.lang.indexOf('it') === 0; });
+  if (itVoice) u.voice = itVoice;
+  window.speechSynthesis.speak(u);
+  CAM.lastVoiceTime = now;
+  CAM.lastVoiceMsg = text;
+}
+
+function speakRepCount(reps, target) {
+  if (reps === target) {
+    speak('Complimenti! Hai completato tutte le ' + target + ' ripetizioni!');
+  } else if (reps === Math.floor(target / 2)) {
+    speak('Metà fatto! ' + reps + ' su ' + target + '. Continua così!');
+  } else if (reps === target - 2) {
+    speak('Ancora 2! Dai che ci sei!');
+  } else if (reps === target - 1) {
+    speak('Ultima ripetizione! Dai!');
+  } else {
+    speak('' + reps);
+  }
+}
+
+function showCamSummary() {
+  var exDef = POSE_EXERCISES[CAM.exercise];
+  var duration = Math.round((Date.now() - CAM.startTime) / 1000);
+  var mm = String(Math.floor(duration / 60)).padStart(2, '0');
+  var ss = String(duration % 60).padStart(2, '0');
+  var grade, gradeEmoji, gradeColor;
+  if (CAM.formScore >= 90) { grade = 'Eccellente'; gradeEmoji = '🏆'; gradeColor = '#22c55e'; }
+  else if (CAM.formScore >= 75) { grade = 'Buono'; gradeEmoji = '💪'; gradeColor = '#22c55e'; }
+  else if (CAM.formScore >= 55) { grade = 'Discreto'; gradeEmoji = '👍'; gradeColor = '#f97316'; }
+  else { grade = 'Da Migliorare'; gradeEmoji = '📝'; gradeColor = '#ef4444'; }
+
+  // Find worst checks
+  var tips = [];
+  var sortedChecks = Object.keys(CAM.failedChecks).sort(function(a,b) { return CAM.failedChecks[b] - CAM.failedChecks[a]; });
+  sortedChecks.slice(0, 3).forEach(function(key) {
+    var cnt = CAM.failedChecks[key];
+    if (cnt > 5) tips.push(key);
+  });
+
+  var body = document.getElementById('cam-summary-body');
+  var html = '<div class="cam-summary-grade">' + gradeEmoji + '</div>';
+  html += '<div class="cam-summary-title" style="color:' + gradeColor + '">' + grade + '</div>';
+  html += '<div class="cam-summary-sub">' + exDef.name + ' · ' + CAM.reps + '/' + CAM.targetReps + ' ripetizioni</div>';
+  html += '<div class="cam-summary-grid">';
+  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + CAM.formScore + '</div><div class="cam-summary-card-lbl">Forma</div></div>';
+  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + CAM.symScore + '</div><div class="cam-summary-card-lbl">Simmetria</div></div>';
+  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + mm + ':' + ss + '</div><div class="cam-summary-card-lbl">Durata</div></div>';
+  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + CAM.calories + '</div><div class="cam-summary-card-lbl">Calorie</div></div>';
+  html += '</div>';
+  if (tips.length > 0) {
+    html += '<div class="cam-summary-tips"><div class="cam-summary-tips-title">📝 Consigli per migliorare</div>';
+    tips.forEach(function(t) { html += '<div class="cam-summary-tip">⚠ ' + t + '</div>'; });
+    html += '</div>';
+  }
+  html += '<button class="cam-summary-close" onclick="closeCamSummary()">Chiudi</button>';
+  body.innerHTML = html;
+  document.getElementById('cam-summary-ov').classList.add('on');
+
+  // Voice summary
+  var voiceMsg = grade + '! Hai completato ' + CAM.reps + ' ripetizioni di ' + exDef.name + ' con un punteggio forma di ' + CAM.formScore + ' su 100.';
+  if (tips.length > 0) voiceMsg += ' Consiglio: lavora su ' + tips[0] + '.';
+  setTimeout(function() { speak(voiceMsg); }, 500);
+}
+
+function closeCamSummary() {
+  document.getElementById('cam-summary-ov').classList.remove('on');
 }
 
 function onPoseResults(results) {
@@ -3225,12 +3368,23 @@ function onPoseResults(results) {
     } else if (CAM.phase === 'down' && repAngle > exDef.upThresh) {
       CAM.phase = 'up';
       CAM.reps++;
+      if (!CAM.sessionActive) { CAM.sessionActive = true; CAM.startTime = Date.now(); }
       document.getElementById('cam-rep-badge').textContent = CAM.reps;
       document.getElementById('cstat-rep').textContent = CAM.reps;
-      // ~0.4 kcal per rep average
+      // Progress bar
+      var pct = Math.min(100, Math.round((CAM.reps / CAM.targetReps) * 100));
+      document.getElementById('cam-progress-fill').style.width = pct + '%';
+      document.getElementById('cam-progress-label').textContent = CAM.reps + '/' + CAM.targetReps;
+      // Calories
       var u = getUser(), wt = (u && u.weight) ? u.weight : 70;
       CAM.calories = Math.round(CAM.reps * 0.4 * (wt / 70));
       document.getElementById('cstat-cal').textContent = CAM.calories;
+      // Voice rep count
+      speakRepCount(CAM.reps, CAM.targetReps);
+      // Target reached?
+      if (CAM.reps >= CAM.targetReps) {
+        setTimeout(function() { showCamSummary(); }, 800);
+      }
     }
   }
 
@@ -3238,12 +3392,24 @@ function onPoseResults(results) {
   var fbBox = document.getElementById('cam-fb-box');
   var fbHtml = '';
   var okCount = 0;
+  var voiceWarnings = [];
   exDef.checks.forEach(function(ch) {
     var pass = ch.fn(CAM.angles);
     if (pass) { okCount++; fbHtml += '<div class="fb ok">' + ch.ok + '</div>'; }
-    else { fbHtml += '<div class="fb warn">' + ch.warn + '</div>'; }
+    else {
+      fbHtml += '<div class="fb warn">' + ch.warn + '</div>';
+      if (ch.voice) voiceWarnings.push(ch.voice);
+      // Track failed checks for summary
+      if (!CAM.failedChecks[ch.warn.replace('⚠ ','')]) CAM.failedChecks[ch.warn.replace('⚠ ','')] = 0;
+      CAM.failedChecks[ch.warn.replace('⚠ ','')]++;
+    }
   });
   fbBox.innerHTML = fbHtml;
+
+  // Voice feedback for errors (pick the most important one)
+  if (voiceWarnings.length > 0 && CAM.reps > 0) {
+    speak(voiceWarnings[0]);
+  }
 
   // Form score
   var formPct = Math.round((okCount / exDef.checks.length) * 100);
@@ -3291,12 +3457,17 @@ async function startCamera() {
     // Reset state
     CAM.reps = 0; CAM.phase = 'up'; CAM.formScore = 0; CAM.symScore = 0;
     CAM.calories = 0; CAM.frameScores = []; CAM.lowLight = false;
+    CAM.failedChecks = {}; CAM.sessionActive = false; CAM.startTime = 0;
+    CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
+    CAM.targetReps = parseInt(document.getElementById('cam-target-reps').value) || 12;
     document.getElementById('cam-rep-badge').textContent = '0';
     document.getElementById('cstat-rep').textContent = '0';
     document.getElementById('cstat-cal').textContent = '0';
     document.getElementById('cstat-form').textContent = '--';
     document.getElementById('cstat-sym').textContent = '--';
     document.getElementById('cam-score').textContent = '--';
+    document.getElementById('cam-progress-fill').style.width = '0%';
+    document.getElementById('cam-progress-label').textContent = '0/' + CAM.targetReps;
 
     document.getElementById('cam-status-text').textContent = 'Attiva';
     document.getElementById('cam-led').style.background = 'var(--gr)';
@@ -3342,6 +3513,7 @@ async function startCamera() {
 }
 
 function stopCamera() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (mpCamera) { mpCamera.stop(); mpCamera = null; }
   poseRunning = false;
   if (cameraStream) {
@@ -3366,22 +3538,48 @@ function stopCamera() {
 // Exercise selector
 document.getElementById('cam-exercise-sel').addEventListener('change', function() {
   CAM.exercise = this.value;
-  CAM.reps = 0; CAM.phase = 'up'; CAM.frameScores = [];
+  CAM.reps = 0; CAM.phase = 'up'; CAM.frameScores = []; CAM.failedChecks = {};
+  CAM.sessionActive = false; CAM.startTime = 0;
+  CAM.targetReps = parseInt(document.getElementById('cam-target-reps').value) || 12;
   document.getElementById('cam-rep-badge').textContent = '0';
   document.getElementById('cstat-rep').textContent = '0';
   document.getElementById('cstat-cal').textContent = '0';
-  toast('🎯 Esercizio: ' + POSE_EXERCISES[CAM.exercise].name, 'bl');
+  document.getElementById('cam-progress-fill').style.width = '0%';
+  document.getElementById('cam-progress-label').textContent = '0/' + CAM.targetReps;
+  speak('Esercizio selezionato: ' + POSE_EXERCISES[CAM.exercise].name);
 });
 
-// Auto start/stop camera on tab change
-var camTabBtns = document.querySelectorAll('[data-tab="camera"]');
-camTabBtns.forEach(function(btn) {
-  btn.addEventListener('click', function() { setTimeout(startCamera, 200); });
+// Target reps change
+document.getElementById('cam-target-reps').addEventListener('change', function() {
+  CAM.targetReps = parseInt(this.value) || 12;
+  var pct = CAM.reps > 0 ? Math.min(100, Math.round((CAM.reps / CAM.targetReps) * 100)) : 0;
+  document.getElementById('cam-progress-fill').style.width = pct + '%';
+  document.getElementById('cam-progress-label').textContent = CAM.reps + '/' + CAM.targetReps;
 });
+
+// Toggle camera session from start button
+function toggleCamSession() {
+  var btn = document.getElementById('cam-start-btn');
+  if (cameraActive) {
+    stopCamera();
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg> Avvia Sessione';
+    btn.classList.remove('running');
+  } else {
+    startCamera();
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Ferma Sessione';
+    btn.classList.add('running');
+  }
+}
+
+// Auto stop camera when leaving tab
 var allTabBtns = document.querySelectorAll('.nb');
 allTabBtns.forEach(function(btn) {
   btn.addEventListener('click', function() {
-    if (!btn.dataset.tab || btn.dataset.tab !== 'camera') { stopCamera(); }
+    if (!btn.dataset.tab || btn.dataset.tab !== 'camera') {
+      stopCamera();
+      var sb = document.getElementById('cam-start-btn');
+      if (sb) { sb.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg> Avvia Sessione'; sb.classList.remove('running'); }
+    }
   });
 });
 
