@@ -512,6 +512,45 @@ html,body{
 .ob-sum-label{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .ob-sum-val{font-family:var(--fd);font-weight:800;font-size:.95rem}
 
+/* ══════ LEGAL PAGES ══════ */
+.legal-ov{
+  position:absolute;inset:0;z-index:4000;
+  display:none;flex-direction:column;
+  background:var(--bg);
+}
+.legal-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.legal-topbar{
+  display:flex;align-items:center;gap:12px;
+  padding:env(safe-area-inset-top,44px) 20px 12px;
+  border-bottom:1px solid var(--s8);flex-shrink:0;
+}
+.legal-back{
+  width:36px;height:36px;border-radius:50%;background:var(--s8);border:1px solid var(--s7);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);
+  transition:all .18s;flex-shrink:0;
+}
+.legal-back:active{background:var(--s7);transform:scale(.93)}
+.legal-page-title{font-family:var(--fd);font-size:1.1rem;font-weight:800}
+.legal-scroll{
+  flex:1;overflow-y:auto;padding:20px 20px calc(var(--nav-h) + var(--safe-b) + 20px);
+  -webkit-overflow-scrolling:touch;
+}
+.legal-scroll::-webkit-scrollbar{display:none}
+.legal-scroll h2{font-family:var(--fd);font-size:1rem;font-weight:800;margin:24px 0 8px;color:var(--t1)}
+.legal-scroll h2:first-child{margin-top:0}
+.legal-scroll h3{font-family:var(--fd);font-size:.85rem;font-weight:700;margin:16px 0 6px;color:var(--or)}
+.legal-scroll p,.legal-scroll li{font-size:.78rem;color:var(--t2);line-height:1.65;margin-bottom:8px}
+.legal-scroll ul{padding-left:18px;margin-bottom:12px}
+.legal-scroll li{margin-bottom:4px}
+.legal-scroll .legal-highlight{
+  background:#f9731610;border:1px solid #f9731630;border-radius:12px;
+  padding:12px 14px;margin:12px 0;font-size:.78rem;color:var(--t2);line-height:1.6;
+}
+.legal-scroll .legal-highlight strong{color:var(--or)}
+.legal-scroll .legal-updated{font-size:.68rem;color:var(--t4);margin-bottom:16px}
+.legal-scroll a{color:var(--or);text-decoration:none}
+.legal-scroll a:hover{text-decoration:underline}
+
 /* DESKTOP CENTERING */
 @media(min-width:431px){
   body{background:#010410;display:flex;align-items:center;justify-content:center;min-height:100vh}
@@ -613,7 +652,7 @@ html,body{
         </form>
       </div>
 
-      <div class="auth-footer">Continuando accetti i <a href="#" style="color:var(--or)" onclick="event.preventDefault()">Termini</a> e la <a href="#" style="color:var(--or)" onclick="event.preventDefault()">Privacy Policy</a></div>
+      <div class="auth-footer">Continuando accetti i <a href="#" style="color:var(--or)" onclick="event.preventDefault();openLegal('terms-ov')">Termini</a> e la <a href="#" style="color:var(--or)" onclick="event.preventDefault();openLegal('privacy-ov')">Privacy Policy</a></div>
     </div>
   </div>
 
@@ -1149,6 +1188,8 @@ html,body{
           <div class="sitem"><span>🎯 Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
           <div class="sitem"><span>🌙 Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
           <div class="sitem" onclick="toast('🔒 Email di reset inviata.','bl')"><span>🔒 Sicurezza & Privacy</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="openLegal('privacy-ov')"><span>🔒 Privacy Policy</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="openLegal('terms-ov')"><span>📜 Termini di Servizio</span><span class="sarr">›</span></div>
           <div class="sitem" id="logout-btn"><span style="color:var(--re)">Esci dall'account</span><span class="sarr" style="color:var(--re)">›</span></div>
         </div>
 
@@ -1217,12 +1258,220 @@ html,body{
   <div class="scan-s" id="scan-s">Scansionando il frigo</div>
 </div>
 
+<!-- ══ PRIVACY POLICY ══ -->
+<div class="legal-ov" id="privacy-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeLegal('privacy-ov')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">🔒 Privacy Policy</div>
+  </div>
+  <div class="legal-scroll">
+    <div class="legal-updated">Ultimo aggiornamento: 13 Marzo 2026</div>
+
+    <div class="legal-highlight">
+      <strong>In sintesi:</strong> AURA raccoglie solo i dati necessari al funzionamento dell'app. Non vendiamo i tuoi dati a terzi. Hai pieno controllo sui tuoi dati e puoi cancellarli in qualsiasi momento.
+    </div>
+
+    <h2>1. Titolare del Trattamento</h2>
+    <p>Il titolare del trattamento dei dati personali è <strong>AURA Fitness S.r.l.</strong>, con sede in Italia. Per qualsiasi richiesta relativa ai tuoi dati puoi contattarci all'indirizzo: <a href="mailto:privacy@aura.app">privacy@aura.app</a></p>
+
+    <h2>2. Dati Raccolti</h2>
+    <h3>2.1 Dati forniti dall'utente</h3>
+    <ul>
+      <li><strong>Dati di registrazione:</strong> nome, email, password (criptata)</li>
+      <li><strong>Dati fisici:</strong> peso, altezza, età, sesso — utilizzati esclusivamente per personalizzare allenamenti e piani alimentari</li>
+      <li><strong>Obiettivi e preferenze:</strong> obiettivo fitness, livello, frequenza di allenamento</li>
+    </ul>
+    <h3>2.2 Dati raccolti automaticamente</h3>
+    <ul>
+      <li><strong>Dati di utilizzo:</strong> interazioni con l'app, funzionalità utilizzate, tempi di sessione</li>
+      <li><strong>Dati dispositivo:</strong> tipo di browser, sistema operativo, risoluzione schermo</li>
+      <li><strong>Dati da dispositivi connessi:</strong> frequenza cardiaca, dati di movimento (solo se autorizzi la connessione con Apple Watch, fasce HR o altri dispositivi)</li>
+    </ul>
+
+    <h2>3. Finalità del Trattamento</h2>
+    <p>I tuoi dati sono trattati per le seguenti finalità:</p>
+    <ul>
+      <li>✅ Fornitura e personalizzazione del servizio (allenamenti, dieta, recupero)</li>
+      <li>✅ Creazione e gestione del tuo account</li>
+      <li>✅ Miglioramento dell'esperienza utente e dell'algoritmo IA</li>
+      <li>✅ Comunicazioni di servizio (es. aggiornamenti, sicurezza)</li>
+      <li>✅ Adempimenti legali e fiscali</li>
+    </ul>
+
+    <h2>4. Base Giuridica (Art. 6 GDPR)</h2>
+    <ul>
+      <li><strong>Consenso:</strong> per dati sanitari/fisici e comunicazioni marketing</li>
+      <li><strong>Esecuzione contrattuale:</strong> per fornitura del servizio</li>
+      <li><strong>Interesse legittimo:</strong> per miglioramento del prodotto e sicurezza</li>
+      <li><strong>Obbligo legale:</strong> per adempimenti fiscali</li>
+    </ul>
+
+    <h2>5. Condivisione dei Dati</h2>
+    <div class="legal-highlight">
+      <strong>🚫 Non vendiamo mai i tuoi dati personali.</strong> I dati possono essere condivisi solo con:
+    </div>
+    <ul>
+      <li><strong>Fornitori di servizi:</strong> hosting (server UE), analytics, elaborazione pagamenti — tutti conformi GDPR</li>
+      <li><strong>Professionisti sanitari:</strong> solo se richiedi la revisione con nutrizionista, e solo con il tuo consenso esplicito</li>
+      <li><strong>Autorità competenti:</strong> solo se richiesto dalla legge</li>
+    </ul>
+
+    <h2>6. Conservazione dei Dati</h2>
+    <ul>
+      <li><strong>Dati account:</strong> conservati per tutta la durata dell'iscrizione + 30 giorni dopo la cancellazione</li>
+      <li><strong>Dati di allenamento:</strong> conservati fino a cancellazione dell'account</li>
+      <li><strong>Dati di pagamento:</strong> conservati per 10 anni (obblighi fiscali)</li>
+    </ul>
+
+    <h2>7. I Tuoi Diritti (Artt. 15-22 GDPR)</h2>
+    <p>Hai diritto a:</p>
+    <ul>
+      <li>📝 <strong>Accesso</strong> — richiedere una copia dei tuoi dati</li>
+      <li>✏️ <strong>Rettifica</strong> — correggere dati inesatti</li>
+      <li>🗑️ <strong>Cancellazione</strong> — richiedere l'eliminazione dei tuoi dati</li>
+      <li>⏸️ <strong>Limitazione</strong> — limitare il trattamento</li>
+      <li>📦 <strong>Portabilità</strong> — ricevere i tuoi dati in formato strutturato</li>
+      <li>❌ <strong>Opposizione</strong> — opporti al trattamento</li>
+      <li>🚫 <strong>Revoca del consenso</strong> — in qualsiasi momento</li>
+    </ul>
+    <p>Per esercitare i tuoi diritti, scrivi a <a href="mailto:privacy@aura.app">privacy@aura.app</a>. Risponderemo entro 30 giorni.</p>
+    <p>Hai anche il diritto di presentare reclamo al <strong>Garante per la Protezione dei Dati Personali</strong> (<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">garanteprivacy.it</a>).</p>
+
+    <h2>8. Sicurezza</h2>
+    <p>Adottiamo misure tecniche e organizzative adeguate: crittografia dei dati, accesso limitato, backup sicuri, monitoraggio continuo. Le password sono sempre hash-ate e non vengono mai memorizzate in chiaro.</p>
+
+    <h2>9. Cookie e Archiviazione Locale</h2>
+    <p>AURA utilizza <strong>localStorage</strong> del browser per salvare la tua sessione e le tue preferenze. Non utilizziamo cookie di profilazione di terze parti. I dati restano sul tuo dispositivo e non vengono inviati a server esterni per tracciamento.</p>
+
+    <h2>10. Trasferimento Dati Extra-UE</h2>
+    <p>I tuoi dati sono conservati su server situati nell'Unione Europea. In caso di trasferimento extra-UE, verranno applicate le Clausole Contrattuali Standard approvate dalla Commissione Europea.</p>
+
+    <h2>11. Minori</h2>
+    <p>AURA non è destinata a minori di 16 anni. Se sei un genitore e ritieni che tuo figlio abbia fornito dati personali senza il tuo consenso, contattaci per la rimozione.</p>
+
+    <h2>12. Modifiche alla Privacy Policy</h2>
+    <p>Ci riserviamo di aggiornare questa policy. In caso di modifiche sostanziali, ti avviseremo tramite notifica in-app o email. L'uso continuato del servizio dopo le modifiche implica l'accettazione.</p>
+
+    <h2>13. Contatti</h2>
+    <p><strong>AURA Fitness S.r.l.</strong><br>Email: <a href="mailto:privacy@aura.app">privacy@aura.app</a><br>DPO (Data Protection Officer): <a href="mailto:dpo@aura.app">dpo@aura.app</a></p>
+  </div>
+</div>
+
+<!-- ══ TERMINI DI SERVIZIO ══ -->
+<div class="legal-ov" id="terms-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeLegal('terms-ov')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">📜 Termini di Servizio</div>
+  </div>
+  <div class="legal-scroll">
+    <div class="legal-updated">Ultimo aggiornamento: 13 Marzo 2026</div>
+
+    <div class="legal-highlight">
+      <strong>In sintesi:</strong> AURA è un assistente fitness IA. I piani generati non sostituiscono il parere medico. Usandola accetti questi termini. Puoi cancellarti in qualsiasi momento.
+    </div>
+
+    <h2>1. Accettazione dei Termini</h2>
+    <p>Registrandoti e utilizzando AURA ("il Servizio"), accetti integralmente i presenti Termini di Servizio. Se non sei d'accordo, non utilizzare il Servizio.</p>
+
+    <h2>2. Descrizione del Servizio</h2>
+    <p>AURA è un'applicazione di fitness e benessere che offre:</p>
+    <ul>
+      <li>Piani di allenamento personalizzati generati da intelligenza artificiale</li>
+      <li>Analisi del movimento tramite camera</li>
+      <li>Piani alimentari e tracking nutrizionale</li>
+      <li>Community e matching con partner di allenamento</li>
+      <li>Monitoraggio progressi e statistiche</li>
+    </ul>
+
+    <h2>3. Disclaimer Medico</h2>
+    <div class="legal-highlight">
+      <strong>⚠️ Importante:</strong> AURA non è un dispositivo medico. I suggerimenti di allenamento e alimentazione sono generati da un algoritmo IA e <strong>non sostituiscono il parere di un medico, nutrizionista o personal trainer certificato</strong>. Consulta sempre un professionista sanitario prima di iniziare un nuovo programma di allenamento o dieta, specialmente se hai condizioni mediche preesistenti.
+    </div>
+
+    <h2>4. Account Utente</h2>
+    <ul>
+      <li>Devi avere almeno <strong>16 anni</strong> per creare un account</li>
+      <li>Sei responsabile della sicurezza delle tue credenziali</li>
+      <li>Le informazioni fornite devono essere veritiere e aggiornate</li>
+      <li>Un account è strettamente personale e non trasferibile</li>
+    </ul>
+
+    <h2>5. Piani e Pagamenti</h2>
+    <h3>5.1 Piano Gratuito</h3>
+    <p>Include funzionalità base: workout tracker, analisi camera limitata, community.</p>
+    <h3>5.2 Piano PRO (9,99€/mese)</h3>
+    <ul>
+      <li>Piano dietetico personalizzato IA</li>
+      <li>Analisi forma illimitata</li>
+      <li>Coaching IA settimanale</li>
+      <li>Treppiedi AURA in omaggio (alla prima sottoscrizione)</li>
+    </ul>
+    <h3>5.3 Servizi Premium</h3>
+    <ul>
+      <li>Revisione nutrizionista certificato: 50€ una tantum</li>
+      <li>Hardware (bilancia, fascia HRV): prezzi specificati nello Store</li>
+    </ul>
+    <h3>5.4 Pagamenti e Rinnovi</h3>
+    <p>Gli abbonamenti si rinnovano automaticamente. Puoi annullare in qualsiasi momento dalle impostazioni. L'annullamento ha effetto alla fine del periodo di fatturazione corrente.</p>
+
+    <h2>6. Diritto di Recesso</h2>
+    <p>Ai sensi del D.Lgs. 206/2005 (Codice del Consumo), hai diritto di recedere entro <strong>14 giorni</strong> dall'acquisto senza motivazione. Il rimborso verrà effettuato entro 14 giorni dalla ricezione della richiesta. Per esercitare il recesso, scrivi a <a href="mailto:supporto@aura.app">supporto@aura.app</a>.</p>
+
+    <h2>7. Proprietà Intellettuale</h2>
+    <p>Tutti i contenuti dell'app (design, algoritmi, testi, loghi, codice) sono proprietà di AURA Fitness S.r.l. e protetti dalle leggi sul diritto d'autore. È vietata la riproduzione non autorizzata.</p>
+
+    <h2>8. Contenuti Generati dall'Utente</h2>
+    <p>I contenuti che condividi nella community (foto profilo, messaggi, dati pubblici) devono rispettare le norme di convivenza civile. AURA si riserva il diritto di rimuovere contenuti offensivi, inappropriati o illegali.</p>
+
+    <h2>9. Uso della Camera e Dati Biometrici</h2>
+    <p>La funzionalità di analisi del movimento elabora le immagini della camera <strong>in tempo reale sul dispositivo</strong>. Le immagini <strong>non vengono salvate né inviate</strong> ai nostri server. L'analisi produce solo dati numerici (angoli, punteggio forma) che vengono salvati nel tuo profilo.</p>
+
+    <h2>10. Limitazione di Responsabilità</h2>
+    <ul>
+      <li>AURA non è responsabile per infortuni derivanti dall'esecuzione degli esercizi suggeriti</li>
+      <li>I risultati possono variare da persona a persona</li>
+      <li>Il servizio è fornito "così com'è" senza garanzie sui risultati</li>
+      <li>AURA non è responsabile per interruzioni temporanee del servizio</li>
+    </ul>
+
+    <h2>11. Sospensione e Chiusura</h2>
+    <p>Ci riserviamo il diritto di sospendere o chiudere il tuo account in caso di violazione dei presenti Termini, uso fraudolento, o comportamento dannoso verso altri utenti.</p>
+    <p>Puoi chiudere il tuo account in qualsiasi momento dalla sezione Profilo > Impostazioni oppure scrivendo a <a href="mailto:supporto@aura.app">supporto@aura.app</a>.</p>
+
+    <h2>12. Legge Applicabile</h2>
+    <p>I presenti Termini sono regolati dalla legge italiana. Per qualsiasi controversia sarà competente il Foro di residenza del consumatore ai sensi del D.Lgs. 206/2005.</p>
+
+    <h2>13. Risoluzione Alternativa delle Controversie</h2>
+    <p>Ai sensi dell'Art. 14 del Regolamento UE 524/2013, ti informiamo che la Commissione Europea mette a disposizione una piattaforma per la risoluzione online delle controversie (ODR): <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a></p>
+
+    <h2>14. Modifiche ai Termini</h2>
+    <p>AURA può modificare i presenti Termini in qualsiasi momento. Le modifiche sostanziali verranno comunicate con almeno 15 giorni di preavviso. L'uso continuato del servizio dopo la notifica costituisce accettazione.</p>
+
+    <h2>15. Contatti</h2>
+    <p><strong>AURA Fitness S.r.l.</strong><br>Email generale: <a href="mailto:supporto@aura.app">supporto@aura.app</a><br>Assistenza legale: <a href="mailto:legale@aura.app">legale@aura.app</a></p>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════
 //  AURA MOBILE — JS
 // ═══════════════════════════════════════════════════
 
 const S = { tab:'home', hydration:1.2, hydGoal:2.5, workoutOn:false, wSec:0, wTimer:null, pIdx:0, bpm:72 };
+
+// ── LEGAL PAGES ───────────────────────────────────────
+function openLegal(id) {
+  const ov = document.getElementById(id);
+  if (ov) { ov.classList.add('on'); ov.querySelector('.legal-scroll').scrollTop = 0; }
+}
+function closeLegal(id) {
+  const ov = document.getElementById(id);
+  if (ov) ov.classList.remove('on');
+}
 
 const partners = [
   { name:'Elena M.',   dist:'2 km',   lvl:'Intermedio',  time:'18:00', tags:['🏋️ Forza','🧘 Yoga','🏃 Running'],      av:'E', col:'#f97316' },
