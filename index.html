@@ -563,6 +563,24 @@ html,body{
 .ep-save:active{background:var(--or2);transform:scale(.97)}
 .ep-email-note{font-size:.68rem;color:var(--t4);margin-top:2px}
 
+/* ══════ XP & BADGES ══════ */
+.xp-bar-wrap{margin-bottom:14px}
+.xp-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.xp-lvl{font-family:var(--fd);font-weight:800;font-size:.95rem}
+.xp-next{font-size:.68rem;color:var(--t4)}
+.xp-bar{height:8px;background:var(--s8);border-radius:50px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--or),var(--or2));border-radius:50px;transition:width .6s ease}
+.xp-label{font-size:.65rem;color:var(--t3);margin-top:4px;text-align:right}
+
+.badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;text-align:center;transition:all .2s}
+.badge-item.unlocked{border-color:#f9731640;background:#f9731608}
+.badge-item.locked{opacity:.4;filter:grayscale(1)}
+.badge-ico{font-size:1.6rem}
+.badge-name{font-size:.68rem;font-weight:700;line-height:1.2}
+.badge-desc{font-size:.58rem;color:var(--t4);line-height:1.2}
+.badge-date{font-size:.55rem;color:var(--or);font-weight:600;margin-top:2px}
+
 /* ══════ LEGAL PAGES ══════ */
 .legal-ov{
   position:absolute;inset:0;z-index:4000;
@@ -837,7 +855,7 @@ html,body{
         </div>
         <div class="hdr-right">
           <div class="av av-m">L</div>
-          <div class="lvl-badge">⚡ Lv.5 Macchina</div>
+          <div class="lvl-badge" id="home-lvl-badge">⚡ Lv.1 Principiante</div>
         </div>
       </div>
 
@@ -1185,10 +1203,10 @@ html,body{
         </div>
         <div>
           <div class="prof-name">Luca Pipia</div>
-          <div class="prof-tag">⚡ Livello 5 — Macchina</div>
-          <div class="prof-since" id="prof-since">Membro da Gennaio 2024 · Piano PRO</div>
+          <div class="prof-tag" id="prof-tag">⚡ Lv.1 — Principiante</div>
+          <div class="prof-since" id="prof-since">Membro da Gennaio 2024</div>
           <div style="display:flex;gap:6px;margin-top:8px">
-            <div class="chip chip-or" style="font-size:.65rem">🔥 7gg streak</div>
+            <div class="chip chip-or" style="font-size:.65rem" id="prof-streak-chip">🔥 0gg streak</div>
             <div class="chip chip-gr" style="font-size:.65rem" id="prof-goal-chip">✅ Massa</div>
           </div>
         </div>
@@ -1205,6 +1223,18 @@ html,body{
           <div class="psep"></div>
           <div class="psi"><div class="psv" id="ps-adherence">0%</div><div class="psl">Aderenza</div></div>
         </div>
+
+        <!-- XP Bar -->
+        <div class="xp-bar-wrap" id="xp-bar-section">
+          <div class="xp-header"><span class="xp-lvl" id="xp-lvl-label">Livello 1</span><span class="xp-next" id="xp-next-label">0 / 120 XP</span></div>
+          <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+          <div class="xp-label" id="xp-label">120 XP per il prossimo livello</div>
+        </div>
+
+        <!-- Badge -->
+        <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">Badge & Achievement <span style="font-size:.7rem;color:var(--t4);font-weight:400" id="badge-count">0/0</span></div>
+        <div class="badges-grid" id="badges-grid"></div>
+        <div style="height:14px"></div>
 
         <!-- Progressi -->
         <div class="sec-title">I Miei Progressi</div>
@@ -1868,8 +1898,13 @@ function updateProfileStats() {
   if (hw) hw.textContent = totalWorkouts + ' allenamenti';
   const hp = document.getElementById('home-points');
   if (hp) hp.textContent = (totalWorkouts * 120) + ' punti';
+  // Profile streak chip
+  const psc = document.getElementById('prof-streak-chip');
+  if (psc) psc.textContent = '🔥 ' + streak + 'gg streak';
   // Profile diary
   renderDiary();
+  // XP & Levels & Badges
+  updateXPandBadges();
 }
 
 function renderDiary() {
@@ -1899,6 +1934,131 @@ function renderDiary() {
   // Replace content but keep the empty div
   diary.querySelectorAll('.whi').forEach(el => el.remove());
   diary.insertAdjacentHTML('beforeend', html);
+}
+
+// ── XP & LEVEL SYSTEM ───────────────────────────
+const XP_TABLE = [0,120,360,720,1200,1800,2520,3360,4320,5400,6600,7920,9360,10920,12600,14400,16320,18360,20520,22800,25200];
+const LVL_NAMES = ['Principiante','Esploratore','Costante','Dedicato','Guerriero','Atleta','Macchina','Campione','Leggenda','Elite','⭐ AURA'];
+
+function getLevelFromXP(xp) {
+  let lvl = 1;
+  for (let i = 1; i < XP_TABLE.length; i++) {
+    if (xp >= XP_TABLE[i]) lvl = i + 1; else break;
+  }
+  return Math.min(lvl, 20);
+}
+function getLevelName(lvl) {
+  const idx = Math.min(Math.floor((lvl - 1) / 2), LVL_NAMES.length - 1);
+  return LVL_NAMES[idx];
+}
+function calcTotalXP() {
+  const d = getProgress();
+  return d.forza.length * 120 + d.resistenza.length * 120 + d.peso.length * 30;
+}
+
+// ── ACHIEVEMENTS ─────────────────────────────
+const BADGES = [
+  { id:'first_workout', ico:'🎯', name:'Primo Passo', desc:'Registra il primo allenamento', check: d => (d.forza.length + d.resistenza.length) >= 1 },
+  { id:'five_workouts', ico:'💪', name:'5 Workout', desc:'Completa 5 allenamenti', check: d => (d.forza.length + d.resistenza.length) >= 5 },
+  { id:'ten_workouts', ico:'🔥', name:'10 Workout', desc:'Completa 10 allenamenti', check: d => (d.forza.length + d.resistenza.length) >= 10 },
+  { id:'twentyfive_workouts', ico:'⚡', name:'25 Workout', desc:'Completa 25 allenamenti', check: d => (d.forza.length + d.resistenza.length) >= 25 },
+  { id:'fifty_workouts', ico:'🏆', name:'50 Workout', desc:'Completa 50 allenamenti', check: d => (d.forza.length + d.resistenza.length) >= 50 },
+  { id:'first_weight', ico:'⚖️', name:'Prima Pesata', desc:'Registra il primo peso', check: d => d.peso.length >= 1 },
+  { id:'ten_weights', ico:'📊', name:'Costanza', desc:'10 pesate registrate', check: d => d.peso.length >= 10 },
+  { id:'first_strength', ico:'🏋️', name:'Ferro', desc:'Primo record di forza', check: d => d.forza.length >= 1 },
+  { id:'first_cardio', ico:'🏃', name:'Cardio!', desc:'Prima attivita cardio', check: d => d.resistenza.length >= 1 },
+  { id:'streak3', ico:'🔥', name:'3gg Streak', desc:'3 giorni consecutivi', check: (d, ctx) => ctx.streak >= 3 },
+  { id:'streak7', ico:'💥', name:'7gg Streak', desc:'7 giorni consecutivi', check: (d, ctx) => ctx.streak >= 7 },
+  { id:'streak14', ico:'⭐', name:'14gg Streak', desc:'2 settimane di fila', check: (d, ctx) => ctx.streak >= 14 },
+  { id:'streak30', ico:'💎', name:'30gg Streak', desc:'Un mese di fila!', check: (d, ctx) => ctx.streak >= 30 },
+  { id:'lvl5', ico:'🌟', name:'Livello 5', desc:'Raggiungi il livello 5', check: (d, ctx) => ctx.level >= 5 },
+  { id:'lvl10', ico:'🌠', name:'Livello 10', desc:'Raggiungi il livello 10', check: (d, ctx) => ctx.level >= 10 },
+  { id:'variety', ico:'🌈', name:'Versatile', desc:'Registra forza E cardio', check: d => d.forza.length >= 1 && d.resistenza.length >= 1 },
+  { id:'bench100', ico:'🦾', name:'100kg Club', desc:'Panca piana 100+ kg', check: d => d.forza.some(e => e.ex === 'Panca Piana' && e.val >= 100) },
+  { id:'run30', ico:'🏅', name:'Maratoneta', desc:'Corsa 30+ minuti', check: d => d.resistenza.some(e => e.type === 'Corsa' && e.val >= 30) },
+];
+
+const BADGE_STORE_KEY = 'aura_badges';
+function getUnlockedBadges() {
+  try { return JSON.parse(localStorage.getItem(BADGE_STORE_KEY)) || {}; } catch { return {}; }
+}
+function saveUnlockedBadges(b) { localStorage.setItem(BADGE_STORE_KEY, JSON.stringify(b)); }
+
+function updateXPandBadges() {
+  const d = getProgress();
+  const xp = calcTotalXP();
+  const lvl = getLevelFromXP(xp);
+  const lvlName = getLevelName(lvl);
+  const xpCur = XP_TABLE[lvl - 1] || 0;
+  const xpNext = XP_TABLE[lvl] || XP_TABLE[XP_TABLE.length - 1];
+  const xpInLevel = xp - xpCur;
+  const xpNeeded = xpNext - xpCur;
+  const pct = xpNeeded > 0 ? Math.min((xpInLevel / xpNeeded) * 100, 100) : 100;
+
+  // XP bar
+  const lvlLabel = document.getElementById('xp-lvl-label');
+  if (lvlLabel) lvlLabel.textContent = 'Livello ' + lvl + ' — ' + lvlName;
+  const nextLabel = document.getElementById('xp-next-label');
+  if (nextLabel) nextLabel.textContent = xp + ' / ' + xpNext + ' XP';
+  const fill = document.getElementById('xp-fill');
+  if (fill) fill.style.width = pct + '%';
+  const xpLbl = document.getElementById('xp-label');
+  if (xpLbl) {
+    if (lvl >= 20) xpLbl.textContent = 'Livello massimo raggiunto!';
+    else xpLbl.textContent = (xpNext - xp) + ' XP per il prossimo livello';
+  }
+
+  // Home & profile level badges
+  const homeLvl = document.getElementById('home-lvl-badge');
+  if (homeLvl) homeLvl.textContent = '⚡ Lv.' + lvl + ' ' + lvlName;
+  const profTag = document.getElementById('prof-tag');
+  if (profTag) profTag.textContent = '⚡ Lv.' + lvl + ' — ' + lvlName;
+
+  // Streak for badge context
+  const today = new Date(); today.setHours(0,0,0,0);
+  const allDates = new Set([...d.forza.map(e=>e.date), ...d.resistenza.map(e=>e.date)]);
+  let streak = 0;
+  const check = new Date(today);
+  while(true) {
+    if (allDates.has(check.toISOString().slice(0,10))) { streak++; check.setDate(check.getDate()-1); }
+    else break;
+  }
+
+  // Check badges
+  const ctx = { streak, level: lvl, xp };
+  const unlocked = getUnlockedBadges();
+  let newBadges = [];
+  BADGES.forEach(b => {
+    if (!unlocked[b.id] && b.check(d, ctx)) {
+      unlocked[b.id] = new Date().toISOString().slice(0,10);
+      newBadges.push(b);
+    }
+  });
+  if (newBadges.length > 0) {
+    saveUnlockedBadges(unlocked);
+    newBadges.forEach((b, i) => {
+      setTimeout(() => toast(b.ico + ' Badge sbloccato: ' + b.name + '!', 'or'), 300 + i * 800);
+    });
+  }
+
+  // Render badges grid
+  const grid = document.getElementById('badges-grid');
+  if (grid) {
+    const months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+    grid.innerHTML = BADGES.map(b => {
+      const u = unlocked[b.id];
+      const cls = u ? 'unlocked' : 'locked';
+      let dateStr = '';
+      if (u) { const dp = new Date(u); dateStr = '<div class="badge-date">' + dp.getDate() + ' ' + months[dp.getMonth()] + ' ' + dp.getFullYear() + '</div>'; }
+      return '<div class="badge-item ' + cls + '"><div class="badge-ico">' + (u ? b.ico : '🔒') + '</div><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div>';
+    }).join('');
+  }
+  const bc = document.getElementById('badge-count');
+  if (bc) {
+    const total = BADGES.length;
+    const done = Object.keys(unlocked).length;
+    bc.textContent = done + '/' + total;
+  }
 }
 
 // ── EDIT PROFILE ─────────────────────────────────
@@ -2347,21 +2507,10 @@ function applyUserData(u) {
   // Profile name
   const profName = document.querySelector('.prof-name');
   if (profName) profName.textContent = u.name;
-  // Profile goal + level
-  const goalLabels = { massa:'💪 Massa Muscolare', dimagrimento:'🔥 Dimagrimento', benessere:'🧘 Benessere', resistenza:'🏃 Resistenza' };
-  const lvlLabels = { principiante:'Principiante', intermedio:'Intermedio', avanzato:'Avanzato' };
-  const profTag = document.querySelector('.prof-tag');
-  if (profTag) {
-    const lvl = lvlLabels[u.level] || 'Intermedio';
-    const gl = goalLabels[u.goal] || 'Macchina';
-    profTag.textContent = '⚡ ' + lvl + ' — ' + gl;
-  }
-  // Level badge on home
-  const lvlBadge = document.querySelector('.lvl-badge');
-  if (lvlBadge && u.level) {
-    const lvlNames = { principiante:'Esploratore', intermedio:'Macchina', avanzato:'Leggenda' };
-    lvlBadge.textContent = '⚡ ' + (lvlLabels[u.level]||'Intermedio') + ' · ' + (lvlNames[u.level]||'Macchina');
-  }
+  // Profile goal + level (levels are now calculated by XP system)
+  const profTag = document.getElementById('prof-tag');
+  // prof-tag is updated by updateXPandBadges(), skip here
+  // Level badge on home is also updated by updateXPandBadges(), skip here
   // Profile goal chip
   const goalChip = document.getElementById('prof-goal-chip');
   if (goalChip && u.goal) {
