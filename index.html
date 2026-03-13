@@ -518,6 +518,36 @@ html,body{
 .ob-sum-label{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .ob-sum-val{font-family:var(--fd);font-weight:800;font-size:.95rem}
 
+/* ══════ PROGRESS TRACKER ══════ */
+.prog-ov{position:absolute;inset:0;z-index:3500;display:none;flex-direction:column;background:var(--bg)}
+.prog-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.prog-tabs{display:flex;gap:6px;padding:0 20px 12px}
+.prog-tab{flex:1;padding:.6rem 0;text-align:center;font-size:.75rem;font-weight:700;border-radius:10px;background:var(--s8);color:var(--t3);cursor:pointer;border:1px solid transparent;transition:all .2s}
+.prog-tab.on{background:#f9731615;color:var(--or);border-color:var(--or)}
+.prog-panel{display:none;flex-direction:column;gap:14px}
+.prog-panel.on{display:flex}
+.prog-chart-wrap{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:14px;position:relative}
+.prog-chart-wrap canvas{width:100%;height:180px;display:block}
+.prog-empty{text-align:center;padding:32px 16px;color:var(--t4);font-size:.82rem}
+.prog-empty b{display:block;font-size:1rem;color:var(--t2);margin-bottom:6px}
+.prog-last{font-size:.72rem;color:var(--t4);margin-top:6px;text-align:right}
+.prog-val-big{font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--t1)}
+.prog-val-unit{font-size:.85rem;color:var(--t3);font-weight:600}
+.prog-val-delta{font-size:.78rem;font-weight:700;margin-left:6px}
+.prog-val-delta.pos{color:var(--gr)}
+.prog-val-delta.neg{color:var(--re)}
+.prog-add-row{display:flex;gap:10px;align-items:flex-end}
+.prog-add-row .ob-input-group{flex:1}
+.prog-add-btn{padding:.75rem 1.2rem;background:var(--or);color:#fff;border-radius:12px;font-weight:700;font-size:.82rem;border:none;cursor:pointer;transition:all .18s;white-space:nowrap}
+.prog-add-btn:active{background:var(--or2);transform:scale(.96)}
+.prog-history{display:flex;flex-direction:column;gap:0}
+.prog-hi{display:flex;align-items:center;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid var(--s8);font-size:.82rem}
+.prog-hi:last-child{border-bottom:none}
+.prog-hi-date{color:var(--t3);font-size:.72rem;min-width:70px}
+.prog-hi-val{font-family:var(--fd);font-weight:800}
+.prog-hi-del{width:28px;height:28px;border-radius:50%;background:var(--s8);border:none;color:var(--re);font-size:.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.prog-hi-del:active{background:#ef444425}
+
 /* ══════ LEGAL PAGES ══════ */
 .legal-ov{
   position:absolute;inset:0;z-index:4000;
@@ -1150,15 +1180,30 @@ html,body{
       </div>
 
       <div style="padding:0 16px">
-        <!-- Stats -->
-        <div class="pstats">
-          <div class="psi"><div class="psv">147</div><div class="psl">Allenamenti</div></div>
+        <!-- Stats (reali) -->
+        <div class="pstats" id="prof-pstats">
+          <div class="psi"><div class="psv" id="ps-workouts">0</div><div class="psl">Allenamenti</div></div>
           <div class="psep"></div>
-          <div class="psi"><div class="psv">7</div><div class="psl">Streak 🔥</div></div>
+          <div class="psi"><div class="psv" id="ps-streak">0</div><div class="psl">Streak 🔥</div></div>
           <div class="psep"></div>
-          <div class="psi"><div class="psv">18.4k</div><div class="psl">Punti</div></div>
+          <div class="psi"><div class="psv" id="ps-points">0</div><div class="psl">Punti</div></div>
           <div class="psep"></div>
-          <div class="psi"><div class="psv">91%</div><div class="psl">Aderenza</div></div>
+          <div class="psi"><div class="psv" id="ps-adherence">0%</div><div class="psl">Aderenza</div></div>
+        </div>
+
+        <!-- Progressi -->
+        <div class="sec-title">I Miei Progressi</div>
+        <div class="card" style="padding:14px;cursor:pointer" onclick="openProgress()">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:1.4rem">📈</span>
+              <div>
+                <div style="font-weight:700;font-size:.88rem">Storico Progressi</div>
+                <div style="font-size:.7rem;color:var(--t3)">Peso, Forza, Resistenza nel tempo</div>
+              </div>
+            </div>
+            <span class="sarr">›</span>
+          </div>
         </div>
 
         <!-- Diario -->
@@ -1466,6 +1511,65 @@ html,body{
   </div>
 </div>
 
+<!-- ═══ PROGRESS OVERLAY ═══ -->
+<div class="prog-ov" id="progress-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeProgress()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">Storico Progressi</div>
+  </div>
+  <div class="prog-tabs">
+    <div class="prog-tab on" data-pt="peso" onclick="switchProgTab('peso')">Peso</div>
+    <div class="prog-tab" data-pt="forza" onclick="switchProgTab('forza')">Forza</div>
+    <div class="prog-tab" data-pt="resistenza" onclick="switchProgTab('resistenza')">Resistenza</div>
+  </div>
+  <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <!-- PESO -->
+    <div class="prog-panel on" id="pp-peso">
+      <div id="peso-current" style="display:flex;align-items:baseline;gap:4px"></div>
+      <div class="prog-chart-wrap"><canvas id="chart-peso" height="180"></canvas></div>
+      <div class="card" style="padding:14px">
+        <div style="font-weight:700;font-size:.82rem;margin-bottom:10px">Aggiungi Pesata</div>
+        <div class="prog-add-row">
+          <div class="ob-input-group"><label class="ob-input-label">Peso (kg)</label><input class="ob-input" type="number" step="0.1" min="30" max="300" id="prog-peso-val" placeholder="0.0"></div>
+          <div class="ob-input-group"><label class="ob-input-label">Data</label><input class="ob-input" type="date" id="prog-peso-date" style="font-size:.82rem"></div>
+          <button class="prog-add-btn" onclick="addProgEntry('peso')">+ Salva</button>
+        </div>
+      </div>
+      <div class="card" style="padding:14px" id="peso-history"><div style="font-weight:700;font-size:.82rem;margin-bottom:8px">Cronologia</div><div class="prog-history" id="peso-list"></div></div>
+    </div>
+    <!-- FORZA -->
+    <div class="prog-panel" id="pp-forza">
+      <div id="forza-current" style="display:flex;align-items:baseline;gap:4px"></div>
+      <div class="prog-chart-wrap"><canvas id="chart-forza" height="180"></canvas></div>
+      <div class="card" style="padding:14px">
+        <div style="font-weight:700;font-size:.82rem;margin-bottom:10px">Aggiungi Record Forza</div>
+        <div class="prog-add-row">
+          <div class="ob-input-group"><label class="ob-input-label">Esercizio</label><select class="ob-input" id="prog-forza-ex" style="font-size:.78rem;font-weight:600"><option value="Panca Piana">Panca Piana</option><option value="Squat">Squat</option><option value="Stacco">Stacco</option><option value="Military Press">Military Press</option><option value="Rematore">Rematore</option><option value="Altro">Altro</option></select></div>
+          <div class="ob-input-group"><label class="ob-input-label">Kg</label><input class="ob-input" type="number" step="0.5" min="0" max="500" id="prog-forza-val" placeholder="0"></div>
+          <button class="prog-add-btn" onclick="addProgEntry('forza')">+ Salva</button>
+        </div>
+      </div>
+      <div class="card" style="padding:14px" id="forza-history"><div style="font-weight:700;font-size:.82rem;margin-bottom:8px">Cronologia</div><div class="prog-history" id="forza-list"></div></div>
+    </div>
+    <!-- RESISTENZA -->
+    <div class="prog-panel" id="pp-resistenza">
+      <div id="resistenza-current" style="display:flex;align-items:baseline;gap:4px"></div>
+      <div class="prog-chart-wrap"><canvas id="chart-resistenza" height="180"></canvas></div>
+      <div class="card" style="padding:14px">
+        <div style="font-weight:700;font-size:.82rem;margin-bottom:10px">Aggiungi Attivita Cardio</div>
+        <div class="prog-add-row">
+          <div class="ob-input-group"><label class="ob-input-label">Tipo</label><select class="ob-input" id="prog-res-type" style="font-size:.78rem;font-weight:600"><option value="Corsa">Corsa</option><option value="Ciclismo">Ciclismo</option><option value="Nuoto">Nuoto</option><option value="Corda">Corda</option><option value="Altro">Altro</option></select></div>
+          <div class="ob-input-group"><label class="ob-input-label">Minuti</label><input class="ob-input" type="number" min="1" max="999" id="prog-res-val" placeholder="0"></div>
+          <button class="prog-add-btn" onclick="addProgEntry('resistenza')">+ Salva</button>
+        </div>
+      </div>
+      <div class="card" style="padding:14px" id="resistenza-history"><div style="font-weight:700;font-size:.82rem;margin-bottom:8px">Cronologia</div><div class="prog-history" id="resistenza-list"></div></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════
 //  AURA MOBILE — JS
@@ -1481,6 +1585,237 @@ function openLegal(id) {
 function closeLegal(id) {
   const ov = document.getElementById(id);
   if (ov) ov.classList.remove('on');
+}
+
+// ── PROGRESS TRACKER ──────────────────────────────────
+const PROG_KEY = 'aura_progress';
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem(PROG_KEY)) || { peso:[], forza:[], resistenza:[] }; }
+  catch(e) { return { peso:[], forza:[], resistenza:[] }; }
+}
+function saveProgress(d) { localStorage.setItem(PROG_KEY, JSON.stringify(d)); }
+
+function openProgress() {
+  document.getElementById('progress-ov').classList.add('on');
+  document.getElementById('prog-peso-date').value = new Date().toISOString().slice(0,10);
+  switchProgTab('peso');
+}
+function closeProgress() {
+  document.getElementById('progress-ov').classList.remove('on');
+}
+
+function switchProgTab(t) {
+  document.querySelectorAll('.prog-tab').forEach(el => el.classList.toggle('on', el.dataset.pt === t));
+  document.querySelectorAll('.prog-panel').forEach(el => el.classList.toggle('on', el.id === 'pp-' + t));
+  renderProgPanel(t);
+}
+
+function addProgEntry(cat) {
+  const d = getProgress();
+  if (cat === 'peso') {
+    const v = parseFloat(document.getElementById('prog-peso-val').value);
+    const dt = document.getElementById('prog-peso-date').value;
+    if (!v || v < 30 || v > 300) { toast('Inserisci un peso valido (30-300 kg)','re'); return; }
+    if (!dt) { toast('Seleziona una data','re'); return; }
+    d.peso.push({ val: v, date: dt });
+    document.getElementById('prog-peso-val').value = '';
+  } else if (cat === 'forza') {
+    const ex = document.getElementById('prog-forza-ex').value;
+    const v = parseFloat(document.getElementById('prog-forza-val').value);
+    if (!v || v <= 0) { toast('Inserisci un peso valido','re'); return; }
+    d.forza.push({ val: v, ex: ex, date: new Date().toISOString().slice(0,10) });
+    document.getElementById('prog-forza-val').value = '';
+  } else {
+    const tp = document.getElementById('prog-res-type').value;
+    const v = parseInt(document.getElementById('prog-res-val').value);
+    if (!v || v <= 0) { toast('Inserisci i minuti','re'); return; }
+    d.resistenza.push({ val: v, type: tp, date: new Date().toISOString().slice(0,10) });
+    document.getElementById('prog-res-val').value = '';
+  }
+  saveProgress(d);
+  toast('Dato salvato!','gr');
+  renderProgPanel(cat);
+  updateProfileStats();
+}
+
+function deleteProgEntry(cat, idx) {
+  const d = getProgress();
+  d[cat].splice(idx, 1);
+  saveProgress(d);
+  renderProgPanel(cat);
+  updateProfileStats();
+}
+
+function renderProgPanel(cat) {
+  const d = getProgress();
+  const entries = d[cat] || [];
+  const sorted = [...entries].sort((a,b) => a.date.localeCompare(b.date));
+  const listEl = document.getElementById(cat + '-list');
+  const histCard = document.getElementById(cat + '-history');
+  const curEl = document.getElementById(cat + '-current');
+
+  // Current value & delta
+  if (sorted.length === 0) {
+    curEl.innerHTML = '<div class="prog-empty"><b>Nessun dato ancora</b>Aggiungi la tua prima misurazione qui sotto</div>';
+  } else {
+    const last = sorted[sorted.length - 1];
+    const unit = cat === 'peso' ? 'kg' : cat === 'forza' ? 'kg' : 'min';
+    let deltaHtml = '';
+    if (sorted.length >= 2) {
+      const prev = sorted[sorted.length - 2];
+      const diff = (last.val - prev.val).toFixed(1);
+      const sign = diff > 0 ? '+' : '';
+      const cls = cat === 'peso' ? (diff < 0 ? 'pos' : diff > 0 ? 'neg' : '') : (diff > 0 ? 'pos' : diff < 0 ? 'neg' : '');
+      deltaHtml = '<span class="prog-val-delta ' + cls + '">' + sign + diff + ' ' + unit + '</span>';
+    }
+    const label = cat === 'forza' ? ' (' + last.ex + ')' : cat === 'resistenza' ? ' (' + last.type + ')' : '';
+    curEl.innerHTML = '<span class="prog-val-big">' + last.val + '</span><span class="prog-val-unit">' + unit + label + '</span>' + deltaHtml;
+  }
+
+  // History list (newest first)
+  const rev = [...sorted].reverse();
+  if (rev.length === 0) {
+    histCard.style.display = 'none';
+  } else {
+    histCard.style.display = '';
+    const months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+    listEl.innerHTML = rev.map((e, ri) => {
+      const realIdx = entries.indexOf(rev[ri]);
+      const dp = new Date(e.date);
+      const ds = dp.getDate() + ' ' + months[dp.getMonth()] + ' ' + dp.getFullYear();
+      const unit = cat === 'peso' ? 'kg' : cat === 'forza' ? 'kg' : 'min';
+      const extra = cat === 'forza' ? e.ex + ' — ' : cat === 'resistenza' ? e.type + ' — ' : '';
+      return '<div class="prog-hi"><span class="prog-hi-date">' + ds + '</span><span class="prog-hi-val">' + extra + e.val + ' ' + unit + '</span><button class="prog-hi-del" onclick="deleteProgEntry(\'' + cat + '\',' + realIdx + ')">✕</button></div>';
+    }).join('');
+  }
+
+  // Draw chart
+  drawProgChart(cat, sorted);
+}
+
+function drawProgChart(cat, sorted) {
+  const canvas = document.getElementById('chart-' + cat);
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = (rect.width - 28) * dpr;
+  canvas.height = 180 * dpr;
+  canvas.style.width = (rect.width - 28) + 'px';
+  canvas.style.height = '180px';
+  ctx.scale(dpr, dpr);
+  const W = rect.width - 28, H = 180;
+  ctx.clearRect(0, 0, W, H);
+
+  if (sorted.length < 2) {
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--t4');
+    ctx.font = '12px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText(sorted.length === 0 ? 'Aggiungi dati per vedere il grafico' : 'Serve almeno un altro dato', W/2, H/2);
+    return;
+  }
+
+  const pad = { t: 20, b: 30, l: 42, r: 16 };
+  const cW = W - pad.l - pad.r;
+  const cH = H - pad.t - pad.b;
+  const vals = sorted.map(e => e.val);
+  let mn = Math.min(...vals), mx = Math.max(...vals);
+  if (mn === mx) { mn -= 1; mx += 1; }
+  const range = mx - mn;
+
+  // Grid lines
+  const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--s7') || '#2a2a2a';
+  const textColor = getComputedStyle(document.documentElement).getPropertyValue('--t4') || '#666';
+  ctx.strokeStyle = gridColor;
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (cH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    ctx.fillStyle = textColor;
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'right';
+    const gv = mx - (range / 4) * i;
+    ctx.fillText(gv.toFixed(cat === 'peso' ? 1 : 0), pad.l - 6, y + 3);
+  }
+
+  // X labels
+  const months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  const step = Math.max(1, Math.floor(sorted.length / 5));
+  ctx.textAlign = 'center';
+  ctx.fillStyle = textColor;
+  ctx.font = '10px system-ui';
+  for (let i = 0; i < sorted.length; i += step) {
+    const x = pad.l + (i / (sorted.length - 1)) * cW;
+    const dp = new Date(sorted[i].date);
+    ctx.fillText(dp.getDate() + '/' + (dp.getMonth()+1), x, H - 6);
+  }
+
+  // Line
+  const orColor = getComputedStyle(document.documentElement).getPropertyValue('--or') || '#f97316';
+  ctx.strokeStyle = orColor;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  sorted.forEach((e, i) => {
+    const x = pad.l + (i / (sorted.length - 1)) * cW;
+    const y = pad.t + cH - ((e.val - mn) / range) * cH;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+  grad.addColorStop(0, orColor + '35');
+  grad.addColorStop(1, orColor + '05');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  sorted.forEach((e, i) => {
+    const x = pad.l + (i / (sorted.length - 1)) * cW;
+    const y = pad.t + cH - ((e.val - mn) / range) * cH;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad.l + cW, pad.t + cH);
+  ctx.lineTo(pad.l, pad.t + cH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Dots
+  sorted.forEach((e, i) => {
+    const x = pad.l + (i / (sorted.length - 1)) * cW;
+    const y = pad.t + cH - ((e.val - mn) / range) * cH;
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = orColor;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+}
+
+function updateProfileStats() {
+  const d = getProgress();
+  const totalWorkouts = d.forza.length + d.resistenza.length;
+  document.getElementById('ps-workouts').textContent = totalWorkouts;
+  document.getElementById('ps-points').textContent = totalWorkouts * 120;
+  // Streak: count consecutive days with entries going backwards from today
+  const today = new Date(); today.setHours(0,0,0,0);
+  const allDates = new Set([...d.forza.map(e=>e.date), ...d.resistenza.map(e=>e.date)]);
+  let streak = 0;
+  const check = new Date(today);
+  while(true) {
+    const ds = check.toISOString().slice(0,10);
+    if (allDates.has(ds)) { streak++; check.setDate(check.getDate()-1); }
+    else break;
+  }
+  document.getElementById('ps-streak').textContent = streak;
+  // Adherence: entries out of last 7 days
+  let days7 = 0;
+  for (let i = 0; i < 7; i++) {
+    const dd = new Date(today); dd.setDate(dd.getDate() - i);
+    if (allDates.has(dd.toISOString().slice(0,10))) days7++;
+  }
+  document.getElementById('ps-adherence').textContent = Math.round((days7/7)*100) + '%';
 }
 
 const partners = [
@@ -2285,6 +2620,7 @@ document.getElementById('ob-finish').addEventListener('click', () => {
 // ── INIT — Check stored session ──────────────────
 (function initAuth() {
   const user = getUser();
+  updateProfileStats();
   if (user && !user._needsOnboarding) {
     applyUserData(user);
     hideAuth();
