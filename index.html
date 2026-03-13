@@ -3179,6 +3179,20 @@ function checkBrightness(video) {
 }
 
 // ── VOICE COACH ─────────────────────────────
+var speechUnlocked = false;
+function unlockSpeech() {
+  if (speechUnlocked) return;
+  if (!('speechSynthesis' in window)) return;
+  // Unlock with a silent utterance from user gesture context
+  var unlock = new SpeechSynthesisUtterance('');
+  unlock.volume = 0;
+  unlock.lang = 'it-IT';
+  window.speechSynthesis.speak(unlock);
+  speechUnlocked = true;
+  // Force load voices
+  window.speechSynthesis.getVoices();
+}
+
 function speak(text) {
   if (!CAM.voiceEnabled) return;
   if (!('speechSynthesis' in window)) return;
@@ -3189,12 +3203,12 @@ function speak(text) {
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(text);
   u.lang = 'it-IT';
-  u.rate = 1.1;
+  u.rate = 1.05;
   u.pitch = 1.0;
   u.volume = 1.0;
   // Try to find an Italian voice
   var voices = window.speechSynthesis.getVoices();
-  var itVoice = voices.find(function(v) { return v.lang.indexOf('it') === 0; });
+  var itVoice = voices.find(function(v) { return v.lang && (v.lang.indexOf('it') === 0); });
   if (itVoice) u.voice = itVoice;
   window.speechSynthesis.speak(u);
   CAM.lastVoiceTime = now;
@@ -3564,6 +3578,8 @@ document.getElementById('cam-target-reps').addEventListener('change', function()
 // Toggle camera session from start button
 function toggleCamSession() {
   var btn = document.getElementById('cam-start-btn');
+  // Unlock speech synthesis from user gesture
+  unlockSpeech();
   if (cameraActive) {
     stopCamera();
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg> Avvia Sessione';
@@ -3572,6 +3588,12 @@ function toggleCamSession() {
     startCamera();
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Ferma Sessione';
     btn.classList.add('running');
+    // Announce start with voice (confirms voice is working)
+    var exName = POSE_EXERCISES[CAM.exercise].name;
+    setTimeout(function() {
+      CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
+      speak('Sessione avviata. ' + CAM.targetReps + ' ' + exName + '. Vai!');
+    }, 1000);
   }
 }
 
