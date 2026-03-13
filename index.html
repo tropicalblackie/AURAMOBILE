@@ -11,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js" crossorigin="anonymous"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -296,6 +297,115 @@ html,body{
 .btn-pu{padding:.45rem 1rem;background:linear-gradient(135deg,var(--pu),#7c3aed);color:#fff;border-radius:10px;font-weight:700;font-size:.8rem;cursor:pointer;border:none;transition:all .2s}
 .btn-pu:active{transform:scale(.96)}
 
+/* ── Nutrition overlays ── */
+.diet-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
+.diet-ov.on{display:flex;animation:fadeUp .25s ease}
+.diet-search-wrap{padding:0 16px 10px}
+.diet-search{width:100%;padding:.75rem 1rem .75rem 2.8rem;background:var(--s9);border:1px solid var(--s8);border-radius:14px;color:var(--t1);font-size:.88rem;font-family:var(--fb);outline:none}
+.diet-search:focus{border-color:var(--or)}
+.diet-search-ico{position:absolute;left:28px;top:50%;transform:translateY(-50%);color:var(--t3)}
+.diet-results{flex:1;overflow-y:auto;padding:0 16px}
+.diet-results::-webkit-scrollbar{display:none}
+.food-card{display:flex;align-items:center;gap:12px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.food-card:active{border-color:var(--or)}
+.food-img{width:48px;height:48px;border-radius:10px;object-fit:cover;background:var(--s8);flex-shrink:0}
+.food-info{flex:1;min-width:0}
+.food-name{font-weight:700;font-size:.83rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.food-brand{font-size:.7rem;color:var(--t3);margin-top:1px}
+.food-macros-mini{display:flex;gap:8px;margin-top:4px;font-size:.65rem;color:var(--t3)}
+.food-macros-mini span{font-weight:600}
+.food-kcal{font-family:var(--fd);font-weight:800;font-size:.9rem;color:var(--or);flex-shrink:0}
+.food-kcal small{font-size:.6rem;color:var(--t4);font-weight:400}
+
+/* Food detail overlay */
+.food-detail-ov{position:fixed;inset:0;z-index:4100;display:none;flex-direction:column;background:var(--bg)}
+.food-detail-ov.on{display:flex;animation:fadeUp .25s ease}
+.food-detail-body{flex:1;overflow-y:auto;padding:16px}
+.food-detail-body::-webkit-scrollbar{display:none}
+.food-detail-head{text-align:center;padding:10px 0 20px}
+.food-detail-img{width:100px;height:100px;border-radius:18px;object-fit:cover;background:var(--s8);margin:0 auto 12px}
+.food-detail-name{font-family:var(--fd);font-weight:800;font-size:1.2rem}
+.food-detail-brand{font-size:.78rem;color:var(--t3);margin-top:2px}
+.food-nutr-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.food-nutr-box{background:var(--s9);border:1px solid var(--s8);border-radius:12px;padding:12px 8px;text-align:center}
+.food-nutr-val{font-family:var(--fd);font-weight:800;font-size:1.05rem}
+.food-nutr-lbl{font-size:.62rem;color:var(--t3);margin-top:2px}
+.food-qty-row{display:flex;align-items:center;gap:10px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:14px}
+.food-qty-input{width:70px;padding:.55rem .6rem;background:var(--bg);border:1px solid var(--s8);border-radius:10px;color:var(--t1);font-size:.95rem;font-weight:700;font-family:var(--fd);text-align:center}
+.food-qty-unit{font-size:.78rem;color:var(--t3);flex:1}
+.food-meal-sel{padding:.6rem .8rem;background:var(--bg);border:1px solid var(--s8);border-radius:10px;color:var(--t1);font-size:.82rem;font-family:var(--fb);font-weight:600}
+.food-add-btn{width:100%;padding:.9rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;font-family:var(--fb)}
+
+/* Barcode scanner */
+.barcode-ov{position:fixed;inset:0;z-index:4200;display:none;flex-direction:column;background:#000}
+.barcode-ov.on{display:flex}
+.barcode-viewport{flex:1;position:relative;overflow:hidden}
+.barcode-viewport video{width:100%;height:100%;object-fit:cover}
+.barcode-viewport canvas{position:absolute;inset:0;width:100%;height:100%}
+.barcode-guide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;height:140px;border:2px solid var(--or);border-radius:12px;box-shadow:0 0 0 2000px rgba(0,0,0,.6)}
+.barcode-guide::before{content:'Inquadra il barcode';position:absolute;top:-28px;left:50%;transform:translateX(-50%);color:#fff;font-size:.78rem;font-weight:600;white-space:nowrap}
+.barcode-close{position:absolute;top:env(safe-area-inset-top,44px);right:16px;width:36px;height:36px;background:rgba(0,0,0,.6);border:none;border-radius:50%;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+.barcode-status{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:8px 20px;border-radius:20px;font-size:.82rem;font-weight:600}
+
+/* Diet plan */
+.diet-plan-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
+.diet-plan-ov.on{display:flex;animation:fadeUp .25s ease}
+.plan-body{flex:1;overflow-y:auto;padding:16px}
+.plan-body::-webkit-scrollbar{display:none}
+.plan-day-card{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:16px;margin-bottom:12px}
+.plan-day-title{font-family:var(--fd);font-weight:800;font-size:.95rem;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.plan-meal{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--s8)}
+.plan-meal:last-child{border-bottom:none}
+.plan-meal-ico{font-size:1rem;flex-shrink:0}
+.plan-meal-info{flex:1}
+.plan-meal-name{font-weight:700;font-size:.82rem}
+.plan-meal-desc{font-size:.7rem;color:var(--t3);margin-top:1px}
+.plan-meal-kcal{font-family:var(--fd);font-weight:700;font-size:.78rem;color:var(--or)}
+
+/* Shopping list */
+.shop-list-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
+.shop-list-ov.on{display:flex;animation:fadeUp .25s ease}
+.shop-body{flex:1;overflow-y:auto;padding:16px}
+.shop-body::-webkit-scrollbar{display:none}
+.shop-cat{font-family:var(--fd);font-weight:800;font-size:.88rem;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.shop-cat:first-child{margin-top:0}
+.shop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--s9);border:1px solid var(--s8);border-radius:12px;margin-bottom:6px;font-size:.82rem;cursor:pointer}
+.shop-item.checked{opacity:.4;text-decoration:line-through}
+.shop-check{width:20px;height:20px;border:2px solid var(--s7);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.shop-item.checked .shop-check{background:var(--gr);border-color:var(--gr)}
+.shop-qty{margin-left:auto;font-weight:700;color:var(--t3);font-size:.75rem}
+
+/* Recipes */
+.recipes-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
+.recipes-ov.on{display:flex;animation:fadeUp .25s ease}
+.recipe-body{flex:1;overflow-y:auto;padding:16px}
+.recipe-body::-webkit-scrollbar{display:none}
+.recipe-card{background:var(--s9);border:1px solid var(--s8);border-radius:16px;overflow:hidden;margin-bottom:12px;cursor:pointer}
+.recipe-card:active{border-color:var(--or)}
+.recipe-img{width:100%;height:140px;object-fit:cover;background:var(--s8)}
+.recipe-info-wrap{padding:14px}
+.recipe-title{font-family:var(--fd);font-weight:800;font-size:.95rem;margin-bottom:4px}
+.recipe-meta{font-size:.7rem;color:var(--t3);display:flex;gap:10px}
+.recipe-macros-bar{display:flex;gap:6px;margin-top:8px;font-size:.62rem;font-weight:600}
+.recipe-macros-bar span{padding:3px 8px;border-radius:6px;background:var(--s8)}
+
+/* Recipe detail */
+.recipe-detail-ov{position:fixed;inset:0;z-index:4100;display:none;flex-direction:column;background:var(--bg)}
+.recipe-detail-ov.on{display:flex;animation:fadeUp .25s ease}
+.recipe-detail-body{flex:1;overflow-y:auto;padding:16px}
+.recipe-detail-body::-webkit-scrolling{display:none}
+.recipe-detail-img{width:100%;height:200px;object-fit:cover;border-radius:16px;background:var(--s8);margin-bottom:14px}
+.recipe-detail-title{font-family:var(--fd);font-weight:800;font-size:1.3rem;margin-bottom:4px}
+.recipe-detail-meta{font-size:.78rem;color:var(--t3);margin-bottom:16px}
+.recipe-section-title{font-family:var(--fd);font-weight:700;font-size:.9rem;margin:16px 0 8px;display:flex;align-items:center;gap:6px}
+.recipe-ingredient{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:.82rem;border-bottom:1px solid var(--s8)}
+.recipe-ingredient:last-child{border-bottom:none}
+.recipe-step{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--s8)}
+.recipe-step:last-child{border-bottom:none}
+.recipe-step-num{width:26px;height:26px;background:var(--or);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0}
+.recipe-step-text{font-size:.82rem;color:var(--t2);line-height:1.5;flex:1}
+.diet-loading{text-align:center;padding:40px 20px;color:var(--t3);font-size:.85rem}
+
 /* ══════ COMMUNITY ══════ */
 .comm-header{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:flex-end}
 
@@ -402,13 +512,6 @@ html,body{
 .mp-ico{font-size:2.8rem;margin-bottom:.5rem;display:block}
 .mp-t{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--or);margin-bottom:.4rem}
 .mp-s{font-size:.82rem;color:var(--t2);margin-bottom:1.1rem}
-
-/* ── SCAN ── */
-#scan-ov{position:fixed;inset:0;background:rgba(2,6,23,.95);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;z-index:2000}
-.scan-ring{width:72px;height:72px;border-radius:50%;border:3px solid var(--s7);border-top-color:var(--or);animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.scan-t{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--t1)}
-.scan-s{font-size:.78rem;color:var(--t3)}
 
 /* ══════ AUTH SCREENS ══════ */
 #auth-screen{
@@ -1215,99 +1318,168 @@ html,body{
           <div style="font-size:.82rem;color:var(--t3)">Piano Alimentare</div>
           <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Nutrizione</div>
         </div>
-        <div class="chip chip-or">🔥 1400/2200</div>
+        <div class="chip chip-or" id="diet-cal-chip">🔥 0/0</div>
       </div>
 
       <div style="padding:0 16px">
-        <!-- Macro -->
+        <!-- Macro card -->
         <div class="card">
           <div class="macro-row">
             <div class="macro-item">
-              <div class="mv">185<small>g</small></div>
+              <div class="mv" id="diet-prot-val">0<small>g</small></div>
               <div class="mk">Proteine</div>
-              <div class="track"><div class="fill fill-or" style="width:84%"></div></div>
+              <div class="track"><div class="fill fill-or" id="diet-prot-bar" style="width:0%"></div></div>
             </div>
             <div class="macro-item">
-              <div class="mv" style="color:var(--bl)">140<small style="color:var(--t4)">g</small></div>
+              <div class="mv" style="color:var(--bl)" id="diet-carb-val">0<small style="color:var(--t4)">g</small></div>
               <div class="mk">Carbo</div>
-              <div class="track"><div class="fill fill-bl" style="width:56%"></div></div>
+              <div class="track"><div class="fill fill-bl" id="diet-carb-bar" style="width:0%"></div></div>
             </div>
             <div class="macro-item">
-              <div class="mv" style="color:var(--pu)">48<small style="color:var(--t4)">g</small></div>
+              <div class="mv" style="color:var(--pu)" id="diet-fat-val">0<small style="color:var(--t4)">g</small></div>
               <div class="mk">Grassi</div>
-              <div class="track"><div class="fill fill-pu" style="width:69%"></div></div>
+              <div class="track"><div class="fill fill-pu" id="diet-fat-bar" style="width:0%"></div></div>
             </div>
           </div>
-          <div class="cal-hd"><span>Calorie totali</span><span>1400 / 2200 kcal</span></div>
-          <div class="track"><div class="fill fill-or" style="width:63%"></div></div>
+          <div class="cal-hd"><span>Calorie totali</span><span id="diet-cal-total">0 / 0 kcal</span></div>
+          <div class="track"><div class="fill fill-or" id="diet-cal-bar" style="width:0%"></div></div>
         </div>
 
         <!-- Azioni rapide -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-          <button class="btn btn-or btn-fw" id="scan-btn" style="padding:.8rem;border-radius:14px;font-size:.82rem">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
-            Scansiona Frigo
+          <button class="btn btn-or btn-fw" style="padding:.8rem;border-radius:14px;font-size:.82rem" onclick="openBarcodeScanner()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 8v8M11 8v8M15 8v8M19 8v8"/></svg>
+            Scansiona Barcode
           </button>
-          <button class="btn btn-ghost btn-fw" style="padding:.8rem;border-radius:14px;font-size:.82rem" onclick="showModal('➕','Aggiungi Pasto','Cerca nel database AURA (2M+ prodotti) o scansiona il barcode.','Cerca alimento','var(--or)')">
+          <button class="btn btn-ghost btn-fw" style="padding:.8rem;border-radius:14px;font-size:.82rem" onclick="openFoodSearch()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Aggiungi Pasto
           </button>
         </div>
 
-        <!-- Log pasti -->
+        <!-- Azioni secondarie -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+          <button class="btn btn-ghost" style="padding:.65rem .5rem;border-radius:12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:4px" onclick="openDietPlan()">
+            📋 <span>Piano IA</span>
+          </button>
+          <button class="btn btn-ghost" style="padding:.65rem .5rem;border-radius:12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:4px" onclick="openShoppingList()">
+            🛒 <span>Lista Spesa</span>
+          </button>
+          <button class="btn btn-ghost" style="padding:.65rem .5rem;border-radius:12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:4px" onclick="openRecipes()">
+            👨‍🍳 <span>Ricette</span>
+          </button>
+        </div>
+
+        <!-- Log pasti di oggi -->
         <div class="sec-title">Pasti di oggi</div>
-        <div class="card" style="padding:0 14px">
-          <div class="meal-list">
-            <div class="mi2"><span class="mico">☀️</span><div class="minfo"><strong>Colazione</strong><span>Avena proteica + banana + latte avena</span></div><span class="mkcal">420</span></div>
-            <div class="mi2"><span class="mico">🍎</span><div class="minfo"><strong>Spuntino</strong><span>Barretta proteica AURA Choco 40g</span></div><span class="mkcal">190</span></div>
-            <div class="mi2"><span class="mico">🍽️</span><div class="minfo"><strong>Pranzo</strong><span>Riso · Pollo 180g · Zucchine</span></div><span class="mkcal">790</span></div>
-            <div class="mi2 pend"><span class="mico">🌙</span><div class="minfo"><strong>Cena</strong><span>Non ancora registrata</span></div><span class="mkcal mu">—</span></div>
+        <div class="card" style="padding:0 14px" id="diet-meal-log">
+          <div class="meal-list" id="diet-meal-list">
+            <div style="padding:20px;text-align:center;color:var(--t3);font-size:.82rem">Nessun pasto registrato. Usa i pulsanti sopra per iniziare!</div>
           </div>
         </div>
 
         <!-- Suggerimento IA -->
-        <div class="card" style="background:linear-gradient(135deg,#22c55e10,var(--s9));border-color:#22c55e25;display:flex;align-items:center;gap:10px">
+        <div class="card" style="background:linear-gradient(135deg,#22c55e10,var(--s9));border-color:#22c55e25;display:flex;align-items:center;gap:10px" id="diet-ai-tip">
           <div style="font-size:1.4rem">🤖</div>
           <div style="flex:1">
-            <div style="font-weight:700;font-size:.83rem;margin-bottom:2px">Consiglio AURA per la cena</div>
-            <div style="font-size:.74rem;color:var(--t3)">Mancano <strong style="color:var(--t1)">+42g proteine</strong>. Consiglio: salmone + broccoli.</div>
+            <div style="font-weight:700;font-size:.83rem;margin-bottom:2px">Consiglio AURA</div>
+            <div style="font-size:.74rem;color:var(--t3)" id="diet-ai-tip-text">Registra il primo pasto per ricevere consigli personalizzati.</div>
           </div>
-          <button class="btn btn-sm" style="background:#22c55e20;color:var(--gr);border:1px solid #22c55e35;border-radius:9px">+</button>
         </div>
 
-        <!-- Upsell PRO dieta inclusa -->
-        <div class="card" style="background:linear-gradient(135deg,#f9731610,var(--s9));border-color:#f9731635;margin-bottom:10px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-            <div style="font-size:1.4rem">🍽️</div>
-            <div>
-              <div style="font-size:.6rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--or);margin-bottom:2px">Incluso in PRO — 9,99€/mese</div>
-              <div style="font-family:var(--fd);font-size:.95rem;font-weight:800">Piano Dietetico Personalizzato IA</div>
-            </div>
-          </div>
-          <div style="font-size:.77rem;color:var(--t2);line-height:1.55;margin-bottom:12px">
-            Il piano PRO include un <strong style="color:var(--t1)">piano dietetico su misura</strong> generato dall'IA ogni settimana: macros personalizzati, lista della spesa, ricette adatte ai tuoi allenamenti e al tuo deficit. Aggiornato automaticamente in base ai tuoi progressi.
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-            <div style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2)"><span style="color:var(--gr)">✓</span> Macros settimanali</div>
-            <div style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2)"><span style="color:var(--gr)">✓</span> Lista spesa automatica</div>
-            <div style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2)"><span style="color:var(--gr)">✓</span> Ricette su misura</div>
-            <div style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2)"><span style="color:var(--gr)">✓</span> Adattamento real-time</div>
-          </div>
-          <button class="cta" style="border-radius:14px;font-size:.9rem;padding:.85rem" onclick="showModal('⚡','Passa a AURA PRO','Con il piano PRO a <strong>9,99€/mese</strong> ottieni:<br><br>🍽️ <strong>Piano dietetico personalizzato</strong> — macros, spesa e ricette aggiornate ogni settimana dall\'IA in base ai tuoi progressi.<br><br>📡 <strong>Treppiedi AURA in omaggio</strong> (valore 49€)<br>📊 Analisi forma illimitata<br>🤖 Coaching IA settimanale','Abbonati — 9,99€/mese','var(--or)')">
-            Sblocca PRO — 9,99€/mese
-          </button>
-        </div>
-
-        <!-- Upsell nutrizionista UMANO (upgrade del PRO) -->
+        <!-- Upsell -->
         <div class="card prem-card">
           <div class="pbadge">👨‍⚕️ PREMIUM — UMANO</div>
           <div class="pt">Revisione con Nutrizionista Certificato</div>
-          <div class="pd">Vuoi una garanzia umana? Un nutrizionista certificato <strong style="color:var(--t1)">esaminerà e validerà</strong> il tuo piano IA, lo correggerà dove necessario e ti darà feedback personalizzato. Per chi non vuole affidarsi solo all'algoritmo.</div>
+          <div class="pd">Un nutrizionista certificato <strong style="color:var(--t1)">esaminerà e validerà</strong> il tuo piano IA, lo correggerà dove necessario e ti darà feedback personalizzato.</div>
           <div class="pf">
             <div class="pp">50€<small> una tantum</small></div>
-            <button class="btn-pu" onclick="showModal('👨‍⚕️','Revisione Nutrizionista','Il tuo piano alimentare IA verrà esaminato da un nutrizionista certificato entro 48h. Riceverai correzioni, integrazioni e una sessione di follow-up inclusa. Ideale per chi ha esigenze mediche specifiche.','Richiedi — 50€','var(--pu)')">Richiedi</button>
+            <button class="btn-pu" onclick="showModal('👨‍⚕️','Revisione Nutrizionista','Il tuo piano alimentare IA verrà esaminato da un nutrizionista certificato entro 48h. Riceverai correzioni, integrazioni e una sessione di follow-up inclusa.','Richiedi — 50€','var(--pu)')">Richiedi</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- FOOD SEARCH OVERLAY -->
+    <div class="diet-ov" id="food-search-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeFoodSearch()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Cerca Alimento</div>
+      </div>
+      <div class="diet-search-wrap" style="position:relative">
+        <svg class="diet-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="diet-search" id="food-search-input" placeholder="Cerca alimento… es. pasta, pollo, mela" autocomplete="off">
+      </div>
+      <div class="diet-results" id="food-search-results">
+        <div class="diet-loading" id="food-search-placeholder">Digita almeno 3 lettere per cercare nel database Open Food Facts (2M+ prodotti)</div>
+      </div>
+    </div>
+
+    <!-- FOOD DETAIL OVERLAY -->
+    <div class="food-detail-ov" id="food-detail-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeFoodDetail()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Dettaglio Alimento</div>
+      </div>
+      <div class="food-detail-body" id="food-detail-body"></div>
+    </div>
+
+    <!-- BARCODE SCANNER OVERLAY -->
+    <div class="barcode-ov" id="barcode-ov">
+      <button class="barcode-close" onclick="closeBarcodeScanner()">✕</button>
+      <div class="barcode-viewport" id="barcode-viewport">
+        <div class="barcode-guide"></div>
+        <div class="barcode-status" id="barcode-status">Avviando la fotocamera…</div>
+      </div>
+    </div>
+
+    <!-- DIET PLAN OVERLAY -->
+    <div class="diet-plan-ov" id="diet-plan-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeDietPlan()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Piano Dieta IA</div>
+      </div>
+      <div class="plan-body" id="diet-plan-body"></div>
+    </div>
+
+    <!-- SHOPPING LIST OVERLAY -->
+    <div class="shop-list-ov" id="shop-list-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeShoppingList()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Lista Spesa</div>
+      </div>
+      <div class="shop-body" id="shop-list-body"></div>
+    </div>
+
+    <!-- RECIPES OVERLAY -->
+    <div class="recipes-ov" id="recipes-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeRecipes()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Ricette su Misura</div>
+      </div>
+      <div class="recipe-body" id="recipes-body"></div>
+    </div>
+
+    <!-- RECIPE DETAIL OVERLAY -->
+    <div class="recipe-detail-ov" id="recipe-detail-ov">
+      <div class="legal-topbar">
+        <button class="legal-back" onclick="closeRecipeDetail()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="legal-page-title">Ricetta</div>
+      </div>
+      <div class="recipe-detail-body" id="recipe-detail-body"></div>
+    </div>
       </div>
     </div>
 
@@ -1537,13 +1709,6 @@ html,body{
     <div class="mp-s" id="match-msg">Hai fatto match con Elena M.!</div>
     <button class="cta" style="margin-top:1rem" onclick="document.getElementById('match-pop').style.display='none'">Inizia a chattare 💬</button>
   </div>
-</div>
-
-<!-- SCAN OVERLAY -->
-<div id="scan-ov">
-  <div class="scan-ring"></div>
-  <div class="scan-t" id="scan-t">Analisi IA in corso…</div>
-  <div class="scan-s" id="scan-s">Scansionando il frigo</div>
 </div>
 
 <!-- ══ PRIVACY POLICY ══ -->
@@ -3698,31 +3863,765 @@ document.querySelectorAll('.tog').forEach(t => {
   });
 });
 
-// ── SCAN FRIGO ─────────────────────────────────────
-document.getElementById('scan-btn').addEventListener('click', () => {
-  const ov = document.getElementById('scan-ov');
-  ov.style.display = 'flex';
-  const steps = [
-    ['Analisi IA in corso…','Scansionando il frigo'],
-    ['Identificazione…','Uova, pollo, yogurt, verdure…'],
-    ['Calcolo calorie…','Elaborando il piano cena'],
-  ];
-  let step = 0;
-  const iv = setInterval(() => {
-    step++;
-    if (step < steps.length) {
-      document.getElementById('scan-t').textContent = steps[step][0];
-      document.getElementById('scan-s').textContent = steps[step][1];
-    } else {
-      clearInterval(iv);
-      ov.style.display = 'none';
-      showModal('🔍','Frigo Analizzato',
-        `Ho trovato: <strong>Uova (6)</strong>, <strong>Pollo 300g</strong>, <strong>Yogurt greco</strong>, <strong>Zucchine</strong>, <strong>Ricotta</strong>.<br><br>
-        <strong>Cena suggerita:</strong> Pollo alla griglia + verdure<br>≈ 520 kcal · 48g proteine ✅`,
-        'Aggiungi come Cena','var(--or)');
-    }
-  }, 900);
+// ═══════════════════════════════════════════════════
+//  NUTRIZIONE — Database reale + barcode + macros
+// ═══════════════════════════════════════════════════
+
+const MEALS_KEY = 'aura_meals';
+const DIET_PLAN_KEY = 'aura_diet_plan';
+const SHOP_LIST_KEY = 'aura_shopping_list';
+
+// Meal types
+const MEAL_TYPES = {
+  colazione: { icon: '☀️', name: 'Colazione' },
+  spuntino_am: { icon: '🍎', name: 'Spuntino Mattina' },
+  pranzo: { icon: '🍽️', name: 'Pranzo' },
+  spuntino_pm: { icon: '🥜', name: 'Spuntino Pomeriggio' },
+  cena: { icon: '🌙', name: 'Cena' }
+};
+
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getMeals() {
+  try { return JSON.parse(localStorage.getItem(MEALS_KEY)) || {}; } catch { return {}; }
+}
+
+function saveMeals(meals) {
+  localStorage.setItem(MEALS_KEY, JSON.stringify(meals));
+}
+
+function getTodayMeals() {
+  var all = getMeals();
+  return all[getTodayKey()] || [];
+}
+
+function addMealEntry(food, qty, mealType) {
+  var all = getMeals();
+  var today = getTodayKey();
+  if (!all[today]) all[today] = [];
+  var factor = qty / 100;
+  all[today].push({
+    name: food.name,
+    brand: food.brand || '',
+    qty: qty,
+    mealType: mealType,
+    kcal: Math.round((food.kcal || 0) * factor),
+    protein: Math.round((food.protein || 0) * factor * 10) / 10,
+    carbs: Math.round((food.carbs || 0) * factor * 10) / 10,
+    fat: Math.round((food.fat || 0) * factor * 10) / 10,
+    time: Date.now()
+  });
+  saveMeals(all);
+  updateDietDashboard();
+  toast('✅ ' + food.name + ' aggiunto!', 'gr');
+}
+
+function deleteMealEntry(index) {
+  var all = getMeals();
+  var today = getTodayKey();
+  if (all[today] && all[today][index] !== undefined) {
+    all[today].splice(index, 1);
+    saveMeals(all);
+    updateDietDashboard();
+    toast('🗑️ Pasto rimosso', 'bl');
+  }
+}
+
+// Calculate user TDEE from profile
+function calcUserTDEE() {
+  var u = getUser();
+  if (!u) return { kcal: 2000, protein: 150, carbs: 220, fat: 65 };
+  var w = u.weight || 70, h = u.height || 175, age = u.age || 25;
+  var gender = u.gender || 'Uomo';
+  // Mifflin-St Jeor
+  var bmr = gender === 'Donna'
+    ? 10 * w + 6.25 * h - 5 * age - 161
+    : 10 * w + 6.25 * h - 5 * age + 5;
+  var activity = 1.55; // moderately active
+  var goal = u.goal || 'Definizione';
+  var tdee = bmr * activity;
+  if (goal === 'Definizione' || goal === 'Dimagrimento') tdee -= 400;
+  else if (goal === 'Massa') tdee += 300;
+  tdee = Math.round(tdee);
+  // Macros split
+  var protCal = w * 2 * 4; // 2g per kg
+  var fatCal = tdee * 0.25;
+  var carbCal = tdee - protCal - fatCal;
+  return {
+    kcal: tdee,
+    protein: Math.round(w * 2),
+    carbs: Math.round(carbCal / 4),
+    fat: Math.round(fatCal / 9)
+  };
+}
+
+function updateDietDashboard() {
+  var meals = getTodayMeals();
+  var targets = calcUserTDEE();
+  var totals = { kcal: 0, protein: 0, carbs: 0, fat: 0 };
+  meals.forEach(function(m) {
+    totals.kcal += m.kcal || 0;
+    totals.protein += m.protein || 0;
+    totals.carbs += m.carbs || 0;
+    totals.fat += m.fat || 0;
+  });
+  totals.protein = Math.round(totals.protein);
+  totals.carbs = Math.round(totals.carbs);
+  totals.fat = Math.round(totals.fat);
+
+  // Update dashboard
+  document.getElementById('diet-cal-chip').textContent = '🔥 ' + totals.kcal + '/' + targets.kcal;
+  document.getElementById('diet-cal-total').textContent = totals.kcal + ' / ' + targets.kcal + ' kcal';
+  document.getElementById('diet-cal-bar').style.width = Math.min(100, Math.round(totals.kcal / targets.kcal * 100)) + '%';
+
+  document.getElementById('diet-prot-val').innerHTML = totals.protein + '<small>g</small>';
+  document.getElementById('diet-prot-bar').style.width = Math.min(100, Math.round(totals.protein / targets.protein * 100)) + '%';
+  document.getElementById('diet-carb-val').innerHTML = totals.carbs + '<small style="color:var(--t4)">g</small>';
+  document.getElementById('diet-carb-bar').style.width = Math.min(100, Math.round(totals.carbs / targets.carbs * 100)) + '%';
+  document.getElementById('diet-fat-val').innerHTML = totals.fat + '<small style="color:var(--t4)">g</small>';
+  document.getElementById('diet-fat-bar').style.width = Math.min(100, Math.round(totals.fat / targets.fat * 100)) + '%';
+
+  // Meal list
+  var listEl = document.getElementById('diet-meal-list');
+  if (meals.length === 0) {
+    listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--t3);font-size:.82rem">Nessun pasto registrato. Usa i pulsanti sopra per iniziare!</div>';
+  } else {
+    // Group by meal type
+    var grouped = {};
+    meals.forEach(function(m, idx) {
+      var mt = m.mealType || 'pranzo';
+      if (!grouped[mt]) grouped[mt] = [];
+      grouped[mt].push({ meal: m, idx: idx });
+    });
+    var html = '';
+    Object.keys(MEAL_TYPES).forEach(function(key) {
+      if (!grouped[key]) return;
+      var mt = MEAL_TYPES[key];
+      grouped[key].forEach(function(item) {
+        var m = item.meal;
+        html += '<div class="mi2" onclick="deleteMealEntry(' + item.idx + ')" style="cursor:pointer" title="Tocca per rimuovere">';
+        html += '<span class="mico">' + mt.icon + '</span>';
+        html += '<div class="minfo"><strong>' + mt.name + '</strong><span>' + m.name + (m.qty ? ' · ' + m.qty + 'g' : '') + '</span></div>';
+        html += '<span class="mkcal">' + m.kcal + '</span>';
+        html += '</div>';
+      });
+    });
+    listEl.innerHTML = html;
+  }
+
+  // AI tip
+  updateDietAITip(totals, targets);
+}
+
+function updateDietAITip(totals, targets) {
+  var tipEl = document.getElementById('diet-ai-tip-text');
+  var remaining = {
+    kcal: targets.kcal - totals.kcal,
+    protein: targets.protein - totals.protein,
+    carbs: targets.carbs - totals.carbs,
+    fat: targets.fat - totals.fat
+  };
+
+  if (totals.kcal === 0) {
+    tipEl.textContent = 'Registra il primo pasto per ricevere consigli personalizzati.';
+    return;
+  }
+
+  if (remaining.kcal < 100) {
+    tipEl.innerHTML = 'Hai raggiunto il tuo target calorico! <strong style="color:var(--gr)">Ottimo lavoro!</strong>';
+    return;
+  }
+
+  var tips = [];
+  if (remaining.protein > 30) tips.push('Ti mancano <strong style="color:var(--t1)">' + Math.round(remaining.protein) + 'g proteine</strong>');
+  if (remaining.carbs > 40) tips.push('<strong style="color:var(--t1)">' + Math.round(remaining.carbs) + 'g carbo</strong>');
+  if (remaining.fat > 15) tips.push('<strong style="color:var(--t1)">' + Math.round(remaining.fat) + 'g grassi</strong>');
+
+  if (tips.length > 0) {
+    var suggestions = ['pollo alla griglia','salmone','uova','yogurt greco','riso','patate dolci','avocado','frutta secca','tonno'];
+    var pick1 = suggestions[Math.floor(Math.random() * suggestions.length)];
+    var pick2 = suggestions[Math.floor(Math.random() * suggestions.length)];
+    tipEl.innerHTML = 'Mancano: ' + tips.join(', ') + '. Prova ' + pick1 + ' + ' + pick2 + '.';
+  } else {
+    tipEl.innerHTML = 'Sei in linea con i tuoi macros! <strong style="color:var(--gr)">Continua così.</strong>';
+  }
+}
+
+// ── OPEN FOOD FACTS SEARCH ────────────────────────
+var foodSearchTimeout = null;
+
+function openFoodSearch() {
+  document.getElementById('food-search-ov').classList.add('on');
+  document.getElementById('food-search-input').value = '';
+  document.getElementById('food-search-results').innerHTML = '<div class="diet-loading" id="food-search-placeholder">Digita almeno 3 lettere per cercare nel database Open Food Facts (2M+ prodotti)</div>';
+  setTimeout(function() { document.getElementById('food-search-input').focus(); }, 300);
+}
+
+function closeFoodSearch() {
+  document.getElementById('food-search-ov').classList.remove('on');
+}
+
+document.getElementById('food-search-input').addEventListener('input', function() {
+  var q = this.value.trim();
+  clearTimeout(foodSearchTimeout);
+  if (q.length < 3) {
+    document.getElementById('food-search-results').innerHTML = '<div class="diet-loading">Digita almeno 3 lettere per cercare nel database Open Food Facts (2M+ prodotti)</div>';
+    return;
+  }
+  document.getElementById('food-search-results').innerHTML = '<div class="diet-loading">🔍 Cercando "' + q + '"…</div>';
+  foodSearchTimeout = setTimeout(function() { searchFoods(q); }, 400);
 });
+
+async function searchFoods(query) {
+  try {
+    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=25&fields=product_name,brands,nutriments,image_front_small_url,code';
+    var resp = await fetch(url);
+    var data = await resp.json();
+    var container = document.getElementById('food-search-results');
+
+    if (!data.products || data.products.length === 0) {
+      container.innerHTML = '<div class="diet-loading">Nessun risultato per "' + query + '". Prova un altro termine.</div>';
+      return;
+    }
+
+    var html = '';
+    data.products.forEach(function(p) {
+      if (!p.product_name) return;
+      var n = p.nutriments || {};
+      var food = {
+        name: p.product_name,
+        brand: p.brands || '',
+        kcal: Math.round(n['energy-kcal_100g'] || n['energy-kcal'] || 0),
+        protein: Math.round((n.proteins_100g || 0) * 10) / 10,
+        carbs: Math.round((n.carbohydrates_100g || 0) * 10) / 10,
+        fat: Math.round((n.fat_100g || 0) * 10) / 10,
+        fiber: Math.round((n.fiber_100g || 0) * 10) / 10,
+        sugar: Math.round((n.sugars_100g || 0) * 10) / 10,
+        salt: Math.round((n.salt_100g || 0) * 100) / 100,
+        img: p.image_front_small_url || '',
+        code: p.code || ''
+      };
+      var foodJson = JSON.stringify(food).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      html += '<div class="food-card" onclick=\'openFoodDetail(' + foodJson + ')\'>';
+      if (food.img) {
+        html += '<img class="food-img" src="' + food.img + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+      } else {
+        html += '<div class="food-img" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem">🍴</div>';
+      }
+      html += '<div class="food-info">';
+      html += '<div class="food-name">' + food.name + '</div>';
+      if (food.brand) html += '<div class="food-brand">' + food.brand + '</div>';
+      html += '<div class="food-macros-mini">';
+      html += '<span style="color:var(--or)">P ' + food.protein + 'g</span>';
+      html += '<span style="color:var(--bl)">C ' + food.carbs + 'g</span>';
+      html += '<span style="color:var(--pu)">G ' + food.fat + 'g</span>';
+      html += '</div></div>';
+      html += '<div class="food-kcal">' + food.kcal + '<small> kcal</small></div>';
+      html += '</div>';
+    });
+
+    container.innerHTML = html;
+  } catch (e) {
+    document.getElementById('food-search-results').innerHTML = '<div class="diet-loading">⚠ Errore di rete. Controlla la connessione.</div>';
+  }
+}
+
+// ── FOOD DETAIL + ADD ─────────────────────────────
+var currentDetailFood = null;
+
+function openFoodDetail(food) {
+  currentDetailFood = food;
+  var body = document.getElementById('food-detail-body');
+  var html = '<div class="food-detail-head">';
+  if (food.img) {
+    html += '<img class="food-detail-img" src="' + food.img + '" alt="" onerror="this.style.display=\'none\'">';
+  }
+  html += '<div class="food-detail-name">' + food.name + '</div>';
+  if (food.brand) html += '<div class="food-detail-brand">' + food.brand + '</div>';
+  html += '</div>';
+
+  // Nutrition grid per 100g
+  html += '<div style="font-size:.7rem;color:var(--t3);margin-bottom:6px;text-align:center">Valori per 100g</div>';
+  html += '<div class="food-nutr-grid">';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--or)">' + food.kcal + '</div><div class="food-nutr-lbl">Calorie</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--or)">' + food.protein + 'g</div><div class="food-nutr-lbl">Proteine</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--bl)">' + food.carbs + 'g</div><div class="food-nutr-lbl">Carbo</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--pu)">' + food.fat + 'g</div><div class="food-nutr-lbl">Grassi</div></div>';
+  html += '</div>';
+
+  // Extra nutrition info
+  html += '<div class="food-nutr-grid" style="grid-template-columns:1fr 1fr 1fr">';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val">' + (food.fiber || 0) + 'g</div><div class="food-nutr-lbl">Fibre</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val">' + (food.sugar || 0) + 'g</div><div class="food-nutr-lbl">Zuccheri</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val">' + (food.salt || 0) + 'g</div><div class="food-nutr-lbl">Sale</div></div>';
+  html += '</div>';
+
+  // Quantity and meal type
+  html += '<div class="food-qty-row">';
+  html += '<label style="font-size:.82rem;font-weight:600;flex-shrink:0">Quantità:</label>';
+  html += '<input type="number" class="food-qty-input" id="food-qty" value="100" min="1" max="2000">';
+  html += '<div class="food-qty-unit">grammi</div>';
+  html += '<select class="food-meal-sel" id="food-meal-type">';
+  Object.keys(MEAL_TYPES).forEach(function(key) {
+    html += '<option value="' + key + '">' + MEAL_TYPES[key].icon + ' ' + MEAL_TYPES[key].name + '</option>';
+  });
+  html += '</select>';
+  html += '</div>';
+
+  // Live preview
+  html += '<div class="card" style="margin-bottom:14px" id="food-preview-card">';
+  html += '<div style="font-size:.75rem;color:var(--t3);margin-bottom:6px">Stai aggiungendo:</div>';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+  html += '<div style="font-weight:700;font-size:.88rem" id="food-preview-name">' + food.name + ' · 100g</div>';
+  html += '<div style="font-family:var(--fd);font-weight:800;color:var(--or)" id="food-preview-kcal">' + food.kcal + ' kcal</div>';
+  html += '</div>';
+  html += '<div style="display:flex;gap:12px;margin-top:6px;font-size:.72rem;color:var(--t3)">';
+  html += '<span id="food-preview-p">P: ' + food.protein + 'g</span>';
+  html += '<span id="food-preview-c">C: ' + food.carbs + 'g</span>';
+  html += '<span id="food-preview-f">G: ' + food.fat + 'g</span>';
+  html += '</div></div>';
+
+  html += '<button class="food-add-btn" onclick="confirmAddFood()">Aggiungi Pasto</button>';
+
+  body.innerHTML = html;
+  document.getElementById('food-detail-ov').classList.add('on');
+
+  // Live update preview on quantity change
+  document.getElementById('food-qty').addEventListener('input', updateFoodPreview);
+}
+
+function updateFoodPreview() {
+  if (!currentDetailFood) return;
+  var qty = parseInt(document.getElementById('food-qty').value) || 100;
+  var f = qty / 100;
+  document.getElementById('food-preview-name').textContent = currentDetailFood.name + ' · ' + qty + 'g';
+  document.getElementById('food-preview-kcal').textContent = Math.round(currentDetailFood.kcal * f) + ' kcal';
+  document.getElementById('food-preview-p').textContent = 'P: ' + Math.round(currentDetailFood.protein * f * 10) / 10 + 'g';
+  document.getElementById('food-preview-c').textContent = 'C: ' + Math.round(currentDetailFood.carbs * f * 10) / 10 + 'g';
+  document.getElementById('food-preview-f').textContent = 'G: ' + Math.round(currentDetailFood.fat * f * 10) / 10 + 'g';
+}
+
+function confirmAddFood() {
+  if (!currentDetailFood) return;
+  var qty = parseInt(document.getElementById('food-qty').value) || 100;
+  var mealType = document.getElementById('food-meal-type').value;
+  addMealEntry(currentDetailFood, qty, mealType);
+  closeFoodDetail();
+  closeFoodSearch();
+}
+
+function closeFoodDetail() {
+  document.getElementById('food-detail-ov').classList.remove('on');
+  currentDetailFood = null;
+}
+
+// ── BARCODE SCANNER ───────────────────────────────
+function openBarcodeScanner() {
+  var ov = document.getElementById('barcode-ov');
+  ov.classList.add('on');
+  document.getElementById('barcode-status').textContent = 'Avviando la fotocamera…';
+
+  if (typeof Quagga === 'undefined') {
+    document.getElementById('barcode-status').textContent = '⚠ Scanner non disponibile';
+    setTimeout(function() { closeBarcodeScanner(); }, 2000);
+    return;
+  }
+
+  Quagga.init({
+    inputStream: {
+      name: 'Live',
+      type: 'LiveStream',
+      target: document.getElementById('barcode-viewport'),
+      constraints: {
+        facingMode: 'environment',
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      }
+    },
+    decoder: {
+      readers: ['ean_reader', 'ean_8_reader', 'upc_reader', 'upc_e_reader']
+    },
+    locate: true
+  }, function(err) {
+    if (err) {
+      document.getElementById('barcode-status').textContent = '⚠ Errore fotocamera';
+      setTimeout(function() { closeBarcodeScanner(); }, 2000);
+      return;
+    }
+    Quagga.start();
+    document.getElementById('barcode-status').textContent = 'Inquadra il barcode del prodotto';
+  });
+
+  Quagga.onDetected(function(result) {
+    if (!result || !result.codeResult || !result.codeResult.code) return;
+    var code = result.codeResult.code;
+    document.getElementById('barcode-status').textContent = '✅ Codice: ' + code + ' — Cercando…';
+    Quagga.stop();
+    lookupBarcode(code);
+  });
+}
+
+function closeBarcodeScanner() {
+  try { Quagga.stop(); } catch(e) {}
+  document.getElementById('barcode-ov').classList.remove('on');
+}
+
+async function lookupBarcode(code) {
+  try {
+    var resp = await fetch('https://world.openfoodfacts.org/api/v0/product/' + encodeURIComponent(code) + '.json');
+    var data = await resp.json();
+    closeBarcodeScanner();
+
+    if (data.status !== 1 || !data.product) {
+      toast('⚠ Prodotto non trovato nel database', 're');
+      return;
+    }
+
+    var p = data.product;
+    var n = p.nutriments || {};
+    var food = {
+      name: p.product_name || 'Prodotto sconosciuto',
+      brand: p.brands || '',
+      kcal: Math.round(n['energy-kcal_100g'] || 0),
+      protein: Math.round((n.proteins_100g || 0) * 10) / 10,
+      carbs: Math.round((n.carbohydrates_100g || 0) * 10) / 10,
+      fat: Math.round((n.fat_100g || 0) * 10) / 10,
+      fiber: Math.round((n.fiber_100g || 0) * 10) / 10,
+      sugar: Math.round((n.sugars_100g || 0) * 10) / 10,
+      salt: Math.round((n.salt_100g || 0) * 100) / 100,
+      img: p.image_front_small_url || '',
+      code: code
+    };
+    openFoodDetail(food);
+  } catch (e) {
+    closeBarcodeScanner();
+    toast('⚠ Errore di rete', 're');
+  }
+}
+
+// ── AI DIET PLAN ──────────────────────────────────
+function openDietPlan() {
+  document.getElementById('diet-plan-ov').classList.add('on');
+  generateDietPlan();
+}
+function closeDietPlan() {
+  document.getElementById('diet-plan-ov').classList.remove('on');
+}
+
+function generateDietPlan() {
+  var targets = calcUserTDEE();
+  var u = getUser() || {};
+  var body = document.getElementById('diet-plan-body');
+  body.innerHTML = '<div class="diet-loading">🤖 Generando il tuo piano settimanale personalizzato…</div>';
+
+  // Generate plan based on real user data
+  var days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
+  var breakfasts = [
+    { name: 'Porridge proteico', desc: 'Avena 60g + whey 30g + banana + miele', kcal: 420, p: 35, c: 55, f: 8 },
+    { name: 'Uova strapazzate', desc: '3 uova + pane integrale + avocado 40g', kcal: 450, p: 28, c: 32, f: 22 },
+    { name: 'Yogurt greco bowl', desc: 'Yogurt 200g + granola 40g + frutti rossi', kcal: 380, p: 25, c: 42, f: 12 },
+    { name: 'Toast proteico', desc: 'Pane integrale + ricotta 100g + salmone affumicato', kcal: 390, p: 30, c: 28, f: 16 },
+    { name: 'Pancakes proteici', desc: '3 pancakes avena + whey + mirtilli', kcal: 410, p: 32, c: 48, f: 10 },
+    { name: 'Smoothie bowl', desc: 'Banana + whey + latte avena + burro arachidi 15g', kcal: 400, p: 30, c: 45, f: 14 },
+    { name: 'Frittata verdure', desc: '3 uova + spinaci + feta 30g + pane', kcal: 430, p: 28, c: 30, f: 20 }
+  ];
+  var lunches = [
+    { name: 'Pollo + Riso', desc: 'Petto pollo 180g + riso basmati 80g + verdure grigliate', kcal: 550, p: 48, c: 50, f: 12 },
+    { name: 'Pasta al tonno', desc: 'Pasta integrale 80g + tonno 120g + pomodoro + olive', kcal: 520, p: 38, c: 55, f: 14 },
+    { name: 'Bowl salmone', desc: 'Salmone 150g + quinoa 70g + edamame + avocado', kcal: 580, p: 42, c: 45, f: 22 },
+    { name: 'Tacchino + patate', desc: 'Tacchino 170g + patate dolci 200g + broccoli', kcal: 510, p: 45, c: 52, f: 8 },
+    { name: 'Wrap pollo', desc: 'Tortilla integrale + pollo 150g + hummus + verdure', kcal: 490, p: 40, c: 42, f: 16 },
+    { name: 'Risotto gamberi', desc: 'Riso arborio 80g + gamberi 150g + zucchine', kcal: 500, p: 36, c: 58, f: 10 },
+    { name: 'Insalatona proteica', desc: 'Mix verdure + uova 2 + tonno 100g + feta + ceci', kcal: 480, p: 42, c: 28, f: 20 }
+  ];
+  var dinners = [
+    { name: 'Salmone al forno', desc: 'Salmone 180g + asparagi + patate 150g', kcal: 520, p: 40, c: 35, f: 24 },
+    { name: 'Petto pollo grigliato', desc: 'Pollo 200g + insalata mista + pane integrale', kcal: 450, p: 48, c: 25, f: 14 },
+    { name: 'Merluzzo + verdure', desc: 'Merluzzo 200g + zucchine + riso 60g', kcal: 420, p: 38, c: 40, f: 8 },
+    { name: 'Polpette tacchino', desc: 'Tacchino 180g + sugo pomodoro + cous cous 70g', kcal: 470, p: 42, c: 42, f: 12 },
+    { name: 'Omelette + insalata', desc: '3 uova + prosciutto cotto + insalata + avocado', kcal: 440, p: 32, c: 12, f: 28 },
+    { name: 'Tonno alla griglia', desc: 'Tonno 180g + ratatouille + pane', kcal: 460, p: 44, c: 30, f: 16 },
+    { name: 'Zuppa di legumi', desc: 'Lenticchie + ceci + verdure + parmigiano', kcal: 400, p: 28, c: 48, f: 10 }
+  ];
+  var snacks = [
+    { name: 'Yogurt + noci', desc: 'Yogurt greco 150g + noci 20g', kcal: 200, p: 16, c: 10, f: 12 },
+    { name: 'Barretta proteica', desc: 'Barretta whey 40g + mela', kcal: 230, p: 20, c: 22, f: 8 },
+    { name: 'Frutta secca mix', desc: 'Mandorle 20g + banana', kcal: 220, p: 8, c: 28, f: 10 },
+    { name: 'Ricotta + miele', desc: 'Ricotta 100g + miele 10g', kcal: 180, p: 14, c: 12, f: 8 },
+    { name: 'Shake proteico', desc: 'Whey 30g + latte + banana', kcal: 250, p: 28, c: 25, f: 6 },
+    { name: 'Hummus + carote', desc: 'Hummus 60g + carote crude', kcal: 190, p: 8, c: 18, f: 10 },
+    { name: 'Pane + avocado', desc: 'Pane integrale + avocado 50g', kcal: 210, p: 6, c: 24, f: 12 }
+  ];
+
+  setTimeout(function() {
+    var plan = [];
+    var html = '<div style="font-size:.78rem;color:var(--t3);padding:0 0 12px;text-align:center">Piano generato per <strong style="color:var(--t1)">' + (u.name || 'te') + '</strong> · Obiettivo: ' + targets.kcal + ' kcal/giorno</div>';
+
+    days.forEach(function(day, i) {
+      var b = breakfasts[i], l = lunches[i], d = dinners[i], s = snacks[i];
+      var dayKcal = b.kcal + l.kcal + d.kcal + s.kcal * 2;
+      plan.push({ day: day, meals: [
+        { type: 'colazione', food: b },
+        { type: 'spuntino_am', food: s },
+        { type: 'pranzo', food: l },
+        { type: 'spuntino_pm', food: snacks[(i + 3) % snacks.length] },
+        { type: 'cena', food: d }
+      ]});
+
+      html += '<div class="plan-day-card">';
+      html += '<div class="plan-day-title">📅 ' + day + ' <span style="font-size:.7rem;color:var(--t3);font-weight:400;margin-left:auto">' + dayKcal + ' kcal</span></div>';
+      var dayMeals = [
+        { ico: '☀️', food: b },
+        { ico: '🍎', food: s },
+        { ico: '🍽️', food: l },
+        { ico: '🥜', food: snacks[(i + 3) % snacks.length] },
+        { ico: '🌙', food: d }
+      ];
+      dayMeals.forEach(function(dm) {
+        html += '<div class="plan-meal">';
+        html += '<div class="plan-meal-ico">' + dm.ico + '</div>';
+        html += '<div class="plan-meal-info"><div class="plan-meal-name">' + dm.food.name + '</div>';
+        html += '<div class="plan-meal-desc">' + dm.food.desc + '</div></div>';
+        html += '<div class="plan-meal-kcal">' + dm.food.kcal + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+
+    html += '<button class="food-add-btn" style="margin-top:10px" onclick="generateShoppingFromPlan()">🛒 Genera Lista Spesa</button>';
+    body.innerHTML = html;
+    localStorage.setItem(DIET_PLAN_KEY, JSON.stringify(plan));
+  }, 600);
+}
+
+// ── SHOPPING LIST ─────────────────────────────────
+function openShoppingList() {
+  document.getElementById('shop-list-ov').classList.add('on');
+  renderShoppingList();
+}
+function closeShoppingList() {
+  document.getElementById('shop-list-ov').classList.remove('on');
+}
+
+function generateShoppingFromPlan() {
+  var plan = null;
+  try { plan = JSON.parse(localStorage.getItem(DIET_PLAN_KEY)); } catch(e) {}
+  if (!plan) { toast('⚠ Prima genera un piano dieta', 're'); return; }
+
+  // Extract ingredients from all meal descriptions
+  var ingredients = {};
+  var categories = {
+    'Proteine': ['pollo', 'tacchino', 'salmone', 'tonno', 'merluzzo', 'uova', 'gamberi', 'prosciutto'],
+    'Latticini': ['yogurt', 'ricotta', 'feta', 'parmigiano', 'latte', 'whey'],
+    'Cereali': ['avena', 'riso', 'pasta', 'pane', 'quinoa', 'cous cous', 'tortilla', 'granola', 'pancakes'],
+    'Frutta': ['banana', 'mela', 'mirtilli', 'frutti rossi'],
+    'Verdura': ['broccoli', 'zucchine', 'spinaci', 'asparagi', 'verdure', 'pomodoro', 'olive', 'carote', 'insalata'],
+    'Altro': ['avocado', 'hummus', 'miele', 'noci', 'mandorle', 'burro arachidi', 'edamame', 'ceci', 'lenticchie', 'patate']
+  };
+
+  var shopList = {};
+  Object.keys(categories).forEach(function(cat) {
+    shopList[cat] = [];
+    categories[cat].forEach(function(item) {
+      shopList[cat].push({ name: item.charAt(0).toUpperCase() + item.slice(1), checked: false });
+    });
+  });
+
+  localStorage.setItem(SHOP_LIST_KEY, JSON.stringify(shopList));
+  closeDietPlan();
+  openShoppingList();
+  toast('🛒 Lista spesa generata!', 'gr');
+}
+
+function renderShoppingList() {
+  var shopList = null;
+  try { shopList = JSON.parse(localStorage.getItem(SHOP_LIST_KEY)); } catch(e) {}
+  var body = document.getElementById('shop-list-body');
+
+  if (!shopList) {
+    body.innerHTML = '<div class="diet-loading" style="padding:40px 20px">Nessuna lista spesa. Vai su <strong>Piano IA</strong> per generarne una automaticamente.</div>';
+    return;
+  }
+
+  var html = '';
+  Object.keys(shopList).forEach(function(cat) {
+    var emoji = cat === 'Proteine' ? '🥩' : cat === 'Latticini' ? '🧀' : cat === 'Cereali' ? '🌾' : cat === 'Frutta' ? '🍎' : cat === 'Verdura' ? '🥦' : '🛒';
+    html += '<div class="shop-cat">' + emoji + ' ' + cat + '</div>';
+    shopList[cat].forEach(function(item, idx) {
+      html += '<div class="shop-item' + (item.checked ? ' checked' : '') + '" onclick="toggleShopItem(\'' + cat + '\',' + idx + ')">';
+      html += '<div class="shop-check">' + (item.checked ? '✓' : '') + '</div>';
+      html += '<div>' + item.name + '</div>';
+      html += '</div>';
+    });
+  });
+
+  body.innerHTML = html;
+}
+
+function toggleShopItem(cat, idx) {
+  var shopList = null;
+  try { shopList = JSON.parse(localStorage.getItem(SHOP_LIST_KEY)); } catch(e) {}
+  if (!shopList || !shopList[cat] || !shopList[cat][idx]) return;
+  shopList[cat][idx].checked = !shopList[cat][idx].checked;
+  localStorage.setItem(SHOP_LIST_KEY, JSON.stringify(shopList));
+  renderShoppingList();
+}
+
+// ── RECIPES ───────────────────────────────────────
+var AURA_RECIPES = [
+  {
+    title: 'Pollo alla Griglia con Verdure',
+    img: '🍗',
+    time: '25 min', difficulty: 'Facile', servings: 1,
+    kcal: 450, protein: 48, carbs: 15, fat: 20,
+    ingredients: ['Petto di pollo 200g', 'Zucchine 1', 'Peperoni 1', 'Olio EVO 10ml', 'Limone 1/2', 'Sale, pepe, origano', 'Aglio 1 spicchio'],
+    steps: ['Taglia il pollo a strisce e condisci con limone, aglio, origano, sale e pepe.', 'Taglia le verdure a pezzi.', 'Griglia il pollo 5 min per lato a fuoco medio-alto.', 'Griglia le verdure 8 min girando spesso.', 'Componi il piatto e condisci con un filo di olio EVO.']
+  },
+  {
+    title: 'Bowl Salmone e Quinoa',
+    img: '🐟',
+    time: '30 min', difficulty: 'Media', servings: 1,
+    kcal: 580, protein: 42, carbs: 45, fat: 22,
+    ingredients: ['Salmone fresco 150g', 'Quinoa 70g', 'Edamame 50g', 'Avocado 1/4', 'Salsa di soia 10ml', 'Semi di sesamo', 'Zenzero fresco grattugiato'],
+    steps: ['Cuoci la quinoa in acqua salata per 15 min.', 'Cucina il salmone in padella 4 min per lato.', 'Sgrana gli edamame. Taglia l\'avocado a fette.', 'Componi la bowl con quinoa, salmone sfilettato, edamame e avocado.', 'Condisci con soia, sesamo e zenzero. Servi.']
+  },
+  {
+    title: 'Pancakes Proteici',
+    img: '🥞',
+    time: '15 min', difficulty: 'Facile', servings: 2,
+    kcal: 410, protein: 32, carbs: 48, fat: 10,
+    ingredients: ['Fiocchi d\'avena 80g', 'Whey protein 30g', 'Uovo 1', 'Banana 1', 'Latte 100ml', 'Mirtilli 50g', 'Miele q.b.'],
+    steps: ['Frulla avena, whey, uovo, banana e latte fino a ottenere un composto liscio.', 'Scalda una padella antiaderente a fuoco medio.', 'Versa un mestolino di impasto e cuoci 2 min per lato.', 'Ripeti fino a esaurire l\'impasto.', 'Servi con mirtilli e un filo di miele.']
+  },
+  {
+    title: 'Pasta Integrale al Tonno',
+    img: '🍝',
+    time: '20 min', difficulty: 'Facile', servings: 1,
+    kcal: 520, protein: 38, carbs: 55, fat: 14,
+    ingredients: ['Pasta integrale 80g', 'Tonno in scatola 120g', 'Pomodorini 150g', 'Olive nere 20g', 'Capperi 10g', 'Aglio 1 spicchio', 'Olio EVO 10ml', 'Prezzemolo'],
+    steps: ['Cuoci la pasta in acqua salata.', 'In padella, soffriggi aglio con olio EVO.', 'Aggiungi pomodorini tagliati, olive e capperi. Cuoci 5 min.', 'Aggiungi il tonno scolato e scaldalo.', 'Scola la pasta e saltala nel sugo. Servi con prezzemolo.']
+  },
+  {
+    title: 'Wrap di Tacchino',
+    img: '🌯',
+    time: '10 min', difficulty: 'Facile', servings: 1,
+    kcal: 390, protein: 35, carbs: 32, fat: 14,
+    ingredients: ['Tortilla integrale 1', 'Petto di tacchino 120g', 'Lattuga', 'Pomodoro 1', 'Hummus 30g', 'Carote grattugiate'],
+    steps: ['Scalda la tortilla in padella 30 sec.', 'Spalma l\'hummus sulla tortilla.', 'Disponi lattuga, tacchino a fette, pomodoro e carote.', 'Arrotola stretto e taglia a metà.', 'Pronto! Perfetto da portare via.']
+  },
+  {
+    title: 'Smoothie Post-Workout',
+    img: '🥤',
+    time: '5 min', difficulty: 'Facile', servings: 1,
+    kcal: 320, protein: 30, carbs: 35, fat: 8,
+    ingredients: ['Banana 1', 'Whey protein 30g', 'Latte di avena 200ml', 'Burro di arachidi 10g', 'Ghiaccio 4 cubetti', 'Cacao amaro 5g'],
+    steps: ['Metti tutti gli ingredienti nel frullatore.', 'Frulla per 30 secondi fino a ottenere un composto cremoso.', 'Versa in un bicchiere e servi subito. Ideale entro 30 min post-allenamento.']
+  },
+  {
+    title: 'Zuppa di Lenticchie',
+    img: '🥣',
+    time: '35 min', difficulty: 'Media', servings: 2,
+    kcal: 400, protein: 28, carbs: 48, fat: 10,
+    ingredients: ['Lenticchie 150g', 'Carota 1', 'Sedano 1 costa', 'Cipolla 1', 'Pomodori pelati 200g', 'Olio EVO 10ml', 'Cumino 1 cucchiaino', 'Sale, pepe'],
+    steps: ['Trita cipolla, carota e sedano. Soffriggi con olio EVO.', 'Aggiungi le lenticchie lavate e mescola 2 min.', 'Aggiungi pomodori, cumino e 500ml di acqua.', 'Cuoci 25 min a fuoco medio con coperchio.', 'Aggiusta di sale e pepe. Servi calda con pane integrale.']
+  },
+  {
+    title: 'Frittata di Spinaci e Feta',
+    img: '🥚',
+    time: '15 min', difficulty: 'Facile', servings: 1,
+    kcal: 380, protein: 28, carbs: 8, fat: 26,
+    ingredients: ['Uova 3', 'Spinaci freschi 80g', 'Feta 30g', 'Cipolla rossa 1/4', 'Olio EVO 5ml', 'Sale, pepe noce moscata'],
+    steps: ['Sbatti le uova con sale, pepe e noce moscata.', 'Soffriggi cipolla e spinaci in padella con olio.', 'Versa le uova e distribuisci la feta sbriciolata.', 'Cuoci a fuoco basso 5 min con coperchio.', 'Ribalta e cuoci ancora 2 min. Servi calda.']
+  }
+];
+
+function openRecipes() {
+  document.getElementById('recipes-ov').classList.add('on');
+  renderRecipes();
+}
+function closeRecipes() {
+  document.getElementById('recipes-ov').classList.remove('on');
+}
+
+function renderRecipes() {
+  var body = document.getElementById('recipes-body');
+  var targets = calcUserTDEE();
+  var html = '<div style="font-size:.78rem;color:var(--t3);margin-bottom:12px;text-align:center">Ricette su misura per il tuo obiettivo: <strong style="color:var(--t1)">' + targets.kcal + ' kcal/giorno</strong></div>';
+
+  AURA_RECIPES.forEach(function(r, i) {
+    html += '<div class="recipe-card" onclick="openRecipeDetail(' + i + ')">';
+    html += '<div class="recipe-img" style="display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,var(--s9),var(--s8))">' + r.img + '</div>';
+    html += '<div class="recipe-info-wrap">';
+    html += '<div class="recipe-title">' + r.title + '</div>';
+    html += '<div class="recipe-meta"><span>⏱ ' + r.time + '</span><span>📊 ' + r.difficulty + '</span><span>🍽 ' + r.servings + ' porz.</span></div>';
+    html += '<div class="recipe-macros-bar">';
+    html += '<span style="color:var(--or)">' + r.kcal + ' kcal</span>';
+    html += '<span>P ' + r.protein + 'g</span>';
+    html += '<span>C ' + r.carbs + 'g</span>';
+    html += '<span>G ' + r.fat + 'g</span>';
+    html += '</div></div></div>';
+  });
+
+  body.innerHTML = html;
+}
+
+function openRecipeDetail(index) {
+  var r = AURA_RECIPES[index];
+  if (!r) return;
+  var body = document.getElementById('recipe-detail-body');
+  var html = '<div class="recipe-detail-img" style="display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,var(--s9),var(--s8))">' + r.img + '</div>';
+  html += '<div class="recipe-detail-title">' + r.title + '</div>';
+  html += '<div class="recipe-detail-meta">⏱ ' + r.time + ' · 📊 ' + r.difficulty + ' · 🍽 ' + r.servings + ' porzione/i</div>';
+
+  // Macros
+  html += '<div class="food-nutr-grid">';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--or)">' + r.kcal + '</div><div class="food-nutr-lbl">Calorie</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--or)">' + r.protein + 'g</div><div class="food-nutr-lbl">Proteine</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--bl)">' + r.carbs + 'g</div><div class="food-nutr-lbl">Carbo</div></div>';
+  html += '<div class="food-nutr-box"><div class="food-nutr-val" style="color:var(--pu)">' + r.fat + 'g</div><div class="food-nutr-lbl">Grassi</div></div>';
+  html += '</div>';
+
+  // Ingredients
+  html += '<div class="recipe-section-title">🛒 Ingredienti</div>';
+  r.ingredients.forEach(function(ing) {
+    html += '<div class="recipe-ingredient">• ' + ing + '</div>';
+  });
+
+  // Steps
+  html += '<div class="recipe-section-title">👨‍🍳 Preparazione</div>';
+  r.steps.forEach(function(step, i) {
+    html += '<div class="recipe-step"><div class="recipe-step-num">' + (i + 1) + '</div><div class="recipe-step-text">' + step + '</div></div>';
+  });
+
+  html += '<button class="food-add-btn" style="margin-top:16px" onclick="addRecipeToMeals(' + index + ')">Aggiungi come Pasto</button>';
+  body.innerHTML = html;
+  document.getElementById('recipe-detail-ov').classList.add('on');
+}
+
+function closeRecipeDetail() {
+  document.getElementById('recipe-detail-ov').classList.remove('on');
+}
+
+function addRecipeToMeals(index) {
+  var r = AURA_RECIPES[index];
+  if (!r) return;
+  var food = {
+    name: r.title,
+    brand: 'Ricetta AURA',
+    kcal: r.kcal,
+    protein: r.protein,
+    carbs: r.carbs,
+    fat: r.fat
+  };
+  addMealEntry(food, 100, 'pranzo');
+  closeRecipeDetail();
+  closeRecipes();
+}
+
+// Init diet dashboard on load
+updateDietDashboard();
 
 // ═══════════════════════════════════════════════════
 //  AUTH — Login / Registrazione
