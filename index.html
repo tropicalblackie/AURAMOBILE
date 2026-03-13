@@ -892,9 +892,9 @@ html,body{
         <!-- Metriche -->
         <div class="metrics-chips">
           <div class="mc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span id="bpm-val">72 BPM</span></div>
-          <div class="mc">🔥 <span>7 giorni streak</span></div>
-          <div class="mc">⚡<span>1.840 kcal</span></div>
-          <div class="mc">🏆<span>3° classifica</span></div>
+          <div class="mc">🔥 <span id="home-streak">0 giorni streak</span></div>
+          <div class="mc">⚡<span id="home-workouts">0 allenamenti</span></div>
+          <div class="mc">🏆<span id="home-points">0 punti</span></div>
         </div>
 
         <!-- CTA -->
@@ -1223,14 +1223,8 @@ html,body{
 
         <!-- Diario -->
         <div class="sec-title">Diario Allenamenti</div>
-        <div class="card" style="padding:0 14px">
-          <div class="whi"><div class="whd"><div class="dd">Lun</div><div class="dn">17</div></div><div class="whi-info"><strong>Upper Body — Forza</strong><span>55 min · 380 kcal · Forma 91%</span></div><div class="whb ok">✓</div></div>
-          <div class="whi"><div class="whd"><div class="dd">Mar</div><div class="dn">18</div></div><div class="whi-info"><strong>Corsa HIIT</strong><span>40 min · 480 kcal · 6.2 km</span></div><div class="whb ok">✓</div></div>
-          <div class="whi"><div class="whd"><div class="dd">Mer</div><div class="dn">19</div></div><div class="whi-info"><strong>Lower Body — Gambe</strong><span>62 min · 520 kcal · Forma 88%</span></div><div class="whb ok">✓</div></div>
-          <div class="whi rest"><div class="whd"><div class="dd">Gio</div><div class="dn">20</div></div><div class="whi-info"><strong>Riposo Attivo</strong><span>AURA ha consigliato recupero</span></div><div class="whb rs">R</div></div>
-          <div class="whi"><div class="whd"><div class="dd">Ven</div><div class="dn">21</div></div><div class="whi-info"><strong>Core & Mobilità</strong><span>45 min · 310 kcal · Forma 94%</span></div><div class="whb ok">✓</div></div>
-          <div class="whi"><div class="whd"><div class="dd">Sab</div><div class="dn">22</div></div><div class="whi-info"><strong>Full Body Circuit</strong><span>70 min · 640 kcal · Forma 89%</span></div><div class="whb ok">✓</div></div>
-          <div class="whi"><div class="whd"><div class="dd">Dom</div><div class="dn">23</div></div><div class="whi-info"><strong>Yoga & Stretching</strong><span>35 min · 180 kcal · Forma 96%</span></div><div class="whb ok">✓</div></div>
+        <div class="card" style="padding:0 14px" id="prof-diary">
+          <div class="prog-empty" id="diary-empty" style="padding:20px 10px"><b>Nessun allenamento registrato</b>I tuoi workout appariranno qui</div>
         </div>
 
         <!-- Hardware -->
@@ -1867,6 +1861,44 @@ function updateProfileStats() {
     if (allDates.has(dd.toISOString().slice(0,10))) days7++;
   }
   document.getElementById('ps-adherence').textContent = Math.round((days7/7)*100) + '%';
+  // Home chips
+  const hs = document.getElementById('home-streak');
+  if (hs) hs.textContent = streak + ' giorni streak';
+  const hw = document.getElementById('home-workouts');
+  if (hw) hw.textContent = totalWorkouts + ' allenamenti';
+  const hp = document.getElementById('home-points');
+  if (hp) hp.textContent = (totalWorkouts * 120) + ' punti';
+  // Profile diary
+  renderDiary();
+}
+
+function renderDiary() {
+  const d = getProgress();
+  const all = [
+    ...d.forza.map(e => ({ ...e, cat: 'Forza', label: e.ex + ' — ' + e.val + ' kg' })),
+    ...d.resistenza.map(e => ({ ...e, cat: 'Cardio', label: e.type + ' — ' + e.val + ' min' }))
+  ].sort((a, b) => b.date.localeCompare(a.date));
+  const diary = document.getElementById('prof-diary');
+  const empty = document.getElementById('diary-empty');
+  if (!diary) return;
+  if (all.length === 0) {
+    empty.style.display = '';
+    // Remove any whi elements
+    diary.querySelectorAll('.whi').forEach(el => el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  const days = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+  const last7 = all.slice(0, 7);
+  const html = last7.map(e => {
+    const dp = new Date(e.date);
+    const dd = days[dp.getDay()];
+    const dn = dp.getDate();
+    return '<div class="whi"><div class="whd"><div class="dd">' + dd + '</div><div class="dn">' + dn + '</div></div><div class="whi-info"><strong>' + e.cat + '</strong><span>' + e.label + '</span></div><div class="whb ok">✓</div></div>';
+  }).join('');
+  // Replace content but keep the empty div
+  diary.querySelectorAll('.whi').forEach(el => el.remove());
+  diary.insertAdjacentHTML('beforeend', html);
 }
 
 // ── EDIT PROFILE ─────────────────────────────────
