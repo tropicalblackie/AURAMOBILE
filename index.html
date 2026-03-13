@@ -643,6 +643,39 @@ html,body{
 .wb-new-plan{width:100%;padding:.85rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s}
 .wb-new-plan:active{background:var(--or2);transform:scale(.97)}
 
+/* Workout Session */
+.ws-ov{position:absolute;inset:0;z-index:3600;display:none;flex-direction:column;background:var(--bg)}
+.ws-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.ws-progress-bar{height:4px;background:var(--s8);border-radius:2px;margin:0 20px 12px;overflow:hidden}
+.ws-progress-fill{height:100%;background:var(--or);border-radius:2px;transition:width .3s}
+.ws-progress-label{text-align:center;font-size:.72rem;color:var(--t4);margin-bottom:16px}
+.ws-card{background:var(--s9);border:1px solid var(--s8);border-radius:18px;padding:20px;margin:0 20px 16px;text-align:center}
+.ws-ex-emoji{font-size:2.2rem;margin-bottom:8px}
+.ws-ex-name{font-family:var(--fd);font-weight:800;font-size:1.15rem;margin-bottom:4px}
+.ws-ex-info{color:var(--t3);font-size:.82rem;margin-bottom:12px}
+.ws-ex-gif{width:100%;max-width:240px;border-radius:14px;margin:0 auto 16px;display:block}
+.ws-timer-big{font-family:var(--fd);font-size:3rem;font-weight:800;color:var(--or);margin:16px 0}
+.ws-rest-label{font-size:1rem;font-weight:700;color:var(--t2);margin-bottom:4px}
+.ws-rest-next{font-size:.78rem;color:var(--t4);margin-top:8px}
+.ws-btn-set{width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .18s}
+.ws-btn-set:active{transform:scale(.96);background:var(--or2)}
+.ws-btn-skip{width:100%;padding:.75rem;background:var(--s8);color:var(--t1);border:none;border-radius:12px;font-size:.85rem;font-weight:600;cursor:pointer;margin-top:8px}
+.ws-controls{display:flex;gap:8px;padding:12px 20px;margin-top:auto}
+.ws-controls button{flex:1;padding:.7rem;border-radius:12px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;transition:all .18s}
+.ws-ctrl-pause{background:var(--s8);color:var(--t1)}
+.ws-ctrl-skip{background:var(--s8);color:var(--or)}
+.ws-ctrl-stop{background:#ef444420;color:var(--re)}
+.ws-summary{text-align:center;padding:40px 20px}
+.ws-summary-ico{font-size:3rem;margin-bottom:12px}
+.ws-summary-title{font-family:var(--fd);font-weight:800;font-size:1.3rem;margin-bottom:4px}
+.ws-summary-plan{color:var(--t3);font-size:.85rem;margin-bottom:24px}
+.ws-summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.ws-summary-stat{background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px 10px}
+.ws-summary-stat-val{font-family:var(--fd);font-weight:800;font-size:1.2rem;color:var(--or)}
+.ws-summary-stat-lbl{font-size:.7rem;color:var(--t4);margin-top:2px}
+.ws-btn-save{width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer}
+.ws-btn-save:active{transform:scale(.96)}
+
 /* New plan form */
 .wb-form{margin-bottom:14px}
 .wb-form-row{display:flex;gap:8px;margin-bottom:10px}
@@ -986,7 +1019,7 @@ html,body{
         <div style="display:flex;gap:10px;margin-bottom:10px">
           <button class="cta pulse" id="start-btn" style="flex:1;margin-bottom:0">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Workout Live IA
+            Avvia Workout
           </button>
           <button class="cta" style="flex:1;margin-bottom:0;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openWorkoutBuilder()">
             📋 Le Mie Schede
@@ -996,19 +1029,7 @@ html,body{
           📚 Libreria Esercizi
         </button>
 
-        <!-- Workout live -->
-        <div class="wl" id="wl-panel" style="display:none;margin-bottom:10px">
-          <div class="wl-hd">
-            <span class="ld"></span>
-            <span>LIVE — Mobilità Attiva</span>
-            <span id="wl-time" style="margin-left:auto;font-family:var(--fd);font-size:.85rem">00:00</span>
-            <button id="stop-btn" style="margin-left:8px;padding:.28rem .7rem;background:var(--re);color:#fff;border:none;border-radius:7px;font-size:.7rem;font-weight:700;cursor:pointer">■ Stop</button>
-          </div>
-          <div class="ex done"><span class="en">01</span><div class="ei"><strong>Cat-Cow Flow</strong><span>3 × 12 rep</span></div><span class="eck">✓</span></div>
-          <div class="ex cur"><span class="en">02</span><div class="ei"><strong>World's Greatest Stretch</strong><span>2 × 8 rep lato</span></div><span class="etm" id="ex-timer">00:00</span></div>
-          <div class="ex"><span class="en">03</span><div class="ei"><strong>Hip 90/90 Flow</strong><span>3 × 10 rep</span></div><span class="edot"></span></div>
-          <div class="ex"><span class="en">04</span><div class="ei"><strong>Pigeon Pose Hold</strong><span>2 × 30 sec lato</span></div><span class="edot"></span></div>
-        </div>
+        <!-- Workout live (session overlay) -->
 
         <!-- Prossimo -->
         <div class="sec-title">Prossimo consigliato</div>
@@ -1664,6 +1685,18 @@ html,body{
   <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="wb-content"></div>
 </div>
 
+<!-- ═══ WORKOUT SESSION OVERLAY ═══ -->
+<div class="ws-ov" id="ws-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="stopWorkoutSession()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title" id="ws-title">Allenamento</div>
+    <span id="ws-total-time" style="margin-left:auto;font-family:var(--fd);font-size:.85rem;color:var(--or)">00:00</span>
+  </div>
+  <div class="legal-scroll" style="padding:12px 20px 20px" id="ws-content"></div>
+</div>
+
 <!-- ═══ EDIT PROFILE OVERLAY ═══ -->
 <div class="legal-ov" id="editprof-ov">
   <div class="legal-topbar">
@@ -1763,7 +1796,7 @@ html,body{
 //  AURA MOBILE — JS
 // ═══════════════════════════════════════════════════
 
-const S = { tab:'home', hydration:1.2, hydGoal:2.5, workoutOn:false, wSec:0, wTimer:null, pIdx:0, bpm:72 };
+const S = { tab:'home', hydration:1.2, hydGoal:2.5, pIdx:0, bpm:72 };
 
 // ── EXERCISE LIBRARY DATA ───────────────────────
 const EXERCISES = [
@@ -1940,7 +1973,8 @@ function renderWorkoutBuilder() {
       html += '<div class="wb-ex-row"><span>' + (e?e.emoji:'') + '</span><span class="wb-ex-name">' + name + '</span><span class="wb-ex-detail">' + ex.sets + 'x' + ex.reps + (ex.rest?' · ' + ex.rest + 's rest':'') + '</span><button class="wb-ex-del" onclick="removeExFromPlan(' + pi + ',' + ei + ')">✕</button></div>';
     });
     html += '</div>';
-    html += '<div class="wb-plan-actions"><button class="wb-start-btn" onclick="openExerciseLibrary();wbEditingIdx=' + pi + '">+ Esercizi</button><button class="wb-del-plan" onclick="deletePlan(' + pi + ')">Elimina</button></div></div>';
+    var hasEx = p.exercises.length > 0;
+    html += '<div class="wb-plan-actions">' + (hasEx ? '<button class="wb-start-btn" onclick="startWorkoutSession(' + pi + ')">\u25b6 Avvia</button>' : '') + '<button class="wb-start-btn" style="background:var(--s8);color:var(--t1)" onclick="openExerciseLibrary();wbEditingIdx=' + pi + '">+ Esercizi</button><button class="wb-del-plan" onclick="deletePlan(' + pi + ')">Elimina</button></div></div>';
   });
   html += '<button class="wb-new-plan" onclick="startNewPlan()">+ Crea Nuova Scheda</button>';
   el.innerHTML = html;
@@ -1999,6 +2033,222 @@ function deletePlan(pi) {
   else if (wbEditingIdx > pi) wbEditingIdx--;
   renderWorkoutBuilder();
   toast('Scheda "' + name + '" eliminata', 're');
+}
+
+// ── WORKOUT SESSION ─────────────────────────────
+const CW_KEY = 'aura_completed_workouts';
+function getCompletedWorkouts() {
+  try { return JSON.parse(localStorage.getItem(CW_KEY)) || []; } catch { return []; }
+}
+const MET_MAP = { 'Principiante': 3.5, 'Intermedio': 5.0, 'Avanzato': 6.0 };
+
+let ws = {
+  active:false, planIdx:-1, planName:'', exercises:[], exIdx:0, setNum:1,
+  resting:false, restSec:0, totalSec:0, paused:false, timer:null,
+  calories:0, exerciseTimeSec:0
+};
+
+function startWorkoutSession(planIdx) {
+  const plans = getWorkouts();
+  if (planIdx < 0 || planIdx >= plans.length) return;
+  const plan = plans[planIdx];
+  if (!plan.exercises || plan.exercises.length === 0) {
+    toast('Aggiungi esercizi prima di avviare!', 're');
+    return;
+  }
+  ws.active = true;
+  ws.planIdx = planIdx;
+  ws.planName = plan.name;
+  ws.exercises = plan.exercises.map(function(ex) {
+    var e = EXERCISES.find(function(x) { return x.id === ex.id; });
+    return { id:ex.id, sets:ex.sets, reps:ex.reps, rest:ex.rest||90, name:e?e.name:ex.id, emoji:e?e.emoji:'💪', gif:e?e.gif:'', diff:e?e.diff:'Intermedio' };
+  });
+  ws.exIdx = 0; ws.setNum = 1; ws.totalSec = 0;
+  ws.resting = false; ws.restSec = 0; ws.paused = false;
+  ws.calories = 0; ws.exerciseTimeSec = 0;
+  document.getElementById('ws-ov').classList.add('on');
+  renderWsView();
+  ws.timer = setInterval(wsTick, 1000);
+  closeWorkoutBuilder();
+}
+
+function wsTick() {
+  if (ws.paused) return;
+  ws.totalSec++;
+  if (ws.resting) {
+    ws.restSec--;
+    if (ws.restSec <= 0) {
+      ws.resting = false;
+      wsAdvance();
+    }
+  } else {
+    ws.exerciseTimeSec++;
+  }
+  wsUpdateTimers();
+}
+
+function wsAdvance() {
+  var ex = ws.exercises[ws.exIdx];
+  var ts = parseInt(ex.sets) || 3;
+  if (ws.setNum < ts) {
+    ws.setNum++;
+  } else {
+    ws.exIdx++;
+    ws.setNum = 1;
+    if (ws.exIdx >= ws.exercises.length) { wsFinish(); return; }
+  }
+  renderWsView();
+}
+
+function wsCompleteSet() {
+  var ex = ws.exercises[ws.exIdx];
+  var ts = parseInt(ex.sets) || 3;
+  if (ws.setNum >= ts && ws.exIdx >= ws.exercises.length - 1) {
+    wsFinish(); return;
+  }
+  ws.resting = true;
+  ws.restSec = parseInt(ex.rest) || 90;
+  renderWsView();
+}
+
+function wsSkipRest() {
+  ws.resting = false;
+  wsAdvance();
+  renderWsView();
+}
+
+function wsTogglePause() {
+  ws.paused = !ws.paused;
+  renderWsView();
+}
+
+function wsSkipExercise() {
+  ws.exIdx++; ws.setNum = 1; ws.resting = false;
+  if (ws.exIdx >= ws.exercises.length) { wsFinish(); return; }
+  renderWsView();
+}
+
+function stopWorkoutSession() {
+  if (!ws.active) { document.getElementById('ws-ov').classList.remove('on'); return; }
+  if (ws.totalSec > 30) {
+    if (!confirm('Vuoi terminare l\'allenamento?')) return;
+    wsFinish();
+  } else {
+    clearInterval(ws.timer); ws.active = false;
+    document.getElementById('ws-ov').classList.remove('on');
+  }
+}
+
+function wsCalcCalories() {
+  var u = getUser(), w = (u && u.weight) ? u.weight : 70;
+  if (ws.exercises.length === 0) return 0;
+  var avgMet = ws.exercises.reduce(function(s,ex) { return s + (MET_MAP[ex.diff]||5); }, 0) / ws.exercises.length;
+  return Math.round(ws.exerciseTimeSec * avgMet * w / 3600);
+}
+
+function wsFinish() {
+  clearInterval(ws.timer); ws.active = false;
+  ws.calories = wsCalcCalories();
+  renderWsSummary();
+}
+
+function wsSaveAndClose() {
+  var cw = getCompletedWorkouts();
+  cw.push({
+    date: new Date().toISOString().slice(0,10),
+    planName: ws.planName,
+    exercises: ws.exercises.map(function(e) { return { id:e.id, name:e.name, sets:e.sets, reps:e.reps }; }),
+    duration: ws.totalSec,
+    calories: ws.calories,
+    completedAt: new Date().toISOString()
+  });
+  localStorage.setItem(CW_KEY, JSON.stringify(cw));
+  document.getElementById('ws-ov').classList.remove('on');
+  updateProfileStats();
+  toast('💪 Allenamento salvato! +200 XP', 'gr');
+}
+
+function wsUpdateTimers() {
+  var tt = document.getElementById('ws-total-time');
+  if (tt) {
+    var m = String(Math.floor(ws.totalSec/60)).padStart(2,'0');
+    var s = String(ws.totalSec%60).padStart(2,'0');
+    tt.textContent = m + ':' + s;
+  }
+  if (ws.resting) {
+    var rt = document.getElementById('ws-rest-timer');
+    if (rt) {
+      var rm = String(Math.floor(ws.restSec/60)).padStart(2,'0');
+      var rs = String(ws.restSec%60).padStart(2,'0');
+      rt.textContent = rm + ':' + rs;
+    }
+  }
+}
+
+function wsEsc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function renderWsView() {
+  var content = document.getElementById('ws-content');
+  var ex = ws.exercises[ws.exIdx];
+  var ts = parseInt(ex.sets) || 3;
+  var total = ws.exercises.length;
+  var pct = Math.round((ws.exIdx / total) * 100);
+  document.getElementById('ws-title').textContent = ws.planName;
+  if (ws.resting) {
+    var nextInfo = ws.setNum < ts
+      ? 'Set ' + (ws.setNum+1) + ' di ' + ts + ' \u00b7 ' + wsEsc(ex.name)
+      : (ws.exIdx+1 < total ? wsEsc(ws.exercises[ws.exIdx+1].name) : 'Fine!');
+    content.innerHTML =
+      '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
+      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' +
+      '<div class="ws-card">' +
+        '<div class="ws-rest-label">\u23f1 Recupero</div>' +
+        '<div class="ws-timer-big" id="ws-rest-timer">' + String(Math.floor(ws.restSec/60)).padStart(2,'0') + ':' + String(ws.restSec%60).padStart(2,'0') + '</div>' +
+        '<div class="ws-rest-next">Prossimo: ' + nextInfo + '</div>' +
+        '<button class="ws-btn-skip" onclick="wsSkipRest()">Salta Recupero \u2192</button>' +
+      '</div>' +
+      '<div class="ws-controls">' +
+        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '\u25b6 Riprendi' : '\u23f8 Pausa') + '</button>' +
+        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">\u25a0 Termina</button>' +
+      '</div>';
+  } else {
+    content.innerHTML =
+      '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
+      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' +
+      '<div class="ws-card">' +
+        '<div class="ws-ex-emoji">'+ex.emoji+'</div>' +
+        '<div class="ws-ex-name">' + wsEsc(ex.name) + '</div>' +
+        '<div class="ws-ex-info">Set '+ws.setNum+' di '+ts+' \u00b7 '+ex.reps+' rep</div>' +
+        (ex.gif ? '<img class="ws-ex-gif" src="'+ex.gif+'" alt="">' : '') +
+        '<button class="ws-btn-set" onclick="wsCompleteSet()">\u2713 Set Completato</button>' +
+      '</div>' +
+      '<div class="ws-controls">' +
+        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '\u25b6 Riprendi' : '\u23f8 Pausa') + '</button>' +
+        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">\u23ed Salta</button>' +
+        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">\u25a0 Termina</button>' +
+      '</div>';
+  }
+}
+
+function renderWsSummary() {
+  var content = document.getElementById('ws-content');
+  var mm = String(Math.floor(ws.totalSec/60)).padStart(2,'0');
+  var ss = String(ws.totalSec%60).padStart(2,'0');
+  document.getElementById('ws-title').textContent = 'Completato!';
+  var tt = document.getElementById('ws-total-time'); if (tt) tt.textContent = '';
+  content.innerHTML =
+    '<div class="ws-summary">' +
+      '<div class="ws-summary-ico">\ud83c\udf89</div>' +
+      '<div class="ws-summary-title">Allenamento Completato!</div>' +
+      '<div class="ws-summary-plan">' + wsEsc(ws.planName) + '</div>' +
+      '<div class="ws-summary-stats">' +
+        '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\u23f1 '+mm+':'+ss+'</div><div class="ws-summary-stat-lbl">Durata</div></div>' +
+        '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\ud83d\udcaa '+ws.exercises.length+'</div><div class="ws-summary-stat-lbl">Esercizi</div></div>' +
+        '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\ud83d\udd25 '+ws.calories+'</div><div class="ws-summary-stat-lbl">Calorie</div></div>' +
+        '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\u26a1 +200</div><div class="ws-summary-stat-lbl">XP</div></div>' +
+      '</div>' +
+      '<button class="ws-btn-save" onclick="wsSaveAndClose()">Salva e Chiudi</button>' +
+    '</div>';
 }
 
 // ── LEGAL PAGES ───────────────────────────────────────
@@ -2219,12 +2469,13 @@ function drawProgChart(cat, sorted) {
 
 function updateProfileStats() {
   const d = getProgress();
-  const totalWorkouts = d.forza.length + d.resistenza.length;
+  const cw = getCompletedWorkouts();
+  const totalWorkouts = d.forza.length + d.resistenza.length + cw.length;
   document.getElementById('ps-workouts').textContent = totalWorkouts;
-  document.getElementById('ps-points').textContent = totalWorkouts * 120;
+  document.getElementById('ps-points').textContent = calcTotalXP();
   // Streak: count consecutive days with entries going backwards from today
   const today = new Date(); today.setHours(0,0,0,0);
-  const allDates = new Set([...d.forza.map(e=>e.date), ...d.resistenza.map(e=>e.date)]);
+  const allDates = new Set([...d.forza.map(e=>e.date), ...d.resistenza.map(e=>e.date), ...cw.map(e=>e.date)]);
   let streak = 0;
   const check = new Date(today);
   while(true) {
@@ -2258,9 +2509,11 @@ function updateProfileStats() {
 
 function renderDiary() {
   const d = getProgress();
+  const cw = getCompletedWorkouts();
   const all = [
     ...d.forza.map(e => ({ ...e, cat: 'Forza', label: e.ex + ' — ' + e.val + ' kg' })),
-    ...d.resistenza.map(e => ({ ...e, cat: 'Cardio', label: e.type + ' — ' + e.val + ' min' }))
+    ...d.resistenza.map(e => ({ ...e, cat: 'Cardio', label: e.type + ' — ' + e.val + ' min' })),
+    ...cw.map(e => ({ date: e.date, cat: 'Sessione', label: e.planName + ' — ' + Math.floor(e.duration/60) + ' min · ' + e.calories + ' kcal' }))
   ].sort((a, b) => b.date.localeCompare(a.date));
   const diary = document.getElementById('prof-diary');
   const empty = document.getElementById('diary-empty');
@@ -2302,7 +2555,8 @@ function getLevelName(lvl) {
 }
 function calcTotalXP() {
   const d = getProgress();
-  return d.forza.length * 120 + d.resistenza.length * 120 + d.peso.length * 30;
+  const cw = getCompletedWorkouts();
+  return d.forza.length * 120 + d.resistenza.length * 120 + d.peso.length * 30 + cw.length * 200;
 }
 
 // ── ACHIEVEMENTS ─────────────────────────────
@@ -2601,37 +2855,18 @@ setInterval(() => {
 
 // ── WORKOUT ────────────────────────────────────────
 document.getElementById('start-btn').addEventListener('click', function() {
-  if (S.workoutOn) return;
-  S.workoutOn = true; S.wSec = 0;
-  const panel = document.getElementById('wl-panel');
-  panel.style.display = 'block';
-  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
-  this.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> In corso…`;
-  this.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
-  this.style.animation = 'none';
-  S.wTimer = setInterval(() => {
-    S.wSec++;
-    const m = String(Math.floor(S.wSec/60)).padStart(2,'0');
-    const s = String(S.wSec%60).padStart(2,'0');
-    document.getElementById('wl-time').textContent = m+':'+s;
-    document.getElementById('ex-timer').textContent = m+':'+s;
-    if (S.wSec > 0 && S.wSec % 30 === 0) {
-      const tips = ['🤖 Forma ottima!','💧 Bevi acqua!','🔥 8 kcal/min bruciate','🤖 Zona HR ottimale'];
-      toast(tips[Math.floor(S.wSec/30-1) % tips.length], 'or');
-    }
-  }, 1000);
-  toast('🔥 Workout avviato! Forza Luca.', 'gr');
-});
-
-document.getElementById('stop-btn').addEventListener('click', () => {
-  clearInterval(S.wTimer); S.workoutOn = false;
-  const panel = document.getElementById('wl-panel');
-  panel.style.opacity = '0'; panel.style.transition = 'opacity .3s';
-  setTimeout(() => { panel.style.display='none'; panel.style.opacity='1'; }, 300);
-  const sb = document.getElementById('start-btn');
-  sb.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg> Inizia Workout Live IA`;
-  sb.style.background = ''; sb.style.animation = '';
-  toast('✅ Completato! +320 punti AURA 🏆', 'gr');
+  var plans = getWorkouts();
+  if (plans.length === 0) {
+    toast('Crea prima una scheda!', 'or');
+    openWorkoutBuilder();
+    return;
+  }
+  if (plans.length === 1) {
+    if (plans[0].exercises.length === 0) { toast('Aggiungi esercizi alla scheda!', 'or'); openWorkoutBuilder(); return; }
+    startWorkoutSession(0);
+  } else {
+    openWorkoutBuilder();
+  }
 });
 
 // ── CAMERA AUTO START ──────────────────────────────
