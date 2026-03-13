@@ -676,6 +676,22 @@ html,body{
 .ws-btn-save{width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer}
 .ws-btn-save:active{transform:scale(.96)}
 
+/* Workout History */
+.wh-item{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:14px;margin-bottom:10px}
+.wh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.wh-plan{font-family:var(--fd);font-weight:800;font-size:.95rem}
+.wh-date{font-size:.7rem;color:var(--t4)}
+.wh-stats{display:flex;gap:12px;margin-bottom:8px}
+.wh-stat{font-size:.78rem;color:var(--t3)}
+.wh-stat b{color:var(--or);font-weight:700}
+.wh-exercises{display:flex;flex-wrap:wrap;gap:5px}
+.wh-ex-chip{font-size:.68rem;background:var(--s8);color:var(--t2);padding:3px 8px;border-radius:6px}
+.wh-empty{text-align:center;padding:40px 16px;color:var(--t4);font-size:.82rem}
+.wh-empty b{display:block;font-size:1rem;color:var(--t2);margin-bottom:6px}
+.wh-total-bar{display:flex;justify-content:space-around;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:16px;margin-bottom:14px;text-align:center}
+.wh-total-val{font-family:var(--fd);font-weight:800;font-size:1.1rem;color:var(--or)}
+.wh-total-lbl{font-size:.68rem;color:var(--t4);margin-top:2px}
+
 /* New plan form */
 .wb-form{margin-bottom:14px}
 .wb-form-row{display:flex;gap:8px;margin-bottom:10px}
@@ -1347,6 +1363,21 @@ html,body{
           </div>
         </div>
 
+        <!-- Storico Allenamenti -->
+        <div class="sec-title">Storico Allenamenti</div>
+        <div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutHistory()">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:1.4rem">🏋️</span>
+              <div>
+                <div style="font-weight:700;font-size:.88rem">I Miei Workout</div>
+                <div style="font-size:.7rem;color:var(--t3)" id="wh-summary">Tutti gli allenamenti completati</div>
+              </div>
+            </div>
+            <span class="sarr">›</span>
+          </div>
+        </div>
+
         <!-- Diario -->
         <div class="sec-title">Diario Allenamenti</div>
         <div class="card" style="padding:0 14px" id="prof-diary">
@@ -1683,6 +1714,17 @@ html,body{
     <div class="legal-page-title">Le Mie Schede</div>
   </div>
   <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="wb-content"></div>
+</div>
+
+<!-- ═══ WORKOUT HISTORY OVERLAY ═══ -->
+<div class="wb-ov" id="wh-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeWorkoutHistory()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">Storico Allenamenti</div>
+  </div>
+  <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="wh-content"></div>
 </div>
 
 <!-- ═══ WORKOUT SESSION OVERLAY ═══ -->
@@ -2251,6 +2293,56 @@ function renderWsSummary() {
     '</div>';
 }
 
+// ── WORKOUT HISTORY ──────────────────────────────────
+function openWorkoutHistory() {
+  document.getElementById('wh-ov').classList.add('on');
+  renderWorkoutHistory();
+}
+function closeWorkoutHistory() { document.getElementById('wh-ov').classList.remove('on'); }
+
+function renderWorkoutHistory() {
+  var cw = getCompletedWorkouts();
+  var el = document.getElementById('wh-content');
+  if (cw.length === 0) {
+    el.innerHTML = '<div class="wh-empty"><b>Nessun allenamento completato</b>Avvia una scheda per registrare il tuo primo workout</div>';
+    return;
+  }
+  var sorted = cw.slice().sort(function(a,b) { return b.completedAt.localeCompare(a.completedAt); });
+  var totalDur = cw.reduce(function(s,w) { return s + (w.duration||0); }, 0);
+  var totalCal = cw.reduce(function(s,w) { return s + (w.calories||0); }, 0);
+  var totalEx = cw.reduce(function(s,w) { return s + (w.exercises?w.exercises.length:0); }, 0);
+  var html = '<div class="wh-total-bar">';
+  html += '<div><div class="wh-total-val">' + cw.length + '</div><div class="wh-total-lbl">Sessioni</div></div>';
+  html += '<div><div class="wh-total-val">' + Math.floor(totalDur/60) + '</div><div class="wh-total-lbl">Minuti</div></div>';
+  html += '<div><div class="wh-total-val">' + totalCal + '</div><div class="wh-total-lbl">Calorie</div></div>';
+  html += '<div><div class="wh-total-val">' + totalEx + '</div><div class="wh-total-lbl">Esercizi</div></div>';
+  html += '</div>';
+  var months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  sorted.forEach(function(w) {
+    var dp = new Date(w.completedAt);
+    var dateStr = dp.getDate() + ' ' + months[dp.getMonth()] + ' ' + dp.getFullYear();
+    var timeStr = String(dp.getHours()).padStart(2,'0') + ':' + String(dp.getMinutes()).padStart(2,'0');
+    var mm = Math.floor((w.duration||0)/60);
+    var ss = (w.duration||0)%60;
+    html += '<div class="wh-item">';
+    html += '<div class="wh-top"><div class="wh-plan">' + whEsc(w.planName||'Workout') + '</div><div class="wh-date">' + dateStr + ' · ' + timeStr + '</div></div>';
+    html += '<div class="wh-stats">';
+    html += '<div class="wh-stat">⏱ <b>' + mm + ':' + String(ss).padStart(2,'0') + '</b></div>';
+    html += '<div class="wh-stat">🔥 <b>' + (w.calories||0) + '</b> kcal</div>';
+    html += '<div class="wh-stat">💪 <b>' + (w.exercises?w.exercises.length:0) + '</b> esercizi</div>';
+    html += '</div>';
+    if (w.exercises && w.exercises.length > 0) {
+      html += '<div class="wh-exercises">';
+      w.exercises.forEach(function(e) { html += '<div class="wh-ex-chip">' + whEsc(e.name||e.id) + '</div>'; });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function whEsc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
 // ── LEGAL PAGES ───────────────────────────────────────
 function openLegal(id) {
   const ov = document.getElementById(id);
@@ -2497,10 +2589,19 @@ function updateProfileStats() {
   const hw = document.getElementById('home-workouts');
   if (hw) hw.textContent = totalWorkouts + ' allenamenti';
   const hp = document.getElementById('home-points');
-  if (hp) hp.textContent = (totalWorkouts * 120) + ' punti';
+  if (hp) hp.textContent = calcTotalXP() + ' punti';
   // Profile streak chip
   const psc = document.getElementById('prof-streak-chip');
   if (psc) psc.textContent = '🔥 ' + streak + 'gg streak';
+  // Workout history summary
+  const whSum = document.getElementById('wh-summary');
+  if (whSum) {
+    if (cw.length === 0) whSum.textContent = 'Tutti gli allenamenti completati';
+    else {
+      const totalCal = cw.reduce((s,w) => s + (w.calories||0), 0);
+      whSum.textContent = cw.length + ' sessioni · ' + totalCal + ' kcal totali';
+    }
+  }
   // Profile diary
   renderDiary();
   // XP & Levels & Badges
