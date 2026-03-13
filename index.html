@@ -3220,7 +3220,7 @@ const CAM = {
   repStartTime: 0, lastFeedback: 0, lowLight: false, frameScores: [],
   exercise: 'squat', angles: {}, targetReps: 12,
   lastVoiceTime: 0, lastVoiceMsg: '', voiceEnabled: true,
-  sessionActive: false, failedChecks: {}, startTime: 0
+  sessionActive: false, failedChecks: {}, startTime: 0, formTipGiven: false
 };
 
 // Exercise definitions for angle analysis
@@ -3362,9 +3362,9 @@ function speak(text) {
   if (!CAM.voiceEnabled) return;
   if (!('speechSynthesis' in window)) return;
   var now = Date.now();
-  // Throttle: no same message within 6s, no any message within 3s
-  if (now - CAM.lastVoiceTime < 3000) return;
-  if (text === CAM.lastVoiceMsg && now - CAM.lastVoiceTime < 6000) return;
+  // Throttle: no same message within 4s, no any message within 1.5s
+  if (now - CAM.lastVoiceTime < 1500) return;
+  if (text === CAM.lastVoiceMsg && now - CAM.lastVoiceTime < 4000) return;
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(text);
   u.lang = 'it-IT';
@@ -3382,13 +3382,7 @@ function speak(text) {
 
 function speakRepCount(reps, target) {
   if (reps === target) {
-    speak('Complimenti! Hai completato tutte le ' + target + ' ripetizioni!');
-  } else if (reps === Math.floor(target / 2)) {
-    speak('Metà fatto! ' + reps + ' su ' + target + '. Continua così!');
-  } else if (reps === target - 2) {
-    speak('Ancora 2! Dai che ci sei!');
-  } else if (reps === target - 1) {
-    speak('Ultima ripetizione! Dai!');
+    speak('Completato!');
   } else {
     speak('' + reps);
   }
@@ -3589,8 +3583,9 @@ function onPoseResults(results) {
   });
   fbBox.innerHTML = fbHtml;
 
-  // Voice feedback for errors (pick the most important one)
-  if (voiceWarnings.length > 0 && CAM.reps > 0) {
+  // Voice: max 1 form tip per session (at rep 3)
+  if (voiceWarnings.length > 0 && CAM.reps === 3 && !CAM.formTipGiven) {
+    CAM.formTipGiven = true;
     speak(voiceWarnings[0]);
   }
 
@@ -3640,7 +3635,7 @@ async function startCamera() {
     // Reset state
     CAM.reps = 0; CAM.phase = 'up'; CAM.formScore = 0; CAM.symScore = 0;
     CAM.calories = 0; CAM.frameScores = []; CAM.lowLight = false;
-    CAM.failedChecks = {}; CAM.sessionActive = false; CAM.startTime = 0;
+    CAM.failedChecks = {}; CAM.sessionActive = false; CAM.startTime = 0; CAM.formTipGiven = false;
     CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
     CAM.targetReps = parseInt(document.getElementById('cam-target-reps').value) || 12;
     document.getElementById('cam-rep-badge').textContent = '0';
@@ -3722,14 +3717,14 @@ function stopCamera() {
 document.getElementById('cam-exercise-sel').addEventListener('change', function() {
   CAM.exercise = this.value;
   CAM.reps = 0; CAM.phase = 'up'; CAM.frameScores = []; CAM.failedChecks = {};
-  CAM.sessionActive = false; CAM.startTime = 0;
+  CAM.sessionActive = false; CAM.startTime = 0; CAM.formTipGiven = false;
   CAM.targetReps = parseInt(document.getElementById('cam-target-reps').value) || 12;
   document.getElementById('cam-rep-badge').textContent = '0';
   document.getElementById('cstat-rep').textContent = '0';
   document.getElementById('cstat-cal').textContent = '0';
   document.getElementById('cam-progress-fill').style.width = '0%';
   document.getElementById('cam-progress-label').textContent = '0/' + CAM.targetReps;
-  speak('Esercizio selezionato: ' + POSE_EXERCISES[CAM.exercise].name);
+
 });
 
 // Target reps change
@@ -3753,11 +3748,10 @@ function toggleCamSession() {
     startCamera();
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Ferma Sessione';
     btn.classList.add('running');
-    // Announce start with voice (confirms voice is working)
-    var exName = POSE_EXERCISES[CAM.exercise].name;
+    // Announce start
     setTimeout(function() {
       CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
-      speak('Sessione avviata. ' + CAM.targetReps + ' ' + exName + '. Vai!');
+      speak('Sessione avviata. VAI!');
     }, 1000);
   }
 }
