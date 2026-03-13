@@ -3068,11 +3068,11 @@ const POSE_EXERCISES = {
       hip: [11, 23, 25]
     },
     repAngle: 'knee_l',
-    downThresh: 100, upThresh: 155,
+    downThresh: 130, upThresh: 145,
     checks: [
-      { name: 'Ginocchia', fn: function(a) { return Math.abs((a.knee_l||180)-(a.knee_r||180)) < 15; }, ok: '✓ Ginocchia simmetriche', warn: '⚠ Ginocchia asimmetriche', voice: 'Ginocchia asimmetriche! Allineale.' },
-      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 110; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più! Cosce parallele al pavimento.' },
-      { name: 'Schiena', fn: function(a) { return (a.hip||0) > 60; }, ok: '✓ Schiena dritta', warn: '⚠ Schiena troppo inclinata', voice: 'Tieni la schiena più dritta!' }
+      { name: 'Ginocchia', fn: function(a) { return Math.abs((a.knee_l||180)-(a.knee_r||180)) < 20; }, ok: '✓ Ginocchia simmetriche', warn: '⚠ Ginocchia asimmetriche', voice: 'Ginocchia asimmetriche! Allineale.' },
+      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 130; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più! Cosce parallele al pavimento.' },
+      { name: 'Schiena', fn: function(a) { return (a.hip||0) > 45; }, ok: '✓ Schiena dritta', warn: '⚠ Schiena troppo inclinata', voice: 'Tieni la schiena più dritta!' }
     ]
   },
   pushup: {
@@ -3083,11 +3083,11 @@ const POSE_EXERCISES = {
       body: [11, 23, 25]
     },
     repAngle: 'elbow_l',
-    downThresh: 95, upThresh: 155,
+    downThresh: 110, upThresh: 145,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Allineali.' },
-      { name: 'Corpo', fn: function(a) { return (a.body||180) > 150; }, ok: '✓ Corpo allineato', warn: '⚠ Alza i fianchi', voice: 'Alza i fianchi! Corpo dritto come una tavola.' },
-      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) < 100; }, ok: '✓ Buona ampiezza', warn: '⚠ Scendi di più', voice: 'Scendi di più con il petto!' }
+      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 20; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Allineali.' },
+      { name: 'Corpo', fn: function(a) { return (a.body||180) > 140; }, ok: '✓ Corpo allineato', warn: '⚠ Alza i fianchi', voice: 'Alza i fianchi! Corpo dritto come una tavola.' },
+      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) < 115; }, ok: '✓ Buona ampiezza', warn: '⚠ Scendi di più', voice: 'Scendi di più con il petto!' }
     ]
   },
   deadlift: {
@@ -3098,7 +3098,7 @@ const POSE_EXERCISES = {
       knee_l: [23, 25, 27]
     },
     repAngle: 'hip_l',
-    downThresh: 90, upThresh: 160,
+    downThresh: 110, upThresh: 150,
     checks: [
       { name: 'Anche', fn: function(a) { return Math.abs((a.hip_l||180)-(a.hip_r||180)) < 12; }, ok: '✓ Anche simmetriche', warn: '⚠ Anche sbilanciate', voice: 'Anche sbilanciate! Distribuisci il peso.' },
       { name: 'Ginocchia', fn: function(a) { return (a.knee_l||180) > 140; }, ok: '✓ Gambe ok', warn: '⚠ Non piegare troppo le ginocchia', voice: 'Non piegare troppo le ginocchia!' },
@@ -3113,7 +3113,7 @@ const POSE_EXERCISES = {
       shoulder_l: [13, 11, 23]
     },
     repAngle: 'elbow_l',
-    downThresh: 85, upThresh: 160,
+    downThresh: 100, upThresh: 150,
     checks: [
       { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Braccia simmetriche', warn: '⚠ Braccia asimmetriche', voice: 'Braccia asimmetriche! Spingi in modo uniforme.' },
       { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) > 155; }, ok: '✓ Estensione completa', warn: '⚠ Estendi di più', voice: 'Estendi di più le braccia in alto!' },
@@ -3128,7 +3128,7 @@ const POSE_EXERCISES = {
       shoulder_l: [13, 11, 23]
     },
     repAngle: 'elbow_l',
-    downThresh: 55, upThresh: 145,
+    downThresh: 65, upThresh: 135,
     checks: [
       { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 20; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Mantienili fermi.' },
       { name: 'Braccio fermo', fn: function(a) { return (a.shoulder_l||0) < 30; }, ok: '✓ Braccio fermo', warn: '⚠ Non muovere il braccio', voice: 'Non muovere il braccio! Solo l\'avambraccio.' },
@@ -3143,7 +3143,7 @@ const POSE_EXERCISES = {
       hip_l: [11, 23, 25]
     },
     repAngle: 'knee_l',
-    downThresh: 95, upThresh: 160,
+    downThresh: 115, upThresh: 150,
     checks: [
       { name: 'Ginocchio ant.', fn: function(a) { return (a.knee_l||180) > 80; }, ok: '✓ Ginocchio ok', warn: '⚠ Ginocchio troppo avanti', voice: 'Ginocchio troppo avanti! Non superare la punta del piede.' },
       { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 105; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più in basso!' },
@@ -3362,7 +3362,11 @@ function onPoseResults(results) {
 
   // Rep counting
   var repAngle = CAM.angles[exDef.repAngle];
+  // Show current angle for debugging
+  var repBadge = document.getElementById('cam-rep-badge');
   if (repAngle !== undefined) {
+    repBadge.textContent = CAM.reps + (CAM.phase === 'down' ? ' ↓' : ' ↑');
+    repBadge.title = exDef.repAngle + ': ' + repAngle + '° (↓<' + exDef.downThresh + ' ↑>' + exDef.upThresh + ')';
     if (CAM.phase === 'up' && repAngle < exDef.downThresh) {
       CAM.phase = 'down';
     } else if (CAM.phase === 'down' && repAngle > exDef.upThresh) {
