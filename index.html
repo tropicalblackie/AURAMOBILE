@@ -68,6 +68,12 @@ html,body{
 .av-m{width:44px;height:44px;font-size:1.05rem;box-shadow:0 0 18px #f9731640}
 .av-l{width:56px;height:56px;font-size:1.25rem;box-shadow:0 0 25px #f9731650}
 .av-xl{width:70px;height:70px;font-size:1.6rem;box-shadow:0 0 32px #f9731655}
+.av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* ── PROFILE PHOTO UPLOAD ── */
+.prof-av-wrap{position:relative;cursor:pointer}
+.prof-av-wrap .cam-badge{position:absolute;bottom:0;right:0;width:24px;height:24px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);box-shadow:0 2px 8px #0004}
+.prof-av-wrap .cam-badge svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
 
 /* ── TABS ── */
 .tab{display:none;padding:0 16px 16px}
@@ -1124,10 +1130,14 @@ html,body{
       </div>
     </div>
 
+    <input type="file" id="prof-photo-input" accept="image/*" hidden>
     <!-- ══ PROFILE ══ -->
     <div class="tab" id="tab-profile">
       <div class="prof-header">
-        <div class="av av-xl" id="prof-av">L</div>
+        <div class="prof-av-wrap" id="prof-av-wrap" onclick="document.getElementById('prof-photo-input').click()">
+          <div class="av av-xl" id="prof-av">L</div>
+          <div class="cam-badge"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        </div>
         <div>
           <div class="prof-name">Luca Pipia</div>
           <div class="prof-tag">⚡ Livello 5 — Macchina</div>
@@ -1900,6 +1910,8 @@ function applyUserData(u) {
     const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
     profSince.textContent = 'Membro da ' + months[d.getMonth()] + ' ' + d.getFullYear() + ' · Piano PRO';
   }
+  // Profile photo
+  if (u.photo) applyProfilePhoto(u.photo);
   // Physical stats in metrics if present
   if (u.weight || u.height) {
     const metricsArea = document.querySelector('.metrics-chips');
@@ -1911,6 +1923,28 @@ function applyUserData(u) {
     }
   }
 }
+
+// ── Profile photo upload ──
+function applyProfilePhoto(src) {
+  document.querySelectorAll('#prof-av, #topbar-av, .home-header .av').forEach(el => {
+    el.innerHTML = '<img src="' + src + '" alt="foto profilo">';
+  });
+}
+document.getElementById('prof-photo-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('Immagine troppo grande (max 5MB)','re'); return; }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const src = ev.target.result;
+    applyProfilePhoto(src);
+    const u = getUser();
+    if (u) { u.photo = src; setUser(u); }
+    toast('Foto profilo aggiornata!','gr');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
 
 // Show / hide auth screen
 function showAuth() {
