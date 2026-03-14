@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Force-nuke old SW caches before anything else loads
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v3')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v4')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -1048,7 +1048,7 @@ html,body{
           <div class="a-divider">oppure</div>
           <div class="a-social">
             <button type="button" class="a-social-btn" onclick="socialLogin('Google')">G · Google</button>
-            <button type="button" class="a-social-btn" onclick="socialLogin('Apple')">🍎 Apple</button>
+            <button type="button" class="a-social-btn" onclick="socialLogin('Apple')"><svg class="ico" viewBox="0 0 24 24" style="stroke:none;fill:currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83z"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> Apple</button>
           </div>
         </form>
 
@@ -1088,16 +1088,16 @@ html,body{
           <div class="a-field">
             <label class="a-label">Obiettivo</label>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="massa" checked style="display:none"/><span class="goal-chip" data-v="massa">💪 Massa</span></label>
-              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="dimagrimento" style="display:none"/><span class="goal-chip" data-v="dimagrimento">🔥 Dimagrimento</span></label>
-              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="benessere" style="display:none"/><span class="goal-chip" data-v="benessere">🧘 Benessere</span></label>
+              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="massa" checked style="display:none"/><span class="goal-chip" data-v="massa"><svg class="ico" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg> Massa</span></label>
+              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="dimagrimento" style="display:none"/><span class="goal-chip" data-v="dimagrimento"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg> Dimagrimento</span></label>
+              <label class="a-check" style="background:var(--s8);padding:6px 12px;border-radius:50px;cursor:pointer"><input type="radio" name="goal" value="benessere" style="display:none"/><span class="goal-chip" data-v="benessere"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20h16M12 4v16M8 8l4-4 4 4"/></svg> Benessere</span></label>
             </div>
           </div>
           <button type="submit" class="cta" style="margin-top:6px">Crea Account</button>
           <div class="a-divider">oppure</div>
           <div class="a-social">
             <button type="button" class="a-social-btn" onclick="socialLogin('Google')">G · Google</button>
-            <button type="button" class="a-social-btn" onclick="socialLogin('Apple')">🍎 Apple</button>
+            <button type="button" class="a-social-btn" onclick="socialLogin('Apple')"><svg class="ico" viewBox="0 0 24 24" style="stroke:none;fill:currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83z"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> Apple</button>
           </div>
         </form>
       </div>
@@ -1120,34 +1120,34 @@ html,body{
 
       <!-- Step 0: Obiettivo -->
       <div class="ob-step on" data-step="0">
-        <div class="ob-emoji">🎯</div>
+        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <div class="ob-title">Qual è il tuo obiettivo?</div>
         <div class="ob-desc">AURA personalizzerà allenamenti, dieta e recupero in base alla tua scelta.</div>
         <div class="ob-options" id="ob-goal-opts">
-          <div class="ob-opt sel" data-val="massa"><span class="ob-opt-ico">💪</span><div class="ob-opt-text"><div class="ob-opt-label">Massa Muscolare</div><div class="ob-opt-sub">Ipertrofia e forza progressiva</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="dimagrimento"><span class="ob-opt-ico">🔥</span><div class="ob-opt-text"><div class="ob-opt-label">Dimagrimento</div><div class="ob-opt-sub">Deficit calorico e cardio mirati</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt" data-val="benessere"><span class="ob-opt-ico">🧘</span><div class="ob-opt-text"><div class="ob-opt-label">Benessere Generale</div><div class="ob-opt-sub">Equilibrio corpo-mente, mobilità</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt" data-val="resistenza"><span class="ob-opt-ico">🏃</span><div class="ob-opt-text"><div class="ob-opt-label">Resistenza</div><div class="ob-opt-sub">Cardio, endurance e stamina</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt sel" data-val="massa"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Massa Muscolare</div><div class="ob-opt-sub">Ipertrofia e forza progressiva</div></div><div class="ob-check">✓</div></div>
+          <div class="ob-opt" data-val="dimagrimento"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Dimagrimento</div><div class="ob-opt-sub">Deficit calorico e cardio mirati</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt" data-val="benessere"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20h16M12 4v16M8 8l4-4 4 4"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Benessere Generale</div><div class="ob-opt-sub">Equilibrio corpo-mente, mobilità</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt" data-val="resistenza"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Resistenza</div><div class="ob-opt-sub">Cardio, endurance e stamina</div></div><div class="ob-check"></div></div>
         </div>
         <div class="ob-footer"><div class="ob-nav"><button class="cta" style="flex:1" id="ob-next-0">Avanti →</button></div></div>
       </div>
 
       <!-- Step 1: Livello -->
       <div class="ob-step" data-step="1">
-        <div class="ob-emoji">📊</div>
+        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
         <div class="ob-title">Qual è il tuo livello?</div>
         <div class="ob-desc">Scegli il livello che ti descrive meglio. AURA si adatterà di conseguenza.</div>
         <div class="ob-options" id="ob-level-opts">
-          <div class="ob-opt" data-val="principiante"><span class="ob-opt-ico">🌱</span><div class="ob-opt-text"><div class="ob-opt-label">Principiante</div><div class="ob-opt-sub">0-6 mesi di allenamento</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt sel" data-val="intermedio"><span class="ob-opt-ico">💫</span><div class="ob-opt-text"><div class="ob-opt-label">Intermedio</div><div class="ob-opt-sub">6 mesi - 2 anni</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="avanzato"><span class="ob-opt-ico">🏆</span><div class="ob-opt-text"><div class="ob-opt-label">Avanzato</div><div class="ob-opt-sub">2+ anni di allenamento costante</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt" data-val="principiante"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4 0 8-2 8-8 0-4-2-6-4-8-1 3-4 3-4 3S14 6 12 3c-2 3-4 5-4 5s-3 0-4-3C2 7 2 10 2 14c0 6 4 8 8 8z"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Principiante</div><div class="ob-opt-sub">0-6 mesi di allenamento</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt sel" data-val="intermedio"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Intermedio</div><div class="ob-opt-sub">6 mesi - 2 anni</div></div><div class="ob-check">✓</div></div>
+          <div class="ob-opt" data-val="avanzato"><span class="ob-opt-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 01-2-2V5h4M18 9h2a2 2 0 002-2V5h-4M4 5h16v4a6 6 0 01-6 6h-4a6 6 0 01-6-6V5zM9 15l-1 5h8l-1-5M9 20h6"/></svg></span><div class="ob-opt-text"><div class="ob-opt-label">Avanzato</div><div class="ob-opt-sub">2+ anni di allenamento costante</div></div><div class="ob-check"></div></div>
         </div>
         <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-1">← Indietro</button><button class="cta" style="flex:1" id="ob-next-1">Avanti →</button></div></div>
       </div>
 
       <!-- Step 2: Misure fisiche -->
       <div class="ob-step" data-step="2">
-        <div class="ob-emoji">📏</div>
+        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><path d="M17 21l-5-3-5 3V5a2 2 0 012-2h6a2 2 0 012 2z"/></svg></div>
         <div class="ob-title">Le tue misure</div>
         <div class="ob-desc">Servono per calcolare calorie, macros e obiettivi personalizzati.</div>
         <div class="ob-input-row">
@@ -1181,24 +1181,24 @@ html,body{
 
       <!-- Step 3: Frequenza -->
       <div class="ob-step" data-step="3">
-        <div class="ob-emoji">📅</div>
+        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <div class="ob-title">Quante volte ti alleni?</div>
         <div class="ob-desc">AURA pianificherà la tua settimana in base alla tua disponibilità.</div>
         <div class="ob-options" id="ob-freq-opts">
-          <div class="ob-opt" data-val="2-3"><span class="ob-opt-ico">🟢</span><div class="ob-opt-text"><div class="ob-opt-label">2-3 volte</div><div class="ob-opt-sub">Ideale per iniziare o mantenere</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt sel" data-val="4-5"><span class="ob-opt-ico">🟠</span><div class="ob-opt-text"><div class="ob-opt-label">4-5 volte</div><div class="ob-opt-sub">Buon equilibrio allenamento/recupero</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="6+"><span class="ob-opt-ico">🔴</span><div class="ob-opt-text"><div class="ob-opt-label">6+ volte</div><div class="ob-opt-sub">Allenamento intensivo quotidiano</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt" data-val="2-3"><span class="ob-opt-ico" style="color:#22c55e">●</span><div class="ob-opt-text"><div class="ob-opt-label">2-3 volte</div><div class="ob-opt-sub">Ideale per iniziare o mantenere</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt sel" data-val="4-5"><span class="ob-opt-ico" style="color:var(--or)">●</span><div class="ob-opt-text"><div class="ob-opt-label">4-5 volte</div><div class="ob-opt-sub">Buon equilibrio allenamento/recupero</div></div><div class="ob-check">✓</div></div>
+          <div class="ob-opt" data-val="6+"><span class="ob-opt-ico" style="color:var(--re)">●</span><div class="ob-opt-text"><div class="ob-opt-label">6+ volte</div><div class="ob-opt-sub">Allenamento intensivo quotidiano</div></div><div class="ob-check"></div></div>
         </div>
         <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-3">← Indietro</button><button class="cta" style="flex:1" id="ob-next-3">Avanti →</button></div></div>
       </div>
 
       <!-- Step 4: Riepilogo -->
       <div class="ob-step" data-step="4">
-        <div class="ob-emoji">✨</div>
+        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg></div>
         <div class="ob-title">Perfetto! Ecco il riepilogo</div>
         <div class="ob-desc">AURA è pronto a creare il tuo piano personalizzato.</div>
         <div class="ob-summary" id="ob-summary"></div>
-        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-4">← Modifica</button><button class="cta" style="flex:1" id="ob-finish">🚀 Genera il mio Piano IA</button></div></div>
+        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-4">← Modifica</button><button class="cta" style="flex:1" id="ob-finish"><svg class="ico" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg> Genera il mio Piano IA</button></div></div>
       </div>
 
       <!-- Step 5: AI Generation -->
@@ -1216,11 +1216,11 @@ html,body{
           </div>
         </div>
         <div class="ob-ai-done" id="ob-ai-done">
-          <div class="ob-ai-done-emoji">🎯</div>
+          <div class="ob-ai-done-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem;stroke:var(--or)"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
           <div class="ob-ai-done-title">Piano Pronto!</div>
           <div class="ob-ai-done-sub" id="ob-ai-done-sub">Ho creato un programma personalizzato basato sui tuoi dati.</div>
           <div class="ob-ai-plan-preview" id="ob-ai-plan-preview"></div>
-          <div class="ob-footer" style="width:100%"><button class="cta" style="width:100%" id="ob-ai-start">💪 Inizia ad Allenarti</button></div>
+          <div class="ob-footer" style="width:100%"><button class="cta" style="width:100%" id="ob-ai-start"><svg class="ico" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg> Inizia ad Allenarti</button></div>
         </div>
       </div>
 
@@ -1256,7 +1256,7 @@ html,body{
       <div class="home-header">
         <div>
           <div class="greeting-sm">Bentornato,</div>
-          <div class="greeting-name">Luca 👋</div>
+          <div class="greeting-name">Luca <svg class="ico" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;vertical-align:-.1em"><path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 018 4M22 12c0 5.5-4.5 10-10 10S2 17.5 2 12"/><path d="M15 9h.01M9 9h.01M8 14s1.5 2 4 2 4-2 4-2"/></svg></div>
         </div>
         <div class="hdr-right">
           <div class="av av-m">L</div>
@@ -1384,7 +1384,7 @@ html,body{
 
       <!-- Target reps -->
       <div class="cam-target-row">
-        <label>🎯 Ripetizioni:</label>
+        <label><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Ripetizioni:</label>
         <input type="number" class="cam-target-input" id="cam-target-reps" value="12" min="1" max="100">
         <div class="cam-progress-bar"><div class="cam-progress-fill" id="cam-progress-fill" style="width:0%"></div></div>
         <div class="cam-progress-label" id="cam-progress-label">0/12</div>
@@ -1442,11 +1442,11 @@ html,body{
 
       <div style="padding:0 16px">
         <div style="display:flex;align-items:flex-start;gap:8px;padding:.75rem .9rem;background:#38bdf808;border:1px solid #38bdf820;border-radius:13px;font-size:.76rem;color:var(--t2);line-height:1.45;margin-bottom:10px">
-          💡 Posizionati a <strong style="margin:0 3px">1,5 m</strong> con <strong style="margin:0 3px">buona luce</strong> per l'analisi ottimale. Inquadra il corpo intero.
+                    <svg class="ico" viewBox="0 0 24 24" style="width:1.5rem;height:1.5rem;stroke:#38bdf8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> Posizionati a <strong style="margin:0 3px">1,5 m</strong> con <strong style="margin:0 3px">buona luce</strong> per l'analisi ottimale. Inquadra il corpo intero.
         </div>
         <!-- Upsell -->
         <div class="card" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;margin-bottom:10px">
-          <div style="font-size:1.8rem;flex-shrink:0">📡</div>
+          <div style="font-size:1.8rem;flex-shrink:0"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:1.8rem;height:1.8rem"><path d="M2 8.82a15 15 0 0120 0M5 12.86a10 10 0 0114 0M8.5 16.43a5 5 0 017 0"/><circle cx="12" cy="20" r="1"/></svg></div>
           <div style="flex:1">
             <div style="font-weight:700;font-size:.85rem;margin-bottom:3px">Telefono che cade?</div>
             <div style="font-size:.76rem;color:var(--t2)"><strong>Treppiedi AURA in omaggio</strong> + piano dietetico personalizzato incluso</div>
@@ -1976,10 +1976,10 @@ html,body{
 <!-- MATCH POPUP -->
 <div id="match-pop">
   <div class="mp-box">
-    <span class="mp-ico">🎉</span>
+    <span class="mp-ico"><svg class="ico" viewBox="0 0 24 24" style="width:2.8rem;height:2.8rem;stroke:var(--or)"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg></span>
     <div class="mp-t">È un match!</div>
     <div class="mp-s" id="match-msg">Hai fatto match con Elena M.!</div>
-    <button class="cta" style="margin-top:1rem" onclick="document.getElementById('match-pop').style.display='none'; openMatchChat()">Inizia a chattare 💬</button>
+    <button class="cta" style="margin-top:1rem" onclick="document.getElementById('match-pop').style.display='none'; openMatchChat()">Inizia a chattare <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
   </div>
 </div>
 
