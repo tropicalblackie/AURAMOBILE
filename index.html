@@ -1247,18 +1247,15 @@ html,body{
 
       <div style="padding:0 16px">
 
-        <!-- Recovery -->
-        <div class="card glass recovery" id="recovery-card">
+        <!-- Recovery (shown only with BLE wearable data) -->
+        <div class="card glass recovery" id="recovery-card" style="display:none">
           <div class="rec-ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
           </div>
           <div class="rec-body">
             <div class="rec-label">Recupero AURA</div>
-            <div class="rec-msg">Hai dormito <strong>5h</strong>. Sconsigliamo i massimali. Passiamo a <span class="acc">Mobilità?</span></div>
-            <div class="rec-actions">
-              <button class="btn btn-or btn-sm" id="rec-yes">Sì ✓</button>
-              <button class="btn btn-ghost btn-sm">No, continua</button>
-            </div>
+            <div class="rec-msg" id="rec-msg"></div>
+            <div class="rec-actions" id="rec-actions"></div>
           </div>
         </div>
 
@@ -3552,25 +3549,63 @@ function modalCta() {
   });
 })();
 
-// ── RECOVERY ───────────────────────────────────────
-document.getElementById('rec-yes').addEventListener('click', function() {
-  const card = document.getElementById('recovery-card');
+// ── RECOVERY (based on real BLE HR data) ──────────
+function updateRecoveryCard() {
+  var card = document.getElementById('recovery-card');
+  if (!card) return;
+  // Only show if we have real HR data from wearable
+  if (!BLE.device || !BLE.hrValues || BLE.hrValues.length < 3) {
+    card.style.display = 'none';
+    return;
+  }
+  // Calculate resting HR from recent readings
+  var recent = BLE.hrValues.slice(-20);
+  var avgHR = Math.round(recent.reduce(function(s,v){ return s + v.hr; }, 0) / recent.length);
+  // Recovery score: lower resting HR = better recovery
+  // Baseline: 60 BPM = 100%, 100 BPM = 40%
+  var score = Math.max(20, Math.min(100, Math.round(100 - (avgHR - 60) * 1.5)));
+  var msgEl = document.getElementById('rec-msg');
+  var actEl = document.getElementById('rec-actions');
+  if (score >= 80) {
+    card.style.borderColor = '#22c55e30';
+    card.style.background = 'linear-gradient(135deg,#22c55e10,#0f172a)';
+    msgEl.innerHTML = 'FC media <strong>' + avgHR + ' BPM</strong>. Recupero <strong style="color:var(--gr)">' + score + '%</strong> — Sei pronto per un allenamento intenso! 💪';
+    actEl.innerHTML = '';
+  } else if (score >= 50) {
+    card.style.borderColor = '#f9731630';
+    card.style.background = 'linear-gradient(135deg,#f9731612,var(--s9))';
+    msgEl.innerHTML = 'FC media <strong>' + avgHR + ' BPM</strong>. Recupero <strong style="color:var(--or)">' + score + '%</strong> — Allenamento moderato consigliato.';
+    actEl.innerHTML = '<button class="btn btn-or btn-sm" onclick="acceptRecoveryAdvice()">Scheda leggera ✓</button><button class="btn btn-ghost btn-sm" onclick="dismissRecovery()">Ignora</button>';
+  } else {
+    card.style.borderColor = '#ef444430';
+    card.style.background = 'linear-gradient(135deg,#ef444412,#0f172a)';
+    msgEl.innerHTML = 'FC media <strong>' + avgHR + ' BPM</strong>. Recupero <strong style="color:var(--re)">' + score + '%</strong> — Riposo o mobilità consigliati.';
+    actEl.innerHTML = '<button class="btn btn-or btn-sm" onclick="acceptRecoveryAdvice()">Mobilità ✓</button><button class="btn btn-ghost btn-sm" onclick="dismissRecovery()">Ignora</button>';
+  }
+  card.style.display = '';
+}
+
+function acceptRecoveryAdvice() {
+  var card = document.getElementById('recovery-card');
   card.style.transition = 'all .35s ease';
   card.style.opacity = '0'; card.style.transform = 'scale(.97)';
-  setTimeout(() => {
-    card.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;width:100%">
-        <div style="width:38px;height:38px;border-radius:10px;background:#22c55e18;border:1px solid #22c55e40;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">✅</div>
-        <div>
-          <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#22c55e;margin-bottom:2px">Scheda aggiornata</div>
-          <div style="font-size:.8rem;color:#94a3b8">Ho modificato in <strong style="color:#f1f5f9">Mobilità & Stretching</strong>. Ottima scelta 💪</div>
-        </div>
-      </div>`;
+  setTimeout(function() {
+    card.innerHTML = '<div style="display:flex;align-items:center;gap:10px;width:100%">' +
+      '<div style="width:38px;height:38px;border-radius:10px;background:#22c55e18;border:1px solid #22c55e40;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">✅</div>' +
+      '<div><div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#22c55e;margin-bottom:2px">Consiglio accettato</div>' +
+      '<div style="font-size:.8rem;color:#94a3b8">Scheda adattata in base al tuo recupero reale 💪</div></div></div>';
     card.style.borderColor = '#22c55e30';
     card.style.background = 'linear-gradient(135deg,#22c55e10,#0f172a)';
     card.style.opacity = '1'; card.style.transform = 'scale(1)';
   }, 360);
-});
+}
+
+function dismissRecovery() {
+  var card = document.getElementById('recovery-card');
+  card.style.transition = 'all .35s ease';
+  card.style.opacity = '0';
+  setTimeout(function() { card.style.display = 'none'; }, 360);
+}
 
 // ── HYDRATION ──────────────────────────────────────
 function updateHydro() {
@@ -5703,8 +5738,7 @@ document.getElementById('form-login').addEventListener('submit', function(e) {
   setUser(user);
   applyUserData(user);
   hideAuth();
-  toast('👋 Bentornato ' + user.name.split(' ')[0] + '! Streak 7 giorni 🔥', 'or');
-  setTimeout(() => toast('🤖 AURA: Recupero 68%. Scheda adattata.', 'bl'), 1500);
+  toast('👋 Bentornato ' + user.name.split(' ')[0] + '!', 'or');
 });
 
 // ── REGISTER ──
@@ -6350,6 +6384,7 @@ function onHRData(event) {
   BLE.hrValues.push({ time: new Date().toLocaleTimeString(), hr: hr });
   if (BLE.hrValues.length > 100) BLE.hrValues.shift();
   renderBLELog();
+  updateRecoveryCard();
 }
 
 function disconnectBLE() {
@@ -6359,6 +6394,7 @@ function disconnectBLE() {
   BLE.device = null;
   BLE.characteristic = null;
   document.getElementById('ble-hr-val').textContent = '--';
+  updateRecoveryCard();
   document.getElementById('ble-hr-status').textContent = 'Disconnesso';
   document.getElementById('ble-hr-status').style.color = '';
   document.getElementById('ble-connect-btn').textContent = '🔗 Connetti Fascia HR (Bluetooth)';
@@ -6713,8 +6749,7 @@ function storeCheckout() {
     applyUserData(user);
     hideAuth();
     hideOnboarding();
-    setTimeout(() => toast('👋 Bentornato ' + user.name.split(' ')[0] + '! Streak 7 giorni 🔥', 'or'), 900);
-    setTimeout(() => toast('🤖 AURA: Recupero 68%. Scheda adattata.', 'bl'), 2400);
+    setTimeout(() => toast('👋 Bentornato ' + user.name.split(' ')[0] + '!', 'or'), 900);
   } else if (user && user._needsOnboarding) {
     applyUserData(user);
     hideAuth();
