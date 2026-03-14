@@ -9,20 +9,11 @@
 <link rel="manifest" href="manifest.json"/>
 <title>AURA</title>
 <script>
-// Nuclear SW cleanup — delete ALL caches and unregister stale workers
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})});}
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.getRegistrations().then(function(regs){
-    regs.forEach(function(r){r.unregister()});
-    // If we had a controlling SW, reload once to get a clean load
-    if(navigator.serviceWorker.controller){
-      if(!sessionStorage.getItem('aura_sw_nuked')){
-        sessionStorage.setItem('aura_sw_nuked','1');
-        window.location.reload();
-      }
-    }
-  });
-}
+// Cleanup old SW caches on load
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v8')caches.delete(k)})});}
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
+// Debug: catch any JS error and show it
+window.onerror=function(m,s,l,c,e){document.title='ERR';var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:999999;background:red;color:#fff;padding:16px;font:12px monospace;word-break:break-all';d.textContent='JS ERROR: '+m+' at line '+l+':'+c;document.body.appendChild(d);};
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -4006,14 +3997,17 @@ function confetti() {
     window.addEventListener('deviceorientation', handleOrientation);
   }
 
-  // Request permission on iOS 13+
+  // Request permission on iOS 13+ (delayed, non-blocking)
   if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-    document.addEventListener('click', function _ask() {
-      DeviceOrientationEvent.requestPermission().then(function(r) {
-        if (r === 'granted') enableTilt();
-      }).catch(function() {});
-      document.removeEventListener('click', _ask);
-    }, { once: true });
+    // Don't steal the first click — wait until user is in the app
+    setTimeout(function() {
+      document.getElementById('tab-home').addEventListener('touchstart', function _ask() {
+        DeviceOrientationEvent.requestPermission().then(function(r) {
+          if (r === 'granted') enableTilt();
+        }).catch(function() {});
+        document.getElementById('tab-home').removeEventListener('touchstart', _ask);
+      }, { once: true });
+    }, 2000);
   } else if ('DeviceOrientationEvent' in window) {
     setTimeout(enableTilt, 500);
   }
