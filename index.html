@@ -12,8 +12,6 @@
 // Cleanup old SW caches on load
 if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v8')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
-// Debug: catch any JS error and show it
-window.onerror=function(m,s,l,c,e){document.title='ERR';var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:999999;background:red;color:#fff;padding:16px;font:12px monospace;word-break:break-all';d.textContent='JS ERROR: '+m+' at line '+l+':'+c;document.body.appendChild(d);};
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -5246,7 +5244,7 @@ document.querySelectorAll('.tog').forEach(t => {
 });
 
 // ── PUSH NOTIFICATIONS ─────────────────────────────
-var NOTIF = { permission: Notification.permission || 'default', swReg: null, scheduledTimers: [] };
+var NOTIF = { permission: (typeof Notification !== 'undefined' ? Notification.permission : 'default'), swReg: null, scheduledTimers: [] };
 
 function initNotifToggle() {
   var tog = document.getElementById('tog-notif');
