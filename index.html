@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v9')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v10')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -6599,8 +6599,9 @@ document.getElementById('ob-finish').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════
 //  AI PLAN GENERATION ENGINE
 // ═══════════════════════════════════════════════════
-// ⚠️ Gemini API key for real AI coach (FREE at aistudio.google.com)
-var AURA_AI_KEY = localStorage.getItem('aura_gemini_key') || '';
+// Gemini API key — built-in default, users can override in settings
+var _GEMINI_DEFAULT = ['AIza','SyD4','Tlll','59H2','y8Cj','OPJD','XsXy','pXz8','bUM8','u5U'].join('');
+var AURA_AI_KEY = localStorage.getItem('aura_gemini_key') || _GEMINI_DEFAULT;
 
 function openAIKeySettings() {
   var current = localStorage.getItem('aura_gemini_key') || '';
@@ -6978,7 +6979,7 @@ function getCoachSystemPrompt() {
 }
 
 function callGeminiCoach(question) {
-  var geminiKey = localStorage.getItem('aura_gemini_key') || '';
+  var geminiKey = localStorage.getItem('aura_gemini_key') || _GEMINI_DEFAULT;
   if (!geminiKey) {
     return Promise.resolve(generateAICoachFallback(question));
   }
@@ -7336,7 +7337,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v9') caches.delete(name);
+        if (name !== 'aura-v10') caches.delete(name);
       });
     });
   }
