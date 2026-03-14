@@ -35,6 +35,42 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
+// Push — show notification from server or scheduled
+self.addEventListener('push', event => {
+  var data = { title: '💪 AURA Fitness', body: 'Hai un allenamento in programma!' };
+  if (event.data) {
+    try { data = event.data.json(); } catch(e) {
+      data.body = event.data.text();
+    }
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: data.icon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏋️</text></svg>',
+      badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💪</text></svg>',
+      tag: data.tag || 'aura-push',
+      vibrate: [200, 100, 200],
+      data: { url: data.url || '/' }
+    })
+  );
+});
+
+// Notification click — open app
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  var url = (event.notification.data && event.notification.data.url) || '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      for (var i = 0; i < windowClients.length; i++) {
+        if (windowClients[i].url.includes('AURAMOBILE') && 'focus' in windowClients[i]) {
+          return windowClients[i].focus();
+        }
+      }
+      return clients.openWindow(url);
+    })
+  );
+});
+
 // Fetch — cache-first for static, network-first for API
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);

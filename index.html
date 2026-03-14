@@ -1221,7 +1221,7 @@ html,body{
   <div class="topbar">
     <div class="topbar-logo">AURA</div>
     <div class="topbar-right">
-      <button class="notif-btn" onclick="toast('🔔 Nessuna nuova notifica.','bl')">
+      <button class="notif-btn" onclick="checkNotifications()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notif-dot"></span>
       </button>
@@ -1877,6 +1877,7 @@ html,body{
           <div class="sitem"><span>🔔 Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
           <div class="sitem"><span>🎯 Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
           <div class="sitem"><span>🌙 Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
+          <div class="sitem" onclick="openAIKeySettings()"><span>🤖 API OpenAI (Piano AI)</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="toast('🔒 Email di reset inviata.','bl')"><span>🔒 Sicurezza & Privacy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('privacy-ov')"><span>Privacy Policy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('terms-ov')"><span>Termini di Servizio</span><span class="sarr">›</span></div>
@@ -4781,13 +4782,133 @@ document.querySelector('.nb[data-tab="community"]').addEventListener('click', fu
   setTimeout(initSocial, 50);
 });
 
-// ── TOGGLE ─────────────────────────────────────────
+// ── TOGGLES ─────────────────────────────────────────
+// Generic toggles (sleep mode etc)
 document.querySelectorAll('.tog').forEach(t => {
+  if (t.id === 'tog-notif') return; // handled separately
   t.addEventListener('click', () => {
     t.classList.toggle('on');
-    toast(t.classList.contains('on') ? '🔔 Notifiche attivate.' : '🔕 Disattivate.', 'bl');
+    toast(t.classList.contains('on') ? 'Attivato.' : 'Disattivato.', 'bl');
   });
 });
+
+// ── PUSH NOTIFICATIONS ─────────────────────────────
+var NOTIF = { permission: Notification.permission || 'default', swReg: null, scheduledTimers: [] };
+
+function initNotifToggle() {
+  var tog = document.getElementById('tog-notif');
+  if (!tog) return;
+  // Reflect current state
+  tog.classList.toggle('on', NOTIF.permission === 'granted');
+  tog.addEventListener('click', function() {
+    if (NOTIF.permission === 'granted') {
+      // User wants to disable — we can't revoke permission, but we stop scheduling
+      cancelScheduledNotifs();
+      localStorage.setItem('aura_notif_enabled', 'false');
+      tog.classList.remove('on');
+      toast('🔕 Notifiche disattivate.', 'bl');
+      return;
+    }
+    if (!('Notification' in window)) {
+      toast('⚠ Il tuo browser non supporta le notifiche.', 're');
+      return;
+    }
+    Notification.requestPermission().then(function(perm) {
+      NOTIF.permission = perm;
+      if (perm === 'granted') {
+        tog.classList.add('on');
+        localStorage.setItem('aura_notif_enabled', 'true');
+        toast('🔔 Notifiche attivate! Riceverai promemoria giornalieri.', 'gr');
+        scheduleLocalNotifs();
+      } else if (perm === 'denied') {
+        tog.classList.remove('on');
+        toast('❌ Permesso negato. Abilitalo dalle impostazioni del browser.', 're');
+      } else {
+        tog.classList.remove('on');
+        toast('⚠ Permesso non concesso.', 'or');
+      }
+    });
+  });
+}
+initNotifToggle();
+
+function scheduleLocalNotifs() {
+  cancelScheduledNotifs();
+  if (NOTIF.permission !== 'granted') return;
+  if (localStorage.getItem('aura_notif_enabled') === 'false') return;
+
+  // Schedule check every 30 minutes
+  var checkTimer = setInterval(function() {
+    checkAndFireNotif();
+  }, 30 * 60 * 1000);
+  NOTIF.scheduledTimers.push(checkTimer);
+  // Also check immediately
+  setTimeout(checkAndFireNotif, 5000);
+}
+
+function cancelScheduledNotifs() {
+  NOTIF.scheduledTimers.forEach(function(t) { clearInterval(t); });
+  NOTIF.scheduledTimers = [];
+}
+
+function checkAndFireNotif() {
+  if (NOTIF.permission !== 'granted') return;
+  if (localStorage.getItem('aura_notif_enabled') === 'false') return;
+  if (document.visibilityState === 'visible') return; // Don't notify if app is open
+
+  var now = new Date();
+  var hour = now.getHours();
+  var lastNotifDate = localStorage.getItem('aura_last_notif_date') || '';
+  var today = now.toISOString().slice(0, 10);
+  if (lastNotifDate === today) return; // Already notified today
+
+  // Check if user trained today
+  var completed = [];
+  try { completed = JSON.parse(localStorage.getItem('aura_completed_workouts') || '[]'); } catch(e) {}
+  var trainedToday = completed.some(function(w) { return w.date === today; });
+
+  if (trainedToday) return; // Already trained, no need to remind
+
+  // Send reminder in evening (after 18:00) or afternoon (after 14:00)
+  if (hour >= 18) {
+    fireLocalNotif('💪 Non hai ancora allenarti oggi!', 'Anche 20 minuti fanno la differenza. Apri AURA e inizia!');
+    localStorage.setItem('aura_last_notif_date', today);
+  } else if (hour >= 14) {
+    fireLocalNotif('🏋️ Promemoria allenamento', 'Il tuo piano ti aspetta. Non spezzare la streak!');
+    localStorage.setItem('aura_last_notif_date', today);
+  }
+}
+
+function fireLocalNotif(title, body) {
+  if (NOTIF.swReg) {
+    NOTIF.swReg.showNotification(title, {
+      body: body,
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏋️</text></svg>',
+      badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💪</text></svg>',
+      tag: 'aura-reminder',
+      renotify: false,
+      vibrate: [200, 100, 200]
+    });
+  } else {
+    new Notification(title, { body: body, tag: 'aura-reminder' });
+  }
+}
+
+// Bell icon click — show pending notifications
+function checkNotifications() {
+  var completed = [];
+  try { completed = JSON.parse(localStorage.getItem('aura_completed_workouts') || '[]'); } catch(e) {}
+  var today = new Date().toISOString().slice(0,10);
+  var trainedToday = completed.some(function(w) { return w.date === today; });
+  var dot = document.querySelector('.notif-dot');
+  if (!trainedToday) {
+    if (dot) dot.style.display = 'block';
+    toast('💪 Hai un allenamento in programma oggi!', 'or');
+  } else {
+    if (dot) dot.style.display = 'none';
+    toast('✅ Allenamento di oggi completato!', 'gr');
+  }
+}
 
 // ═══════════════════════════════════════════════════
 //  NUTRIZIONE — Database reale + barcode + macros
@@ -5975,6 +6096,34 @@ document.getElementById('ob-finish').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════
 //  AI PLAN GENERATION ENGINE
 // ═══════════════════════════════════════════════════
+// ⚠️ Set your OpenAI API key here for real AI-generated plans.
+// Without a key, falls back to the local smart algorithm.
+var AURA_AI_KEY = localStorage.getItem('aura_ai_key') || '';
+
+function openAIKeySettings() {
+  var current = localStorage.getItem('aura_ai_key') || '';
+  var masked = current ? '••••' + current.slice(-4) : 'Non configurata';
+  openModal('🤖', 'API OpenAI',
+    '<p style="font-size:.85rem;color:var(--gr);margin-bottom:12px;line-height:1.5">Inserisci la tua API Key di OpenAI per generare piani di allenamento con intelligenza artificiale reale. Senza chiave, usiamo un algoritmo locale intelligente.</p>' +
+    '<input type="password" id="ai-key-input" placeholder="sk-..." value="' + (current ? current : '') + '" style="width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:.9rem;margin-bottom:8px">' +
+    '<div style="font-size:.78rem;color:var(--gr);margin-bottom:16px">Stato: ' + (current ? '✅ Configurata (' + masked + ')' : '⚠️ Non configurata — algoritmo locale') + '</div>' +
+    '<button class="cta" onclick="saveAIKey()" style="width:100%;margin-bottom:8px">💾 Salva</button>' +
+    (current ? '<button class="cta" onclick="removeAIKey()" style="width:100%;background:#1e293b;border:1px solid #334155">🗑️ Rimuovi chiave</button>' : ''));
+}
+function saveAIKey() {
+  var val = document.getElementById('ai-key-input').value.trim();
+  if (val && !val.startsWith('sk-')) { toast('⚠️ La chiave deve iniziare con sk-', 're'); return; }
+  localStorage.setItem('aura_ai_key', val);
+  AURA_AI_KEY = val;
+  closeModal();
+  toast(val ? '✅ API Key salvata!' : '⚠️ Chiave rimossa, useremo l\'algoritmo locale.', val ? 'gr' : 'bl');
+}
+function removeAIKey() {
+  localStorage.removeItem('aura_ai_key');
+  AURA_AI_KEY = '';
+  closeModal();
+  toast('🗑️ API Key rimossa. Useremo l\'algoritmo locale.', 'bl');
+}
 
 function runAIPlanGeneration(user) {
   var loadEl = document.getElementById('ob-ai-loading');
@@ -5983,39 +6132,108 @@ function runAIPlanGeneration(user) {
   doneEl.classList.remove('on');
 
   var steps = [0,1,2,3,4];
-  var delay = 0;
 
   // Animate through AI steps
   steps.forEach(function(si, idx) {
     setTimeout(function() {
-      // Mark previous as done
       for (var j = 0; j < si; j++) {
         var prev = document.getElementById('ais-'+j);
         if (prev) { prev.className = 'ob-ai-step done'; prev.querySelector('.ob-ai-step-ico').textContent = '✓'; }
       }
-      // Mark current as active
       var cur = document.getElementById('ais-'+si);
       if (cur) cur.className = 'ob-ai-step active';
     }, idx * 800);
   });
 
-  // After animation, generate the plan
-  setTimeout(function() {
-    // Mark last step done
+  // Try real AI first, fallback to local
+  generateAIPlanWithLLM(user).then(function(plan) {
+    // Mark all steps done
     for (var j = 0; j < 5; j++) {
       var el = document.getElementById('ais-'+j);
       if (el) { el.className = 'ob-ai-step done'; el.querySelector('.ob-ai-step-ico').textContent = '✓'; }
     }
-
-    var plan = generateAIPlan(user);
     saveWorkouts(plan);
-
-    // Show done screen after short pause
     setTimeout(function() {
       loadEl.style.display = 'none';
       showAIPlanResult(user, plan);
     }, 600);
-  }, 5 * 800);
+  });
+}
+
+function generateAIPlanWithLLM(user) {
+  // If no API key, use local algorithm immediately
+  if (!AURA_AI_KEY) {
+    return new Promise(function(resolve) {
+      setTimeout(function() { resolve(generateAIPlan(user)); }, 4000);
+    });
+  }
+
+  var goal = user.goal || 'massa';
+  var level = user.level || 'intermedio';
+  var freq = user.freq || '4-5';
+  var sex = user.sex === 'F' ? 'Donna' : 'Uomo';
+  var age = user.age || 25;
+  var weight = user.weight || 75;
+  var height = user.height || 175;
+  var daysPerWeek = freq === '2-3' ? 3 : freq === '6+' ? 6 : 4;
+
+  // Build available exercise list for the AI
+  var exList = EXERCISES.map(function(e) {
+    return e.id + ' (' + e.name + ', ' + e.muscle + ', ' + e.diff + ', ' + e.sets + 'x' + e.reps + ')';
+  }).join('\n');
+
+  var goalLabels = { massa:'Massa Muscolare', dimagrimento:'Dimagrimento/Perdita peso', benessere:'Benessere generale', resistenza:'Resistenza/Cardio' };
+
+  var prompt = 'Sei un personal trainer certificato. Crea un programma di allenamento settimanale personalizzato.\n\n' +
+    'PROFILO UTENTE:\n- Sesso: ' + sex + '\n- Età: ' + age + ' anni\n- Peso: ' + weight + 'kg\n- Altezza: ' + height + 'cm\n' +
+    '- Obiettivo: ' + (goalLabels[goal] || goal) + '\n- Livello: ' + level + '\n- Frequenza: ' + daysPerWeek + ' giorni/settimana\n\n' +
+    'ESERCIZI DISPONIBILI (usa SOLO questi id):\n' + exList + '\n\n' +
+    'ISTRUZIONI:\n- Crea esattamente ' + daysPerWeek + ' schede giornaliere\n- Ogni scheda deve avere 4-6 esercizi\n- Adatta serie e ripetizioni al livello e obiettivo\n- Includi tempo di riposo in secondi\n- Dai un nome descrittivo a ogni giornata\n\n' +
+    'RISPONDI SOLO con un JSON valido (nessun testo extra), in questo formato esatto:\n' +
+    '[{"name":"Lunedì — Push","exercises":[{"id":"bench","sets":4,"reps":"8-10","rest":120}]}]\n' +
+    'Ogni oggetto ha: name (string), exercises (array di {id, sets, reps, rest}).';
+
+  return fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + AURA_AI_KEY },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: 'Sei un esperto personal trainer italiano. Rispondi SOLO con JSON valido, nessun markdown o testo extra.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 2000
+    })
+  })
+  .then(function(resp) {
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    return resp.json();
+  })
+  .then(function(data) {
+    var content = data.choices[0].message.content.trim();
+    // Strip markdown code fences if present
+    content = content.replace(/^```json?\s*/i, '').replace(/```\s*$/, '').trim();
+    var plans = JSON.parse(content);
+    if (!Array.isArray(plans) || plans.length === 0) throw new Error('Invalid plan format');
+    // Validate and clean plans
+    var validIds = new Set(EXERCISES.map(function(e) { return e.id; }));
+    var cleaned = plans.slice(0, daysPerWeek).map(function(p) {
+      var validExercises = (p.exercises || []).filter(function(ex) { return validIds.has(ex.id); }).map(function(ex) {
+        return { id: ex.id, sets: parseInt(ex.sets) || 3, reps: String(ex.reps || '10'), rest: parseInt(ex.rest) || 90 };
+      });
+      return { name: p.name || 'Allenamento', exercises: validExercises, _aiGenerated: true, _realAI: true };
+    });
+    if (cleaned.length === 0 || cleaned.every(function(p) { return p.exercises.length === 0; })) throw new Error('No valid exercises');
+    // Save AI metadata
+    var u = getUser();
+    if (u) { u.aiPlanGeneratedAt = new Date().toISOString(); u.aiPlanGoal = goal; u.aiPlanLevel = level; u.aiPlanDays = daysPerWeek; u.aiPlanSource = 'openai'; setUser(u); }
+    return cleaned;
+  })
+  .catch(function(err) {
+    console.warn('[AURA] AI API fallback:', err.message);
+    return generateAIPlan(user);
+  });
 }
 
 function generateAIPlan(user) {
@@ -6590,6 +6808,11 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js').then(function(reg) {
       console.log('[AURA] SW registered, scope:', reg.scope);
+      NOTIF.swReg = reg;
+      // Start notification scheduler if permission was already granted
+      if (NOTIF.permission === 'granted' && localStorage.getItem('aura_notif_enabled') !== 'false') {
+        scheduleLocalNotifs();
+      }
     }).catch(function(err) {
       console.log('[AURA] SW registration failed:', err);
     });
