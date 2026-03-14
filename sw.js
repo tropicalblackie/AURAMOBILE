@@ -1,5 +1,5 @@
 // AURA Service Worker — Offline Mode
-const CACHE_NAME = 'aura-v2';
+const CACHE_NAME = 'aura-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html'
@@ -95,6 +95,20 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Network-first for navigation (always get latest HTML)
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
+
   // Cache-first for everything else (static assets, CDN libs)
   event.respondWith(
     caches.match(event.request).then(cached => {
@@ -106,11 +120,6 @@ self.addEventListener('fetch', event => {
         }
         return response;
       });
-    }).catch(() => {
-      // Offline fallback for navigation
-      if (event.request.mode === 'navigate') {
-        return caches.match('/index.html');
-      }
-    })
+    }).catch(() => new Response('Offline', { status: 503 }))
   );
 });

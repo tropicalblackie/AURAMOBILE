@@ -24,6 +24,7 @@
   --gr:#22c55e;--bl:#38bdf8;--pu:#a78bfa;--re:#f43f5e;
   --nav-h:68px;--safe-b:env(safe-area-inset-bottom,16px);
   --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
 }
 html,body{
   height:100%;width:100%;overflow:hidden;
@@ -92,7 +93,7 @@ html,body{
 
 /* ── TABS ── */
 .tab{display:none;padding:0 16px 16px}
-.tab.on{display:block;animation:fadeUp .28s ease forwards}
+.tab.on{display:block;animation:fadeUp .32s var(--spring) forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── BOTTOM NAV ── */
@@ -112,11 +113,11 @@ html,body{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
   padding:8px 2px;background:none;border:none;color:var(--t4);
   font-size:.55rem;font-weight:600;letter-spacing:.3px;
-  transition:color .2s;position:relative;
+  transition:color .2s var(--spring);position:relative;
 }
 .nb.on{color:var(--or)}
-.nb svg{width:20px;height:20px;transition:transform .2s}
-.nb.on svg{filter:drop-shadow(0 0 5px var(--or));transform:scale(1.1)}
+.nb svg{width:20px;height:20px;transition:transform .25s var(--spring)}
+.nb.on svg{filter:drop-shadow(0 0 5px var(--or));transform:scale(1.15)}
 .nb-dot{position:absolute;top:6px;right:calc(50% - 14px);width:6px;height:6px;border-radius:50%;background:var(--or);border:1.5px solid rgba(10,15,26,.65)}
 
 /* ── CARDS ── */
@@ -125,10 +126,13 @@ html,body{
 .sec-title{font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t4);margin-bottom:10px;margin-top:18px}
 .sec-title:first-child{margin-top:4px}
 
+/* ── DISPLAY TYPOGRAPHY ── */
+.disp-title{font-family:var(--fd);font-size:2.8rem;font-weight:800;letter-spacing:-2px;line-height:.95;color:var(--t1)}
+
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:.65rem 1.2rem;border-radius:12px;font-weight:600;font-size:.85rem;transition:all .18s;border:none;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:.65rem 1.2rem;border-radius:12px;font-weight:600;font-size:.85rem;transition:all .2s var(--spring);border:none;cursor:pointer}
 .btn-or{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;box-shadow:0 5px 18px #f9731630}
-.btn-or:active{transform:scale(.96)}
+.btn-or:active{transform:scale(.94)}
 .btn-ghost{background:var(--s8);color:var(--t2);border:1px solid var(--s7)}
 .btn-ghost:active{background:var(--s7)}
 .btn-sm{padding:.4rem .85rem;font-size:.75rem;border-radius:9px}
@@ -139,15 +143,17 @@ html,body{
   background:linear-gradient(135deg,var(--or),var(--or2));
   color:#fff;border-radius:18px;border:none;
   font-family:var(--fd);font-size:1rem;font-weight:700;
-  box-shadow:0 8px 28px #f9731635;transition:all .2s;
+  box-shadow:0 8px 28px #f9731635;transition:all .25s var(--spring);
   position:relative;overflow:hidden;cursor:pointer;
 }
-.cta:active{transform:scale(.97)}
+.cta:active{transform:scale(.95)}
 .cta::after{content:'';position:absolute;top:-50%;left:-60%;width:35%;height:200%;background:rgba(255,255,255,.15);transform:skewX(-20deg);transition:left .5s}
 .pulse{animation:pulse 2.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 8px 28px #f9731635}50%{box-shadow:0 8px 40px #f9731660,0 0 0 5px #f9731615}}
 
 /* ── CHIPS ── */
+.ico{display:inline-block;width:1em;height:1em;vertical-align:-.125em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ico-lg{width:1.4rem;height:1.4rem}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:.32rem .75rem;border-radius:50px;font-size:.7rem;font-weight:600}
 .chip-or{background:#f9731615;border:1px solid #f9731440;color:var(--or)}
 .chip-gr{background:#22c55e15;border:1px solid #22c55e40;color:var(--gr)}
@@ -155,7 +161,7 @@ html,body{
 
 /* ── PROGRESS ── */
 .track{height:6px;background:var(--s8);border-radius:10px;overflow:hidden}
-.fill{height:100%;border-radius:10px;transition:width 1.2s ease}
+.fill{height:100%;border-radius:10px;transition:width 1.2s var(--spring)}
 .fill-or{background:linear-gradient(90deg,var(--or),var(--or3));box-shadow:0 0 8px #f9731440}
 .fill-gr{background:var(--gr)}
 .fill-bl{background:var(--bl)}
@@ -164,7 +170,7 @@ html,body{
 /* ══════ HOME ══════ */
 .home-header{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:center}
 .greeting-sm{font-size:.82rem;color:var(--t3)}
-.greeting-name{font-family:var(--fd);font-size:1.7rem;font-weight:800;line-height:1.1}
+.greeting-name{font-family:var(--fd);font-size:2.8rem;font-weight:800;letter-spacing:-2px;line-height:.95}
 .hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .lvl-badge{font-size:.65rem;font-weight:700;color:var(--or);background:#f9731615;border:1px solid #f9731440;padding:3px 10px;border-radius:50px;white-space:nowrap}
 
@@ -264,7 +270,7 @@ html,body{
 .cam-progress-fill{height:100%;background:var(--or);border-radius:3px;transition:width .3s}
 .cam-progress-label{font-size:.7rem;color:var(--t4);font-weight:700;min-width:40px;text-align:right}
 .cam-summary-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
-.cam-summary-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.cam-summary-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .cam-summary-body{padding:40px 20px;text-align:center;flex:1;overflow-y:auto}
 .cam-summary-grade{font-size:4rem;margin-bottom:8px}
 .cam-summary-title{font-family:var(--fd);font-weight:800;font-size:1.4rem;margin-bottom:4px}
@@ -310,7 +316,7 @@ html,body{
 
 /* ── Nutrition overlays ── */
 .diet-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
-.diet-ov.on{display:flex;animation:fadeUp .25s ease}
+.diet-ov.on{display:flex;animation:fadeUp .3s var(--spring)}
 .diet-search-wrap{padding:0 16px 10px}
 .diet-search{width:100%;padding:.75rem 1rem .75rem 2.8rem;background:var(--s9);border:1px solid var(--s8);border-radius:14px;color:var(--t1);font-size:.88rem;font-family:var(--fb);outline:none}
 .diet-search:focus{border-color:var(--or)}
@@ -330,7 +336,7 @@ html,body{
 
 /* Food detail overlay */
 .food-detail-ov{position:fixed;inset:0;z-index:4100;display:none;flex-direction:column;background:var(--bg)}
-.food-detail-ov.on{display:flex;animation:fadeUp .25s ease}
+.food-detail-ov.on{display:flex;animation:fadeUp .3s var(--spring)}
 .food-detail-body{flex:1;overflow-y:auto;padding:16px}
 .food-detail-body::-webkit-scrollbar{display:none}
 .food-detail-head{text-align:center;padding:10px 0 20px}
@@ -360,7 +366,7 @@ html,body{
 
 /* Diet plan */
 .diet-plan-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
-.diet-plan-ov.on{display:flex;animation:fadeUp .25s ease}
+.diet-plan-ov.on{display:flex;animation:fadeUp .3s var(--spring)}
 .plan-body{flex:1;overflow-y:auto;padding:16px}
 .plan-body::-webkit-scrollbar{display:none}
 .plan-day-card{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:16px;margin-bottom:12px}
@@ -375,7 +381,7 @@ html,body{
 
 /* Shopping list */
 .shop-list-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
-.shop-list-ov.on{display:flex;animation:fadeUp .25s ease}
+.shop-list-ov.on{display:flex;animation:fadeUp .3s var(--spring)}
 .shop-body{flex:1;overflow-y:auto;padding:16px}
 .shop-body::-webkit-scrollbar{display:none}
 .shop-cat{font-family:var(--fd);font-weight:800;font-size:.88rem;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
@@ -388,7 +394,7 @@ html,body{
 
 /* Recipes */
 .recipes-ov{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg)}
-.recipes-ov.on{display:flex;animation:fadeUp .25s ease}
+.recipes-ov.on{display:flex;animation:fadeUp .3s var(--spring)}
 .recipe-body{flex:1;overflow-y:auto;padding:16px}
 .recipe-body::-webkit-scrollbar{display:none}
 .recipe-card{background:var(--s9);border:1px solid var(--s8);border-radius:16px;overflow:hidden;margin-bottom:12px;cursor:pointer}
@@ -402,7 +408,7 @@ html,body{
 
 /* Recipe detail */
 .recipe-detail-ov{position:fixed;inset:0;z-index:4100;display:none;flex-direction:column;background:var(--bg)}
-.recipe-detail-ov.on{display:flex;animation:fadeUp .25s ease}
+.recipe-detail-ov.on{display:flex;animation:fadeUp .3s var(--spring)}
 .recipe-detail-body{flex:1;overflow-y:auto;padding:16px}
 .recipe-detail-body::-webkit-scrolling{display:none}
 .recipe-detail-img{width:100%;height:200px;object-fit:cover;border-radius:16px;background:var(--s8);margin-bottom:14px}
@@ -475,7 +481,7 @@ html,body{
 .match-name{font-weight:700;font-size:.88rem}
 .match-preview{font-size:.72rem;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .match-time{font-size:.62rem;color:var(--t4);flex-shrink:0}
-.chat-ov{position:fixed;inset:0;background:var(--bg);z-index:1500;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.chat-ov{position:fixed;inset:0;background:var(--bg);z-index:1500;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s var(--spring)}
 .chat-ov.on{transform:translateX(0)}
 .chat-topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--s8);flex-shrink:0}
 .chat-back{width:36px;height:36px;border-radius:50%;background:var(--s8);border:none;display:flex;align-items:center;justify-content:center;color:var(--t1);cursor:pointer}
@@ -529,20 +535,20 @@ html,body{
 .sitem:last-child{border-bottom:none}
 .sarr{color:var(--t4);font-size:1.1rem}
 .conn{width:7px;height:7px;border-radius:50%;background:var(--gr);box-shadow:0 0 6px var(--gr)}
-.tog{width:40px;height:21px;border-radius:50px;background:var(--s7);position:relative;cursor:pointer;transition:background .3s;flex-shrink:0}
-.tog::after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:transform .3s}
+.tog{width:40px;height:21px;border-radius:50px;background:var(--s7);position:relative;cursor:pointer;transition:background .3s var(--spring);flex-shrink:0}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:transform .25s var(--spring)}
 .tog.on{background:var(--or)}
 .tog.on::after{transform:translateX(19px)}
 
 /* ── TOAST ── */
 #toasts{position:fixed;top:env(safe-area-inset-top,44px);left:12px;right:12px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{background:rgba(15,23,42,.96);border-radius:14px;padding:.65rem .9rem;font-size:.78rem;color:var(--t1);display:flex;align-items:flex-start;gap:8px;pointer-events:auto;cursor:pointer;opacity:0;transform:translateY(-14px);transition:all .3s cubic-bezier(.4,0,.2,1);backdrop-filter:blur(16px);box-shadow:0 6px 28px rgba(0,0,0,.5);line-height:1.4;border-left-width:3px;border-left-style:solid}
+.toast{background:rgba(15,23,42,.96);border-radius:14px;padding:.65rem .9rem;font-size:.78rem;color:var(--t1);display:flex;align-items:flex-start;gap:8px;pointer-events:auto;cursor:pointer;opacity:0;transform:translateY(-14px);transition:all .3s var(--spring);backdrop-filter:blur(16px);box-shadow:0 6px 28px rgba(0,0,0,.5);line-height:1.4;border-left-width:3px;border-left-style:solid}
 .toast.in{opacity:1;transform:translateY(0)}
 
 /* ── MODAL ── */
 #modal-ov{position:fixed;inset:0;background:rgba(2,6,23,.9);backdrop-filter:blur(14px);display:none;align-items:flex-end;justify-content:center;z-index:2000;padding-bottom:env(safe-area-inset-bottom,16px)}
 #modal-ov.on{display:flex}
-#modal-box{background:var(--s9);border:1px solid var(--s8);border-radius:24px 24px 0 0;padding:28px 22px;width:100%;max-width:430px;text-align:center;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+#modal-box{background:var(--s9);border:1px solid var(--s8);border-radius:24px 24px 0 0;padding:28px 22px;width:100%;max-width:430px;text-align:center;transform:translateY(100%);transition:transform .35s var(--spring)}
 #modal-ov.on #modal-box{transform:translateY(0)}
 #modal-box .mico2{font-size:2.4rem;margin-bottom:.65rem}
 #modal-box .mt{font-family:var(--fd);font-size:1.25rem;font-weight:800;margin-bottom:.55rem}
@@ -564,7 +570,7 @@ html,body{
   position:absolute;inset:0;z-index:3000;
   display:flex;flex-direction:column;
   background:var(--bg);
-  transition:opacity .4s ease,transform .4s ease;
+  transition:opacity .4s var(--spring),transform .4s var(--spring);
 }
 #auth-screen.hidden{opacity:0;pointer-events:none;transform:scale(1.03)}
 .auth-scroll{
@@ -641,7 +647,7 @@ html,body{
   position:absolute;inset:0;z-index:3500;
   display:flex;flex-direction:column;
   background:var(--bg);
-  transition:opacity .4s ease,transform .4s ease;
+  transition:opacity .4s var(--spring),transform .4s var(--spring);
 }
 #onboarding.hidden{opacity:0;pointer-events:none;transform:scale(1.03)}
 .ob-scroll{
@@ -654,7 +660,7 @@ html,body{
 .ob-bar.done{background:var(--or)}
 .ob-bar.cur{background:linear-gradient(90deg,var(--or),var(--or3));box-shadow:0 0 8px #f9731640}
 .ob-step{display:none;flex-direction:column;flex:1;padding-top:20px}
-.ob-step.on{display:flex;animation:fadeUp .3s ease forwards}
+.ob-step.on{display:flex;animation:fadeUp .35s var(--spring) forwards}
 .ob-emoji{font-size:2.8rem;margin-bottom:10px}
 .ob-title{font-family:var(--fd);font-size:1.5rem;font-weight:800;margin-bottom:6px}
 .ob-desc{font-size:.82rem;color:var(--t3);line-height:1.5;margin-bottom:24px}
@@ -715,7 +721,7 @@ html,body{
 .ob-ai-step.done .ob-ai-step-ico{background:#22c55e20;color:var(--gr)}
 .ob-ai-step.active .ob-ai-step-ico{background:#f9731620;color:var(--or);box-shadow:0 0 8px #f9731640}
 .ob-ai-done{display:none;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:20px}
-.ob-ai-done.on{display:flex;animation:fadeUp .4s ease forwards}
+.ob-ai-done.on{display:flex;animation:fadeUp .4s var(--spring) forwards}
 .ob-ai-done-emoji{font-size:3rem}
 .ob-ai-done-title{font-family:var(--fd);font-size:1.5rem;font-weight:800;color:var(--or)}
 .ob-ai-done-sub{font-size:.82rem;color:var(--t3);line-height:1.5}
@@ -727,7 +733,7 @@ html,body{
 
 /* ══════ PROGRESS TRACKER ══════ */
 .prog-ov{position:absolute;inset:0;z-index:3500;display:none;flex-direction:column;background:var(--bg)}
-.prog-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.prog-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .prog-tabs{display:flex;gap:6px;padding:0 20px 12px}
 .prog-tab{flex:1;padding:.6rem 0;text-align:center;font-size:.75rem;font-weight:700;border-radius:10px;background:var(--s8);color:var(--t3);cursor:pointer;border:1px solid transparent;transition:all .2s}
 .prog-tab.on{background:#f9731615;color:var(--or);border-color:var(--or)}
@@ -776,7 +782,7 @@ html,body{
 .xp-lvl{font-family:var(--fd);font-weight:800;font-size:.95rem}
 .xp-next{font-size:.68rem;color:var(--t4)}
 .xp-bar{height:8px;background:var(--s8);border-radius:50px;overflow:hidden}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--or),var(--or2));border-radius:50px;transition:width .6s ease}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--or),var(--or2));border-radius:50px;transition:width .6s var(--spring)}
 .xp-label{font-size:.65rem;color:var(--t3);margin-top:4px;text-align:right}
 
 .badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -790,7 +796,7 @@ html,body{
 
 /* ══════ EXERCISE LIBRARY & BUILDER ══════ */
 .exlib-ov{position:absolute;inset:0;z-index:3600;display:none;flex-direction:column;background:var(--bg)}
-.exlib-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.exlib-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .exlib-search{margin:0 20px 10px;padding:.7rem 1rem .7rem 2.4rem;background:var(--s8);border:1px solid var(--s7);border-radius:12px;color:var(--t1);font-size:.88rem;font-family:var(--fb);outline:none;width:calc(100% - 40px);box-sizing:border-box;transition:border-color .2s}
 .exlib-search:focus{border-color:var(--or)}
 .exlib-search-wrap{position:relative}
@@ -815,7 +821,7 @@ html,body{
 
 /* Exercise detail modal */
 .exdet-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
-.exdet-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.exdet-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .exdet-hero{height:200px;background:var(--s8);display:flex;align-items:center;justify-content:center;position:relative}
 .exdet-hero img{height:100%;object-fit:contain}
 .exdet-hero-emoji{font-size:4rem}
@@ -829,7 +835,7 @@ html,body{
 
 /* Workout builder */
 .wb-ov{position:absolute;inset:0;z-index:3500;display:none;flex-direction:column;background:var(--bg)}
-.wb-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.wb-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .wb-empty{text-align:center;padding:32px 16px;color:var(--t4);font-size:.82rem}
 .wb-empty b{display:block;font-size:1rem;color:var(--t2);margin-bottom:6px}
 .wb-plan{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:14px;margin-bottom:10px}
@@ -852,7 +858,7 @@ html,body{
 
 /* Workout Session */
 .ws-ov{position:absolute;inset:0;z-index:3600;display:none;flex-direction:column;background:var(--bg)}
-.ws-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.ws-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .ws-progress-bar{height:4px;background:var(--s8);border-radius:2px;margin:0 20px 12px;overflow:hidden}
 .ws-progress-fill{height:100%;background:var(--or);border-radius:2px;transition:width .3s}
 .ws-progress-label{text-align:center;font-size:.72rem;color:var(--t4);margin-bottom:16px}
@@ -910,7 +916,7 @@ html,body{
   display:none;flex-direction:column;
   background:var(--bg);
 }
-.legal-ov.on{display:flex;animation:fadeUp .28s ease forwards}
+.legal-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .legal-topbar{
   display:flex;align-items:center;gap:12px;
   padding:env(safe-area-inset-top,44px) 20px 12px;
@@ -1249,7 +1255,7 @@ html,body{
         </div>
         <div class="hdr-right">
           <div class="av av-m">L</div>
-          <div class="lvl-badge" id="home-lvl-badge">⚡ Lv.1 Principiante</div>
+          <div class="lvl-badge" id="home-lvl-badge"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lv.1 Principiante</div>
         </div>
       </div>
 
@@ -1301,9 +1307,9 @@ html,body{
         <!-- Metriche -->
         <div class="metrics-chips">
           <div class="mc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span id="bpm-val">72 BPM</span></div>
-          <div class="mc">🔥 <span id="home-streak">0 giorni streak</span></div>
-          <div class="mc">⚡<span id="home-workouts">0 allenamenti</span></div>
-          <div class="mc">🏆<span id="home-points">0 punti</span></div>
+          <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg><span id="home-streak">0 giorni streak</span></div>
+          <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="home-workouts">0 allenamenti</span></div>
+          <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 01-2-2V5h4M18 9h2a2 2 0 002-2V5h-4M4 5h16v4a6 6 0 01-6 6h-4a6 6 0 01-6-6V5zM9 15l-1 5h8l-1-5M9 20h6"/></svg><span id="home-points">0 punti</span></div>
         </div>
 
         <!-- CTA -->
@@ -1313,21 +1319,21 @@ html,body{
             Avvia Workout
           </button>
           <button class="cta" style="flex:1;margin-bottom:0;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openWorkoutBuilder()">
-            📋 Le Mie Schede
+            <svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Le Mie Schede
           </button>
         </div>
         <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,var(--or),var(--or2))" onclick="openExerciseLibrary()">
-          📚 Libreria Esercizi
+          <svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria Esercizi
         </button>
 
         <!-- AI Coach CTA -->
         <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,#a78bfa,#7c3aed)" onclick="openAICoach()">
-          🤖 Chiedi al Coach IA
+          <svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> Chiedi al Coach IA
         </button>
 
         <!-- HIIT Timer CTA -->
         <button class="cta" style="margin-bottom:10px;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openHIIT()">
-          ⏱️ Timer HIIT / Tabata
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> Timer HIIT / Tabata
         </button>
 
         <!-- Workout live (session overlay) -->
@@ -1335,7 +1341,7 @@ html,body{
         <!-- Prossimo -->
         <div class="sec-title">Prossimo consigliato</div>
         <div class="card" style="display:flex;align-items:center;gap:12px">
-          <div style="width:42px;height:42px;border-radius:11px;background:#f9731618;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🧘</div>
+          <div style="width:42px;height:42px;border-radius:11px;background:#f9731618;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg class="ico ico-lg" viewBox="0 0 24 24" style="stroke:var(--or)"><path d="M4 20h16M12 4v16M8 8l4-4 4 4"/></svg></div>
           <div style="flex:1">
             <div style="font-weight:700;font-size:.87rem">Mobilità & Stretching</div>
             <div style="font-size:.72rem;color:var(--t3);margin-top:2px">45 min · Bassa intensità</div>
@@ -1352,7 +1358,7 @@ html,body{
       <div style="padding:8px 20px 8px;display:flex;justify-content:space-between;align-items:center">
         <div>
           <div style="font-size:.82rem;color:var(--t3)">Analisi Movimento</div>
-          <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Camera IA</div>
+          <div class="disp-title">Camera IA</div>
         </div>
         <div class="hbchip" id="cam-status-chip">
           <span class="ld" style="width:6px;height:6px" id="cam-led"></span>
@@ -1464,16 +1470,16 @@ html,body{
       <div style="padding:8px 20px 8px;display:flex;justify-content:space-between;align-items:center">
         <div>
           <div style="font-size:.82rem;color:var(--t3)">Le Tue Schede</div>
-          <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Allenamento</div>
+          <div class="disp-title">Allenamento</div>
         </div>
-        <div class="chip chip-or" id="workout-tab-count">📋 0 schede</div>
+        <div class="chip chip-or" id="workout-tab-count"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> 0 schede</div>
       </div>
       <div style="padding:0 16px">
         <!-- Quick actions -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
-          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()">📋 Schede</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()">📚 Libreria</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()">⏱️ HIIT</button>
+          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Schede</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT</button>
         </div>
         <!-- AI plans -->
         <div class="sec-title">Schede IA Generate</div>
@@ -1487,7 +1493,7 @@ html,body{
         <div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutHistory()">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem">🏋️</span>
+              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg></span>
               <div>
                 <div style="font-weight:700;font-size:.88rem">Storico Allenamenti</div>
                 <div style="font-size:.7rem;color:var(--t3)">Tutti gli allenamenti completati</div>
@@ -1504,9 +1510,9 @@ html,body{
       <div class="diet-header">
         <div>
           <div style="font-size:.82rem;color:var(--t3)">Piano Alimentare</div>
-          <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Nutrizione</div>
+          <div class="disp-title">Nutrizione</div>
         </div>
-        <div class="chip chip-or" id="diet-cal-chip">🔥 0/0</div>
+        <div class="chip chip-or" id="diet-cal-chip"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg> 0/0</div>
       </div>
 
       <div style="padding:0 16px">
@@ -1548,13 +1554,13 @@ html,body{
         <!-- Azioni secondarie -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
           <button class="btn btn-ghost" style="padding:.65rem .5rem;border-radius:12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:4px" onclick="openDietPlan()">
-            📋 <span>Piano IA</span>
+            <svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> <span>Piano IA</span>
           </button>
           <button class="btn btn-ghost" style="padding:.65rem .5rem;border-radius:12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:4px" onclick="openShoppingList()">
-            🛒 <span>Lista Spesa</span>
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57L22 7H6"/></svg> <span>Lista Spesa</span>
           </button>
           <button class="btn btn-ghost" style="padding:.65rem .5rem;border-radius:12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:4px" onclick="openRecipes()">
-            👨‍🍳 <span>Ricette</span>
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2M7 2v20M21 15V2l-5 5v8a2 2 0 002 2h3m0 0v5"/></svg> <span>Ricette</span>
           </button>
         </div>
 
@@ -1568,7 +1574,7 @@ html,body{
 
         <!-- Suggerimento IA -->
         <div class="card" style="background:linear-gradient(135deg,#22c55e10,var(--s9));border-color:#22c55e25;display:flex;align-items:center;gap:10px" id="diet-ai-tip">
-          <div style="font-size:1.4rem">🤖</div>
+          <div style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg></div>
           <div style="flex:1">
             <div style="font-weight:700;font-size:.83rem;margin-bottom:2px">Consiglio AURA</div>
             <div style="font-size:.74rem;color:var(--t3)" id="diet-ai-tip-text">Registra il primo pasto per ricevere consigli personalizzati.</div>
@@ -1577,7 +1583,7 @@ html,body{
 
         <!-- Upsell -->
         <div class="card prem-card">
-          <div class="pbadge">👨‍⚕️ PREMIUM — UMANO</div>
+          <div class="pbadge"><svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg> PREMIUM — UMANO</div>
           <div class="pt">Revisione con Nutrizionista Certificato</div>
           <div class="pd">Un nutrizionista certificato <strong style="color:var(--t1)">esaminerà e validerà</strong> il tuo piano IA, lo correggerà dove necessario e ti darà feedback personalizzato.</div>
           <div class="pf">
@@ -1674,12 +1680,12 @@ html,body{
       <div class="comm-header">
         <div>
           <div style="font-size:.82rem;color:var(--t3)">Trova il tuo</div>
-          <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Partner</div>
+          <div class="disp-title">Partner</div>
         </div>
-        <div class="chip chip-gr" id="nearby-count">📡 Cercando...</div>
+        <div class="chip chip-gr" id="nearby-count"><svg class="ico" viewBox="0 0 24 24"><path d="M2 8.82a15 15 0 0120 0M5 12.86a10 10 0 0114 0M8.5 16.43a5 5 0 017 0"/><circle cx="12" cy="20" r="1"/></svg> Cercando...</div>
       </div>
 
-      <div class="geo-status" id="geo-status">📍 Localizzazione in corso...</div>
+      <div class="geo-status" id="geo-status"><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Localizzazione in corso...</div>
 
       <div class="radius-row">
         <span>Raggio:</span>
@@ -1720,7 +1726,7 @@ html,body{
 
       <!-- I tuoi Match -->
       <div class="matches-sec" style="padding:0 16px">
-        <div class="sec-title">I tuoi Match 💬</div>
+        <div class="sec-title">I tuoi Match <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
         <div id="matches-list"><div class="no-users-msg">Nessun match ancora. Swipa per trovare partner!</div></div>
       </div>
 
@@ -1730,7 +1736,7 @@ html,body{
           Condividi su Strava
         </button>
 
-        <div class="sec-title">Classifica Settimanale 🏆</div>
+        <div class="sec-title">Classifica Settimanale <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 01-2-2V5h4M18 9h2a2 2 0 002-2V5h-4M4 5h16v4a6 6 0 01-6 6h-4a6 6 0 01-6-6V5zM9 15l-1 5h8l-1-5M9 20h6"/></svg></div>
         <div class="lb" id="leaderboard-body">
           <div class="no-users-msg">Caricamento classifica...</div>
         </div>
@@ -1747,11 +1753,11 @@ html,body{
         </div>
         <div>
           <div class="prof-name">Luca Pipia</div>
-          <div class="prof-tag" id="prof-tag">⚡ Lv.1 — Principiante</div>
+          <div class="prof-tag" id="prof-tag"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lv.1 — Principiante</div>
           <div class="prof-since" id="prof-since">Membro da Gennaio 2024</div>
           <div style="display:flex;gap:6px;margin-top:8px">
-            <div class="chip chip-or" style="font-size:.65rem" id="prof-streak-chip">🔥 0gg streak</div>
-            <div class="chip chip-gr" style="font-size:.65rem" id="prof-goal-chip">✅ Massa</div>
+            <div class="chip chip-or" style="font-size:.65rem" id="prof-streak-chip"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg> 0gg streak</div>
+            <div class="chip chip-gr" style="font-size:.65rem" id="prof-goal-chip"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Massa</div>
           </div>
         </div>
       </div>
@@ -1761,7 +1767,7 @@ html,body{
         <div class="pstats" id="prof-pstats">
           <div class="psi"><div class="psv" id="ps-workouts">0</div><div class="psl">Allenamenti</div></div>
           <div class="psep"></div>
-          <div class="psi"><div class="psv" id="ps-streak">0</div><div class="psl">Streak 🔥</div></div>
+          <div class="psi"><div class="psv" id="ps-streak">0</div><div class="psl">Streak <svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg></div></div>
           <div class="psep"></div>
           <div class="psi"><div class="psv" id="ps-points">0</div><div class="psl">Punti</div></div>
           <div class="psep"></div>
@@ -1785,7 +1791,7 @@ html,body{
         <div class="card" style="padding:14px;cursor:pointer" onclick="openProgress()">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem">📈</span>
+              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M2 12l5 5L22 5"/></svg></span>
               <div>
                 <div style="font-weight:700;font-size:.88rem">Storico Progressi</div>
                 <div style="font-size:.7rem;color:var(--t3)">Peso, Forza, Resistenza nel tempo</div>
@@ -1799,7 +1805,7 @@ html,body{
         <div class="card" style="padding:14px;cursor:pointer" onclick="openProgressPhotos()">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem">📸</span>
+              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
               <div>
                 <div style="font-weight:700;font-size:.88rem">Foto Progresso</div>
                 <div style="font-size:.7rem;color:var(--t3)">Confronto visivo settimanale</div>
@@ -1814,7 +1820,7 @@ html,body{
         <div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutHistory()">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem">🏋️</span>
+              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg></span>
               <div>
                 <div style="font-weight:700;font-size:.88rem">I Miei Workout</div>
                 <div style="font-size:.7rem;color:var(--t3)" id="wh-summary">Tutti gli allenamenti completati</div>
@@ -1833,10 +1839,10 @@ html,body{
         <!-- Hardware -->
         <div class="sec-title">Hardware & Store</div>
         <div class="hwg">
-          <div class="card hwc"><div class="hwico">⚖️</div><div class="hwn">Bilancia BMI</div><div class="hwd">Composizione corporea sync con AURA.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
-          <div class="card hwc"><div class="hwico">📡</div><div class="hwn">Treppiedi PRO</div><div class="hwd">Analisi movimento senza mani.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
-          <div class="card hwc"><div class="hwico">💓</div><div class="hwn">Fascia HRV</div><div class="hwd">Monitoraggio HRV avanzato.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
-          <div class="card hwc"><div class="hwico">🛒</div><div class="hwn">AURA Store</div><div class="hwd">Esplora i nostri prodotti.</div><button class="btn-hw2" onclick="openStore()">Apri →</button></div>
+          <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M3 11h18M6.5 11L12 3l5.5 8"/></svg></div><div class="hwn">Bilancia BMI</div><div class="hwd">Composizione corporea sync con AURA.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+          <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M2 8.82a15 15 0 0120 0M5 12.86a10 10 0 0114 0M8.5 16.43a5 5 0 017 0"/><circle cx="12" cy="20" r="1"/></svg></div><div class="hwn">Treppiedi PRO</div><div class="hwd">Analisi movimento senza mani.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+          <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/><path d="M3.5 12h4l2.5-5 3 10 2.5-5h5"/></svg></div><div class="hwn">Fascia HRV</div><div class="hwd">Monitoraggio HRV avanzato.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+          <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57L22 7H6"/></svg></div><div class="hwn">AURA Store</div><div class="hwd">Esplora i nostri prodotti.</div><button class="btn-hw2" onclick="openStore()">Apri →</button></div>
         </div>
 
         <!-- Abbonamento & Referral -->
@@ -1844,7 +1850,7 @@ html,body{
         <div class="card" style="background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;padding:14px;margin-bottom:10px">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
-              <div style="font-weight:700;font-size:.88rem">⚡ Piano Annuale</div>
+              <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Piano Annuale</div>
               <div style="font-size:.72rem;color:var(--t3)">79,99€/anno — risparmi il 33%</div>
             </div>
             <button class="btn btn-or btn-sm" onclick="showAnnualPlan()">Scopri →</button>
@@ -1853,7 +1859,7 @@ html,body{
         <div class="card" style="padding:14px;margin-bottom:10px">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
-              <div style="font-weight:700;font-size:.88rem">🎁 Invita un Amico</div>
+              <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg> Invita un Amico</div>
               <div style="font-size:.72rem;color:var(--t3)">Ottieni 1 mese gratis per ogni invito</div>
             </div>
             <button class="btn btn-ghost btn-sm" onclick="openReferral()">Invita →</button>
@@ -1862,7 +1868,7 @@ html,body{
         <div class="card" style="padding:14px;margin-bottom:10px">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
-              <div style="font-weight:700;font-size:.88rem">🎫 Hai un codice?</div>
+              <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2zM13 5v2M13 17v2M13 11v2"/></svg> Hai un codice?</div>
               <div style="font-size:.72rem;color:var(--t3)">Riscatta il codice referral di un amico</div>
             </div>
             <button class="btn btn-ghost btn-sm" onclick="redeemReferral()">Riscatta</button>
@@ -1872,22 +1878,22 @@ html,body{
         <!-- Integrazioni -->
         <div class="sec-title">Integrazioni</div>
         <div class="card" style="padding:0 14px">
-          <div class="sitem" onclick="openWearable()"><span>💓 Fascia HR Bluetooth</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="toast('🍎 Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span>🍎 Apple Health</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="toast('🏃 Connettendo Strava...','or')"><span>🏃 Strava</span><span class="sarr">›</span></div>
-          <div class="sitem"><span>⌚ Apple Watch</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:.7rem;color:var(--t3)">Non connesso</span></div></div>
-          <div class="sitem" onclick="toast('📊 Esportazione avviata!','gr')"><span>📊 Esporta dati</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="openWearable()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/><path d="M3.5 12h4l2.5-5 3 10 2.5-5h5"/></svg> Fascia HR Bluetooth</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="toast('Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/></svg> Apple Health</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="toast('Connettendo Strava...','or')"><span><svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Strava</span><span class="sarr">›</span></div>
+          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="6" width="14" height="12" rx="2"/><path d="M12 10v2l1 1M7 2h10M7 22h10"/></svg> Apple Watch</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:.7rem;color:var(--t3)">Non connesso</span></div></div>
+          <div class="sitem" onclick="toast('Esportazione avviata!','gr')"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Esporta dati</span><span class="sarr">›</span></div>
         </div>
 
         <!-- Settings -->
         <div class="sec-title">Impostazioni</div>
         <div class="card" style="padding:0 14px">
-          <div class="sitem" onclick="openEditProfile()"><span>✏️ Modifica dati personali</span><span class="sarr">›</span></div>
-          <div class="sitem"><span>🔔 Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
-          <div class="sitem"><span>🎯 Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
-          <div class="sitem"><span>🌙 Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
-          <div class="sitem" onclick="openAIKeySettings()"><span>🤖 API OpenAI (Piano AI)</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="toast('🔒 Email di reset inviata.','bl')"><span>🔒 Sicurezza & Privacy</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="openEditProfile()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg> Modifica dati personali</span><span class="sarr">›</span></div>
+          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg> Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
+          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
+          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
+          <div class="sitem" onclick="openAIKeySettings()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> API OpenAI (Piano AI)</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="toast('Email di reset inviata.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Sicurezza & Privacy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('privacy-ov')"><span>Privacy Policy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('terms-ov')"><span>Termini di Servizio</span><span class="sarr">›</span></div>
           <div class="sitem" id="logout-btn"><span style="color:var(--re)">Esci dall'account</span><span class="sarr" style="color:var(--re)">›</span></div>
@@ -1978,7 +1984,7 @@ html,body{
     <button class="legal-back" onclick="closeAICoach()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="legal-page-title">🤖 AI Coach</div>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> AI Coach</div>
   </div>
   <div class="aicoach-body">
     <div class="aicoach-msgs" id="aicoach-msgs">
@@ -1999,10 +2005,10 @@ html,body{
     <button class="legal-back" onclick="closeProgressPhotos()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="legal-page-title">📸 Foto Progresso</div>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Foto Progresso</div>
   </div>
   <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
-    <button class="btn btn-or btn-fw" style="margin-bottom:14px" onclick="document.getElementById('prog-photo-file').click()">📷 Scatta / Carica Foto</button>
+    <button class="btn btn-or btn-fw" style="margin-bottom:14px" onclick="document.getElementById('prog-photo-file').click()"><svg class="ico" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Scatta / Carica Foto</button>
     <input type="file" id="prog-photo-file" accept="image/*" capture="environment" hidden>
     <div id="progphoto-compare" style="margin-bottom:14px"></div>
     <div class="sec-title">Galleria</div>
@@ -2016,21 +2022,21 @@ html,body{
     <button class="legal-back" onclick="closeWearable()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="legal-page-title">⌚ Wearable Sync</div>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="6" width="14" height="12" rx="2"/><path d="M12 10v2l1 1M7 2h10M7 22h10"/></svg> Wearable Sync</div>
   </div>
   <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
     <div class="card" style="text-align:center;padding:20px">
-      <div style="font-size:2.5rem;margin-bottom:8px">💓</div>
+      <div style="font-size:2.5rem;margin-bottom:8px"><svg class="ico" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem;stroke:var(--re)"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/><path d="M3.5 12h4l2.5-5 3 10 2.5-5h5"/></svg></div>
       <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px">Frequenza Cardiaca</div>
       <div style="font-size:2rem;font-family:var(--fd);font-weight:800;color:var(--re)" id="ble-hr-val">--</div>
       <div style="font-size:.75rem;color:var(--t3)" id="ble-hr-status">Non connesso</div>
     </div>
-    <button class="btn btn-or btn-fw" style="margin:12px 0" id="ble-connect-btn" onclick="connectBLEHeartRate()">🔗 Connetti Fascia HR (Bluetooth)</button>
+    <button class="btn btn-or btn-fw" style="margin:12px 0" id="ble-connect-btn" onclick="connectBLEHeartRate()"><svg class="ico" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Connetti Fascia HR (Bluetooth)</button>
     <button class="btn btn-ghost btn-fw" style="margin-bottom:12px;display:none" id="ble-disconnect-btn" onclick="disconnectBLE()">Disconnetti</button>
     <div class="sec-title">Integrazioni Health</div>
     <div class="card" style="padding:0 14px">
-      <div class="sitem" onclick="toast('🍎 Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span>🍎 Apple Health</span><span class="sarr">›</span></div>
-      <div class="sitem" onclick="toast('🏃 Google Fit richiede l\'app mobile nativa.','bl')"><span>🏃 Google Fit</span><span class="sarr">›</span></div>
+      <div class="sitem" onclick="toast('Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/></svg> Apple Health</span><span class="sarr">›</span></div>
+      <div class="sitem" onclick="toast('Google Fit richiede l\'app mobile nativa.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Google Fit</span><span class="sarr">›</span></div>
     </div>
     <div class="sec-title">Log HR recente</div>
     <div id="ble-hr-log" class="card" style="padding:14px;font-size:.8rem;color:var(--t3)">Nessun dato HR registrato.</div>
@@ -2043,7 +2049,7 @@ html,body{
     <button class="legal-back" onclick="closeHIIT()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="legal-page-title">⏱️ HIIT / Tabata</div>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT / Tabata</div>
   </div>
   <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
     <div class="hiit-display" id="hiit-display">
@@ -2079,7 +2085,7 @@ html,body{
     <button class="legal-back" onclick="closeStore()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="legal-page-title">🛒 AURA Store</div>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57L22 7H6"/></svg> AURA Store</div>
   </div>
   <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="store-body"></div>
 </div>
@@ -2443,6 +2449,25 @@ html,body{
 // ═══════════════════════════════════════════════════
 
 const S = { tab:'home', hydration:1.2, hydGoal:2.5, bpm:72 };
+
+// ── HAPTIC FEEDBACK ────────────────────────────────
+var _hapticCtx;
+function haptic(ms){
+  ms = ms || 10;
+  if(navigator.vibrate) navigator.vibrate(ms);
+  else {
+    try {
+      if(!_hapticCtx) _hapticCtx = new (window.AudioContext||window.webkitAudioContext)();
+      var o = _hapticCtx.createOscillator(), g = _hapticCtx.createGain();
+      o.frequency.value = 800; g.gain.value = 0.015;
+      o.connect(g); g.connect(_hapticCtx.destination);
+      o.start(); o.stop(_hapticCtx.currentTime + ms/1000);
+    } catch(e){}
+  }
+}
+document.addEventListener('click', function(e){
+  if(e.target.closest('.cta,.btn-or,.nb,.tog')) haptic();
+}, true);
 
 // ── LAZY SCRIPT LOADER ─────────────────────────────
 var _loadedScripts = {};
@@ -3653,7 +3678,7 @@ function updateRecoveryCard() {
 
 function acceptRecoveryAdvice() {
   var card = document.getElementById('recovery-card');
-  card.style.transition = 'all .35s ease';
+  card.style.transition = 'all .35s cubic-bezier(.34,1.56,.64,1)';
   card.style.opacity = '0'; card.style.transform = 'scale(.97)';
   setTimeout(function() {
     card.innerHTML = '<div style="display:flex;align-items:center;gap:10px;width:100%">' +
@@ -3668,7 +3693,7 @@ function acceptRecoveryAdvice() {
 
 function dismissRecovery() {
   var card = document.getElementById('recovery-card');
-  card.style.transition = 'all .35s ease';
+  card.style.transition = 'all .35s cubic-bezier(.34,1.56,.64,1)';
   card.style.opacity = '0';
   setTimeout(function() { card.style.display = 'none'; }, 360);
 }
@@ -4846,7 +4871,7 @@ function checkNewNotifications() {
     if(!drag) return; drag=false;
     if(cx<-65) document.getElementById('btn-skip').click();
     else if(cx>65) document.getElementById('btn-match').click();
-    else { card.style.transition='all .28s ease'; card.style.transform='translateX(0) rotate(0)'; card.style.opacity='1'; }
+    else { card.style.transition='all .28s cubic-bezier(.34,1.56,.64,1)'; card.style.transform='translateX(0) rotate(0)'; card.style.opacity='1'; }
     cx=0;
   });
   card.addEventListener('mousedown', function(e) { sx=e.clientX; drag=true; card.style.transition='none'; e.preventDefault(); });
@@ -4859,7 +4884,7 @@ function checkNewNotifications() {
     if(!drag) return; drag=false;
     if(cx<-65) document.getElementById('btn-skip').click();
     else if(cx>65) document.getElementById('btn-match').click();
-    else { card.style.transition='all .28s ease'; card.style.transform='none'; card.style.opacity='1'; }
+    else { card.style.transition='all .28s cubic-bezier(.34,1.56,.64,1)'; card.style.transform='none'; card.style.opacity='1'; }
     cx=0;
   });
 })();
