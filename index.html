@@ -6970,11 +6970,25 @@ function getErrorLog() { return AURA_ERRORS; }
 //  16. SERVICE WORKER REGISTRATION
 // ═══════════════════════════════════════════════════
 if ('serviceWorker' in navigator) {
+  // Force clear old caches on page load
+  if (window.caches) {
+    caches.keys().then(function(names) {
+      names.forEach(function(name) {
+        if (name !== 'aura-v3') caches.delete(name);
+      });
+    });
+  }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').then(function(reg) {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function(reg) {
       console.log('[AURA] SW registered, scope:', reg.scope);
       NOTIF.swReg = reg;
-      // Start notification scheduler if permission was already granted
+      // Force update check
+      reg.update();
+      // Auto-reload when new SW activates
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
       if (NOTIF.permission === 'granted' && localStorage.getItem('aura_notif_enabled') !== 'false') {
         scheduleLocalNotifs();
       }
