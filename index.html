@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v12')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v13')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -6600,7 +6600,7 @@ document.getElementById('ob-finish').addEventListener('click', () => {
 //  AI PLAN GENERATION ENGINE
 // ═══════════════════════════════════════════════════
 // Groq API key — built-in default (Llama 3.3 70B, free), users can override in settings
-var _GROQ_DEFAULT = ['gsk_','M7Fj','Q8AH','Ffny','HdSs','aniL','WGdy','b3FY','iWUg','Bgfk','cGd0','hdxA','4Q7d','YANX'].join('');
+var _GROQ_DEFAULT = ['gsk_','M7Fj','Q8AH','Ffny','HdSs','aniL','WGdy','b3FY','iWUg','Bgfk','cGd0','hdxA','4Q7d','YANx'].join('');
 var AURA_AI_KEY = localStorage.getItem('aura_groq_key') || _GROQ_DEFAULT;
 
 function openAIKeySettings() {
@@ -7349,7 +7349,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v12') caches.delete(name);
+        if (name !== 'aura-v13') caches.delete(name);
       });
     });
   }
