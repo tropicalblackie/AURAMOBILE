@@ -9,9 +9,20 @@
 <link rel="manifest" href="manifest.json"/>
 <title>AURA</title>
 <script>
-// Force-nuke old SW caches before anything else loads
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v7')caches.delete(k)})});}
-if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
+// Nuclear SW cleanup — delete ALL caches and unregister stale workers
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})});}
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(r){r.unregister()});
+    // If we had a controlling SW, reload once to get a clean load
+    if(navigator.serviceWorker.controller){
+      if(!sessionStorage.getItem('aura_sw_nuked')){
+        sessionStorage.setItem('aura_sw_nuked','1');
+        window.location.reload();
+      }
+    }
+  });
+}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -7310,17 +7321,17 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v7') caches.delete(name);
+        if (name !== 'aura-v8') caches.delete(name);
       });
     });
   }
   window.addEventListener('load', function() {
+    // Clear nuke flag so future visits register normally
+    sessionStorage.removeItem('aura_sw_nuked');
     navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function(reg) {
       console.log('[AURA] SW registered, scope:', reg.scope);
       NOTIF.swReg = reg;
-      // Force update check
       reg.update();
-      // Auto-reload when new SW activates
       var refreshing = false;
       navigator.serviceWorker.addEventListener('controllerchange', function() {
         if (!refreshing) { refreshing = true; window.location.reload(); }
