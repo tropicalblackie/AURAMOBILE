@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Force-nuke old SW caches before anything else loads
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v5')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v6')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -62,6 +62,75 @@ html,body{
   overscroll-behavior:none;
 }
 .screen::-webkit-scrollbar{display:none}
+
+/* ── DYNAMIC ISLAND ── */
+.dyn-island{
+  position:fixed;top:12px;left:50%;transform:translateX(-50%) scale(.92);opacity:0;
+  z-index:9998;pointer-events:none;
+  min-width:140px;max-width:calc(100% - 40px);
+  background:#1a1a1e;border-radius:36px;
+  box-shadow:0 4px 24px rgba(0,0,0,.6),0 0 0 .5px rgba(255,255,255,.08) inset;
+  overflow:hidden;cursor:pointer;
+  transition:all .5s var(--spring);
+  -webkit-tap-highlight-color:transparent;
+}
+.dyn-island.on{
+  opacity:1;transform:translateX(-50%) scale(1);pointer-events:auto;
+}
+.dyn-island.expanded{
+  border-radius:28px;
+}
+/* Collapsed pill */
+.di-pill{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 16px 8px 12px;
+  min-height:36px;
+}
+.di-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--or);
+  animation:di-pulse 1.5s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes di-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.di-timer{
+  font-family:var(--fd);font-size:.8rem;font-weight:700;color:#fff;
+  font-variant-numeric:tabular-nums;letter-spacing:.5px;
+}
+.di-exname{
+  font-size:.65rem;color:var(--t2);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;
+}
+.di-bpm{
+  font-family:var(--fd);font-size:.72rem;font-weight:700;color:var(--re);
+  margin-left:auto;display:flex;align-items:center;gap:3px;
+}
+.di-bpm svg{flex-shrink:0}
+/* Expanded panel */
+.di-expand{
+  max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .45s var(--spring),opacity .3s ease,padding .35s ease;
+  padding:0 16px;
+}
+.dyn-island.expanded .di-expand{
+  max-height:200px;opacity:1;padding:4px 16px 14px;
+}
+.di-expand-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 0;
+}
+.di-expand-label{font-size:.65rem;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.di-expand-val{font-family:var(--fd);font-size:.85rem;font-weight:700;color:var(--t1)}
+.di-expand-actions{
+  display:flex;gap:8px;margin-top:6px;
+}
+.di-expand-actions button{
+  flex:1;padding:8px;border:none;border-radius:14px;font-size:.72rem;font-weight:700;
+  font-family:var(--fb);cursor:pointer;
+  transition:transform .15s var(--spring);
+}
+.di-expand-actions button:active{transform:scale(.95)}
+.di-btn-pause{background:var(--s7);color:#fff}
+.di-btn-stop{background:var(--re);color:#fff}
 
 /* ── STATUS BAR ── */
 .statusbar{
@@ -1982,6 +2051,25 @@ html,body{
 </div><!-- /app -->
 
 <!-- TOASTS -->
+<!-- ═══ DYNAMIC ISLAND ═══ -->
+<div class="dyn-island" id="dyn-island" onclick="diToggle()">
+  <div class="di-pill">
+    <div class="di-dot"></div>
+    <span class="di-timer" id="di-timer">00:00</span>
+    <span class="di-exname" id="di-exname"></span>
+    <span class="di-bpm" id="di-bpm"><svg viewBox="0 0 24 24" fill="var(--re)" width="12" height="12"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span id="di-bpm-val">--</span></span>
+  </div>
+  <div class="di-expand">
+    <div class="di-expand-row"><span class="di-expand-label">Esercizio</span><span class="di-expand-val" id="di-ex-full">--</span></div>
+    <div class="di-expand-row"><span class="di-expand-label">Serie</span><span class="di-expand-val" id="di-set-info">--</span></div>
+    <div class="di-expand-row"><span class="di-expand-label">Stato</span><span class="di-expand-val" id="di-status">In corso</span></div>
+    <div class="di-expand-actions">
+      <button class="di-btn-pause" id="di-btn-pause" onclick="event.stopPropagation();diPause()">⏸ Pausa</button>
+      <button class="di-btn-stop" onclick="event.stopPropagation();stopWorkoutSession()">■ Stop</button>
+    </div>
+  </div>
+</div>
+
 <div id="toasts"></div>
 
 <!-- MODAL (bottom sheet) -->
@@ -2865,6 +2953,7 @@ function startWorkoutSession(planIdx) {
   renderWsView();
   ws.timer = setInterval(wsTick, 1000);
   closeWorkoutBuilder();
+  diShow();
 }
 
 function wsTick() {
@@ -2880,6 +2969,7 @@ function wsTick() {
     ws.exerciseTimeSec++;
   }
   wsUpdateTimers();
+  diUpdate();
 }
 
 function wsAdvance() {
@@ -2931,6 +3021,7 @@ function stopWorkoutSession() {
   } else {
     clearInterval(ws.timer); ws.active = false;
     document.getElementById('ws-ov').classList.remove('on');
+    diHide();
   }
 }
 
@@ -2945,6 +3036,7 @@ function wsFinish() {
   clearInterval(ws.timer); ws.active = false;
   ws.calories = wsCalcCalories();
   renderWsSummary();
+  diHide();
 }
 
 function wsSaveAndClose() {
@@ -3746,6 +3838,81 @@ function dismissRecovery() {
   card.style.transition = 'all .35s cubic-bezier(.34,1.56,.64,1)';
   card.style.opacity = '0';
   setTimeout(function() { card.style.display = 'none'; }, 360);
+}
+
+// ── DYNAMIC ISLAND ─────────────────────────────────
+var _diExpanded = false;
+
+function diShow() {
+  var el = document.getElementById('dyn-island');
+  if (!el) return;
+  diUpdate();
+  el.classList.add('on');
+  el.classList.remove('expanded');
+  _diExpanded = false;
+}
+
+function diHide() {
+  var el = document.getElementById('dyn-island');
+  if (!el) return;
+  el.classList.remove('on','expanded');
+  _diExpanded = false;
+}
+
+function diUpdate() {
+  if (!ws.active) return;
+  var ex = ws.exercises[ws.exIdx];
+  var m = String(Math.floor(ws.totalSec / 60)).padStart(2, '0');
+  var s = String(ws.totalSec % 60).padStart(2, '0');
+  var timer = document.getElementById('di-timer');
+  if (timer) timer.textContent = m + ':' + s;
+  var name = document.getElementById('di-exname');
+  if (name && ex) name.textContent = ex.name;
+  var bpm = document.getElementById('di-bpm-val');
+  if (bpm) bpm.textContent = S.bpm + '';
+  // Expanded details
+  var exFull = document.getElementById('di-ex-full');
+  if (exFull && ex) exFull.textContent = ex.name;
+  var setInfo = document.getElementById('di-set-info');
+  if (setInfo && ex) setInfo.textContent = ws.setNum + ' / ' + (parseInt(ex.sets) || 3);
+  var status = document.getElementById('di-status');
+  if (status) {
+    if (ws.paused) status.textContent = 'In pausa';
+    else if (ws.resting) {
+      var rm = String(Math.floor(ws.restSec / 60)).padStart(2, '0');
+      var rs = String(ws.restSec % 60).padStart(2, '0');
+      status.textContent = 'Riposo ' + rm + ':' + rs;
+      status.style.color = 'var(--bl)';
+    } else {
+      status.textContent = 'In corso';
+      status.style.color = 'var(--gr)';
+    }
+  }
+  // Dot color
+  var dot = document.querySelector('.di-dot');
+  if (dot) {
+    if (ws.paused) { dot.style.background = 'var(--t3)'; dot.style.animationPlayState = 'paused'; }
+    else if (ws.resting) { dot.style.background = 'var(--bl)'; dot.style.animationPlayState = 'running'; }
+    else { dot.style.background = 'var(--or)'; dot.style.animationPlayState = 'running'; }
+  }
+  var pauseBtn = document.getElementById('di-btn-pause');
+  if (pauseBtn) pauseBtn.textContent = ws.paused ? '▶ Riprendi' : '⏸ Pausa';
+}
+
+function diToggle() {
+  var el = document.getElementById('dyn-island');
+  if (!el) return;
+  _diExpanded = !_diExpanded;
+  el.classList.toggle('expanded', _diExpanded);
+  haptic();
+}
+
+function diPause() {
+  ws.paused = !ws.paused;
+  diUpdate();
+  // Also sync with the workout overlay pause logic if available
+  renderWsView();
+  haptic();
 }
 
 // ── ACTIVITY RINGS ─────────────────────────────────
@@ -7050,7 +7217,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v5') caches.delete(name);
+        if (name !== 'aura-v6') caches.delete(name);
       });
     });
   }
