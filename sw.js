@@ -53,15 +53,16 @@ self.addEventListener('push', event => {
 // Notification click — open app
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  var url = (event.notification.data && event.notification.data.url) || '/';
+  var tab = (event.notification.data && event.notification.data.tab) || 'workout';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
       for (var i = 0; i < windowClients.length; i++) {
         if (windowClients[i].url.includes('AURAMOBILE') && 'focus' in windowClients[i]) {
+          windowClients[i].postMessage({ type: 'navigate-tab', tab: tab });
           return windowClients[i].focus();
         }
       }
-      return clients.openWindow(url);
+      return clients.openWindow('/?tab=' + tab);
     })
   );
 });

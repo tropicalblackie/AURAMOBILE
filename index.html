@@ -1461,9 +1461,10 @@ html,body{
       </div>
       <div style="padding:0 16px">
         <!-- Quick actions -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()">📋 Le Mie Schede</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()">📚 Libreria Esercizi</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()">📋 Schede</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()">📚 Libreria</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()">⏱️ HIIT</button>
         </div>
         <!-- AI plans -->
         <div class="sec-title">Schede IA Generate</div>
@@ -1993,7 +1994,7 @@ html,body{
   </div>
   <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
     <button class="btn btn-or btn-fw" style="margin-bottom:14px" onclick="document.getElementById('prog-photo-file').click()">📷 Scatta / Carica Foto</button>
-    <input type="file" id="prog-photo-file" accept="image/*" hidden>
+    <input type="file" id="prog-photo-file" accept="image/*" capture="environment" hidden>
     <div id="progphoto-compare" style="margin-bottom:14px"></div>
     <div class="sec-title">Galleria</div>
     <div id="progphoto-gallery" class="progphoto-grid"></div>
@@ -4377,6 +4378,7 @@ function _initFirebase() {
       if (SOCIAL.myLocation) loadNearbyUsers();
       loadMatches();
       loadLeaderboard();
+      checkReferralCount();
     }).catch(function(e) { console.error('Firebase auth error:', e); showSocialSetup(); });
   } catch(e) { console.error('Firebase init error:', e); showSocialSetup(); }
 }
@@ -4955,7 +4957,8 @@ function checkAndFireNotif() {
   }
 }
 
-function fireLocalNotif(title, body) {
+function fireLocalNotif(title, body, targetTab) {
+  var tab = targetTab || 'workout';
   if (NOTIF.swReg) {
     NOTIF.swReg.showNotification(title, {
       body: body,
@@ -4963,11 +4966,22 @@ function fireLocalNotif(title, body) {
       badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💪</text></svg>',
       tag: 'aura-reminder',
       renotify: false,
-      vibrate: [200, 100, 200]
+      vibrate: [200, 100, 200],
+      data: { tab: tab }
     });
   } else {
     new Notification(title, { body: body, tag: 'aura-reminder' });
   }
+}
+
+// Listen for deep-link messages from SW
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'navigate-tab' && e.data.tab) {
+      var btn = document.querySelector('.nb[data-tab="' + e.data.tab + '"]');
+      if (btn) btn.click();
+    }
+  });
 }
 
 // Bell icon click — show pending notifications
@@ -5330,9 +5344,38 @@ function confirmAddFood() {
   if (!currentDetailFood) return;
   var qty = parseInt(document.getElementById('food-qty').value) || 100;
   var mealType = document.getElementById('food-meal-type').value;
+  var foodName = currentDetailFood.name;
   addMealEntry(currentDetailFood, qty, mealType);
   closeFoodDetail();
   closeFoodSearch();
+  // Offer to add to shopping list
+  suggestAddToShoppingList(foodName);
+}
+
+function suggestAddToShoppingList(foodName) {
+  if (!foodName) return;
+  showModal('🛒', 'Lista Spesa',
+    '<p style="font-size:.88rem;color:var(--t2);line-height:1.5">Vuoi aggiungere <strong>' + escapeHtml(foodName) + '</strong> alla lista della spesa?</p>',
+    '✅ Aggiungi', 'var(--gr)');
+  _modalCtaAction = function() {
+    addFoodToShoppingList(foodName);
+    closeModal();
+  };
+}
+
+function addFoodToShoppingList(name) {
+  var shopList = null;
+  try { shopList = JSON.parse(localStorage.getItem(SHOP_LIST_KEY)); } catch(e) {}
+  if (!shopList) shopList = { 'Proteine': [], 'Latticini': [], 'Cereali': [], 'Frutta': [], 'Verdura': [], 'Altro': [] };
+  // Check if already exists
+  var exists = Object.keys(shopList).some(function(cat) {
+    return shopList[cat].some(function(item) { return item.name.toLowerCase() === name.toLowerCase(); });
+  });
+  if (exists) { toast('ℹ️ Già nella lista spesa', 'bl'); return; }
+  if (!shopList['Altro']) shopList['Altro'] = [];
+  shopList['Altro'].push({ name: name, checked: false });
+  localStorage.setItem(SHOP_LIST_KEY, JSON.stringify(shopList));
+  toast('🛒 ' + name + ' aggiunto alla lista spesa!', 'gr');
 }
 
 function closeFoodDetail() {
@@ -6978,9 +7021,53 @@ function redeemReferral() {
   }
   var u = getUser() || {};
   if (u.redeemedReferral) { toast('ℹ️ Hai già usato un codice referral.', 'bl'); return; }
+  // Check not redeeming own code
+  if (u.referralCode && u.referralCode === code) { toast('⚠️ Non puoi usare il tuo stesso codice.', 're'); return; }
   u.redeemedReferral = code;
   setUser(u);
   toast('🎉 Codice riscattato! Hai ottenuto 1 mese gratis.', 'gr');
+  // Track referral in Firebase if available
+  trackReferralRedeem(code);
+}
+
+function trackReferralRedeem(code) {
+  // Use Firebase to increment the referrer's count
+  if (typeof firebase !== 'undefined' && FB.db && FB.ready) {
+    // Find the user who owns this referral code and increment their count
+    FB.db.collection('referrals').doc(code).set({
+      code: code,
+      redeemedBy: FB.uid || 'anonymous',
+      redeemedAt: new Date().toISOString()
+    }, { merge: true }).then(function() {
+      // Also increment a counter doc
+      FB.db.collection('referral_counts').doc(code).set({
+        count: firebase.firestore.FieldValue.increment(1)
+      }, { merge: true });
+    }).catch(function(e) { console.warn('Referral track error:', e); });
+  }
+  // Also store locally a record of the redemption
+  var redeems = [];
+  try { redeems = JSON.parse(localStorage.getItem('aura_referral_redeems') || '[]'); } catch(e) {}
+  redeems.push({ code: code, at: new Date().toISOString() });
+  localStorage.setItem('aura_referral_redeems', JSON.stringify(redeems));
+}
+
+// Check if anyone has used our referral code (called on social init)
+function checkReferralCount() {
+  var u = getUser();
+  if (!u || !u.referralCode) return;
+  if (typeof firebase !== 'undefined' && FB.db && FB.ready) {
+    FB.db.collection('referral_counts').doc(u.referralCode).get().then(function(doc) {
+      if (doc.exists && doc.data().count) {
+        var count = doc.data().count;
+        if (count !== u.referrals) {
+          u.referrals = count;
+          setUser(u);
+          if (count > 0) toast('🎉 ' + count + ' amico/i hanno usato il tuo codice!', 'gr');
+        }
+      }
+    }).catch(function() {});
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -7070,6 +7157,19 @@ function storeCheckout() {
     showAuth();
     hideOnboarding();
   }
+  // Handle deep-link from notification (?tab=workout etc)
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var deepTab = params.get('tab');
+    if (deepTab) {
+      setTimeout(function() {
+        var btn = document.querySelector('.nb[data-tab="' + deepTab + '"]');
+        if (btn) btn.click();
+        // Clean URL
+        if (window.history.replaceState) window.history.replaceState({}, '', window.location.pathname);
+      }, 500);
+    }
+  } catch(e) {}
 })();
 </script>
 </body>
