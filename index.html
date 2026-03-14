@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="theme-color" content="#020617"/>
+<meta name="theme-color" content="#000000"/>
 <link rel="manifest" href="manifest.json"/>
 <title>AURA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -19,10 +19,10 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
   --or:#f97316;--or2:#ea6c0d;--or3:#fb923c;
-  --bg:#020617;--s9:#0f172a;--s8:#1e293b;--s7:#334155;--s6:#475569;
+  --bg:#000000;--s9:#0a0f1a;--s8:#151c2b;--s7:#2a3345;--s6:#3d4a5f;
   --t1:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--t4:#475569;
   --gr:#22c55e;--bl:#38bdf8;--pu:#a78bfa;--re:#f43f5e;
-  --nav-h:72px;--safe-b:env(safe-area-inset-bottom,16px);
+  --nav-h:68px;--safe-b:env(safe-area-inset-bottom,16px);
   --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
 }
 html,body{
@@ -38,11 +38,19 @@ html,body{
   max-width:430px;margin:0 auto;
   background:var(--bg);position:relative;overflow:hidden;
 }
+/* Noise texture overlay for depth */
+.app::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:128px 128px;
+}
+.app>*{position:relative;z-index:1;}
 
 /* ── SCROLLABLE CONTENT ── */
 .screen{
   flex:1;overflow-y:auto;overflow-x:hidden;
-  padding:0 0 calc(var(--nav-h) + var(--safe-b));
+  padding:0 0 calc(var(--nav-h) + var(--safe-b) + 28px);
   scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:none;
@@ -89,30 +97,31 @@ html,body{
 
 /* ── BOTTOM NAV ── */
 .bottomnav{
-  position:absolute;bottom:0;left:0;right:0;
-  height:calc(var(--nav-h) + var(--safe-b));
-  padding-bottom:var(--safe-b);
-  background:rgba(15,23,42,.85);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:1px solid rgba(255,255,255,.07);
-  display:flex;align-items:flex-start;
-  padding-top:6px;
+  position:absolute;bottom:calc(12px + var(--safe-b));left:16px;right:16px;
+  height:var(--nav-h);
+  background:rgba(10,15,26,.65);
+  backdrop-filter:saturate(180%) blur(40px);-webkit-backdrop-filter:saturate(180%) blur(40px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  display:flex;align-items:center;
+  padding:0 6px;
   z-index:100;
+  box-shadow:0 8px 32px rgba(0,0,0,.45), 0 0 0 .5px rgba(255,255,255,.06) inset;
 }
 .nb{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:6px 2px;background:none;border:none;color:var(--t4);
+  padding:8px 2px;background:none;border:none;color:var(--t4);
   font-size:.55rem;font-weight:600;letter-spacing:.3px;
   transition:color .2s;position:relative;
 }
 .nb.on{color:var(--or)}
 .nb svg{width:20px;height:20px;transition:transform .2s}
 .nb.on svg{filter:drop-shadow(0 0 5px var(--or));transform:scale(1.1)}
-.nb-dot{position:absolute;top:6px;right:calc(50% - 14px);width:6px;height:6px;border-radius:50%;background:var(--or);border:1.5px solid rgba(15,23,42,.85)}
+.nb-dot{position:absolute;top:6px;right:calc(50% - 14px);width:6px;height:6px;border-radius:50%;background:var(--or);border:1.5px solid rgba(10,15,26,.65)}
 
 /* ── CARDS ── */
-.card{background:var(--s9);border:1px solid var(--s8);border-radius:20px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
-.card.glass{background:rgba(15,23,42,.6);backdrop-filter:blur(16px);border-color:rgba(255,255,255,.06)}
+.card{background:var(--s9);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
+.card.glass{background:rgba(10,15,26,.5);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-color:rgba(255,255,255,.08)}
 .sec-title{font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t4);margin-bottom:10px;margin-top:18px}
 .sec-title:first-child{margin-top:4px}
 
