@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Force-nuke old SW caches before anything else loads
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v6')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v7')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -62,6 +62,9 @@ html,body{
   overscroll-behavior:none;
 }
 .screen::-webkit-scrollbar{display:none}
+
+/* ── 3D TILT CARDS ── */
+.tilt-card{transition:transform .15s ease-out;transform-style:preserve-3d;will-change:transform}
 
 /* ── DYNAMIC ISLAND ── */
 .dyn-island{
@@ -3141,6 +3144,7 @@ function renderWsSummary() {
       '</div>' +
       '<button class="ws-btn-save" onclick="wsSaveAndClose()">Salva e Chiudi</button>' +
     '</div>';
+  confetti();
 }
 
 // ── WORKOUT HISTORY ──────────────────────────────────
@@ -3595,6 +3599,7 @@ function updateXPandBadges() {
     newBadges.forEach((b, i) => {
       setTimeout(() => toast(b.ico + ' Badge sbloccato: ' + b.name + '!', 'or'), 300 + i * 800);
     });
+    confetti();
   }
 
   // Render badges grid
@@ -3914,6 +3919,94 @@ function diPause() {
   renderWsView();
   haptic();
 }
+
+// ── CONFETTI ───────────────────────────────────────
+function confetti() {
+  var cvs = document.createElement('canvas');
+  cvs.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none';
+  cvs.width = window.innerWidth; cvs.height = window.innerHeight;
+  document.body.appendChild(cvs);
+  var ctx = cvs.getContext('2d');
+  var colors = ['#f97316','#22c55e','#38bdf8','#a78bfa','#f43f5e','#facc15','#fff'];
+  var particles = [];
+  for (var i = 0; i < 40; i++) {
+    particles.push({
+      x: cvs.width * .5 + (Math.random() - .5) * cvs.width * .4,
+      y: cvs.height * .35,
+      vx: (Math.random() - .5) * 8,
+      vy: -Math.random() * 12 - 4,
+      w: 4 + Math.random() * 5,
+      h: 3 + Math.random() * 4,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * 360,
+      rv: (Math.random() - .5) * 12,
+      g: .25 + Math.random() * .15
+    });
+  }
+  var start = performance.now();
+  function frame(now) {
+    var t = now - start;
+    if (t > 1200) { document.body.removeChild(cvs); return; }
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    var alpha = t > 900 ? 1 - (t - 900) / 300 : 1;
+    ctx.globalAlpha = alpha;
+    particles.forEach(function(p) {
+      p.x += p.vx; p.y += p.vy; p.vy += p.g; p.rot += p.rv;
+      p.vx *= .99;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ── 3D TILT (GYROSCOPE) ────────────────────────────
+(function() {
+  var cards = [];
+  var tiltEnabled = false;
+
+  function initTilt() {
+    cards = document.querySelectorAll('#tab-home .card.glass');
+    cards.forEach(function(c) { c.classList.add('tilt-card'); });
+  }
+
+  function resetTilt() {
+    cards.forEach(function(c) { c.style.transform = ''; });
+  }
+
+  function handleOrientation(e) {
+    if (!tiltEnabled || S.tab !== 'home') return;
+    var beta = Math.max(-5, Math.min(5, (e.beta - 45) * 0.15));
+    var gamma = Math.max(-5, Math.min(5, e.gamma * 0.15));
+    cards.forEach(function(c) {
+      c.style.transform = 'perspective(800px) rotateX(' + (-beta).toFixed(2) + 'deg) rotateY(' + gamma.toFixed(2) + 'deg)';
+    });
+  }
+
+  function enableTilt() {
+    if (tiltEnabled) return;
+    initTilt();
+    tiltEnabled = true;
+    window.addEventListener('deviceorientation', handleOrientation);
+  }
+
+  // Request permission on iOS 13+
+  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    document.addEventListener('click', function _ask() {
+      DeviceOrientationEvent.requestPermission().then(function(r) {
+        if (r === 'granted') enableTilt();
+      }).catch(function() {});
+      document.removeEventListener('click', _ask);
+    }, { once: true });
+  } else if ('DeviceOrientationEvent' in window) {
+    setTimeout(enableTilt, 500);
+  }
+})();
 
 // ── ACTIVITY RINGS ─────────────────────────────────
 function updateRings() {
@@ -7217,7 +7310,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v6') caches.delete(name);
+        if (name !== 'aura-v7') caches.delete(name);
       });
     });
   }
