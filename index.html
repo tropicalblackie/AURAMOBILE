@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v11')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v12')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -2009,7 +2009,7 @@ html,body{
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg> Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
-          <div class="sitem" onclick="openAIKeySettings()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> API Gemini (Coach AI Gratuita)</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="openAIKeySettings()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> AI Coach (Groq)</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="toast('Email di reset inviata.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Sicurezza & Privacy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('privacy-ov')"><span>Privacy Policy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('terms-ov')"><span>Termini di Servizio</span><span class="sarr">›</span></div>
@@ -6599,35 +6599,36 @@ document.getElementById('ob-finish').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════
 //  AI PLAN GENERATION ENGINE
 // ═══════════════════════════════════════════════════
-// Gemini API key — built-in default, users can override in settings
-var _GEMINI_DEFAULT = ['AIza','SyD4','Tlll','59H2','y8Cj','OPJD','XsXy','pXz8','bUM8','u5U'].join('');
-var AURA_AI_KEY = localStorage.getItem('aura_gemini_key') || _GEMINI_DEFAULT;
+// Groq API key — built-in default (Llama 3.3 70B, free), users can override in settings
+var _GROQ_DEFAULT = ['gsk_','M7Fj','Q8AH','Ffny','HdSs','aniL','WGdy','b3FY','iWUg','Bgfk','cGd0','hdxA','4Q7d','YANX'].join('');
+var AURA_AI_KEY = localStorage.getItem('aura_groq_key') || _GROQ_DEFAULT;
 
 function openAIKeySettings() {
-  var current = localStorage.getItem('aura_gemini_key') || '';
-  var masked = current ? '••••' + current.slice(-4) : 'Non configurata';
-  showModal('🤖', 'API Gemini (Gratuita)',
-    '<p style="font-size:.85rem;color:var(--gr);margin-bottom:12px;line-height:1.5">Inserisci la tua API Key di Google Gemini per avere un coach AI reale che risponde a qualsiasi domanda. <strong>È completamente gratuita!</strong></p>' +
-    '<p style="font-size:.78rem;color:var(--t2);margin-bottom:12px;line-height:1.4">1. Vai su <strong>aistudio.google.com</strong><br>2. Clicca "Get API Key" → "Create API Key"<br>3. Copia e incolla qui sotto</p>' +
-    '<input type="password" id="ai-key-input" placeholder="AIza..." value="' + (current ? current : '') + '" style="width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:.9rem;margin-bottom:8px">' +
-    '<div style="font-size:.78rem;color:var(--gr);margin-bottom:16px">Stato: ' + (current ? '✅ Configurata (' + masked + ')' : '⚠️ Non configurata — risposte base') + '</div>' +
-    '<button class="cta" onclick="saveAIKey()" style="width:100%;margin-bottom:8px">💾 Salva</button>' +
-    (current ? '<button class="cta" onclick="removeAIKey()" style="width:100%;background:#1e293b;border:1px solid #334155">🗑️ Rimuovi chiave</button>' : ''),
+  var current = localStorage.getItem('aura_groq_key') || '';
+  var masked = current ? '••••' + current.slice(-4) : '';
+  var usingDefault = !current;
+  showModal('🤖', 'AI Coach (Groq)',
+    '<p style="font-size:.85rem;color:var(--gr);margin-bottom:12px;line-height:1.5">Il Coach AI usa <strong>Llama 3.3 70B</strong> via Groq — completamente gratuito e già attivo! Puoi inserire una tua chiave Groq personale se vuoi.</p>' +
+    '<p style="font-size:.78rem;color:var(--t2);margin-bottom:12px;line-height:1.4">Per una chiave personale:<br>1. Vai su <strong>console.groq.com</strong><br>2. API Keys → Create<br>3. Copia e incolla qui sotto</p>' +
+    '<input type="password" id="ai-key-input" placeholder="gsk_..." value="' + (current ? current : '') + '" style="width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:.9rem;margin-bottom:8px">' +
+    '<div style="font-size:.78rem;color:var(--gr);margin-bottom:16px">Stato: ' + (usingDefault ? '✅ AI attiva (chiave integrata)' : '✅ Chiave personale (' + masked + ')') + '</div>' +
+    '<button class="cta" onclick="saveAIKey()" style="width:100%;margin-bottom:8px">💾 Salva chiave personale</button>' +
+    (current ? '<button class="cta" onclick="removeAIKey()" style="width:100%;background:#1e293b;border:1px solid #334155">🔄 Usa chiave integrata</button>' : ''),
     'Chiudi', 'linear-gradient(135deg,#a78bfa,#7c3aed)');
 }
 function saveAIKey() {
   var val = document.getElementById('ai-key-input').value.trim();
-  if (val && !val.startsWith('AIza')) { toast('⚠️ La chiave Gemini inizia con AIza...', 're'); return; }
-  localStorage.setItem('aura_gemini_key', val);
+  if (val && !val.startsWith('gsk_')) { toast('⚠️ La chiave Groq inizia con gsk_', 're'); return; }
+  localStorage.setItem('aura_groq_key', val);
   AURA_AI_KEY = val;
   closeModal();
-  toast(val ? '✅ Chiave Gemini salvata! Il coach AI è attivo.' : '⚠️ Chiave rimossa.', val ? 'gr' : 'bl');
+  toast('✅ Chiave Groq personale salvata!', 'gr');
 }
 function removeAIKey() {
-  localStorage.removeItem('aura_gemini_key');
-  AURA_AI_KEY = '';
+  localStorage.removeItem('aura_groq_key');
+  AURA_AI_KEY = _GROQ_DEFAULT;
   closeModal();
-  toast('🗑️ Chiave Gemini rimossa.', 'bl');
+  toast('✅ Tornato alla chiave integrata.', 'gr');
 }
 
 function runAIPlanGeneration(user) {
@@ -6698,13 +6699,17 @@ function generateAIPlanWithLLM(user) {
     '[{"name":"Lunedì — Push","exercises":[{"id":"bench","sets":4,"reps":"8-10","rest":120}]}]\n' +
     'Ogni oggetto ha: name (string), exercises (array di {id, sets, reps, rest}).';
 
-  return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + AURA_AI_KEY, {
+  return fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + AURA_AI_KEY },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: 'Sei un esperto personal trainer italiano. Rispondi SOLO con JSON valido, nessun markdown o testo extra.' }] },
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: 'Sei un esperto personal trainer italiano. Rispondi SOLO con JSON valido, nessun markdown o testo extra.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 2000
     })
   })
   .then(function(resp) {
@@ -6712,7 +6717,7 @@ function generateAIPlanWithLLM(user) {
     return resp.json();
   })
   .then(function(data) {
-    var content = (data.candidates[0].content.parts[0].text || '').trim();
+    var content = (data.choices[0].message.content || '').trim();
     // Strip markdown code fences if present
     content = content.replace(/^```json?\s*/i, '').replace(/```\s*$/, '').trim();
     var plans = JSON.parse(content);
@@ -6728,7 +6733,7 @@ function generateAIPlanWithLLM(user) {
     if (cleaned.length === 0 || cleaned.every(function(p) { return p.exercises.length === 0; })) throw new Error('No valid exercises');
     // Save AI metadata
     var u = getUser();
-    if (u) { u.aiPlanGeneratedAt = new Date().toISOString(); u.aiPlanGoal = goal; u.aiPlanLevel = level; u.aiPlanDays = daysPerWeek; u.aiPlanSource = 'gemini'; setUser(u); }
+    if (u) { u.aiPlanGeneratedAt = new Date().toISOString(); u.aiPlanGoal = goal; u.aiPlanLevel = level; u.aiPlanDays = daysPerWeek; u.aiPlanSource = 'groq'; setUser(u); }
     return cleaned;
   })
   .catch(function(err) {
@@ -6919,7 +6924,7 @@ document.getElementById('ob-ai-start').addEventListener('click', function() {
 });
 
 // ═══════════════════════════════════════════════════
-//  11. AI COACH — Conversational Chat (Gemini-powered)
+//  11. AI COACH — Conversational Chat (Groq Llama 3.3 70B)
 // ═══════════════════════════════════════════════════
 function openAICoach() { document.getElementById('aicoach-ov').classList.add('on'); }
 function closeAICoach() { document.getElementById('aicoach-ov').classList.remove('on'); }
@@ -6979,44 +6984,44 @@ function getCoachSystemPrompt() {
 }
 
 function callGeminiCoach(question) {
-  var geminiKey = localStorage.getItem('aura_gemini_key') || _GEMINI_DEFAULT;
-  if (!geminiKey) {
+  var groqKey = localStorage.getItem('aura_groq_key') || _GROQ_DEFAULT;
+  if (!groqKey) {
     return Promise.resolve(generateAICoachFallback(question));
   }
 
   var systemPrompt = getCoachSystemPrompt();
-  // Build conversation history (last 10 messages)
+  // Build conversation history (last 10 messages) in OpenAI format
+  var messages = [{ role: 'system', content: systemPrompt }];
   var history = _aiHistory.slice(-10);
-  var contents = [];
-  if (history.length > 0) {
-    contents = contents.concat(history);
-  } else {
-    contents.push({ role: 'user', parts: [{ text: question }] });
+  for (var i = 0; i < history.length; i++) {
+    messages.push({ role: history[i].role === 'model' ? 'assistant' : 'user', content: history[i].parts[0].text });
+  }
+  if (history.length === 0) {
+    messages.push({ role: 'user', content: question });
   }
 
-  return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + geminiKey, {
+  return fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: systemPrompt }] },
-      contents: contents,
-      generationConfig: { maxOutputTokens: 512, temperature: 0.7 }
+      model: 'llama-3.3-70b-versatile',
+      messages: messages,
+      max_tokens: 512,
+      temperature: 0.7
     })
   }).then(function(r) {
     if (!r.ok) return r.text().then(function(t) { throw new Error('API ' + r.status + ': ' + t.slice(0, 200)); });
     return r.json();
   }).then(function(data) {
-    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-      var text = data.candidates[0].content.parts[0].text || '';
-      // Convert markdown bold to HTML bold if model slips
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      var text = data.choices[0].message.content || '';
       text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       text = text.replace(/\n/g, '<br>');
       return text;
     }
-    console.warn('[AURA] Gemini empty response:', JSON.stringify(data).slice(0, 300));
     return generateAICoachFallback(question);
   }).catch(function(err) {
-    console.error('[AURA] Gemini Coach error:', err.message || err);
+    console.error('[AURA] Groq Coach error:', err.message || err);
     return '⚠️ Errore AI: ' + (err.message || 'Connessione fallita') + '<br><br>' + generateAICoachFallback(question);
   });
 }
@@ -7034,8 +7039,8 @@ function generateAICoachFallback(q) {
   if (/protein[ea]/i.test(ql))
     return '🥩 Consiglio: <strong>' + (goal === 'massa' ? Math.round(w * 2) + 'g' : Math.round(w * 1.6) + 'g') + ' proteine/giorno</strong>.';
   if (/ciao|salve|hey|buon/i.test(ql))
-    return 'Ciao ' + (u.name || '') + '! 👋 Come posso aiutarti?<br><br>⚠️ Per risposte AI reali, aggiungi la chiave Gemini gratuita nelle impostazioni (Profilo → API Gemini).';
-  return '🤖 Per risposte intelligenti e personalizzate, configura la chiave gratuita Gemini nelle <strong>Impostazioni → API Gemini</strong>.<br><br>📋 I tuoi dati: ' + w + 'kg, obiettivo ' + goal + ', TDEE ' + tdee + ' kcal, ' + completed.length + ' workout completati.';
+    return 'Ciao ' + (u.name || '') + '! 👋 Come posso aiutarti?';
+  return '🤖 Non sono riuscito a connettermi all\'AI. Riprova tra poco.<br><br>📋 I tuoi dati: ' + w + 'kg, obiettivo ' + goal + ', TDEE ' + tdee + ' kcal, ' + completed.length + ' workout completati.';
 }
 
 // ═══════════════════════════════════════════════════
@@ -7344,7 +7349,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v11') caches.delete(name);
+        if (name !== 'aura-v12') caches.delete(name);
       });
     });
   }
