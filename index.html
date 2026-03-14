@@ -8,6 +8,11 @@
 <meta name="theme-color" content="#000000"/>
 <link rel="manifest" href="manifest.json"/>
 <title>AURA</title>
+<script>
+// Force-nuke old SW caches before anything else loads
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v3')caches.delete(k)})});}
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
