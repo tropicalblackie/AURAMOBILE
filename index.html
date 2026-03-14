@@ -8,14 +8,13 @@
 <meta name="theme-color" content="#020617"/>
 <link rel="manifest" href="manifest.json"/>
 <title>AURA</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js" crossorigin="anonymous"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/></noscript>
+<!-- CDN libs loaded lazily on first use (MediaPipe, Quagga, Firebase) -->
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -2435,6 +2434,61 @@ html,body{
 
 const S = { tab:'home', hydration:1.2, hydGoal:2.5, bpm:72 };
 
+// ── LAZY SCRIPT LOADER ─────────────────────────────
+var _loadedScripts = {};
+function loadScript(url) {
+  if (_loadedScripts[url]) return _loadedScripts[url];
+  _loadedScripts[url] = new Promise(function(resolve, reject) {
+    var s = document.createElement('script');
+    s.src = url;
+    s.crossOrigin = 'anonymous';
+    s.onload = resolve;
+    s.onerror = function() { delete _loadedScripts[url]; reject(new Error('Failed to load: ' + url)); };
+    document.head.appendChild(s);
+  });
+  return _loadedScripts[url];
+}
+function loadScripts(urls) {
+  return urls.reduce(function(chain, url) {
+    return chain.then(function() { return loadScript(url); });
+  }, Promise.resolve());
+}
+
+var _mediaPipeReady = null;
+function ensureMediaPipe() {
+  if (_mediaPipeReady) return _mediaPipeReady;
+  if (typeof Pose !== 'undefined' && typeof Camera !== 'undefined') {
+    _mediaPipeReady = Promise.resolve();
+    return _mediaPipeReady;
+  }
+  _mediaPipeReady = loadScripts([
+    'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
+    'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
+    'https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js'
+  ]);
+  return _mediaPipeReady;
+}
+
+var _quaggaReady = null;
+function ensureQuagga() {
+  if (_quaggaReady) return _quaggaReady;
+  if (typeof Quagga !== 'undefined') { _quaggaReady = Promise.resolve(); return _quaggaReady; }
+  _quaggaReady = loadScript('https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js');
+  return _quaggaReady;
+}
+
+var _firebaseReady = null;
+function ensureFirebase() {
+  if (_firebaseReady) return _firebaseReady;
+  if (typeof firebase !== 'undefined' && firebase.apps) { _firebaseReady = Promise.resolve(); return _firebaseReady; }
+  _firebaseReady = loadScripts([
+    'https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js',
+    'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js'
+  ]);
+  return _firebaseReady;
+}
+
 // ── EXERCISE LIBRARY DATA ───────────────────────
 const EXERCISES = [
   // PETTO
@@ -3484,6 +3538,7 @@ document.querySelectorAll('.nb').forEach(btn => {
     document.getElementById('tab-' + t).classList.add('on');
     document.getElementById('screen').scrollTop = 0;
     S.tab = t;
+    if (t === 'home') startBpmSim(); else stopBpmSim();
     if (t === 'workout') renderWorkoutTab();
   });
 });
@@ -3631,10 +3686,17 @@ document.getElementById('add-water').addEventListener('click', function() {
 updateHydro();
 
 // ── BPM ────────────────────────────────────────────
-setInterval(() => {
-  S.bpm = 68 + Math.floor(Math.random() * 12);
-  const a = document.getElementById('bpm-val'); if (a) a.textContent = S.bpm + ' BPM';
-}, 3000);
+var _bpmInterval = null;
+function startBpmSim() {
+  if (_bpmInterval) return;
+  _bpmInterval = setInterval(() => {
+    S.bpm = 68 + Math.floor(Math.random() * 12);
+    const a = document.getElementById('bpm-val'); if (a) a.textContent = S.bpm + ' BPM';
+  }, 3000);
+}
+function stopBpmSim() {
+  if (_bpmInterval) { clearInterval(_bpmInterval); _bpmInterval = null; }
+}
 
 // ── WORKOUT ────────────────────────────────────────
 document.getElementById('start-btn').addEventListener('click', function() {
@@ -4072,6 +4134,16 @@ async function startCamera() {
   var video = document.getElementById('cam-video');
   var canvas = document.getElementById('cam-canvas');
   var skel = document.getElementById('skel-overlay');
+
+  // Lazy-load MediaPipe libs on first use
+  try {
+    document.getElementById('cam-status-badge').textContent = 'Caricamento AI…';
+    await ensureMediaPipe();
+  } catch(e) {
+    toast('⚠ Errore caricamento MediaPipe', 're');
+    document.getElementById('cam-status-badge').textContent = 'Errore AI';
+    return;
+  }
   try {
     cameraStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
@@ -4289,6 +4361,10 @@ function initSocial() {
   SOCIAL.initialized = true;
   requestGeo();
   if (!FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.projectId) { showSocialSetup(); return; }
+  // Lazy-load Firebase on first social tab use
+  ensureFirebase().then(function() { _initFirebase(); }).catch(function() { showSocialSetup(); });
+}
+function _initFirebase() {
   try {
     if (typeof firebase === 'undefined') { showSocialSetup(); return; }
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
@@ -5268,13 +5344,24 @@ function closeFoodDetail() {
 function openBarcodeScanner() {
   var ov = document.getElementById('barcode-ov');
   ov.classList.add('on');
-  document.getElementById('barcode-status').textContent = 'Avviando la fotocamera…';
+  document.getElementById('barcode-status').textContent = 'Caricamento scanner…';
 
+  // Lazy-load Quagga on first use
+  ensureQuagga().then(function() {
+    _startQuaggaScanner();
+  }).catch(function() {
+    document.getElementById('barcode-status').textContent = '⚠ Scanner non disponibile';
+    setTimeout(function() { closeBarcodeScanner(); }, 2000);
+  });
+}
+
+function _startQuaggaScanner() {
   if (typeof Quagga === 'undefined') {
     document.getElementById('barcode-status').textContent = '⚠ Scanner non disponibile';
     setTimeout(function() { closeBarcodeScanner(); }, 2000);
     return;
   }
+  document.getElementById('barcode-status').textContent = 'Avviando la fotocamera…';
 
   Quagga.init({
     inputStream: {
@@ -6103,12 +6190,13 @@ var AURA_AI_KEY = localStorage.getItem('aura_ai_key') || '';
 function openAIKeySettings() {
   var current = localStorage.getItem('aura_ai_key') || '';
   var masked = current ? '••••' + current.slice(-4) : 'Non configurata';
-  openModal('🤖', 'API OpenAI',
+  showModal('🤖', 'API OpenAI',
     '<p style="font-size:.85rem;color:var(--gr);margin-bottom:12px;line-height:1.5">Inserisci la tua API Key di OpenAI per generare piani di allenamento con intelligenza artificiale reale. Senza chiave, usiamo un algoritmo locale intelligente.</p>' +
     '<input type="password" id="ai-key-input" placeholder="sk-..." value="' + (current ? current : '') + '" style="width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:.9rem;margin-bottom:8px">' +
     '<div style="font-size:.78rem;color:var(--gr);margin-bottom:16px">Stato: ' + (current ? '✅ Configurata (' + masked + ')' : '⚠️ Non configurata — algoritmo locale') + '</div>' +
     '<button class="cta" onclick="saveAIKey()" style="width:100%;margin-bottom:8px">💾 Salva</button>' +
-    (current ? '<button class="cta" onclick="removeAIKey()" style="width:100%;background:#1e293b;border:1px solid #334155">🗑️ Rimuovi chiave</button>' : ''));
+    (current ? '<button class="cta" onclick="removeAIKey()" style="width:100%;background:#1e293b;border:1px solid #334155">🗑️ Rimuovi chiave</button>' : ''),
+    'Chiudi', 'linear-gradient(135deg,#a78bfa,#7c3aed)');
 }
 function saveAIKey() {
   var val = document.getElementById('ai-key-input').value.trim();
@@ -6968,6 +7056,7 @@ function storeCheckout() {
 (function initAuth() {
   const user = getUser();
   updateProfileStats();
+  startBpmSim(); // Start BPM sim only after DOM is ready, home tab is default
   if (user && !user._needsOnboarding) {
     applyUserData(user);
     hideAuth();

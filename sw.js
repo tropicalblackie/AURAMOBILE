@@ -1,13 +1,8 @@
 // AURA Service Worker — Offline Mode
-const CACHE_NAME = 'aura-v1';
+const CACHE_NAME = 'aura-v2';
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
-  'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap',
-  'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
-  'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
-  'https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js',
-  'https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js'
+  '/index.html'
 ];
 
 // Install — cache core assets
