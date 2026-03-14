@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v8')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v9')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -2009,7 +2009,7 @@ html,body{
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg> Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
-          <div class="sitem" onclick="openAIKeySettings()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> API OpenAI (Piano AI)</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="openAIKeySettings()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> API Gemini (Coach AI Gratuita)</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="toast('Email di reset inviata.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Sicurezza & Privacy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('privacy-ov')"><span>Privacy Policy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('terms-ov')"><span>Termini di Servizio</span><span class="sarr">›</span></div>
@@ -6599,34 +6599,34 @@ document.getElementById('ob-finish').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════
 //  AI PLAN GENERATION ENGINE
 // ═══════════════════════════════════════════════════
-// ⚠️ Set your OpenAI API key here for real AI-generated plans.
-// Without a key, falls back to the local smart algorithm.
-var AURA_AI_KEY = localStorage.getItem('aura_ai_key') || '';
+// ⚠️ Gemini API key for real AI coach (FREE at aistudio.google.com)
+var AURA_AI_KEY = localStorage.getItem('aura_gemini_key') || '';
 
 function openAIKeySettings() {
-  var current = localStorage.getItem('aura_ai_key') || '';
+  var current = localStorage.getItem('aura_gemini_key') || '';
   var masked = current ? '••••' + current.slice(-4) : 'Non configurata';
-  showModal('🤖', 'API OpenAI',
-    '<p style="font-size:.85rem;color:var(--gr);margin-bottom:12px;line-height:1.5">Inserisci la tua API Key di OpenAI per generare piani di allenamento con intelligenza artificiale reale. Senza chiave, usiamo un algoritmo locale intelligente.</p>' +
-    '<input type="password" id="ai-key-input" placeholder="sk-..." value="' + (current ? current : '') + '" style="width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:.9rem;margin-bottom:8px">' +
-    '<div style="font-size:.78rem;color:var(--gr);margin-bottom:16px">Stato: ' + (current ? '✅ Configurata (' + masked + ')' : '⚠️ Non configurata — algoritmo locale') + '</div>' +
+  showModal('🤖', 'API Gemini (Gratuita)',
+    '<p style="font-size:.85rem;color:var(--gr);margin-bottom:12px;line-height:1.5">Inserisci la tua API Key di Google Gemini per avere un coach AI reale che risponde a qualsiasi domanda. <strong>È completamente gratuita!</strong></p>' +
+    '<p style="font-size:.78rem;color:var(--t2);margin-bottom:12px;line-height:1.4">1. Vai su <strong>aistudio.google.com</strong><br>2. Clicca "Get API Key" → "Create API Key"<br>3. Copia e incolla qui sotto</p>' +
+    '<input type="password" id="ai-key-input" placeholder="AIza..." value="' + (current ? current : '') + '" style="width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:.9rem;margin-bottom:8px">' +
+    '<div style="font-size:.78rem;color:var(--gr);margin-bottom:16px">Stato: ' + (current ? '✅ Configurata (' + masked + ')' : '⚠️ Non configurata — risposte base') + '</div>' +
     '<button class="cta" onclick="saveAIKey()" style="width:100%;margin-bottom:8px">💾 Salva</button>' +
     (current ? '<button class="cta" onclick="removeAIKey()" style="width:100%;background:#1e293b;border:1px solid #334155">🗑️ Rimuovi chiave</button>' : ''),
     'Chiudi', 'linear-gradient(135deg,#a78bfa,#7c3aed)');
 }
 function saveAIKey() {
   var val = document.getElementById('ai-key-input').value.trim();
-  if (val && !val.startsWith('sk-')) { toast('⚠️ La chiave deve iniziare con sk-', 're'); return; }
-  localStorage.setItem('aura_ai_key', val);
+  if (val && !val.startsWith('AIza')) { toast('⚠️ La chiave Gemini inizia con AIza...', 're'); return; }
+  localStorage.setItem('aura_gemini_key', val);
   AURA_AI_KEY = val;
   closeModal();
-  toast(val ? '✅ API Key salvata!' : '⚠️ Chiave rimossa, useremo l\'algoritmo locale.', val ? 'gr' : 'bl');
+  toast(val ? '✅ Chiave Gemini salvata! Il coach AI è attivo.' : '⚠️ Chiave rimossa.', val ? 'gr' : 'bl');
 }
 function removeAIKey() {
-  localStorage.removeItem('aura_ai_key');
+  localStorage.removeItem('aura_gemini_key');
   AURA_AI_KEY = '';
   closeModal();
-  toast('🗑️ API Key rimossa. Useremo l\'algoritmo locale.', 'bl');
+  toast('🗑️ Chiave Gemini rimossa.', 'bl');
 }
 
 function runAIPlanGeneration(user) {
@@ -6697,17 +6697,13 @@ function generateAIPlanWithLLM(user) {
     '[{"name":"Lunedì — Push","exercises":[{"id":"bench","sets":4,"reps":"8-10","rest":120}]}]\n' +
     'Ogni oggetto ha: name (string), exercises (array di {id, sets, reps, rest}).';
 
-  return fetch('https://api.openai.com/v1/chat/completions', {
+  return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + AURA_AI_KEY, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + AURA_AI_KEY },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: 'Sei un esperto personal trainer italiano. Rispondi SOLO con JSON valido, nessun markdown o testo extra.' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7,
-      max_tokens: 2000
+      systemInstruction: { parts: [{ text: 'Sei un esperto personal trainer italiano. Rispondi SOLO con JSON valido, nessun markdown o testo extra.' }] },
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
     })
   })
   .then(function(resp) {
@@ -6715,7 +6711,7 @@ function generateAIPlanWithLLM(user) {
     return resp.json();
   })
   .then(function(data) {
-    var content = data.choices[0].message.content.trim();
+    var content = (data.candidates[0].content.parts[0].text || '').trim();
     // Strip markdown code fences if present
     content = content.replace(/^```json?\s*/i, '').replace(/```\s*$/, '').trim();
     var plans = JSON.parse(content);
@@ -6731,7 +6727,7 @@ function generateAIPlanWithLLM(user) {
     if (cleaned.length === 0 || cleaned.every(function(p) { return p.exercises.length === 0; })) throw new Error('No valid exercises');
     // Save AI metadata
     var u = getUser();
-    if (u) { u.aiPlanGeneratedAt = new Date().toISOString(); u.aiPlanGoal = goal; u.aiPlanLevel = level; u.aiPlanDays = daysPerWeek; u.aiPlanSource = 'openai'; setUser(u); }
+    if (u) { u.aiPlanGeneratedAt = new Date().toISOString(); u.aiPlanGoal = goal; u.aiPlanLevel = level; u.aiPlanDays = daysPerWeek; u.aiPlanSource = 'gemini'; setUser(u); }
     return cleaned;
   })
   .catch(function(err) {
@@ -6922,10 +6918,12 @@ document.getElementById('ob-ai-start').addEventListener('click', function() {
 });
 
 // ═══════════════════════════════════════════════════
-//  11. AI COACH — Conversational Chat
+//  11. AI COACH — Conversational Chat (Gemini-powered)
 // ═══════════════════════════════════════════════════
 function openAICoach() { document.getElementById('aicoach-ov').classList.add('on'); }
 function closeAICoach() { document.getElementById('aicoach-ov').classList.remove('on'); }
+
+var _aiHistory = [];
 
 document.getElementById('aicoach-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') sendAICoachMsg();
@@ -6940,71 +6938,96 @@ function sendAICoachMsg() {
   msgs.innerHTML += '<div class="aicoach-msg user"><div class="aicoach-bubble user">' + q.replace(/</g,'&lt;') + '</div></div>';
   msgs.innerHTML += '<div class="aicoach-msg bot" id="aicoach-typing"><div class="aicoach-typing"><span></span><span></span><span></span></div></div>';
   msgs.scrollTop = msgs.scrollHeight;
-  setTimeout(function() {
+
+  _aiHistory.push({ role: 'user', parts: [{ text: q }] });
+
+  callGeminiCoach(q).then(function(answer) {
     var typing = document.getElementById('aicoach-typing');
     if (typing) typing.remove();
-    var answer = generateAICoachAnswer(q);
+    _aiHistory.push({ role: 'model', parts: [{ text: answer }] });
     msgs.innerHTML += '<div class="aicoach-msg bot"><div class="aicoach-bubble bot">' + answer + '</div></div>';
     msgs.scrollTop = msgs.scrollHeight;
-  }, 600 + Math.random() * 800);
+  });
 }
 
-function generateAICoachAnswer(q) {
-  var ql = q.toLowerCase();
+function getCoachSystemPrompt() {
   var u = getUser() || {};
   var meals = JSON.parse(localStorage.getItem('aura_meals') || '[]');
   var completed = JSON.parse(localStorage.getItem('aura_completed_workouts') || '[]');
   var plans = getWorkouts();
-  var prog = JSON.parse(localStorage.getItem('aura_progress') || '{"peso":[],"forza":[],"resistenza":[]}');
+  var w = u.weight || 70, h = u.height || 175, age = u.age || 25, goal = u.goal || 'massa';
+  var tdee = Math.round((u.sex === 'F' ? 10*w + 6.25*h - 5*age - 161 : 10*w + 6.25*h - 5*age + 5) * 1.55);
+  var lastWorkout = completed.length > 0 ? completed[completed.length - 1] : null;
+
+  return 'Sei AURA Coach, un personal trainer e nutrizionista AI esperto dentro l\'app AURA Fitness. ' +
+    'Rispondi SEMPRE in italiano. Sii conciso, motivante e pratico. Usa emoji con moderazione. ' +
+    'Formatta con <br> per gli a capo e <strong> per il grassetto (è HTML, non markdown). ' +
+    'Non usare mai asterischi ** per il grassetto. ' +
+    'Ecco i dati dell\'utente:\n' +
+    '- Nome: ' + (u.name || 'Utente') + '\n' +
+    '- Sesso: ' + (u.sex === 'F' ? 'Donna' : 'Uomo') + '\n' +
+    '- Peso: ' + w + 'kg | Altezza: ' + h + 'cm | Età: ' + age + '\n' +
+    '- Obiettivo: ' + goal + '\n' +
+    '- TDEE stimato: ' + tdee + ' kcal/giorno\n' +
+    '- Schede create: ' + plans.length + '\n' +
+    '- Workout completati: ' + completed.length + '\n' +
+    '- Pasti registrati oggi: ' + meals.filter(function(m) { return m.date === new Date().toISOString().slice(0,10); }).length + '\n' +
+    (lastWorkout ? '- Ultimo workout: ' + lastWorkout.planName + ' (' + lastWorkout.date + ')\n' : '') +
+    '- Idratazione: ' + (S.hydration || 0) + '/' + (S.hydGoal || 2.5) + 'L\n' +
+    'Rispondi in modo personalizzato basandoti su questi dati reali.';
+}
+
+function callGeminiCoach(question) {
+  var geminiKey = localStorage.getItem('aura_gemini_key') || '';
+  if (!geminiKey) {
+    return Promise.resolve(generateAICoachFallback(question));
+  }
+
+  var systemPrompt = getCoachSystemPrompt();
+  var contents = [{ role: 'user', parts: [{ text: systemPrompt }] }, { role: 'model', parts: [{ text: 'Capito! Sono AURA Coach, il tuo personal trainer AI. Come posso aiutarti?' }] }];
+  // Add conversation history (last 10 messages)
+  var history = _aiHistory.slice(-10);
+  contents = contents.concat(history);
+
+  return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(geminiKey), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: contents,
+      generationConfig: { maxOutputTokens: 512, temperature: 0.7 }
+    })
+  }).then(function(r) {
+    if (!r.ok) throw new Error('API ' + r.status);
+    return r.json();
+  }).then(function(data) {
+    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+      var text = data.candidates[0].content.parts[0].text || '';
+      // Convert markdown bold to HTML bold if model slips
+      text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\n/g, '<br>');
+      return text;
+    }
+    return generateAICoachFallback(question);
+  }).catch(function() {
+    return generateAICoachFallback(question);
+  });
+}
+
+function generateAICoachFallback(q) {
+  var ql = q.toLowerCase();
+  var u = getUser() || {};
+  var completed = JSON.parse(localStorage.getItem('aura_completed_workouts') || '[]');
+  var plans = getWorkouts();
   var w = u.weight || 70, h = u.height || 175, age = u.age || 25, goal = u.goal || 'massa';
   var tdee = Math.round((u.sex === 'F' ? 10*w + 6.25*h - 5*age - 161 : 10*w + 6.25*h - 5*age + 5) * 1.55);
 
-  if (/quant[ei]\s*(calorie|kcal)|fabbisogno|tdee/i.test(ql)) {
-    return '🔥 Il tuo TDEE stimato è di <strong>' + tdee + ' kcal/giorno</strong> (basato su ' + w + 'kg, ' + h + 'cm, ' + age + ' anni).<br><br>' +
-      (goal === 'dimagrimento' ? 'Per dimagrire, punta a <strong>' + Math.round(tdee * 0.8) + ' kcal</strong> (-20%).' :
-       goal === 'massa' ? 'Per la massa, punta a <strong>' + Math.round(tdee * 1.15) + ' kcal</strong> (+15% surplus).' :
-       'Per il tono, mantieni circa <strong>' + tdee + ' kcal</strong>.');
-  }
-  if (/protein[ea]|quant[ei]\s*protein/i.test(ql)) {
-    var pTarget = goal === 'massa' ? Math.round(w * 2) : Math.round(w * 1.6);
-    return '🥩 Per il tuo obiettivo (' + goal + '), ti consiglio <strong>' + pTarget + 'g di proteine/giorno</strong> (' + (goal==='massa'?'2':'1.6') + 'g/kg).<br><br>Fonti top: pollo, uova, pesce, legumi, whey protein.';
-  }
-  if (/carboidrat[io]|carbo/i.test(ql)) {
-    var cTarget = Math.round((tdee * (goal === 'dimagrimento' ? 0.35 : 0.45)) / 4);
-    return '🍚 Carbo consigliati: <strong>' + cTarget + 'g/giorno</strong>. ' + (goal === 'dimagrimento' ? 'Tienili moderati per il deficit.' : 'Fondamentali per energia e crescita muscolare.');
-  }
-  if (/grass[io]|lipid[io]/i.test(ql)) {
-    var fTarget = Math.round((tdee * 0.25) / 9);
-    return '🥑 Grassi consigliati: <strong>' + fTarget + 'g/giorno</strong> (~25% delle calorie). Preferisci olio d\'oliva, avocado, frutta secca, pesce azzurro.';
-  }
-  if (/allenam|workout|scheda|eserciz/i.test(ql)) {
-    return '💪 Hai <strong>' + plans.length + ' schede</strong> create e <strong>' + completed.length + ' allenamenti</strong> completati.<br><br>' +
-      (completed.length === 0 ? 'Non hai ancora completato allenamenti — inizia oggi! Vai nella tab Workout.' :
-       'Ultimo allenamento: ' + (completed[completed.length-1].date || 'recente') + '. Continua così!') +
-      '<br><br>Per il tuo obiettivo (' + goal + '), consiglio ' + (goal==='massa'?'4-5':'3-4') + ' sessioni a settimana.';
-  }
-  if (/peso|dimagr|ingras|massa grassa/i.test(ql)) {
-    var lastW = prog.peso.length > 0 ? prog.peso[prog.peso.length-1].value : w;
-    return '⚖️ Il tuo peso attuale è <strong>' + lastW + 'kg</strong>.' +
-      (prog.peso.length > 1 ? '<br>Variazione recente: ' + (lastW - prog.peso[0].value > 0 ? '+' : '') + (lastW - prog.peso[0].value).toFixed(1) + 'kg dal primo tracciamento.' : '') +
-      '<br><br>' + (goal==='dimagrimento'?'Per perdere peso in modo sano, punta a -0.5/1kg a settimana con un deficit moderato.':'Per aumentare massa, punta a +0.25/0.5kg a settimana con surplus e allenamento pesante.');
-  }
-  if (/recupero|riposo|rest|overtraining|stanco|fatica/i.test(ql)) {
-    return '😴 Il recupero è fondamentale!<br><br>✅ Dormi <strong>7-9 ore</strong><br>✅ Riposa ogni muscolo <strong>48-72h</strong><br>✅ Idratati bene (almeno 2L/giorno)<br>✅ Stretching post-workout<br><br>Se ti senti molto stanco, fai un giorno di deload o mobilità.';
-  }
-  if (/integrator[ie]|creatina|whey|bcaa|supplement/i.test(ql)) {
-    return '💊 Integratori consigliati:<br><br>🔸 <strong>Creatina monoidrata</strong> (5g/giorno) — il più studiato, migliora forza<br>🔸 <strong>Whey Protein</strong> — post-workout per raggiungere il target proteico<br>🔸 <strong>Vitamina D</strong> — se non ti esponi al sole<br>🔸 <strong>Omega-3</strong> — anti-infiammatorio<br><br>❌ Non servono BCAA se assumi abbastanza proteine.';
-  }
-  if (/stretching|mobilit|flessibilit/i.test(ql)) {
-    return '🧘 La mobilità è importante quanto l\'allenamento!<br><br>✅ <strong>Pre-workout</strong>: mobilità dinamica (5-10 min)<br>✅ <strong>Post-workout</strong>: stretching statico (10-15 min)<br>✅ Foam roller per le aree tese<br>✅ Yoga 1-2x/settimana se possibile';
-  }
-  if (/motivazione|non ce la faccio|mollo|arrendo|difficile/i.test(ql)) {
-    return '🔥 Capisco che può essere difficile, ma sei già qui — e questo conta!<br><br>💡 Ricorda: i progressi non sono lineari. Anche un allenamento breve è meglio di zero.<br><br>🎯 Focus su piccoli obiettivi: "oggi faccio 3 serie di squat". Tutto il resto è bonus.<br><br>Hai già completato <strong>' + completed.length + ' workout</strong>. Non fermarti ora! 💪';
-  }
-  if (/ciao|salve|hey|buongiorno|buonasera/i.test(ql)) {
-    return 'Ciao ' + (u.name || '') + '! 👋 Come posso aiutarti oggi? Chiedimi di dieta, esercizi, recupero, supplementi, o qualsiasi dubbio fitness!';
-  }
-  return '🤖 Buona domanda! Ecco cosa so di te:<br><br>• Obiettivo: <strong>' + goal + '</strong><br>• Peso: <strong>' + w + 'kg</strong> | Altezza: <strong>' + h + 'cm</strong><br>• TDEE: <strong>' + tdee + ' kcal</strong><br>• Schede: <strong>' + plans.length + '</strong> | Workout completati: <strong>' + completed.length + '</strong><br><br>Prova a chiedermi qualcosa di specifico come "quante proteine devo assumere?" o "come miglioro il recupero?"';
+  if (/quant[ei]\s*(calorie|kcal)|fabbisogno|tdee/i.test(ql))
+    return '🔥 TDEE stimato: <strong>' + tdee + ' kcal/giorno</strong>. ' + (goal === 'dimagrimento' ? 'Per dimagrire: ~' + Math.round(tdee * 0.8) + ' kcal (-20%).' : goal === 'massa' ? 'Per massa: ~' + Math.round(tdee * 1.15) + ' kcal (+15%).' : 'Mantieni ~' + tdee + ' kcal.');
+  if (/protein[ea]/i.test(ql))
+    return '🥩 Consiglio: <strong>' + (goal === 'massa' ? Math.round(w * 2) + 'g' : Math.round(w * 1.6) + 'g') + ' proteine/giorno</strong>.';
+  if (/ciao|salve|hey|buon/i.test(ql))
+    return 'Ciao ' + (u.name || '') + '! 👋 Come posso aiutarti?<br><br>⚠️ Per risposte AI reali, aggiungi la chiave Gemini gratuita nelle impostazioni (Profilo → API Gemini).';
+  return '🤖 Per risposte intelligenti e personalizzate, configura la chiave gratuita Gemini nelle <strong>Impostazioni → API Gemini</strong>.<br><br>📋 I tuoi dati: ' + w + 'kg, obiettivo ' + goal + ', TDEE ' + tdee + ' kcal, ' + completed.length + ' workout completati.';
 }
 
 // ═══════════════════════════════════════════════════
@@ -7313,7 +7336,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v8') caches.delete(name);
+        if (name !== 'aura-v9') caches.delete(name);
       });
     });
   }

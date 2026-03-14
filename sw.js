@@ -1,5 +1,5 @@
 // AURA Service Worker — Offline Mode
-const CACHE_NAME = 'aura-v8';
+const CACHE_NAME = 'aura-v9';
 const STATIC_ASSETS = [
   '/',
   '/index.html'
