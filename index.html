@@ -6,12 +6,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#020617"/>
+<link rel="manifest" href="manifest.json"/>
 <title>AURA</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -61,7 +65,7 @@ html,body{
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 20px 10px;flex-shrink:0;
 }
-.topbar-logo{font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-logo{font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .notif-btn{width:36px;height:36px;border-radius:50%;background:var(--s8);border:1px solid var(--s7);display:flex;align-items:center;justify-content:center;position:relative}
 .notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--or);border:1.5px solid var(--bg)}
@@ -97,13 +101,13 @@ html,body{
   z-index:100;
 }
 .nb{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:8px 4px;background:none;border:none;color:var(--t4);
-  font-size:.6rem;font-weight:600;letter-spacing:.3px;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 2px;background:none;border:none;color:var(--t4);
+  font-size:.55rem;font-weight:600;letter-spacing:.3px;
   transition:color .2s;position:relative;
 }
 .nb.on{color:var(--or)}
-.nb svg{width:22px;height:22px;transition:transform .2s}
+.nb svg{width:20px;height:20px;transition:transform .2s}
 .nb.on svg{filter:drop-shadow(0 0 5px var(--or));transform:scale(1.1)}
 .nb-dot{position:absolute;top:6px;right:calc(50% - 14px);width:6px;height:6px;border-radius:50%;background:var(--or);border:1.5px solid rgba(15,23,42,.85)}
 
@@ -278,7 +282,6 @@ html,body{
 .mk{font-size:.65rem;color:var(--t3);margin:3px 0 6px}
 .cal-hd{display:flex;justify-content:space-between;font-size:.74rem;color:var(--t2);margin-bottom:4px}
 
-.meal-list{}
 .mi2{display:flex;align-items:center;gap:12px;padding:.75rem 0;border-bottom:1px solid var(--s8)}
 .mi2:last-child{border-bottom:none}
 .mi2.pend{opacity:.5}
@@ -448,6 +451,41 @@ html,body{
 .lpts{font-family:var(--fd);font-weight:800;font-size:.78rem;color:var(--t3)}
 .li.me .lpts{color:var(--or)}
 
+/* ── SOCIAL REAL-TIME ── */
+.social-setup{padding:24px;text-align:center;color:var(--t3);font-size:.82rem;line-height:1.6}
+.social-setup code{background:var(--s8);padding:2px 6px;border-radius:4px;font-size:.72rem;color:var(--or)}
+.social-setup ol{font-size:.78rem;line-height:2}
+.radius-row{display:flex;align-items:center;gap:8px;padding:4px 20px 10px;font-size:.78rem;color:var(--t3)}
+.radius-row input[type=range]{flex:1;accent-color:var(--or);height:4px}
+.radius-val{font-weight:700;color:var(--or);min-width:42px;text-align:right}
+.no-users-msg{text-align:center;padding:30px 20px;color:var(--t3);font-size:.82rem}
+.matches-sec{margin-bottom:16px}
+.match-item{display:flex;align-items:center;gap:12px;padding:.75rem;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:8px;cursor:pointer;transition:background .18s}
+.match-item:active{background:var(--s8)}
+.match-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--or3));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex-shrink:0;font-family:var(--fd)}
+.match-info{flex:1;overflow:hidden}
+.match-name{font-weight:700;font-size:.88rem}
+.match-preview{font-size:.72rem;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.match-time{font-size:.62rem;color:var(--t4);flex-shrink:0}
+.chat-ov{position:fixed;inset:0;background:var(--bg);z-index:1500;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.chat-ov.on{transform:translateX(0)}
+.chat-topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--s8);flex-shrink:0}
+.chat-back{width:36px;height:36px;border-radius:50%;background:var(--s8);border:none;display:flex;align-items:center;justify-content:center;color:var(--t1);cursor:pointer}
+.chat-uname{font-family:var(--fd);font-weight:800;font-size:1rem;flex:1}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.chat-day{text-align:center;font-size:.65rem;color:var(--t4);margin:8px 0}
+.chat-bub{max-width:78%;padding:10px 14px;border-radius:16px;font-size:.82rem;line-height:1.5;word-break:break-word}
+.chat-bub.them{background:var(--s8);color:var(--t1);border-bottom-left-radius:4px;align-self:flex-start}
+.chat-bub.me{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.chat-bub-time{font-size:.58rem;opacity:.6;margin-top:3px}
+.chat-input-row{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--s8);flex-shrink:0;background:var(--bg)}
+.chat-input{flex:1;padding:10px 14px;background:var(--s8);border:1px solid var(--s7);border-radius:24px;color:var(--t1);font-size:.85rem;outline:none;font-family:var(--fb)}
+.chat-input::placeholder{color:var(--t4)}
+.chat-send{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--or2));border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.chat-send:active{transform:scale(.93)}
+.geo-status{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--gr);padding:0 20px 6px;transition:opacity .4s}
+.geo-status.err{color:#ef4444}
+
 /* ══════ PROFILE ══════ */
 .prof-header{padding:14px 20px;display:flex;align-items:center;gap:14px}
 .prof-name{font-family:var(--fd);font-size:1.3rem;font-weight:800}
@@ -529,7 +567,7 @@ html,body{
 }
 .auth-logo{
   font-family:var(--fd);font-size:2.4rem;font-weight:800;letter-spacing:5px;
-  background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   margin-bottom:6px;
 }
 .auth-tagline{font-size:.82rem;color:var(--t3);margin-bottom:36px;text-align:center}
@@ -633,7 +671,7 @@ html,body{
   padding:.75rem 1rem;background:var(--s8);border:1px solid var(--s7);
   border-radius:12px;color:var(--t1);font-size:1.1rem;font-family:var(--fd);
   font-weight:700;text-align:center;outline:none;transition:border-color .2s;
-  -moz-appearance:textfield;
+  -moz-appearance:textfield;appearance:textfield;
 }
 .ob-input::-webkit-outer-spin-button,.ob-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .ob-input:focus{border-color:var(--or);box-shadow:0 0 0 3px #f9731618}
@@ -654,6 +692,30 @@ html,body{
 }
 .ob-sum-label{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .ob-sum-val{font-family:var(--fd);font-weight:800;font-size:.95rem}
+
+/* ── ONBOARDING AI STEP ── */
+.ob-ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:16px;padding:20px}
+.ob-ai-spinner{width:64px;height:64px;border-radius:50%;border:4px solid var(--s7);border-top-color:var(--or);animation:aiSpin 1s linear infinite}
+@keyframes aiSpin{to{transform:rotate(360deg)}}
+.ob-ai-title{font-family:var(--fd);font-size:1.3rem;font-weight:800;line-height:1.3}
+.ob-ai-sub{font-size:.82rem;color:var(--t3);line-height:1.5;max-width:280px}
+.ob-ai-steps{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;margin-top:8px}
+.ob-ai-step{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--t3);transition:all .4s}
+.ob-ai-step.done{color:var(--gr)}
+.ob-ai-step.active{color:var(--or);font-weight:600}
+.ob-ai-step-ico{width:24px;height:24px;border-radius:50%;background:var(--s8);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;transition:all .4s}
+.ob-ai-step.done .ob-ai-step-ico{background:#22c55e20;color:var(--gr)}
+.ob-ai-step.active .ob-ai-step-ico{background:#f9731620;color:var(--or);box-shadow:0 0 8px #f9731640}
+.ob-ai-done{display:none;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:20px}
+.ob-ai-done.on{display:flex;animation:fadeUp .4s ease forwards}
+.ob-ai-done-emoji{font-size:3rem}
+.ob-ai-done-title{font-family:var(--fd);font-size:1.5rem;font-weight:800;color:var(--or)}
+.ob-ai-done-sub{font-size:.82rem;color:var(--t3);line-height:1.5}
+.ob-ai-plan-preview{width:100%;display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.ob-ai-plan-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--s9);border:1px solid var(--s8);border-radius:14px}
+.ob-ai-plan-day{font-family:var(--fd);font-weight:800;font-size:.78rem;color:var(--or);min-width:42px}
+.ob-ai-plan-name{font-weight:600;font-size:.82rem;flex:1}
+.ob-ai-plan-cnt{font-size:.7rem;color:var(--t4)}
 
 /* ══════ PROGRESS TRACKER ══════ */
 .prog-ov{position:absolute;inset:0;z-index:3500;display:none;flex-direction:column;background:var(--bg)}
@@ -737,7 +799,7 @@ html,body{
 .ex-info{flex:1;min-width:0}
 .ex-info-name{font-weight:700;font-size:.88rem;margin-bottom:2px}
 .ex-info-muscle{font-size:.68rem;color:var(--or);font-weight:600}
-.ex-info-desc{font-size:.7rem;color:var(--t3);margin-top:3px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ex-info-desc{font-size:.7rem;color:var(--t3);margin-top:3px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ex-info-meta{display:flex;gap:8px;margin-top:5px;font-size:.62rem;color:var(--t4)}
 .ex-info-meta span{display:flex;align-items:center;gap:3px}
 .ex-add-btn{width:34px;height:34px;border-radius:50%;background:var(--or);color:#fff;border:none;font-size:1.1rem;cursor:pointer;flex-shrink:0;align-self:center;display:flex;align-items:center;justify-content:center;transition:all .15s}
@@ -878,6 +940,53 @@ html,body{
   body{background:#010410;display:flex;align-items:center;justify-content:center;min-height:100vh}
   .app{border-radius:40px;box-shadow:0 0 0 1px #1e293b,0 40px 100px rgba(0,0,0,.8);height:88vh;max-height:900px}
 }
+
+/* ── AI COACH ── */
+.aicoach-body{display:flex;flex-direction:column;height:calc(100% - 52px)}
+.aicoach-msgs{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:10px}
+.aicoach-msg{display:flex}
+.aicoach-msg.bot{justify-content:flex-start}
+.aicoach-msg.user{justify-content:flex-end}
+.aicoach-bubble{max-width:82%;padding:10px 14px;border-radius:16px;font-size:.82rem;line-height:1.5}
+.aicoach-bubble.bot{background:var(--s8);border:1px solid var(--s7);color:var(--t1);border-bottom-left-radius:4px}
+.aicoach-bubble.user{background:var(--or);color:#fff;border-bottom-right-radius:4px}
+.aicoach-input-row{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--s8);background:var(--bg)}
+.aicoach-input{flex:1;background:var(--s9);border:1px solid var(--s8);border-radius:20px;padding:10px 16px;color:var(--t1);font-size:.85rem;outline:none}
+.aicoach-input:focus{border-color:var(--or)}
+.aicoach-send{width:40px;height:40px;border-radius:50%;background:var(--or);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.aicoach-send svg{stroke:#fff}
+.aicoach-typing{display:flex;gap:4px;padding:10px 14px}
+.aicoach-typing span{width:6px;height:6px;border-radius:50%;background:var(--t3);animation:aicDot .8s infinite}
+.aicoach-typing span:nth-child(2){animation-delay:.15s}
+.aicoach-typing span:nth-child(3){animation-delay:.3s}
+@keyframes aicDot{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+/* ── PROGRESS PHOTOS ── */
+.progphoto-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.progphoto-item{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:var(--s9);border:1px solid var(--s8);cursor:pointer}
+.progphoto-item img{width:100%;height:100%;object-fit:cover}
+.progphoto-item .progphoto-date{position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:.65rem;color:#fff;text-align:center}
+.progphoto-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.progphoto-compare-card{border-radius:14px;overflow:hidden;background:var(--s9);border:1px solid var(--s8);position:relative}
+.progphoto-compare-card img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.progphoto-compare-card .overlay-data{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:.7rem;color:#fff}
+
+/* ── HIIT TIMER ── */
+.hiit-display{text-align:center;padding:30px 20px;margin-bottom:14px;background:var(--s9);border:1px solid var(--s8);border-radius:22px}
+.hiit-phase{font-family:var(--fd);font-size:1.2rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;color:var(--or)}
+.hiit-phase.work{color:var(--re)}
+.hiit-phase.rest{color:var(--gr)}
+.hiit-phase.prep{color:var(--bl)}
+.hiit-time{font-family:var(--fd);font-size:4rem;font-weight:800;line-height:1;margin-bottom:6px}
+.hiit-round{font-size:.85rem;color:var(--t3)}
+
+/* ── STORE ── */
+.store-item{display:flex;gap:14px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:16px;margin-bottom:10px}
+.store-item img{width:80px;height:80px;object-fit:cover;border-radius:12px;flex-shrink:0;background:var(--s8)}
+.store-item-info{flex:1}
+.store-item-name{font-weight:700;font-size:.88rem;margin-bottom:3px}
+.store-item-desc{font-size:.74rem;color:var(--t3);margin-bottom:6px}
+.store-item-price{font-family:var(--fd);font-weight:800;color:var(--or);font-size:.95rem}
 </style>
 </head>
 <body>
@@ -986,6 +1095,7 @@ html,body{
       <div class="ob-bar" id="ob-b2"></div>
       <div class="ob-bar" id="ob-b3"></div>
       <div class="ob-bar" id="ob-b4"></div>
+      <div class="ob-bar" id="ob-b5"></div>
     </div>
     <div class="ob-scroll">
 
@@ -1069,7 +1179,30 @@ html,body{
         <div class="ob-title">Perfetto! Ecco il riepilogo</div>
         <div class="ob-desc">AURA è pronto a creare il tuo piano personalizzato.</div>
         <div class="ob-summary" id="ob-summary"></div>
-        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-4">← Modifica</button><button class="cta" style="flex:1" id="ob-finish">🚀 Inizia con AURA</button></div></div>
+        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-4">← Modifica</button><button class="cta" style="flex:1" id="ob-finish">🚀 Genera il mio Piano IA</button></div></div>
+      </div>
+
+      <!-- Step 5: AI Generation -->
+      <div class="ob-step" data-step="5">
+        <div class="ob-ai-loading" id="ob-ai-loading">
+          <div class="ob-ai-spinner"></div>
+          <div class="ob-ai-title">AURA sta creando<br>il tuo piano personalizzato</div>
+          <div class="ob-ai-sub">Il nostro motore IA analizza i tuoi dati per generare allenamenti, split e progressione ottimali.</div>
+          <div class="ob-ai-steps" id="ob-ai-steps">
+            <div class="ob-ai-step" id="ais-0"><div class="ob-ai-step-ico">1</div> Analisi profilo fisico</div>
+            <div class="ob-ai-step" id="ais-1"><div class="ob-ai-step-ico">2</div> Calcolo volume ottimale</div>
+            <div class="ob-ai-step" id="ais-2"><div class="ob-ai-step-ico">3</div> Selezione esercizi mirati</div>
+            <div class="ob-ai-step" id="ais-3"><div class="ob-ai-step-ico">4</div> Costruzione split settimanale</div>
+            <div class="ob-ai-step" id="ais-4"><div class="ob-ai-step-ico">5</div> Calibrazione progressione</div>
+          </div>
+        </div>
+        <div class="ob-ai-done" id="ob-ai-done">
+          <div class="ob-ai-done-emoji">🎯</div>
+          <div class="ob-ai-done-title">Piano Pronto!</div>
+          <div class="ob-ai-done-sub" id="ob-ai-done-sub">Ho creato un programma personalizzato basato sui tuoi dati.</div>
+          <div class="ob-ai-plan-preview" id="ob-ai-plan-preview"></div>
+          <div class="ob-footer" style="width:100%"><button class="cta" style="width:100%" id="ob-ai-start">💪 Inizia ad Allenarti</button></div>
+        </div>
       </div>
 
     </div>
@@ -1180,6 +1313,16 @@ html,body{
         </div>
         <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,var(--or),var(--or2))" onclick="openExerciseLibrary()">
           📚 Libreria Esercizi
+        </button>
+
+        <!-- AI Coach CTA -->
+        <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,#a78bfa,#7c3aed)" onclick="openAICoach()">
+          🤖 Chiedi al Coach IA
+        </button>
+
+        <!-- HIIT Timer CTA -->
+        <button class="cta" style="margin-bottom:10px;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openHIIT()">
+          ⏱️ Timer HIIT / Tabata
         </button>
 
         <!-- Workout live (session overlay) -->
@@ -1309,6 +1452,45 @@ html,body{
         <div class="legal-page-title">Riepilogo Esercizio</div>
       </div>
       <div class="cam-summary-body" id="cam-summary-body"></div>
+    </div>
+
+    <!-- ══ WORKOUT ══ -->
+    <div class="tab" id="tab-workout">
+      <div style="padding:8px 20px 8px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:.82rem;color:var(--t3)">Le Tue Schede</div>
+          <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Allenamento</div>
+        </div>
+        <div class="chip chip-or" id="workout-tab-count">📋 0 schede</div>
+      </div>
+      <div style="padding:0 16px">
+        <!-- Quick actions -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()">📋 Le Mie Schede</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()">📚 Libreria Esercizi</button>
+        </div>
+        <!-- AI plans -->
+        <div class="sec-title">Schede IA Generate</div>
+        <div id="workout-tab-ai-plans"></div>
+        <!-- Manual plans -->
+        <div class="sec-title">Schede Manuali</div>
+        <div id="workout-tab-manual-plans"></div>
+        <!-- CTA create -->
+        <button class="cta" style="margin:14px 0" onclick="openWorkoutBuilder()">+ Crea Nuova Scheda</button>
+        <!-- Workout history shortcut -->
+        <div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutHistory()">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:1.4rem">🏋️</span>
+              <div>
+                <div style="font-weight:700;font-size:.88rem">Storico Allenamenti</div>
+                <div style="font-size:.7rem;color:var(--t3)">Tutti gli allenamenti completati</div>
+              </div>
+            </div>
+            <span class="sarr">›</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ══ DIET ══ -->
@@ -1480,8 +1662,6 @@ html,body{
       </div>
       <div class="recipe-detail-body" id="recipe-detail-body"></div>
     </div>
-      </div>
-    </div>
 
     <!-- ══ COMMUNITY ══ -->
     <div class="tab" id="tab-community">
@@ -1490,24 +1670,30 @@ html,body{
           <div style="font-size:.82rem;color:var(--t3)">Trova il tuo</div>
           <div style="font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1.1">Partner</div>
         </div>
-        <div class="chip chip-gr">12 vicino a te</div>
+        <div class="chip chip-gr" id="nearby-count">📡 Cercando...</div>
+      </div>
+
+      <div class="geo-status" id="geo-status">📍 Localizzazione in corso...</div>
+
+      <div class="radius-row">
+        <span>Raggio:</span>
+        <input type="range" id="radius-slider" min="1" max="50" value="10">
+        <span class="radius-val" id="radius-val">10 km</span>
       </div>
 
       <!-- Card stack -->
-      <div class="pstack">
-        <div class="pcard back"><div style="display:flex;align-items:center;justify-content:center;height:100%;opacity:.3"><div class="av av-l">G</div></div></div>
+      <div class="pstack" id="pstack-container">
+        <div class="pcard back"><div style="display:flex;align-items:center;justify-content:center;height:100%;opacity:.3"><div class="av av-l">?</div></div></div>
         <div class="pcard main" id="partner-card">
           <div class="pg"></div>
-          <div class="pphoto"><div class="av av-xl" id="p-av">E</div></div>
+          <div class="pphoto"><div class="av av-xl" id="p-av">?</div></div>
           <div class="pinfo">
-            <div class="pname"><span id="p-name">Elena M.</span><span class="dtag" id="p-dist">📍 2 km</span></div>
-            <div class="plvl"><span class="gd"></span><span id="p-lvl">Livello Intermedio</span></div>
-            <div class="ptags" id="p-tags">
-              <span class="ptag2">🏋️ Forza</span><span class="ptag2">🧘 Yoga</span><span class="ptag2">🏃 Running</span>
-            </div>
+            <div class="pname"><span id="p-name">Cercando...</span><span class="dtag" id="p-dist"></span></div>
+            <div class="plvl"><span class="gd"></span><span id="p-lvl">Caricamento</span></div>
+            <div class="ptags" id="p-tags"></div>
             <div class="psch">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Si allena alle <strong style="margin-left:4px" id="p-time">18:00</strong>
+              Si allena alle <strong style="margin-left:4px" id="p-time">--:--</strong>
             </div>
           </div>
         </div>
@@ -1526,6 +1712,12 @@ html,body{
         </button>
       </div>
 
+      <!-- I tuoi Match -->
+      <div class="matches-sec" style="padding:0 16px">
+        <div class="sec-title">I tuoi Match 💬</div>
+        <div id="matches-list"><div class="no-users-msg">Nessun match ancora. Swipa per trovare partner!</div></div>
+      </div>
+
       <div style="padding:0 16px">
         <button class="strava-btn" id="strava-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
@@ -1533,12 +1725,8 @@ html,body{
         </button>
 
         <div class="sec-title">Classifica Settimanale 🏆</div>
-        <div class="lb">
-          <div class="li gold"><span class="lrank">1</span><span class="lav" style="background:#facc15;color:#000">L</span><span class="lname">Luca B.</span><span class="lpts">4.280 pt</span></div>
-          <div class="li silv"><span class="lrank">2</span><span class="lav">S</span><span class="lname">Sofia R.</span><span class="lpts">3.910 pt</span></div>
-          <div class="li me"><span class="lrank">3</span><span class="lav">L</span><span class="lname">Tu — Luca</span><span class="lpts">3.640 pt</span></div>
-          <div class="li"><span class="lrank">4</span><span class="lav">A</span><span class="lname">Alessandro T.</span><span class="lpts">3.200 pt</span></div>
-          <div class="li"><span class="lrank">5</span><span class="lav">G</span><span class="lname">Giulia M.</span><span class="lpts">2.980 pt</span></div>
+        <div class="lb" id="leaderboard-body">
+          <div class="no-users-msg">Caricamento classifica...</div>
         </div>
       </div>
     </div>
@@ -1601,6 +1789,20 @@ html,body{
           </div>
         </div>
 
+        <!-- Foto Progresso -->
+        <div class="card" style="padding:14px;cursor:pointer" onclick="openProgressPhotos()">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:1.4rem">📸</span>
+              <div>
+                <div style="font-weight:700;font-size:.88rem">Foto Progresso</div>
+                <div style="font-size:.7rem;color:var(--t3)">Confronto visivo settimanale</div>
+              </div>
+            </div>
+            <span class="sarr">›</span>
+          </div>
+        </div>
+
         <!-- Storico Allenamenti -->
         <div class="sec-title">Storico Allenamenti</div>
         <div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutHistory()">
@@ -1625,18 +1827,49 @@ html,body{
         <!-- Hardware -->
         <div class="sec-title">Hardware & Store</div>
         <div class="hwg">
-          <div class="card hwc"><div class="hwico">⚖️</div><div class="hwn">Bilancia BMI</div><div class="hwd">Composizione corporea sync con AURA.</div><button class="btn-hw2" onclick="toast('🛒 Bilancia aggiunta al carrello!','or')">10€ →</button></div>
-          <div class="card hwc"><div class="hwico">📡</div><div class="hwn">Treppiedi PRO</div><div class="hwd">Analisi movimento senza mani.</div><button class="btn-hw2" style="background:var(--s7)" onclick="showModal('📡','Treppiedi AURA Pro','Incluso nel piano PRO. Spedito gratis in 5-7 giorni.','Ottieni con PRO','var(--or)')">PRO</button></div>
-          <div class="card hwc"><div class="hwico">💓</div><div class="hwn">Fascia HRV</div><div class="hwd">Monitoraggio HRV avanzato.</div><button class="btn-hw2" onclick="toast('🛒 Fascia HRV aggiunta al carrello!','or')">35€ →</button></div>
-          <div class="card hwc"><div class="hwico">🍫</div><div class="hwn">Proteine AURA</div><div class="hwd">Barrette consigliate per il tuo deficit.</div><button class="btn-hw2" onclick="toast('🛒 Apertura AURA Store...','or')">Shop →</button></div>
+          <div class="card hwc"><div class="hwico">⚖️</div><div class="hwn">Bilancia BMI</div><div class="hwd">Composizione corporea sync con AURA.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+          <div class="card hwc"><div class="hwico">📡</div><div class="hwn">Treppiedi PRO</div><div class="hwd">Analisi movimento senza mani.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+          <div class="card hwc"><div class="hwico">💓</div><div class="hwn">Fascia HRV</div><div class="hwd">Monitoraggio HRV avanzato.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+          <div class="card hwc"><div class="hwico">🛒</div><div class="hwn">AURA Store</div><div class="hwd">Esplora i nostri prodotti.</div><button class="btn-hw2" onclick="openStore()">Apri →</button></div>
+        </div>
+
+        <!-- Abbonamento & Referral -->
+        <div class="sec-title">Abbonamento</div>
+        <div class="card" style="background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;padding:14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-weight:700;font-size:.88rem">⚡ Piano Annuale</div>
+              <div style="font-size:.72rem;color:var(--t3)">79,99€/anno — risparmi il 33%</div>
+            </div>
+            <button class="btn btn-or btn-sm" onclick="showAnnualPlan()">Scopri →</button>
+          </div>
+        </div>
+        <div class="card" style="padding:14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-weight:700;font-size:.88rem">🎁 Invita un Amico</div>
+              <div style="font-size:.72rem;color:var(--t3)">Ottieni 1 mese gratis per ogni invito</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="openReferral()">Invita →</button>
+          </div>
+        </div>
+        <div class="card" style="padding:14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-weight:700;font-size:.88rem">🎫 Hai un codice?</div>
+              <div style="font-size:.72rem;color:var(--t3)">Riscatta il codice referral di un amico</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="redeemReferral()">Riscatta</button>
+          </div>
         </div>
 
         <!-- Integrazioni -->
         <div class="sec-title">Integrazioni</div>
         <div class="card" style="padding:0 14px">
-          <div class="sitem"><span>🍎 Apple Health</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:.7rem;color:var(--gr)">Attivo</span><span class="conn"></span></div></div>
+          <div class="sitem" onclick="openWearable()"><span>💓 Fascia HR Bluetooth</span><span class="sarr">›</span></div>
+          <div class="sitem" onclick="toast('🍎 Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span>🍎 Apple Health</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="toast('🏃 Connettendo Strava...','or')"><span>🏃 Strava</span><span class="sarr">›</span></div>
-          <div class="sitem"><span>⌚ Apple Watch</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:.7rem;color:var(--gr)">Attivo</span><span class="conn"></span></div></div>
+          <div class="sitem"><span>⌚ Apple Watch</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:.7rem;color:var(--t3)">Non connesso</span></div></div>
           <div class="sitem" onclick="toast('📊 Esportazione avviata!','gr')"><span>📊 Esporta dati</span><span class="sarr">›</span></div>
         </div>
 
@@ -1670,6 +1903,10 @@ html,body{
       Camera
       <span class="nb-dot"></span>
     </button>
+    <button class="nb" data-tab="workout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5h11M6 12h12M17.5 17.5h-11"/><rect x="2" y="9" width="4" height="6" rx="1"/><rect x="18" y="9" width="4" height="6" rx="1"/><line x1="4" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="20" y2="12"/></svg>
+      Workout
+    </button>
     <button class="nb" data-tab="diet">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
       Dieta
@@ -1701,14 +1938,143 @@ html,body{
   </div>
 </div>
 
+<!-- CHAT OVERLAY -->
+<div class="chat-ov" id="chat-ov">
+  <div class="chat-topbar">
+    <button class="chat-back" onclick="closeChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="chat-uname" id="chat-uname">Chat</div>
+  </div>
+  <div class="chat-msgs" id="chat-msgs"></div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" placeholder="Scrivi un messaggio..." maxlength="500">
+    <button class="chat-send" onclick="sendChatMessage()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
 <!-- MATCH POPUP -->
 <div id="match-pop">
   <div class="mp-box">
     <span class="mp-ico">🎉</span>
     <div class="mp-t">È un match!</div>
     <div class="mp-s" id="match-msg">Hai fatto match con Elena M.!</div>
-    <button class="cta" style="margin-top:1rem" onclick="document.getElementById('match-pop').style.display='none'">Inizia a chattare 💬</button>
+    <button class="cta" style="margin-top:1rem" onclick="document.getElementById('match-pop').style.display='none'; openMatchChat()">Inizia a chattare 💬</button>
   </div>
+</div>
+
+<!-- AI COACH OVERLAY -->
+<div class="legal-ov" id="aicoach-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeAICoach()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">🤖 AI Coach</div>
+  </div>
+  <div class="aicoach-body">
+    <div class="aicoach-msgs" id="aicoach-msgs">
+      <div class="aicoach-msg bot"><div class="aicoach-bubble bot">Ciao! Sono il tuo AI Coach AURA 🤖<br>Chiedimi qualsiasi cosa su allenamento, dieta, recupero, progressi o integratori!</div></div>
+    </div>
+    <div class="aicoach-input-row">
+      <input class="aicoach-input" id="aicoach-input" placeholder="Scrivi una domanda..." maxlength="500">
+      <button class="aicoach-send" onclick="sendAICoachMsg()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS PHOTO OVERLAY -->
+<div class="legal-ov" id="progphoto-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeProgressPhotos()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">📸 Foto Progresso</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <button class="btn btn-or btn-fw" style="margin-bottom:14px" onclick="document.getElementById('prog-photo-file').click()">📷 Scatta / Carica Foto</button>
+    <input type="file" id="prog-photo-file" accept="image/*" hidden>
+    <div id="progphoto-compare" style="margin-bottom:14px"></div>
+    <div class="sec-title">Galleria</div>
+    <div id="progphoto-gallery" class="progphoto-grid"></div>
+  </div>
+</div>
+
+<!-- WEARABLE SYNC OVERLAY -->
+<div class="legal-ov" id="wearable-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeWearable()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">⌚ Wearable Sync</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <div class="card" style="text-align:center;padding:20px">
+      <div style="font-size:2.5rem;margin-bottom:8px">💓</div>
+      <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px">Frequenza Cardiaca</div>
+      <div style="font-size:2rem;font-family:var(--fd);font-weight:800;color:var(--re)" id="ble-hr-val">--</div>
+      <div style="font-size:.75rem;color:var(--t3)" id="ble-hr-status">Non connesso</div>
+    </div>
+    <button class="btn btn-or btn-fw" style="margin:12px 0" id="ble-connect-btn" onclick="connectBLEHeartRate()">🔗 Connetti Fascia HR (Bluetooth)</button>
+    <button class="btn btn-ghost btn-fw" style="margin-bottom:12px;display:none" id="ble-disconnect-btn" onclick="disconnectBLE()">Disconnetti</button>
+    <div class="sec-title">Integrazioni Health</div>
+    <div class="card" style="padding:0 14px">
+      <div class="sitem" onclick="toast('🍎 Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span>🍎 Apple Health</span><span class="sarr">›</span></div>
+      <div class="sitem" onclick="toast('🏃 Google Fit richiede l\'app mobile nativa.','bl')"><span>🏃 Google Fit</span><span class="sarr">›</span></div>
+    </div>
+    <div class="sec-title">Log HR recente</div>
+    <div id="ble-hr-log" class="card" style="padding:14px;font-size:.8rem;color:var(--t3)">Nessun dato HR registrato.</div>
+  </div>
+</div>
+
+<!-- HIIT TIMER OVERLAY -->
+<div class="legal-ov" id="hiit-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeHIIT()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">⏱️ HIIT / Tabata</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <div class="hiit-display" id="hiit-display">
+      <div class="hiit-phase" id="hiit-phase">PRONTO</div>
+      <div class="hiit-time" id="hiit-time">00:00</div>
+      <div class="hiit-round" id="hiit-round">Round 0/0</div>
+    </div>
+    <div class="hiit-settings" id="hiit-settings">
+      <div class="sec-title">Impostazioni</div>
+      <div class="card" style="padding:14px">
+        <div class="ep-field"><label class="ep-label">Lavoro (sec)</label><input class="ep-input" type="number" id="hiit-work" value="20" min="5" max="300"></div>
+        <div class="ep-field"><label class="ep-label">Riposo (sec)</label><input class="ep-input" type="number" id="hiit-rest" value="10" min="5" max="300"></div>
+        <div class="ep-field"><label class="ep-label">Round</label><input class="ep-input" type="number" id="hiit-rounds" value="8" min="1" max="50"></div>
+        <div class="ep-field"><label class="ep-label">Preparazione (sec)</label><input class="ep-input" type="number" id="hiit-prep" value="5" min="3" max="30"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <button class="btn btn-or btn-fw" onclick="setHIITPreset(20,10,8)">Tabata 20/10×8</button>
+        <button class="btn btn-ghost btn-fw" onclick="setHIITPreset(30,15,10)">HIIT 30/15×10</button>
+        <button class="btn btn-ghost btn-fw" onclick="setHIITPreset(40,20,6)">EMOM 40/20×6</button>
+        <button class="btn btn-ghost btn-fw" onclick="setHIITPreset(45,15,12)">Endurance 45/15×12</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="cta pulse" style="flex:1;margin:0" id="hiit-start-btn" onclick="toggleHIIT()">▶ Avvia</button>
+      <button class="btn btn-ghost" style="padding:.8rem 1.2rem" id="hiit-reset-btn" onclick="resetHIIT()">↺ Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- AURA STORE OVERLAY -->
+<div class="legal-ov" id="store-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeStore()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">🛒 AURA Store</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="store-body"></div>
 </div>
 
 <!-- ══ PRIVACY POLICY ══ -->
@@ -2069,7 +2435,7 @@ html,body{
 //  AURA MOBILE — JS
 // ═══════════════════════════════════════════════════
 
-const S = { tab:'home', hydration:1.2, hydGoal:2.5, pIdx:0, bpm:72 };
+const S = { tab:'home', hydration:1.2, hydGoal:2.5, bpm:72 };
 
 // ── EXERCISE LIBRARY DATA ───────────────────────
 const EXERCISES = [
@@ -2220,6 +2586,30 @@ function getWorkouts() {
 function saveWorkouts(w) { localStorage.setItem(WB_KEY, JSON.stringify(w)); }
 
 let wbEditingIdx = -1; // -1 = none, >= 0 = editing plan index
+
+function renderWorkoutTab() {
+  var plans = getWorkouts();
+  var aiPlans = plans.filter(function(p) { return p._aiGenerated; });
+  var manualPlans = plans.filter(function(p) { return !p._aiGenerated; });
+  var chip = document.getElementById('workout-tab-count');
+  if (chip) chip.textContent = '📋 ' + plans.length + ' schede';
+  function planCard(p, pi) {
+    var exCount = p.exercises ? p.exercises.length : 0;
+    return '<div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutBuilder()">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between">' +
+      '<div style="display:flex;align-items:center;gap:10px">' +
+      '<span style="font-size:1.4rem">' + (p._aiGenerated ? '🤖' : '📋') + '</span>' +
+      '<div><div style="font-weight:700;font-size:.88rem">' + (p.name||'Scheda') + '</div>' +
+      '<div style="font-size:.7rem;color:var(--t3)">' + exCount + ' esercizi</div></div></div>' +
+      '<div style="display:flex;gap:6px;align-items:center">' +
+      (exCount > 0 ? '<button class="btn btn-or btn-sm" onclick="event.stopPropagation();startWorkoutSession(' + pi + ')">▶ Avvia</button>' : '') +
+      '<span class="sarr">›</span></div></div></div>';
+  }
+  var aiEl = document.getElementById('workout-tab-ai-plans');
+  var manEl = document.getElementById('workout-tab-manual-plans');
+  if (aiEl) aiEl.innerHTML = aiPlans.length > 0 ? aiPlans.map(function(p) { return planCard(p, plans.indexOf(p)); }).join('') : '<div class="card" style="padding:16px;text-align:center;color:var(--t3);font-size:.82rem">Nessuna scheda IA. Completa l\'onboarding per generarne una!</div>';
+  if (manEl) manEl.innerHTML = manualPlans.length > 0 ? manualPlans.map(function(p) { return planCard(p, plans.indexOf(p)); }).join('') : '<div class="card" style="padding:16px;text-align:center;color:var(--t3);font-size:.82rem">Nessuna scheda manuale. Creane una!</div>';
+}
 
 function openWorkoutBuilder() {
   document.getElementById('wb-ov').classList.add('on');
@@ -2692,7 +3082,9 @@ function renderProgPanel(cat) {
 
 function drawProgChart(cat, sorted) {
   const canvas = document.getElementById('chart-' + cat);
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement.getBoundingClientRect();
   canvas.width = (rect.width - 28) * dpr;
@@ -3043,13 +3435,36 @@ function saveEditProfile() {
   toast('Profilo aggiornato!','gr');
 }
 
-const partners = [
-  { name:'Elena M.',   dist:'2 km',   lvl:'Intermedio',  time:'18:00', tags:['🏋️ Forza','🧘 Yoga','🏃 Running'],      av:'E', col:'#f97316' },
-  { name:'Giulia R.',  dist:'1.4 km', lvl:'Avanzato',    time:'07:30', tags:['🚴 Ciclismo','🏊 Nuoto','💪 HIIT'],      av:'G', col:'#38bdf8' },
-  { name:'Davide P.',  dist:'3.1 km', lvl:'Principiante',time:'20:00', tags:['🏃 Running','🧘 Yoga'],                  av:'D', col:'#a78bfa' },
-  { name:'Sara L.',    dist:'0.8 km', lvl:'Intermedio',  time:'12:00', tags:['🏋️ Forza','🤸 Calisthenics'],           av:'S', col:'#22c55e' },
-  { name:'Lorenzo B.', dist:'4.2 km', lvl:'Avanzato',    time:'06:00', tags:['💪 PowerLifting','🥊 Boxe'],             av:'L', col:'#facc15' },
-];
+// ═══════════════════════════════════════════════════
+//  SOCIAL — Firebase Config & State
+// ═══════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  // ⚠️ Inserisci qui la tua config Firebase:
+  // 1. Vai su console.firebase.google.com
+  // 2. Crea progetto → Abilita Auth Anonymous + Firestore (test mode)
+  // 3. Copia le credenziali qui sotto
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+
+var FB = { ready: false, db: null, auth: null, uid: null };
+var SOCIAL = {
+  myLocation: null,
+  nearbyUsers: [],
+  currentIdx: 0,
+  matches: [],
+  currentChatMatchId: null,
+  currentChatName: '',
+  chatUnsub: null,
+  matchesUnsub: null,
+  radius: 10,
+  initialized: false,
+  lastMatchName: ''
+};
 
 // ── OROLOGIO STATUS BAR ───────────────────────────
 function updateClock() {
@@ -3071,6 +3486,7 @@ document.querySelectorAll('.nb').forEach(btn => {
     document.getElementById('tab-' + t).classList.add('on');
     document.getElementById('screen').scrollTop = 0;
     S.tab = t;
+    if (t === 'workout') renderWorkoutTab();
   });
 });
 
@@ -3684,9 +4100,22 @@ async function startCamera() {
     toast('📹 Camera IA accesa — MediaPipe attivo', 'gr');
   } catch (err) {
     console.log('Camera error:', err);
-    toast('📹 Camera non disponibile. Controlla i permessi.', 're');
-    document.getElementById('cam-status-badge').className = 'cam-status off';
-    document.getElementById('cam-status-badge').textContent = 'Non disponibile';
+    var fbBox = document.getElementById('cam-fb-box');
+    var badge = document.getElementById('cam-status-badge');
+    badge.className = 'cam-status off';
+    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+      badge.textContent = 'Permesso negato';
+      if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Permesso fotocamera negato</strong><br><br>Per usare la Camera IA devi consentire l\'accesso alla fotocamera.<br><br>👉 Vai nelle <strong>Impostazioni del browser</strong> → Sito → Fotocamera → Consenti<br><br>Poi riprova.</div>';
+      toast('📷 Permesso fotocamera negato. Controlla le impostazioni del browser.', 're');
+    } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+      badge.textContent = 'Nessuna fotocamera';
+      if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Nessuna fotocamera rilevata</strong><br><br>Il dispositivo non ha una fotocamera disponibile.</div>';
+      toast('📷 Nessuna fotocamera trovata sul dispositivo.', 're');
+    } else {
+      badge.textContent = 'Non disponibile';
+      if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Camera non disponibile</strong><br><br>Errore: ' + (err.message || 'sconosciuto') + '<br>Riprova.</div>';
+      toast('📹 Camera non disponibile. Controlla i permessi.', 're');
+    }
   }
 }
 
@@ -3768,85 +4197,553 @@ allTabBtns.forEach(function(btn) {
   });
 });
 
-// ── COMMUNITY ──────────────────────────────────────
+// ═══════════════════════════════════════════════════
+//  SOCIAL / COMMUNITY — Backend Reale Firebase
+// ═══════════════════════════════════════════════════
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── GEOLOCATION REALE ──────────────────────────────
+function requestGeo() {
+  var el = document.getElementById('geo-status');
+  if (!navigator.geolocation) {
+    if (el) { el.textContent = '❌ Geolocalizzazione non supportata'; el.className = 'geo-status err'; }
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      SOCIAL.myLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      if (el) { el.textContent = '📍 Posizione acquisita (' + pos.coords.latitude.toFixed(3) + ', ' + pos.coords.longitude.toFixed(3) + ')'; setTimeout(function(){ if(el) el.style.opacity='0'; }, 3000); }
+      if (FB.ready) { syncUserProfile(); loadNearbyUsers(); }
+    },
+    function(err) {
+      if (el) { el.textContent = '⚠ ' + (err.code===1 ? 'Permesso posizione negato. Abilita GPS nelle impostazioni.' : 'Posizione non disponibile'); el.className = 'geo-status err'; }
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 300000 }
+  );
+}
+
+// ── GEOHASH ENCODING ───────────────────────────────
+function encodeGeohash(lat, lng, prec) {
+  prec = prec || 6;
+  var c = '0123456789bcdefghjkmnpqrstuvwxyz', b = [16,8,4,2,1];
+  var h = '', nLat=-90, xLat=90, nLng=-180, xLng=180, isLng=true, bit=0, ch=0;
+  while (h.length < prec) {
+    var mid;
+    if (isLng) { mid=(nLng+xLng)/2; if(lng>mid){ch|=b[bit];nLng=mid;}else{xLng=mid;} }
+    else { mid=(nLat+xLat)/2; if(lat>mid){ch|=b[bit];nLat=mid;}else{xLat=mid;} }
+    isLng=!isLng;
+    if(bit<4) bit++; else { h+=c[ch]; bit=0; ch=0; }
+  }
+  return h;
+}
+
+function haversineKm(la1,lo1,la2,lo2) {
+  var R=6371, dLa=(la2-la1)*Math.PI/180, dLo=(lo2-lo1)*Math.PI/180;
+  var a=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// ── FIREBASE INIT ──────────────────────────────────
+function initSocial() {
+  if (SOCIAL.initialized) return;
+  SOCIAL.initialized = true;
+  requestGeo();
+  if (!FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.projectId) { showSocialSetup(); return; }
+  try {
+    if (typeof firebase === 'undefined') { showSocialSetup(); return; }
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    FB.db = firebase.firestore();
+    FB.auth = firebase.auth();
+    FB.auth.signInAnonymously().then(function(cred) {
+      FB.uid = cred.user.uid;
+      FB.ready = true;
+      syncUserProfile();
+      if (SOCIAL.myLocation) loadNearbyUsers();
+      loadMatches();
+      loadLeaderboard();
+    }).catch(function(e) { console.error('Firebase auth error:', e); showSocialSetup(); });
+  } catch(e) { console.error('Firebase init error:', e); showSocialSetup(); }
+}
+
+function showSocialSetup() {
+  var el = document.getElementById('pstack-container');
+  if (el) {
+    el.innerHTML =
+      '<div class="social-setup">' +
+      '<div style="font-size:2rem;margin-bottom:12px">🔧</div>' +
+      '<div style="font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--t1);margin-bottom:8px">Configura Firebase</div>' +
+      '<p>Per le funzionalità Social reali (match, chat, classifica), configura Firebase nel codice:</p>' +
+      '<ol style="text-align:left;margin:12px auto;max-width:300px">' +
+      '<li>Vai su <code>console.firebase.google.com</code></li>' +
+      '<li>Crea un nuovo progetto</li>' +
+      '<li>Abilita <code>Authentication → Anonymous</code></li>' +
+      '<li>Crea database <code>Firestore</code> (test mode)</li>' +
+      '<li>Copia config in <code>FIREBASE_CONFIG</code> nel codice</li>' +
+      '</ol>' +
+      '<div style="margin-top:12px;font-size:.72rem;color:var(--t4)">La geolocalizzazione e condivisione Strava funzionano già!</div>' +
+      '</div>';
+  }
+  document.getElementById('nearby-count').textContent = '⚙️ Setup';
+}
+
+// ── SYNC PROFILO SU FIRESTORE ──────────────────────
+function syncUserProfile() {
+  if (!FB.ready) return;
+  var u = getUser(); if (!u) return;
+  var goalTags = {
+    massa:['🏋️ Forza','💪 Massa'], dimagrimento:['🏃 Cardio','🔥 HIIT'],
+    benessere:['🧘 Yoga','🧠 Benessere'], resistenza:['🏃 Running','🚴 Ciclismo']
+  };
+  var h = new Date().getHours();
+  var profile = {
+    name: u.name || 'Utente AURA',
+    age: u.age || 25,
+    goal: u.goal || '',
+    sex: u.sex || 'M',
+    xp: u.xp || 0,
+    level: u.level || 1,
+    tags: goalTags[u.goal] || ['🏋️ Forza'],
+    schedule: h < 12 ? '07:00' : h < 17 ? '13:00' : '18:00',
+    lastActive: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if (SOCIAL.myLocation) {
+    profile.lat = SOCIAL.myLocation.lat;
+    profile.lng = SOCIAL.myLocation.lng;
+    profile.geohash = encodeGeohash(SOCIAL.myLocation.lat, SOCIAL.myLocation.lng, 6);
+  }
+  FB.db.collection('users').doc(FB.uid).set(profile, { merge: true });
+}
+
+// ── LOAD NEARBY USERS ──────────────────────────────
+async function loadNearbyUsers() {
+  if (!FB.ready || !SOCIAL.myLocation) return;
+  var cnt = document.getElementById('nearby-count');
+  cnt.textContent = '📡 Cercando...';
+  try {
+    var hash4 = encodeGeohash(SOCIAL.myLocation.lat, SOCIAL.myLocation.lng, 4);
+    var snap = await FB.db.collection('users')
+      .where('geohash', '>=', hash4)
+      .where('geohash', '<=', hash4 + '\uf8ff')
+      .limit(50).get();
+
+    // Carica azioni già fatte (like/skip) per filtrarle
+    var actSnap = await FB.db.collection('social_actions')
+      .where('from', '==', FB.uid).get();
+    var acted = new Set();
+    actSnap.forEach(function(d) { acted.add(d.data().to); });
+
+    var users = [];
+    snap.forEach(function(doc) {
+      if (doc.id === FB.uid || acted.has(doc.id)) return;
+      var d = doc.data();
+      if (!d.lat || !d.lng) return;
+      var dist = haversineKm(SOCIAL.myLocation.lat, SOCIAL.myLocation.lng, d.lat, d.lng);
+      if (dist <= SOCIAL.radius) {
+        d.uid = doc.id;
+        d.distance = dist;
+        users.push(d);
+      }
+    });
+
+    users.sort(function(a,b) { return a.distance - b.distance; });
+    SOCIAL.nearbyUsers = users;
+    SOCIAL.currentIdx = 0;
+    cnt.textContent = users.length + ' vicino a te';
+    if (users.length > 0) renderPartner(0);
+    else showNoUsers();
+  } catch(e) { console.error('Nearby query error:', e); cnt.textContent = '⚠ Errore rete'; }
+}
+
+function showNoUsers() {
+  var card = document.getElementById('partner-card');
+  if (!card) return;
+  card.innerHTML =
+    '<div class="pg"></div>' +
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:30px;text-align:center">' +
+    '<div style="font-size:2.2rem;margin-bottom:12px">🔍</div>' +
+    '<div style="font-family:var(--fd);font-weight:800;font-size:1rem;color:var(--t1);margin-bottom:6px">Nessun utente nelle vicinanze</div>' +
+    '<div style="font-size:.78rem;color:var(--t3)">Aumenta il raggio di ricerca o riprova più tardi.</div></div>';
+}
+
+// ── RENDER PARTNER CARD ────────────────────────────
 function renderPartner(i) {
-  const p = partners[i % partners.length];
-  const av = document.getElementById('p-av');
-  av.textContent = p.av;
-  av.style.background = `linear-gradient(135deg,${p.col},${p.col}bb)`;
-  av.style.boxShadow = `0 0 35px ${p.col}55`;
-  document.getElementById('p-name').textContent = p.name;
-  document.getElementById('p-dist').textContent = '📍 ' + p.dist;
-  document.getElementById('p-lvl').textContent = 'Livello ' + p.lvl;
-  document.getElementById('p-time').textContent = p.time;
-  document.getElementById('p-tags').innerHTML = p.tags.map(t=>`<span class="ptag2">${t}</span>`).join('');
+  if (!SOCIAL.nearbyUsers.length || i >= SOCIAL.nearbyUsers.length) { showNoUsers(); return; }
+  var p = SOCIAL.nearbyUsers[i];
+  var initial = escapeHtml((p.name||'?').charAt(0).toUpperCase());
+  var card = document.getElementById('partner-card');
+  card.innerHTML =
+    '<div class="pg"></div>' +
+    '<div class="pphoto"><div class="av av-xl" id="p-av">' + initial + '</div></div>' +
+    '<div class="pinfo">' +
+      '<div class="pname"><span id="p-name">' + escapeHtml(p.name||'Utente') + '</span><span class="dtag" id="p-dist">📍 ' + p.distance.toFixed(1) + ' km</span></div>' +
+      '<div class="plvl"><span class="gd"></span><span id="p-lvl">Livello ' + (p.level||1) + '</span></div>' +
+      '<div class="ptags" id="p-tags">' + (p.tags||[]).map(function(t){return '<span class="ptag2">'+escapeHtml(t)+'</span>';}).join('') + '</div>' +
+      '<div class="psch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Si allena alle <strong style="margin-left:4px" id="p-time">' + escapeHtml(p.schedule||'--:--') + '</strong></div>' +
+    '</div>';
 }
 
+// ── CARD ANIMATIONS ────────────────────────────────
 function cardOut(dir, cb) {
-  const c = document.getElementById('partner-card');
+  var c = document.getElementById('partner-card');
+  if (!c) return;
   c.style.transition = 'all .35s cubic-bezier(.4,0,.2,1)';
-  c.style.transform = `translateX(${dir==='left'?'-130%':'130%'}) rotate(${dir==='left'?'-14deg':'14deg'})`;
+  c.style.transform = 'translateX(' + (dir==='left'?'-130%':'130%') + ') rotate(' + (dir==='left'?'-14':'14') + 'deg)';
   c.style.opacity = '0';
-  setTimeout(() => { c.style.transition='none'; c.style.transform='translateY(16px)'; c.style.opacity='0'; S.pIdx++; renderPartner(S.pIdx); if(cb)cb(); }, 370);
+  setTimeout(function() {
+    c.style.transition = 'none';
+    c.style.transform = 'translateY(16px)';
+    c.style.opacity = '0';
+    SOCIAL.currentIdx++;
+    renderPartner(SOCIAL.currentIdx);
+    if (cb) cb();
+  }, 370);
 }
+
 function cardIn() {
-  const c = document.getElementById('partner-card');
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  var c = document.getElementById('partner-card');
+  if (!c) return;
+  requestAnimationFrame(function() { requestAnimationFrame(function() {
     c.style.transition = 'all .3s cubic-bezier(.4,0,.2,1)';
-    c.style.transform = 'translateY(0)'; c.style.opacity = '1';
-  }));
+    c.style.transform = 'translateY(0)';
+    c.style.opacity = '1';
+  }); });
 }
 
-document.getElementById('btn-skip').addEventListener('click', () => {
-  cardOut('left', () => { cardIn(); toast('👋 Prossimo!', 'bl'); });
-});
-document.getElementById('btn-match').addEventListener('click', () => {
-  const p = partners[S.pIdx % partners.length];
-  cardOut('right', () => {
-    cardIn();
-    document.getElementById('match-msg').textContent = `Hai fatto match con ${p.name}! Pianificate il prossimo allenamento.`;
-    document.getElementById('match-pop').style.display = 'flex';
-    toast(`🎉 Match con ${p.name}!`, 'or');
+// ── LIKE / SKIP CON FIREBASE ───────────────────────
+async function socialLike() {
+  if (!FB.ready || !SOCIAL.nearbyUsers[SOCIAL.currentIdx]) {
+    cardOut('right', cardIn);
+    return;
+  }
+  var target = SOCIAL.nearbyUsers[SOCIAL.currentIdx];
+  cardOut('right', cardIn);
+  try {
+    await FB.db.collection('social_actions').add({
+      from: FB.uid, to: target.uid, action: 'like',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // Controlla match reciproco
+    var mutual = await FB.db.collection('social_actions')
+      .where('from', '==', target.uid)
+      .where('to', '==', FB.uid)
+      .where('action', '==', 'like')
+      .limit(1).get();
+
+    if (!mutual.empty) {
+      // MATCH!
+      var u = getUser();
+      var matchData = {
+        users: [FB.uid, target.uid],
+        names: {},
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastMessage: 'Match! 🎉',
+        lastMessageAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      matchData.names[FB.uid] = u ? u.name : 'Tu';
+      matchData.names[target.uid] = target.name;
+      await FB.db.collection('matches').add(matchData);
+      SOCIAL.lastMatchName = target.name;
+      document.getElementById('match-msg').textContent = 'Hai fatto match con ' + (target.name||'') + '! Pianificate il prossimo allenamento.';
+      document.getElementById('match-pop').style.display = 'flex';
+      toast('🎉 Match con ' + target.name + '!', 'or');
+    } else {
+      toast('💜 Like inviato a ' + target.name, 'bl');
+    }
+  } catch(e) { console.error('Like error:', e); toast('⚠ Errore invio like', 're'); }
+}
+
+async function socialSkip() {
+  if (!FB.ready || !SOCIAL.nearbyUsers[SOCIAL.currentIdx]) {
+    cardOut('left', cardIn);
+    return;
+  }
+  var target = SOCIAL.nearbyUsers[SOCIAL.currentIdx];
+  cardOut('left', function() { cardIn(); toast('👋 Prossimo!', 'bl'); });
+  try {
+    await FB.db.collection('social_actions').add({
+      from: FB.uid, to: target.uid, action: 'skip',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) { /* skip silently */ }
+}
+
+// ── MATCHES IN TEMPO REALE ─────────────────────────
+function loadMatches() {
+  if (!FB.ready) return;
+  if (SOCIAL.matchesUnsub) SOCIAL.matchesUnsub();
+  SOCIAL.matchesUnsub = FB.db.collection('matches')
+    .where('users', 'array-contains', FB.uid)
+    .orderBy('lastMessageAt', 'desc')
+    .limit(20)
+    .onSnapshot(function(snap) {
+      SOCIAL.matches = [];
+      snap.forEach(function(doc) {
+        var d = doc.data();
+        d.id = doc.id;
+        SOCIAL.matches.push(d);
+      });
+      renderMatches();
+    }, function(e) { console.error('Matches listener error:', e); });
+}
+
+function renderMatches() {
+  var el = document.getElementById('matches-list');
+  if (!el) return;
+  if (!SOCIAL.matches.length) {
+    el.innerHTML = '<div class="no-users-msg">Nessun match ancora. Swipa verso destra per trovare partner!</div>';
+    return;
+  }
+  var html = '';
+  SOCIAL.matches.forEach(function(m) {
+    var otherName = 'Utente';
+    if (m.names) {
+      Object.keys(m.names).forEach(function(uid) {
+        if (uid !== FB.uid) otherName = m.names[uid];
+      });
+    }
+    var initial = (otherName||'?').charAt(0).toUpperCase();
+    var preview = m.lastMessage || 'Nuovo match!';
+    var time = '';
+    if (m.lastMessageAt && m.lastMessageAt.toDate) {
+      var d = m.lastMessageAt.toDate();
+      time = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+    var safeId = escapeHtml(m.id);
+    var safeName = escapeHtml(otherName).replace(/'/g, '&#39;');
+    html += '<div class="match-item" onclick="openChat(\'' + safeId + '\',\'' + safeName + '\')">' +
+      '<div class="match-av">' + escapeHtml(initial) + '</div>' +
+      '<div class="match-info"><div class="match-name">' + escapeHtml(otherName) + '</div>' +
+      '<div class="match-preview">' + escapeHtml(preview) + '</div></div>' +
+      '<div class="match-time">' + time + '</div></div>';
   });
+  el.innerHTML = html;
+}
+
+function openMatchChat() {
+  if (SOCIAL.matches.length > 0) {
+    var m = SOCIAL.matches[0];
+    var otherName = 'Utente';
+    if (m.names) Object.keys(m.names).forEach(function(uid) { if (uid !== FB.uid) otherName = m.names[uid]; });
+    openChat(m.id, otherName);
+  }
+}
+
+// ── CHAT IN TEMPO REALE ────────────────────────────
+function openChat(matchId, name) {
+  if (!FB.ready) { toast('⚠ Firebase non connesso', 're'); return; }
+  SOCIAL.currentChatMatchId = matchId;
+  SOCIAL.currentChatName = name;
+  document.getElementById('chat-uname').textContent = name;
+  document.getElementById('chat-msgs').innerHTML = '<div class="no-users-msg">Caricamento messaggi...</div>';
+  document.getElementById('chat-input').value = '';
+  document.getElementById('chat-ov').classList.add('on');
+
+  if (SOCIAL.chatUnsub) SOCIAL.chatUnsub();
+  SOCIAL.chatUnsub = FB.db.collection('matches').doc(matchId)
+    .collection('messages').orderBy('timestamp', 'asc')
+    .onSnapshot(function(snap) {
+      var el = document.getElementById('chat-msgs');
+      if (!el) return;
+      if (snap.empty) {
+        el.innerHTML = '<div class="no-users-msg">Nessun messaggio. Scrivi per primo! 💬</div>';
+        return;
+      }
+      el.innerHTML = '';
+      var lastDay = '';
+      snap.forEach(function(doc) {
+        var msg = doc.data();
+        var isMe = msg.from === FB.uid;
+        var time = '', dayStr = '';
+        if (msg.timestamp && msg.timestamp.toDate) {
+          var d = msg.timestamp.toDate();
+          time = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+          dayStr = d.toLocaleDateString('it-IT');
+        }
+        if (dayStr && dayStr !== lastDay) {
+          el.innerHTML += '<div class="chat-day">' + dayStr + '</div>';
+          lastDay = dayStr;
+        }
+        el.innerHTML += '<div class="chat-bub ' + (isMe ? 'me' : 'them') + '">' +
+          escapeHtml(msg.text) +
+          '<div class="chat-bub-time">' + time + '</div></div>';
+      });
+      el.scrollTop = el.scrollHeight;
+    }, function(e) { console.error('Chat listener error:', e); });
+}
+
+function closeChat() {
+  document.getElementById('chat-ov').classList.remove('on');
+  if (SOCIAL.chatUnsub) { SOCIAL.chatUnsub(); SOCIAL.chatUnsub = null; }
+  SOCIAL.currentChatMatchId = null;
+}
+
+function sendChatMessage() {
+  var input = document.getElementById('chat-input');
+  var text = (input.value || '').trim();
+  if (!text || !SOCIAL.currentChatMatchId || !FB.ready) return;
+  if (text.length > 500) { toast('⚠ Messaggio troppo lungo', 're'); return; }
+  input.value = '';
+
+  var matchRef = FB.db.collection('matches').doc(SOCIAL.currentChatMatchId);
+  matchRef.collection('messages').add({
+    from: FB.uid,
+    text: text,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  matchRef.update({
+    lastMessage: text.substring(0, 100),
+    lastMessageAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+// Enter per inviare
+document.getElementById('chat-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); }
 });
 
-// Touch swipe su partner card
+// ── CLASSIFICA SETTIMANALE REALE ───────────────────
+async function loadLeaderboard() {
+  var el = document.getElementById('leaderboard-body');
+  if (!el) return;
+
+  if (!FB.ready) {
+    // Mostra solo utente locale
+    var u = getUser();
+    if (u) {
+      el.innerHTML = '<div class="li me"><span class="lrank">1</span><span class="lav" style="background:var(--or);color:#fff">' +
+        escapeHtml((u.name||'Tu').charAt(0)) + '</span><span class="lname">Tu — ' + escapeHtml(u.name||'Utente') +
+        '</span><span class="lpts">' + ((u.xp||0)).toLocaleString() + ' pt</span></div>' +
+        '<div class="no-users-msg" style="padding:12px">Configura Firebase per la classifica completa</div>';
+    }
+    return;
+  }
+
+  try {
+    var snap = await FB.db.collection('users').orderBy('xp', 'desc').limit(20).get();
+    var html = '', rank = 0;
+    snap.forEach(function(doc) {
+      rank++;
+      var d = doc.data();
+      var isMe = doc.id === FB.uid;
+      var cls = rank===1 ? 'gold' : rank===2 ? 'silv' : isMe ? 'me' : '';
+      var avStyle = rank===1 ? ' style="background:#facc15;color:#000"' : isMe ? ' style="background:var(--or);color:#fff"' : '';
+      html += '<div class="li ' + cls + '">' +
+        '<span class="lrank">' + rank + '</span>' +
+        '<span class="lav"' + avStyle + '>' + escapeHtml((d.name||'?').charAt(0)) + '</span>' +
+        '<span class="lname">' + (isMe ? 'Tu — ' : '') + escapeHtml(d.name||'Utente') + '</span>' +
+        '<span class="lpts">' + ((d.xp||0)).toLocaleString() + ' pt</span></div>';
+    });
+    el.innerHTML = html || '<div class="no-users-msg">Nessun utente ancora nella classifica</div>';
+  } catch(e) {
+    console.error('Leaderboard error:', e);
+    el.innerHTML = '<div class="no-users-msg">Errore caricamento classifica</div>';
+  }
+}
+
+// ── CONDIVISIONE STRAVA REALE ──────────────────────
+document.getElementById('strava-btn').addEventListener('click', function() {
+  var u = getUser() || {};
+  var completed = [];
+  try { completed = JSON.parse(localStorage.getItem('aura_completed_workouts') || '[]'); } catch(e) {}
+  var last = completed.length > 0 ? completed[completed.length - 1] : null;
+
+  var shareText = '🏋️ AURA Workout\n';
+  if (last) {
+    shareText += '📋 ' + (last.name || 'Allenamento') + '\n';
+    shareText += '⏱ ' + (last.duration || '?') + ' min\n';
+    shareText += '🔥 ' + (last.kcal || '?') + ' kcal\n';
+  } else {
+    shareText += 'Ho completato un allenamento con AURA!\n';
+  }
+  shareText += '💪 ' + (u.name || 'Atleta AURA') + ' · Livello ' + (u.level || 1) + '\n';
+  shareText += '#AURAFitness #Workout';
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'AURA Workout',
+      text: shareText,
+      url: 'https://tropicalblackie.github.io/AURAMOBILE/'
+    }).then(function() {
+      toast('✅ Condiviso con successo!', 'gr');
+    }).catch(function(e) {
+      if (e.name !== 'AbortError') toast('Condivisione annullata', 'bl');
+    });
+  } else {
+    navigator.clipboard.writeText(shareText).then(function() {
+      toast('📋 Copiato negli appunti! Incolla su Strava o social', 'gr');
+    }).catch(function() {
+      toast('⚠ Browser non supportato per condivisione', 're');
+    });
+  }
+});
+
+// ── SKIP / MATCH BUTTONS ───────────────────────────
+document.getElementById('btn-skip').addEventListener('click', function() { socialSkip(); });
+document.getElementById('btn-match').addEventListener('click', function() { socialLike(); });
+
+// ── RADIUS SLIDER ──────────────────────────────────
+document.getElementById('radius-slider').addEventListener('input', function() {
+  SOCIAL.radius = parseInt(this.value);
+  document.getElementById('radius-val').textContent = this.value + ' km';
+});
+document.getElementById('radius-slider').addEventListener('change', function() {
+  if (FB.ready && SOCIAL.myLocation) loadNearbyUsers();
+});
+
+// ── NOTIFICHE NUOVI MATCH ──────────────────────────
+function checkNewNotifications() {
+  if (!FB.ready) return;
+  FB.db.collection('matches')
+    .where('users', 'array-contains', FB.uid)
+    .onSnapshot(function(snap) {
+      var count = snap.size;
+      var dot = document.querySelector('.notif-dot');
+      if (dot && count > 0) {
+        dot.style.display = 'block';
+      }
+    });
+}
+
+// ── TOUCH SWIPE SU PARTNER CARD ────────────────────
 (function() {
-  const card = document.getElementById('partner-card');
-  let sx = 0, drag = false, cx = 0;
-  card.addEventListener('touchstart', e => { sx = e.touches[0].clientX; drag = true; card.style.transition = 'none'; }, { passive:true });
-  card.addEventListener('touchmove', e => {
-    if (!drag) return;
-    cx = e.touches[0].clientX - sx;
-    card.style.transform = `translateX(${cx}px) rotate(${cx*.06}deg)`;
-    card.style.opacity = String(1 - Math.abs(cx)/300);
-  }, { passive:true });
-  card.addEventListener('touchend', () => {
-    if (!drag) return; drag = false;
-    if (cx < -65) document.getElementById('btn-skip').click();
-    else if (cx > 65) document.getElementById('btn-match').click();
-    else { card.style.transition = 'all .28s ease'; card.style.transform = 'translateX(0) rotate(0)'; card.style.opacity = '1'; }
-    cx = 0;
+  var card = document.getElementById('partner-card');
+  if (!card) return;
+  var sx=0, drag=false, cx=0;
+  card.addEventListener('touchstart', function(e) { sx=e.touches[0].clientX; drag=true; card.style.transition='none'; }, {passive:true});
+  card.addEventListener('touchmove', function(e) {
+    if(!drag) return; cx=e.touches[0].clientX-sx;
+    card.style.transform='translateX('+cx+'px) rotate('+cx*.06+'deg)';
+    card.style.opacity=String(1-Math.abs(cx)/300);
+  }, {passive:true});
+  card.addEventListener('touchend', function() {
+    if(!drag) return; drag=false;
+    if(cx<-65) document.getElementById('btn-skip').click();
+    else if(cx>65) document.getElementById('btn-match').click();
+    else { card.style.transition='all .28s ease'; card.style.transform='translateX(0) rotate(0)'; card.style.opacity='1'; }
+    cx=0;
   });
-  // Mouse swipe anche su mobile web
-  card.addEventListener('mousedown', e => { sx = e.clientX; drag = true; card.style.transition = 'none'; e.preventDefault(); });
-  window.addEventListener('mousemove', e => { if (!drag) return; cx = e.clientX - sx; card.style.transform = `translateX(${cx}px) rotate(${cx*.06}deg)`; card.style.opacity = String(1 - Math.abs(cx)/300); });
-  window.addEventListener('mouseup', () => { if (!drag) return; drag = false; if (cx < -65) document.getElementById('btn-skip').click(); else if (cx > 65) document.getElementById('btn-match').click(); else { card.style.transition = 'all .28s ease'; card.style.transform = 'none'; card.style.opacity = '1'; } cx = 0; });
+  card.addEventListener('mousedown', function(e) { sx=e.clientX; drag=true; card.style.transition='none'; e.preventDefault(); });
+  window.addEventListener('mousemove', function(e) {
+    if(!drag) return; cx=e.clientX-sx;
+    card.style.transform='translateX('+cx+'px) rotate('+cx*.06+'deg)';
+    card.style.opacity=String(1-Math.abs(cx)/300);
+  });
+  window.addEventListener('mouseup', function() {
+    if(!drag) return; drag=false;
+    if(cx<-65) document.getElementById('btn-skip').click();
+    else if(cx>65) document.getElementById('btn-match').click();
+    else { card.style.transition='all .28s ease'; card.style.transform='none'; card.style.opacity='1'; }
+    cx=0;
+  });
 })();
 
-// ── STRAVA ─────────────────────────────────────────
-document.getElementById('strava-btn').addEventListener('click', function() {
-  this.textContent = '⏳ Condivisione…';
-  this.disabled = true;
-  setTimeout(() => {
-    this.textContent = '✅ Condiviso su Strava!';
-    this.style.color = '#22c55e'; this.style.borderColor = '#22c55e40';
-    toast('🏃 Pubblicato su Strava!', 'gr');
-    setTimeout(() => {
-      this.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Condividi su Strava`;
-      this.style.color = '#fc4c02'; this.style.borderColor = ''; this.disabled = false;
-    }, 3000);
-  }, 1500);
+// Init social quando si apre il tab Community
+document.querySelector('.nb[data-tab="community"]').addEventListener('click', function() {
+  setTimeout(initSocial, 50);
 });
 
 // ── TOGGLE ─────────────────────────────────────────
@@ -3928,16 +4825,16 @@ function calcUserTDEE() {
   var u = getUser();
   if (!u) return { kcal: 2000, protein: 150, carbs: 220, fat: 65 };
   var w = u.weight || 70, h = u.height || 175, age = u.age || 25;
-  var gender = u.gender || 'Uomo';
+  var gender = (u.sex === 'F') ? 'Donna' : 'Uomo';
   // Mifflin-St Jeor
   var bmr = gender === 'Donna'
     ? 10 * w + 6.25 * h - 5 * age - 161
     : 10 * w + 6.25 * h - 5 * age + 5;
   var activity = 1.55; // moderately active
-  var goal = u.goal || 'Definizione';
+  var goal = u.goal || 'massa';
   var tdee = bmr * activity;
-  if (goal === 'Definizione' || goal === 'Dimagrimento') tdee -= 400;
-  else if (goal === 'Massa') tdee += 300;
+  if (goal === 'dimagrimento') tdee -= 400;
+  else if (goal === 'massa') tdee += 300;
   tdee = Math.round(tdee);
   // Macros split
   var protCal = w * 2 * 4; // 2g per kg
@@ -4105,8 +5002,8 @@ async function searchFoods(query) {
         html += '<div class="food-img" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem">🍴</div>';
       }
       html += '<div class="food-info">';
-      html += '<div class="food-name">' + food.name + '</div>';
-      if (food.brand) html += '<div class="food-brand">' + food.brand + '</div>';
+      html += '<div class="food-name">' + escapeHtml(food.name) + '</div>';
+      if (food.brand) html += '<div class="food-brand">' + escapeHtml(food.brand) + '</div>';
       html += '<div class="food-macros-mini">';
       html += '<span style="color:var(--or)">P ' + food.protein + 'g</span>';
       html += '<span style="color:var(--bl)">C ' + food.carbs + 'g</span>';
@@ -4132,8 +5029,8 @@ function openFoodDetail(food) {
   if (food.img) {
     html += '<img class="food-detail-img" src="' + food.img + '" alt="" onerror="this.style.display=\'none\'">';
   }
-  html += '<div class="food-detail-name">' + food.name + '</div>';
-  if (food.brand) html += '<div class="food-detail-brand">' + food.brand + '</div>';
+  html += '<div class="food-detail-name">' + escapeHtml(food.name) + '</div>';
+  if (food.brand) html += '<div class="food-detail-brand">' + escapeHtml(food.brand) + '</div>';
   html += '</div>';
 
   // Nutrition grid per 100g
@@ -4917,8 +5814,9 @@ function renderObStep() {
   const step = document.querySelector('.ob-step[data-step="'+obStep+'"]');
   if (step) step.classList.add('on');
   // Progress bars
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const b = document.getElementById('ob-b'+i);
+    if (!b) continue;
     b.classList.remove('done','cur');
     if (i < obStep) b.classList.add('done');
     else if (i === obStep) b.classList.add('cur');
@@ -5013,7 +5911,7 @@ function buildObSummary() {
   ).join('');
 }
 
-// Finish onboarding
+// Finish onboarding — triggers AI plan generation
 document.getElementById('ob-finish').addEventListener('click', () => {
   const user = getUser();
   if (!user) return;
@@ -5034,10 +5932,778 @@ document.getElementById('ob-finish').addEventListener('click', () => {
   const idx = stored.findIndex(a => a.email === user.email);
   if (idx >= 0) { Object.assign(stored[idx], user); localStorage.setItem('aura_accounts', JSON.stringify(stored)); }
   applyUserData(user);
-  hideOnboarding();
-  toast('🎉 Benvenuto in AURA, ' + user.name.split(' ')[0] + '!', 'gr');
-  setTimeout(() => toast('🤖 Ho creato il tuo piano personalizzato.', 'bl'), 1500);
+  // Go to AI generation step
+  obStep = 5;
+  renderObStep();
+  runAIPlanGeneration(user);
 });
+
+// ═══════════════════════════════════════════════════
+//  AI PLAN GENERATION ENGINE
+// ═══════════════════════════════════════════════════
+
+function runAIPlanGeneration(user) {
+  var loadEl = document.getElementById('ob-ai-loading');
+  var doneEl = document.getElementById('ob-ai-done');
+  loadEl.style.display = 'flex';
+  doneEl.classList.remove('on');
+
+  var steps = [0,1,2,3,4];
+  var delay = 0;
+
+  // Animate through AI steps
+  steps.forEach(function(si, idx) {
+    setTimeout(function() {
+      // Mark previous as done
+      for (var j = 0; j < si; j++) {
+        var prev = document.getElementById('ais-'+j);
+        if (prev) { prev.className = 'ob-ai-step done'; prev.querySelector('.ob-ai-step-ico').textContent = '✓'; }
+      }
+      // Mark current as active
+      var cur = document.getElementById('ais-'+si);
+      if (cur) cur.className = 'ob-ai-step active';
+    }, idx * 800);
+  });
+
+  // After animation, generate the plan
+  setTimeout(function() {
+    // Mark last step done
+    for (var j = 0; j < 5; j++) {
+      var el = document.getElementById('ais-'+j);
+      if (el) { el.className = 'ob-ai-step done'; el.querySelector('.ob-ai-step-ico').textContent = '✓'; }
+    }
+
+    var plan = generateAIPlan(user);
+    saveWorkouts(plan);
+
+    // Show done screen after short pause
+    setTimeout(function() {
+      loadEl.style.display = 'none';
+      showAIPlanResult(user, plan);
+    }, 600);
+  }, 5 * 800);
+}
+
+function generateAIPlan(user) {
+  var goal = user.goal || 'massa';
+  var level = user.level || 'intermedio';
+  var freq = user.freq || '4-5';
+  var sex = user.sex || 'M';
+  var age = user.age || 25;
+  var weight = user.weight || 75;
+
+  // Parse frequency
+  var daysPerWeek = freq === '2-3' ? 3 : freq === '6+' ? 6 : 4;
+
+  // Level multipliers
+  var setsMult = level === 'principiante' ? 0.75 : level === 'avanzato' ? 1.25 : 1;
+  var diffFilter = level === 'principiante'
+    ? ['Principiante']
+    : level === 'avanzato'
+      ? ['Principiante','Intermedio','Avanzato']
+      : ['Principiante','Intermedio'];
+
+  // Get available exercises by muscle group
+  function exByMuscle(m) {
+    return EXERCISES.filter(function(e) {
+      return e.muscle === m && diffFilter.indexOf(e.diff) >= 0;
+    });
+  }
+  function pickN(arr, n) {
+    var shuffled = arr.slice().sort(function() { return Math.random() - 0.5; });
+    return shuffled.slice(0, Math.min(n, shuffled.length));
+  }
+  function adjustSets(ex, mult) {
+    return {
+      id: ex.id,
+      sets: Math.max(2, Math.round(ex.sets * mult)),
+      reps: ex.reps,
+      rest: ex.muscle === 'Cardio' ? 60 : (goal === 'massa' ? 120 : goal === 'resistenza' ? 45 : 90)
+    };
+  }
+
+  // Define splits based on frequency and goal
+  var splits;
+  if (daysPerWeek <= 3) {
+    // Full body split
+    if (goal === 'dimagrimento' || goal === 'resistenza') {
+      splits = [
+        { name: 'Full Body + Cardio A', muscles: [['Petto',1],['Schiena',1],['Gambe',1],['Core',1],['Cardio',1]] },
+        { name: 'Full Body + Cardio B', muscles: [['Spalle',1],['Gambe',1],['Schiena',1],['Braccia',1],['Cardio',1]] },
+        { name: 'HIIT + Core', muscles: [['Gambe',1],['Petto',1],['Spalle',1],['Core',2],['Cardio',1]] }
+      ];
+    } else {
+      splits = [
+        { name: 'Full Body A', muscles: [['Petto',2],['Schiena',2],['Gambe',1],['Braccia',1]] },
+        { name: 'Full Body B', muscles: [['Gambe',2],['Spalle',2],['Braccia',1],['Core',1]] },
+        { name: 'Full Body C', muscles: [['Schiena',2],['Petto',1],['Gambe',2],['Core',1]] }
+      ];
+    }
+  } else if (daysPerWeek === 4) {
+    if (goal === 'massa') {
+      splits = [
+        { name: 'Petto & Tricipiti', muscles: [['Petto',3],['Braccia',2]] },
+        { name: 'Schiena & Bicipiti', muscles: [['Schiena',3],['Braccia',2]] },
+        { name: 'Gambe & Glutei', muscles: [['Gambe',4],['Core',1]] },
+        { name: 'Spalle & Core', muscles: [['Spalle',3],['Core',2]] }
+      ];
+    } else if (goal === 'dimagrimento') {
+      splits = [
+        { name: 'Upper Body + Cardio', muscles: [['Petto',2],['Schiena',2],['Cardio',1]] },
+        { name: 'Lower Body + Core', muscles: [['Gambe',3],['Core',2]] },
+        { name: 'Push + HIIT', muscles: [['Petto',1],['Spalle',2],['Braccia',1],['Cardio',1]] },
+        { name: 'Pull + Cardio', muscles: [['Schiena',2],['Gambe',1],['Braccia',1],['Cardio',1]] }
+      ];
+    } else if (goal === 'benessere') {
+      splits = [
+        { name: 'Upper Body', muscles: [['Petto',2],['Schiena',2],['Spalle',1]] },
+        { name: 'Lower Body', muscles: [['Gambe',3],['Core',1]] },
+        { name: 'Functional + Core', muscles: [['Spalle',1],['Braccia',2],['Core',2]] },
+        { name: 'Full Body Light', muscles: [['Petto',1],['Schiena',1],['Gambe',1],['Cardio',1]] }
+      ];
+    } else {
+      // resistenza
+      splits = [
+        { name: 'Cardio + Upper', muscles: [['Cardio',2],['Petto',1],['Schiena',1]] },
+        { name: 'Legs + Endurance', muscles: [['Gambe',3],['Cardio',1]] },
+        { name: 'Intervals + Core', muscles: [['Cardio',2],['Core',2],['Spalle',1]] },
+        { name: 'Full Endurance', muscles: [['Gambe',1],['Schiena',1],['Cardio',2],['Core',1]] }
+      ];
+    }
+  } else {
+    // 5-6 days — PPL or advanced
+    if (goal === 'massa') {
+      splits = [
+        { name: 'Push (Petto Focus)', muscles: [['Petto',3],['Spalle',1],['Braccia',1]] },
+        { name: 'Pull (Schiena Focus)', muscles: [['Schiena',3],['Braccia',2]] },
+        { name: 'Gambe A (Quad)', muscles: [['Gambe',4],['Core',1]] },
+        { name: 'Push (Spalle Focus)', muscles: [['Spalle',3],['Petto',1],['Braccia',1]] },
+        { name: 'Pull (Dorsali Focus)', muscles: [['Schiena',3],['Braccia',2]] },
+        { name: 'Gambe B (Post.)', muscles: [['Gambe',3],['Core',2]] }
+      ];
+    } else {
+      splits = [
+        { name: 'Upper Push + Cardio', muscles: [['Petto',2],['Spalle',1],['Braccia',1],['Cardio',1]] },
+        { name: 'Lower + Core', muscles: [['Gambe',3],['Core',2]] },
+        { name: 'Upper Pull', muscles: [['Schiena',3],['Braccia',2]] },
+        { name: 'HIIT + Full Body', muscles: [['Cardio',2],['Gambe',1],['Core',1]] },
+        { name: 'Upper Strength', muscles: [['Petto',1],['Schiena',1],['Spalle',2],['Braccia',1]] },
+        { name: 'Legs + Cardio', muscles: [['Gambe',3],['Cardio',1]] }
+      ];
+    }
+  }
+
+  // Take only daysPerWeek splits
+  splits = splits.slice(0, daysPerWeek);
+
+  // Build the actual workout plans
+  var plans = [];
+  var dayNames = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+
+  splits.forEach(function(split, di) {
+    var exercises = [];
+    var usedIds = new Set();
+
+    split.muscles.forEach(function(pair) {
+      var muscle = pair[0], count = pair[1];
+      var available = exByMuscle(muscle).filter(function(e) { return !usedIds.has(e.id); });
+      var picked = pickN(available, count);
+      picked.forEach(function(ex) {
+        usedIds.add(ex.id);
+        exercises.push(adjustSets(ex, setsMult));
+      });
+    });
+
+    plans.push({
+      name: dayNames[di] + ' — ' + split.name,
+      exercises: exercises,
+      _aiGenerated: true
+    });
+  });
+
+  // Add age/weight-based notes to user
+  var u = getUser();
+  if (u) {
+    u.aiPlanGeneratedAt = new Date().toISOString();
+    u.aiPlanGoal = goal;
+    u.aiPlanLevel = level;
+    u.aiPlanDays = daysPerWeek;
+    setUser(u);
+  }
+
+  return plans;
+}
+
+function showAIPlanResult(user, plans) {
+  var doneEl = document.getElementById('ob-ai-done');
+  var previewEl = document.getElementById('ob-ai-plan-preview');
+  var subEl = document.getElementById('ob-ai-done-sub');
+
+  var goalLabels = { massa:'Massa Muscolare', dimagrimento:'Dimagrimento', benessere:'Benessere', resistenza:'Resistenza' };
+  var daysPerWeek = plans.length;
+
+  subEl.textContent = 'Ho creato ' + daysPerWeek + ' schede per ' + (goalLabels[user.goal]||user.goal) + ', calibrate su ' + user.weight + 'kg · ' + user.height + 'cm · livello ' + user.level + '.';
+
+  var html = '';
+  plans.forEach(function(p, i) {
+    var parts = p.name.split(' — ');
+    var day = parts[0] || '';
+    var title = parts[1] || p.name;
+    html += '<div class="ob-ai-plan-card">' +
+      '<div class="ob-ai-plan-day">' + day.replace(/ì/g,'ì') + '</div>' +
+      '<div class="ob-ai-plan-name">' + title + '</div>' +
+      '<div class="ob-ai-plan-cnt">' + p.exercises.length + ' ex</div></div>';
+  });
+  previewEl.innerHTML = html;
+  doneEl.classList.add('on');
+}
+
+document.getElementById('ob-ai-start').addEventListener('click', function() {
+  hideOnboarding();
+  var user = getUser();
+  toast('🎉 Benvenuto in AURA, ' + (user ? user.name.split(' ')[0] : '') + '!', 'gr');
+  setTimeout(function() { toast('💪 ' + getWorkouts().length + ' schede pronte. Vai alla sezione Home per iniziare!', 'bl'); }, 1500);
+});
+
+// ═══════════════════════════════════════════════════
+//  11. AI COACH — Conversational Chat
+// ═══════════════════════════════════════════════════
+function openAICoach() { document.getElementById('aicoach-ov').classList.add('on'); }
+function closeAICoach() { document.getElementById('aicoach-ov').classList.remove('on'); }
+
+document.getElementById('aicoach-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') sendAICoachMsg();
+});
+
+function sendAICoachMsg() {
+  var input = document.getElementById('aicoach-input');
+  var q = (input.value || '').trim();
+  if (!q) return;
+  input.value = '';
+  var msgs = document.getElementById('aicoach-msgs');
+  msgs.innerHTML += '<div class="aicoach-msg user"><div class="aicoach-bubble user">' + q.replace(/</g,'&lt;') + '</div></div>';
+  msgs.innerHTML += '<div class="aicoach-msg bot" id="aicoach-typing"><div class="aicoach-typing"><span></span><span></span><span></span></div></div>';
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(function() {
+    var typing = document.getElementById('aicoach-typing');
+    if (typing) typing.remove();
+    var answer = generateAICoachAnswer(q);
+    msgs.innerHTML += '<div class="aicoach-msg bot"><div class="aicoach-bubble bot">' + answer + '</div></div>';
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 600 + Math.random() * 800);
+}
+
+function generateAICoachAnswer(q) {
+  var ql = q.toLowerCase();
+  var u = getUser() || {};
+  var meals = JSON.parse(localStorage.getItem('aura_meals') || '[]');
+  var completed = JSON.parse(localStorage.getItem('aura_completed_workouts') || '[]');
+  var plans = getWorkouts();
+  var prog = JSON.parse(localStorage.getItem('aura_progress') || '{"peso":[],"forza":[],"resistenza":[]}');
+  var w = u.weight || 70, h = u.height || 175, age = u.age || 25, goal = u.goal || 'massa';
+  var tdee = Math.round((u.sex === 'F' ? 10*w + 6.25*h - 5*age - 161 : 10*w + 6.25*h - 5*age + 5) * 1.55);
+
+  if (/quant[ei]\s*(calorie|kcal)|fabbisogno|tdee/i.test(ql)) {
+    return '🔥 Il tuo TDEE stimato è di <strong>' + tdee + ' kcal/giorno</strong> (basato su ' + w + 'kg, ' + h + 'cm, ' + age + ' anni).<br><br>' +
+      (goal === 'dimagrimento' ? 'Per dimagrire, punta a <strong>' + Math.round(tdee * 0.8) + ' kcal</strong> (-20%).' :
+       goal === 'massa' ? 'Per la massa, punta a <strong>' + Math.round(tdee * 1.15) + ' kcal</strong> (+15% surplus).' :
+       'Per il tono, mantieni circa <strong>' + tdee + ' kcal</strong>.');
+  }
+  if (/protein[ea]|quant[ei]\s*protein/i.test(ql)) {
+    var pTarget = goal === 'massa' ? Math.round(w * 2) : Math.round(w * 1.6);
+    return '🥩 Per il tuo obiettivo (' + goal + '), ti consiglio <strong>' + pTarget + 'g di proteine/giorno</strong> (' + (goal==='massa'?'2':'1.6') + 'g/kg).<br><br>Fonti top: pollo, uova, pesce, legumi, whey protein.';
+  }
+  if (/carboidrat[io]|carbo/i.test(ql)) {
+    var cTarget = Math.round((tdee * (goal === 'dimagrimento' ? 0.35 : 0.45)) / 4);
+    return '🍚 Carbo consigliati: <strong>' + cTarget + 'g/giorno</strong>. ' + (goal === 'dimagrimento' ? 'Tienili moderati per il deficit.' : 'Fondamentali per energia e crescita muscolare.');
+  }
+  if (/grass[io]|lipid[io]/i.test(ql)) {
+    var fTarget = Math.round((tdee * 0.25) / 9);
+    return '🥑 Grassi consigliati: <strong>' + fTarget + 'g/giorno</strong> (~25% delle calorie). Preferisci olio d\'oliva, avocado, frutta secca, pesce azzurro.';
+  }
+  if (/allenam|workout|scheda|eserciz/i.test(ql)) {
+    return '💪 Hai <strong>' + plans.length + ' schede</strong> create e <strong>' + completed.length + ' allenamenti</strong> completati.<br><br>' +
+      (completed.length === 0 ? 'Non hai ancora completato allenamenti — inizia oggi! Vai nella tab Workout.' :
+       'Ultimo allenamento: ' + (completed[completed.length-1].date || 'recente') + '. Continua così!') +
+      '<br><br>Per il tuo obiettivo (' + goal + '), consiglio ' + (goal==='massa'?'4-5':'3-4') + ' sessioni a settimana.';
+  }
+  if (/peso|dimagr|ingras|massa grassa/i.test(ql)) {
+    var lastW = prog.peso.length > 0 ? prog.peso[prog.peso.length-1].value : w;
+    return '⚖️ Il tuo peso attuale è <strong>' + lastW + 'kg</strong>.' +
+      (prog.peso.length > 1 ? '<br>Variazione recente: ' + (lastW - prog.peso[0].value > 0 ? '+' : '') + (lastW - prog.peso[0].value).toFixed(1) + 'kg dal primo tracciamento.' : '') +
+      '<br><br>' + (goal==='dimagrimento'?'Per perdere peso in modo sano, punta a -0.5/1kg a settimana con un deficit moderato.':'Per aumentare massa, punta a +0.25/0.5kg a settimana con surplus e allenamento pesante.');
+  }
+  if (/recupero|riposo|rest|overtraining|stanco|fatica/i.test(ql)) {
+    return '😴 Il recupero è fondamentale!<br><br>✅ Dormi <strong>7-9 ore</strong><br>✅ Riposa ogni muscolo <strong>48-72h</strong><br>✅ Idratati bene (almeno 2L/giorno)<br>✅ Stretching post-workout<br><br>Se ti senti molto stanco, fai un giorno di deload o mobilità.';
+  }
+  if (/integrator[ie]|creatina|whey|bcaa|supplement/i.test(ql)) {
+    return '💊 Integratori consigliati:<br><br>🔸 <strong>Creatina monoidrata</strong> (5g/giorno) — il più studiato, migliora forza<br>🔸 <strong>Whey Protein</strong> — post-workout per raggiungere il target proteico<br>🔸 <strong>Vitamina D</strong> — se non ti esponi al sole<br>🔸 <strong>Omega-3</strong> — anti-infiammatorio<br><br>❌ Non servono BCAA se assumi abbastanza proteine.';
+  }
+  if (/stretching|mobilit|flessibilit/i.test(ql)) {
+    return '🧘 La mobilità è importante quanto l\'allenamento!<br><br>✅ <strong>Pre-workout</strong>: mobilità dinamica (5-10 min)<br>✅ <strong>Post-workout</strong>: stretching statico (10-15 min)<br>✅ Foam roller per le aree tese<br>✅ Yoga 1-2x/settimana se possibile';
+  }
+  if (/motivazione|non ce la faccio|mollo|arrendo|difficile/i.test(ql)) {
+    return '🔥 Capisco che può essere difficile, ma sei già qui — e questo conta!<br><br>💡 Ricorda: i progressi non sono lineari. Anche un allenamento breve è meglio di zero.<br><br>🎯 Focus su piccoli obiettivi: "oggi faccio 3 serie di squat". Tutto il resto è bonus.<br><br>Hai già completato <strong>' + completed.length + ' workout</strong>. Non fermarti ora! 💪';
+  }
+  if (/ciao|salve|hey|buongiorno|buonasera/i.test(ql)) {
+    return 'Ciao ' + (u.name || '') + '! 👋 Come posso aiutarti oggi? Chiedimi di dieta, esercizi, recupero, supplementi, o qualsiasi dubbio fitness!';
+  }
+  return '🤖 Buona domanda! Ecco cosa so di te:<br><br>• Obiettivo: <strong>' + goal + '</strong><br>• Peso: <strong>' + w + 'kg</strong> | Altezza: <strong>' + h + 'cm</strong><br>• TDEE: <strong>' + tdee + ' kcal</strong><br>• Schede: <strong>' + plans.length + '</strong> | Workout completati: <strong>' + completed.length + '</strong><br><br>Prova a chiedermi qualcosa di specifico come "quante proteine devo assumere?" o "come miglioro il recupero?"';
+}
+
+// ═══════════════════════════════════════════════════
+//  12. PROGRESS PHOTO GALLERY
+// ═══════════════════════════════════════════════════
+var PROGPHOTO_KEY = 'aura_progress_photos';
+
+function openProgressPhotos() {
+  document.getElementById('progphoto-ov').classList.add('on');
+  renderProgressPhotos();
+}
+function closeProgressPhotos() { document.getElementById('progphoto-ov').classList.remove('on'); }
+
+document.getElementById('prog-photo-file').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var photos = JSON.parse(localStorage.getItem(PROGPHOTO_KEY) || '[]');
+    var u = getUser() || {};
+    photos.push({
+      date: new Date().toISOString().slice(0,10),
+      img: ev.target.result,
+      weight: u.weight || null
+    });
+    localStorage.setItem(PROGPHOTO_KEY, JSON.stringify(photos));
+    toast('📸 Foto salvata!', 'gr');
+    renderProgressPhotos();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+function renderProgressPhotos() {
+  var photos = JSON.parse(localStorage.getItem(PROGPHOTO_KEY) || '[]');
+  var gallery = document.getElementById('progphoto-gallery');
+  var compare = document.getElementById('progphoto-compare');
+  if (photos.length === 0) {
+    gallery.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--t3);font-size:.82rem">Nessuna foto ancora. Carica la prima!</div>';
+    compare.innerHTML = '';
+    return;
+  }
+  if (photos.length >= 2) {
+    var first = photos[0], last = photos[photos.length - 1];
+    compare.innerHTML = '<div class="sec-title">Confronto</div><div class="progphoto-compare">' +
+      '<div class="progphoto-compare-card"><img src="' + first.img + '" alt="Prima"><div class="overlay-data"><strong>' + first.date + '</strong>' + (first.weight ? '<br>' + first.weight + 'kg' : '') + '</div></div>' +
+      '<div class="progphoto-compare-card"><img src="' + last.img + '" alt="Dopo"><div class="overlay-data"><strong>' + last.date + '</strong>' + (last.weight ? '<br>' + last.weight + 'kg' : '') + '</div></div></div>';
+  } else {
+    compare.innerHTML = '<div style="text-align:center;padding:10px;color:var(--t3);font-size:.78rem">Carica almeno 2 foto per il confronto!</div>';
+  }
+  gallery.innerHTML = photos.slice().reverse().map(function(p, i) {
+    return '<div class="progphoto-item"><img src="' + p.img + '" alt="Foto"><div class="progphoto-date">' + p.date + (p.weight ? ' · ' + p.weight + 'kg' : '') + '</div></div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  13. WEARABLE SYNC — WebBluetooth HR
+// ═══════════════════════════════════════════════════
+var BLE = { device: null, characteristic: null, hrValues: [] };
+
+function openWearable() { document.getElementById('wearable-ov').classList.add('on'); renderBLELog(); }
+function closeWearable() { document.getElementById('wearable-ov').classList.remove('on'); }
+
+async function connectBLEHeartRate() {
+  if (!navigator.bluetooth) {
+    toast('❌ WebBluetooth non supportato su questo browser. Usa Chrome su Android/desktop.', 're');
+    return;
+  }
+  try {
+    toast('🔗 Cercando dispositivi Bluetooth HR...', 'bl');
+    BLE.device = await navigator.bluetooth.requestDevice({
+      filters: [{ services: ['heart_rate'] }],
+      optionalServices: ['heart_rate']
+    });
+    var server = await BLE.device.gatt.connect();
+    var service = await server.getPrimaryService('heart_rate');
+    BLE.characteristic = await service.getCharacteristic('heart_rate_measurement');
+    await BLE.characteristic.startNotifications();
+    BLE.characteristic.addEventListener('characteristicvaluechanged', onHRData);
+    document.getElementById('ble-hr-status').textContent = 'Connesso a ' + (BLE.device.name || 'Fascia HR');
+    document.getElementById('ble-hr-status').style.color = 'var(--gr)';
+    document.getElementById('ble-connect-btn').textContent = '✅ Connesso';
+    document.getElementById('ble-disconnect-btn').style.display = 'block';
+    toast('💓 Fascia HR connessa! ' + (BLE.device.name || ''), 'gr');
+  } catch (err) {
+    if (err.name !== 'NotFoundError') {
+      toast('❌ Errore connessione: ' + err.message, 're');
+    }
+  }
+}
+
+function onHRData(event) {
+  var value = event.target.value;
+  var flags = value.getUint8(0);
+  var hr = (flags & 1) ? value.getUint16(1, true) : value.getUint8(1);
+  document.getElementById('ble-hr-val').textContent = hr;
+  document.getElementById('bpm-val').textContent = hr + ' BPM';
+  S.bpm = hr;
+  BLE.hrValues.push({ time: new Date().toLocaleTimeString(), hr: hr });
+  if (BLE.hrValues.length > 100) BLE.hrValues.shift();
+  renderBLELog();
+}
+
+function disconnectBLE() {
+  if (BLE.device && BLE.device.gatt.connected) {
+    BLE.device.gatt.disconnect();
+  }
+  BLE.device = null;
+  BLE.characteristic = null;
+  document.getElementById('ble-hr-val').textContent = '--';
+  document.getElementById('ble-hr-status').textContent = 'Disconnesso';
+  document.getElementById('ble-hr-status').style.color = '';
+  document.getElementById('ble-connect-btn').textContent = '🔗 Connetti Fascia HR (Bluetooth)';
+  document.getElementById('ble-disconnect-btn').style.display = 'none';
+  toast('💓 Fascia HR disconnessa.', 'bl');
+}
+
+function renderBLELog() {
+  var el = document.getElementById('ble-hr-log');
+  if (BLE.hrValues.length === 0) { el.innerHTML = 'Nessun dato HR registrato.'; return; }
+  var last10 = BLE.hrValues.slice(-10).reverse();
+  el.innerHTML = last10.map(function(v) { return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--s8)">' +
+    '<span>' + v.time + '</span><span style="color:var(--re);font-weight:700">' + v.hr + ' BPM</span></div>'; }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  14. HIIT / TABATA TIMER
+// ═══════════════════════════════════════════════════
+var HIIT = { running: false, paused: false, interval: null, phase: 'idle', currentRound: 0, secondsLeft: 0, totalRounds: 8, workSec: 20, restSec: 10, prepSec: 5, noSleepVideo: null };
+
+function openHIIT() { document.getElementById('hiit-ov').classList.add('on'); }
+function closeHIIT() {
+  if (HIIT.running) resetHIIT();
+  document.getElementById('hiit-ov').classList.remove('on');
+}
+
+function setHIITPreset(work, rest, rounds) {
+  document.getElementById('hiit-work').value = work;
+  document.getElementById('hiit-rest').value = rest;
+  document.getElementById('hiit-rounds').value = rounds;
+}
+
+function toggleHIIT() {
+  if (HIIT.running && !HIIT.paused) {
+    HIIT.paused = true;
+    clearInterval(HIIT.interval);
+    document.getElementById('hiit-start-btn').textContent = '▶ Riprendi';
+    return;
+  }
+  if (HIIT.paused) {
+    HIIT.paused = false;
+    document.getElementById('hiit-start-btn').textContent = '⏸ Pausa';
+    HIIT.interval = setInterval(hiitTick, 1000);
+    return;
+  }
+  HIIT.workSec = parseInt(document.getElementById('hiit-work').value) || 20;
+  HIIT.restSec = parseInt(document.getElementById('hiit-rest').value) || 10;
+  HIIT.totalRounds = parseInt(document.getElementById('hiit-rounds').value) || 8;
+  HIIT.prepSec = parseInt(document.getElementById('hiit-prep').value) || 5;
+  HIIT.currentRound = 0;
+  HIIT.phase = 'prep';
+  HIIT.secondsLeft = HIIT.prepSec;
+  HIIT.running = true;
+  HIIT.paused = false;
+  document.getElementById('hiit-settings').style.display = 'none';
+  document.getElementById('hiit-start-btn').textContent = '⏸ Pausa';
+  enableNoSleep();
+  updateHIITDisplay();
+  HIIT.interval = setInterval(hiitTick, 1000);
+}
+
+function hiitTick() {
+  HIIT.secondsLeft--;
+  if (HIIT.secondsLeft <= 3 && HIIT.secondsLeft > 0) hiitBeep(800, 80);
+  if (HIIT.secondsLeft <= 0) {
+    if (HIIT.phase === 'prep') {
+      HIIT.phase = 'work';
+      HIIT.currentRound = 1;
+      HIIT.secondsLeft = HIIT.workSec;
+      hiitBeep(1000, 200);
+    } else if (HIIT.phase === 'work') {
+      if (HIIT.currentRound >= HIIT.totalRounds) {
+        finishHIIT();
+        return;
+      }
+      HIIT.phase = 'rest';
+      HIIT.secondsLeft = HIIT.restSec;
+      hiitBeep(600, 150);
+    } else if (HIIT.phase === 'rest') {
+      HIIT.phase = 'work';
+      HIIT.currentRound++;
+      HIIT.secondsLeft = HIIT.workSec;
+      hiitBeep(1000, 200);
+    }
+  }
+  updateHIITDisplay();
+}
+
+function updateHIITDisplay() {
+  var phaseEl = document.getElementById('hiit-phase');
+  var timeEl = document.getElementById('hiit-time');
+  var roundEl = document.getElementById('hiit-round');
+  var labels = { prep: 'PREPARATI', work: 'LAVORO!', rest: 'RIPOSO', idle: 'PRONTO' };
+  phaseEl.textContent = labels[HIIT.phase] || 'PRONTO';
+  phaseEl.className = 'hiit-phase ' + HIIT.phase;
+  var m = Math.floor(HIIT.secondsLeft / 60);
+  var s = HIIT.secondsLeft % 60;
+  timeEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  roundEl.textContent = 'Round ' + HIIT.currentRound + '/' + HIIT.totalRounds;
+}
+
+function finishHIIT() {
+  clearInterval(HIIT.interval);
+  HIIT.running = false;
+  HIIT.phase = 'idle';
+  disableNoSleep();
+  document.getElementById('hiit-phase').textContent = 'COMPLETATO! 🎉';
+  document.getElementById('hiit-phase').className = 'hiit-phase';
+  document.getElementById('hiit-phase').style.color = 'var(--gr)';
+  document.getElementById('hiit-start-btn').textContent = '▶ Avvia';
+  document.getElementById('hiit-settings').style.display = '';
+  hiitBeep(1200, 500);
+  toast('🎉 HIIT completato! ' + HIIT.totalRounds + ' round in ' + formatHIITTotal() + '!', 'gr');
+}
+
+function resetHIIT() {
+  clearInterval(HIIT.interval);
+  HIIT.running = false;
+  HIIT.paused = false;
+  HIIT.phase = 'idle';
+  HIIT.currentRound = 0;
+  HIIT.secondsLeft = 0;
+  disableNoSleep();
+  document.getElementById('hiit-phase').textContent = 'PRONTO';
+  document.getElementById('hiit-phase').className = 'hiit-phase';
+  document.getElementById('hiit-phase').style.color = '';
+  document.getElementById('hiit-time').textContent = '00:00';
+  document.getElementById('hiit-round').textContent = 'Round 0/0';
+  document.getElementById('hiit-start-btn').textContent = '▶ Avvia';
+  document.getElementById('hiit-settings').style.display = '';
+}
+
+function formatHIITTotal() {
+  var total = HIIT.totalRounds * (HIIT.workSec + HIIT.restSec) + HIIT.prepSec;
+  var m = Math.floor(total / 60);
+  return m + ' min';
+}
+
+var hiitAudioCtx = null;
+function hiitBeep(freq, duration) {
+  try {
+    if (!hiitAudioCtx) hiitAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = hiitAudioCtx.createOscillator();
+    var gain = hiitAudioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(hiitAudioCtx.destination);
+    osc.frequency.value = freq;
+    gain.gain.value = 0.3;
+    osc.start();
+    osc.stop(hiitAudioCtx.currentTime + duration / 1000);
+  } catch(e) {}
+}
+
+function enableNoSleep() {
+  try {
+    if (navigator.wakeLock) {
+      navigator.wakeLock.request('screen').then(function(lock) { HIIT.noSleepVideo = lock; });
+    }
+  } catch(e) {}
+}
+function disableNoSleep() {
+  try {
+    if (HIIT.noSleepVideo && HIIT.noSleepVideo.release) {
+      HIIT.noSleepVideo.release();
+      HIIT.noSleepVideo = null;
+    }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════
+//  17. ERROR TRACKING
+// ═══════════════════════════════════════════════════
+var AURA_ERRORS = [];
+
+window.onerror = function(msg, url, line, col, err) {
+  AURA_ERRORS.push({ type: 'error', msg: msg, url: url, line: line, col: col, stack: err && err.stack, time: new Date().toISOString() });
+  if (AURA_ERRORS.length > 50) AURA_ERRORS.shift();
+  console.error('[AURA Error]', msg, 'at', url, line, col);
+};
+
+window.addEventListener('unhandledrejection', function(event) {
+  AURA_ERRORS.push({ type: 'promise', msg: String(event.reason), time: new Date().toISOString() });
+  if (AURA_ERRORS.length > 50) AURA_ERRORS.shift();
+  console.error('[AURA Promise Rejection]', event.reason);
+});
+
+function getErrorLog() { return AURA_ERRORS; }
+
+// ═══════════════════════════════════════════════════
+//  16. SERVICE WORKER REGISTRATION
+// ═══════════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
+      console.log('[AURA] SW registered, scope:', reg.scope);
+    }).catch(function(err) {
+      console.log('[AURA] SW registration failed:', err);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  18. ANNUAL PLAN (79.99€)
+// ═══════════════════════════════════════════════════
+function showAnnualPlan() {
+  showModal('⚡', 'Piano Annuale AURA PRO',
+    '<div style="text-align:center;margin-bottom:12px">' +
+    '<div style="font-size:.75rem;color:var(--t3);text-decoration:line-through">119,88€/anno (9,99€/mese)</div>' +
+    '<div style="font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--or)">79,99€<small style="font-size:.7rem;color:var(--t3)">/anno</small></div>' +
+    '<div class="chip chip-gr" style="display:inline-block;margin-top:6px">🎉 Risparmi 33%!</div></div>' +
+    '<div style="font-size:.82rem;color:var(--t2);line-height:1.6">' +
+    '✅ Piano dietetico personalizzato IA<br>' +
+    '✅ Analisi forma illimitata<br>' +
+    '✅ AI Coach conversazionale<br>' +
+    '✅ Foto progresso con confronto<br>' +
+    '✅ HIIT Timer avanzato<br>' +
+    '✅ Treppiedi AURA in omaggio<br>' +
+    '✅ Supporto prioritario</div>',
+    'Abbonati — 79,99€/anno', 'var(--or)');
+  _modalCtaAction = function() {
+    closeModal();
+    toast('⚡ Abbonamento annuale attivato! Grazie per il supporto.', 'gr');
+    var u = getUser();
+    if (u) { u.plan = 'annual'; u.planExpiry = new Date(Date.now() + 365*86400000).toISOString(); setUser(u); }
+  };
+}
+
+// ═══════════════════════════════════════════════════
+//  19. REFERRAL PROGRAM
+// ═══════════════════════════════════════════════════
+function generateReferralCode() {
+  var u = getUser() || {};
+  if (u.referralCode) return u.referralCode;
+  var code = 'AURA-' + (u.name || 'USER').replace(/\s+/g, '').substring(0, 4).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+  u.referralCode = code;
+  u.referrals = u.referrals || 0;
+  setUser(u);
+  return code;
+}
+
+function openReferral() {
+  var code = generateReferralCode();
+  var u = getUser() || {};
+  var referrals = u.referrals || 0;
+  showModal('🎁', 'Invita un Amico',
+    '<div style="text-align:center">' +
+    '<div style="font-size:.82rem;color:var(--t2);margin-bottom:12px">Condividi il tuo codice e <strong>ottieni 1 mese gratis</strong> per ogni amico che si iscrive!</div>' +
+    '<div style="background:var(--s8);border:2px dashed var(--or);border-radius:14px;padding:14px;margin-bottom:12px">' +
+    '<div style="font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:2px;color:var(--or)">' + code + '</div></div>' +
+    '<div style="font-size:.78rem;color:var(--t3);margin-bottom:8px">Amici invitati: <strong style="color:var(--or)">' + referrals + '</strong> | Mesi gratis: <strong style="color:var(--gr)">' + referrals + '</strong></div>' +
+    '</div>',
+    '📤 Condividi Codice', 'var(--or)');
+  _modalCtaAction = function() {
+    closeModal();
+    if (navigator.share) {
+      navigator.share({ title: 'AURA Fitness', text: 'Unisciti a AURA! Usa il mio codice ' + code + ' per ottenere vantaggi. Scarica gratis:', url: 'https://tropicalblackie.github.io/AURAMOBILE/' });
+    } else {
+      navigator.clipboard.writeText(code).then(function() { toast('📋 Codice copiato: ' + code, 'gr'); });
+    }
+  };
+}
+
+function redeemReferral() {
+  var code = prompt('Inserisci il codice referral:');
+  if (!code || !code.trim()) return;
+  code = code.trim().toUpperCase();
+  if (!/^AURA-[A-Z0-9]{3,4}-[A-Z0-9]{4}$/.test(code)) {
+    toast('❌ Codice non valido. Formato: AURA-XXXX-XXXX', 're');
+    return;
+  }
+  var u = getUser() || {};
+  if (u.redeemedReferral) { toast('ℹ️ Hai già usato un codice referral.', 'bl'); return; }
+  u.redeemedReferral = code;
+  setUser(u);
+  toast('🎉 Codice riscattato! Hai ottenuto 1 mese gratis.', 'gr');
+}
+
+// ═══════════════════════════════════════════════════
+//  20. AURA STORE
+// ═══════════════════════════════════════════════════
+var STORE_ITEMS = [
+  { id: 'tripod', name: 'Treppiedi AURA Pro', desc: 'Supporto stabile per analisi movimento, regolabile, con custodia.', price: 49.99, img: '', emoji: '📡' },
+  { id: 'bands', name: 'Set Elastici Resistenza', desc: '5 elastici con diverse resistenze + maniglie + aggancio porta.', price: 24.99, img: '', emoji: '🏋️' },
+  { id: 'scale', name: 'Bilancia Smart BMI', desc: 'Bilancia con composizione corporea, sync Bluetooth con AURA.', price: 39.99, img: '', emoji: '⚖️' },
+  { id: 'hrband', name: 'Fascia Cardio HR', desc: 'Fascia toracica Bluetooth per monitoraggio HR in tempo reale.', price: 34.99, img: '', emoji: '💓' },
+  { id: 'shaker', name: 'Shaker AURA 700ml', desc: 'Shaker premium in acciaio con logo AURA.', price: 14.99, img: '', emoji: '🥤' },
+  { id: 'protein', name: 'Whey Protein AURA 1kg', desc: 'Proteine del siero di latte, gusto cioccolato. 30g proteine/dose.', price: 29.99, img: '', emoji: '🍫' },
+  { id: 'creatine', name: 'Creatina Monoidrata 300g', desc: 'Creatina pura, 5g/dose. 60 dosi per confezione.', price: 19.99, img: '', emoji: '💊' },
+  { id: 'mat', name: 'Tappetino AURA Premium', desc: 'Tappetino antiscivolo 183x61cm, 8mm spessore.', price: 29.99, img: '', emoji: '🧘' }
+];
+
+var STORE_CART = [];
+
+function openStore() {
+  document.getElementById('store-ov').classList.add('on');
+  renderStore();
+}
+function closeStore() { document.getElementById('store-ov').classList.remove('on'); }
+
+function renderStore() {
+  var body = document.getElementById('store-body');
+  var cartTotal = STORE_CART.reduce(function(sum, item) { return sum + item.price; }, 0);
+  var html = '';
+  if (STORE_CART.length > 0) {
+    html += '<div class="card" style="background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;padding:14px;margin-bottom:14px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+      '<div><div style="font-weight:700;font-size:.88rem">🛒 Carrello (' + STORE_CART.length + ')</div>' +
+      '<div style="font-size:.75rem;color:var(--t3)">' + STORE_CART.map(function(c){return c.name}).join(', ') + '</div></div>' +
+      '<div style="text-align:right"><div style="font-family:var(--fd);font-weight:800;color:var(--or)">' + cartTotal.toFixed(2) + '€</div>' +
+      '<button class="btn btn-or btn-sm" style="margin-top:4px" onclick="storeCheckout()">Checkout →</button></div></div></div>';
+  }
+  STORE_ITEMS.forEach(function(item) {
+    html += '<div class="store-item">' +
+      '<div style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:var(--s8);border-radius:12px;flex-shrink:0">' + item.emoji + '</div>' +
+      '<div class="store-item-info"><div class="store-item-name">' + item.name + '</div>' +
+      '<div class="store-item-desc">' + item.desc + '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px"><span class="store-item-price">' + item.price.toFixed(2) + '€</span>' +
+      '<button class="btn btn-or btn-sm" onclick="addToCart(\'' + item.id + '\')">+ Carrello</button></div></div></div>';
+  });
+  body.innerHTML = html;
+}
+
+function addToCart(itemId) {
+  var item = STORE_ITEMS.find(function(i) { return i.id === itemId; });
+  if (!item) return;
+  STORE_CART.push(item);
+  toast('🛒 ' + item.name + ' aggiunto al carrello!', 'or');
+  renderStore();
+}
+
+function storeCheckout() {
+  if (STORE_CART.length === 0) { toast('Il carrello è vuoto!', 're'); return; }
+  var total = STORE_CART.reduce(function(s, i) { return s + i.price; }, 0);
+  showModal('🛒', 'Checkout AURA Store',
+    '<div style="font-size:.82rem;color:var(--t2);line-height:1.6">' +
+    STORE_CART.map(function(c) { return '• ' + c.name + ' — <strong>' + c.price.toFixed(2) + '€</strong>'; }).join('<br>') +
+    '<br><br><div style="font-family:var(--fd);font-size:1.3rem;font-weight:800;color:var(--or)">Totale: ' + total.toFixed(2) + '€</div>' +
+    '<div style="font-size:.72rem;color:var(--t3);margin-top:6px">Spedizione gratuita sopra 50€</div></div>',
+    'Paga con Stripe →', 'var(--or)');
+  _modalCtaAction = function() {
+    closeModal();
+    toast('✅ Ordine confermato! Riceverai email di conferma.', 'gr');
+    STORE_CART = [];
+  };
+}
 
 // ── INIT — Check stored session ──────────────────
 (function initAuth() {
