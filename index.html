@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v13')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v14')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -1089,6 +1089,44 @@ html,body{
 .store-item-name{font-weight:700;font-size:.88rem;margin-bottom:3px}
 .store-item-desc{font-size:.74rem;color:var(--t3);margin-bottom:6px}
 .store-item-price{font-family:var(--fd);font-weight:800;color:var(--or);font-size:.95rem}
+
+/* ── WORKOUT CALENDAR ── */
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px;margin-bottom:14px}
+.cal-head-title{font-family:var(--fd);font-weight:800;font-size:1.1rem}
+.cal-arrow{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--s9);border:1px solid var(--s8);color:var(--t1);cursor:pointer;transition:background .2s}
+.cal-arrow:active{background:var(--s8)}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:.7rem;color:var(--t3);font-weight:600;margin-bottom:6px;text-transform:uppercase}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--t2);transition:background .2s,transform .15s}
+.cal-cell:active{transform:scale(.92)}
+.cal-cell.today{background:var(--s9);color:var(--or);border:1px solid var(--or)}
+.cal-cell.other{opacity:.25;pointer-events:none}
+.cal-cell.selected{background:var(--or);color:#000}
+.cal-dots{display:flex;gap:3px;margin-top:2px;min-height:6px}
+.cal-dot{width:6px;height:6px;border-radius:50%}
+.cal-dot.forza{background:#f97316}
+.cal-dot.cardio{background:#22c55e}
+.cal-dot.riposo{background:#38bdf8}
+.cal-dot.scheduled{background:#a78bfa}
+.cal-legend{display:flex;gap:14px;justify-content:center;margin:14px 0 8px;flex-wrap:wrap}
+.cal-legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t3)}
+.cal-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cal-day-detail{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:14px;margin-top:12px}
+.cal-day-title{font-family:var(--fd);font-weight:700;font-size:.92rem;margin-bottom:10px}
+.cal-ev{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg);border-radius:12px;margin-bottom:6px}
+.cal-ev-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cal-ev-info{flex:1}
+.cal-ev-name{font-weight:600;font-size:.84rem}
+.cal-ev-meta{font-size:.7rem;color:var(--t3)}
+.cal-ev-del{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f43f5e20;color:#f43f5e;cursor:pointer;font-size:.9rem}
+.cal-schedule-row{display:flex;gap:8px;margin-top:10px}
+.cal-schedule-row select,.cal-schedule-row button{padding:10px 12px;border-radius:12px;font-size:.82rem;border:1px solid var(--s8);background:var(--s9);color:var(--t1)}
+.cal-schedule-row select{flex:1;appearance:none}
+.cal-schedule-row button{background:var(--or);color:#000;font-weight:700;border:none;white-space:nowrap;cursor:pointer}
+.cal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.cal-stat{text-align:center;background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:12px 6px}
+.cal-stat-val{font-family:var(--fd);font-weight:800;font-size:1.2rem;color:var(--or)}
+.cal-stat-lbl{font-size:.68rem;color:var(--t3);margin-top:2px}
 </style>
 </head>
 <body>
@@ -1593,10 +1631,11 @@ html,body{
       </div>
       <div style="padding:0 16px">
         <!-- Quick actions -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">
           <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Schede</button>
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria</button>
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#a78bfa;color:#a78bfa" onclick="openCalendar()"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendario</button>
         </div>
         <!-- AI plans -->
         <div class="sec-title">Schede IA Generate</div>
@@ -2111,6 +2150,39 @@ html,body{
     <div class="mp-t">È un match!</div>
     <div class="mp-s" id="match-msg">Hai fatto match con Elena M.!</div>
     <button class="cta" style="margin-top:1rem" onclick="document.getElementById('match-pop').style.display='none'; openMatchChat()">Inizia a chattare <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
+  </div>
+</div>
+
+<!-- WORKOUT CALENDAR OVERLAY -->
+<div class="legal-ov" id="cal-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeCalendar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendario</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <!-- Month stats -->
+    <div class="cal-stats" id="cal-stats"></div>
+    <!-- Calendar nav -->
+    <div class="cal-head" style="margin-top:14px">
+      <button class="cal-arrow" onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="cal-head-title" id="cal-month-title"></div>
+      <button class="cal-arrow" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+    <!-- Weekday headers -->
+    <div class="cal-weekdays"><span>Lun</span><span>Mar</span><span>Mer</span><span>Gio</span><span>Ven</span><span>Sab</span><span>Dom</span></div>
+    <!-- Calendar grid -->
+    <div class="cal-grid" id="cal-grid"></div>
+    <!-- Legend -->
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#f97316"></div>Forza</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#22c55e"></div>Cardio</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#38bdf8"></div>Riposo</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#a78bfa"></div>Pianificato</div>
+    </div>
+    <!-- Day detail -->
+    <div id="cal-day-detail"></div>
   </div>
 </div>
 
@@ -3060,6 +3132,11 @@ function wsSaveAndClose() {
   S.exercise = Math.min(S.exercise + Math.round(ws.totalSec / 60), S.exGoal);
   S.stand = Math.min(S.stand + 1, S.standGoal);
   updateRings();
+  // Remove completed scheduled workout from calendar
+  var todayDate = new Date().toISOString().slice(0,10);
+  var sched = getScheduled();
+  var filtered = sched.filter(function(s) { return !(s.date === todayDate && s.planName === ws.planName); });
+  if (filtered.length !== sched.length) saveScheduled(filtered);
   toast('💪 Allenamento salvato! +200 XP', 'gr');
 }
 
@@ -7044,6 +7121,248 @@ function generateAICoachFallback(q) {
 }
 
 // ═══════════════════════════════════════════════════
+//  11b. WORKOUT CALENDAR
+// ═══════════════════════════════════════════════════
+var CAL_SCHED_KEY = 'aura_scheduled_workouts';
+var _calYear, _calMonth, _calSelDate;
+var MESI = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+
+function getScheduled() {
+  try { return JSON.parse(localStorage.getItem(CAL_SCHED_KEY)) || []; } catch(e) { return []; }
+}
+function saveScheduled(arr) { localStorage.setItem(CAL_SCHED_KEY, JSON.stringify(arr)); }
+
+function openCalendar() {
+  var now = new Date();
+  _calYear = now.getFullYear();
+  _calMonth = now.getMonth();
+  _calSelDate = now.toISOString().slice(0,10);
+  document.getElementById('cal-ov').classList.add('on');
+  renderCalendar();
+}
+function closeCalendar() { document.getElementById('cal-ov').classList.remove('on'); }
+
+function calNav(dir) {
+  _calMonth += dir;
+  if (_calMonth < 0) { _calMonth = 11; _calYear--; }
+  if (_calMonth > 11) { _calMonth = 0; _calYear++; }
+  renderCalendar();
+}
+
+function calClassifyWorkout(planName) {
+  var n = (planName || '').toLowerCase();
+  if (/cardio|corsa|run|hiit|bike|camminat|endurance|aerob/i.test(n)) return 'cardio';
+  if (/riposo|rest|stretch|yoga|recovery|mobil/i.test(n)) return 'riposo';
+  return 'forza';
+}
+
+function calGetDayData(dateStr) {
+  var completed = getCompletedWorkouts().filter(function(w) { return w.date === dateStr; });
+  var scheduled = getScheduled().filter(function(s) { return s.date === dateStr; });
+  return { completed: completed, scheduled: scheduled };
+}
+
+function renderCalendar() {
+  var title = MESI[_calMonth] + ' ' + _calYear;
+  document.getElementById('cal-month-title').textContent = title;
+
+  var todayStr = new Date().toISOString().slice(0,10);
+  var firstDay = new Date(_calYear, _calMonth, 1);
+  var lastDay = new Date(_calYear, _calMonth + 1, 0);
+  var startDow = (firstDay.getDay() + 6) % 7; // Monday = 0
+
+  var grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  // Previous month padding
+  var prevLast = new Date(_calYear, _calMonth, 0).getDate();
+  for (var p = startDow - 1; p >= 0; p--) {
+    var d = prevLast - p;
+    var cell = document.createElement('div');
+    cell.className = 'cal-cell other';
+    cell.textContent = d;
+    grid.appendChild(cell);
+  }
+
+  // Current month days
+  for (var i = 1; i <= lastDay.getDate(); i++) {
+    var dateStr = _calYear + '-' + String(_calMonth + 1).padStart(2,'0') + '-' + String(i).padStart(2,'0');
+    var cell = document.createElement('div');
+    cell.className = 'cal-cell';
+    if (dateStr === todayStr) cell.classList.add('today');
+    if (dateStr === _calSelDate) cell.classList.add('selected');
+    cell.textContent = i;
+
+    // Dots
+    var data = calGetDayData(dateStr);
+    var dotsDiv = document.createElement('div');
+    dotsDiv.className = 'cal-dots';
+    var types = {};
+    data.completed.forEach(function(w) { types[calClassifyWorkout(w.planName)] = true; });
+    data.scheduled.forEach(function(s) { types['scheduled'] = true; });
+    ['forza','cardio','riposo','scheduled'].forEach(function(t) {
+      if (types[t]) {
+        var dot = document.createElement('div');
+        dot.className = 'cal-dot ' + t;
+        dotsDiv.appendChild(dot);
+      }
+    });
+    cell.appendChild(dotsDiv);
+
+    (function(ds) {
+      cell.addEventListener('click', function() {
+        _calSelDate = ds;
+        renderCalendar();
+      });
+    })(dateStr);
+
+    grid.appendChild(cell);
+  }
+
+  // Next month padding
+  var totalCells = startDow + lastDay.getDate();
+  var remaining = (7 - totalCells % 7) % 7;
+  for (var n = 1; n <= remaining; n++) {
+    var cell = document.createElement('div');
+    cell.className = 'cal-cell other';
+    cell.textContent = n;
+    grid.appendChild(cell);
+  }
+
+  // Month stats
+  renderCalStats();
+  // Day detail
+  renderCalDayDetail();
+}
+
+function renderCalStats() {
+  var completed = getCompletedWorkouts().filter(function(w) {
+    return w.date && w.date.slice(0,7) === _calYear + '-' + String(_calMonth + 1).padStart(2,'0');
+  });
+  var totalMin = 0, totalCal = 0;
+  completed.forEach(function(w) { totalMin += Math.round((w.duration || 0) / 60); totalCal += (w.calories || 0); });
+  document.getElementById('cal-stats').innerHTML =
+    '<div class="cal-stat"><div class="cal-stat-val">' + completed.length + '</div><div class="cal-stat-lbl">Allenamenti</div></div>' +
+    '<div class="cal-stat"><div class="cal-stat-val">' + totalMin + '</div><div class="cal-stat-lbl">Minuti</div></div>' +
+    '<div class="cal-stat"><div class="cal-stat-val">' + totalCal + '</div><div class="cal-stat-lbl">Calorie</div></div>';
+}
+
+function renderCalDayDetail() {
+  var el = document.getElementById('cal-day-detail');
+  var data = calGetDayData(_calSelDate);
+  var dayParts = _calSelDate.split('-');
+  var dayLabel = parseInt(dayParts[2]) + ' ' + MESI[parseInt(dayParts[1]) - 1];
+  var todayStr = new Date().toISOString().slice(0,10);
+  var isPastOrToday = _calSelDate <= todayStr;
+  var isFuture = _calSelDate > todayStr;
+
+  var html = '<div class="cal-day-detail"><div class="cal-day-title">📅 ' + dayLabel + '</div>';
+
+  // Completed workouts
+  if (data.completed.length > 0) {
+    data.completed.forEach(function(w) {
+      var type = calClassifyWorkout(w.planName);
+      var colors = { forza:'#f97316', cardio:'#22c55e', riposo:'#38bdf8' };
+      var dur = Math.round((w.duration || 0) / 60);
+      html += '<div class="cal-ev">' +
+        '<div class="cal-ev-dot" style="background:' + (colors[type] || '#f97316') + '"></div>' +
+        '<div class="cal-ev-info"><div class="cal-ev-name">' + (w.planName || 'Allenamento') + '</div>' +
+        '<div class="cal-ev-meta">✅ Completato • ' + dur + ' min • ' + (w.calories || 0) + ' kcal</div></div></div>';
+    });
+  }
+
+  // Scheduled workouts
+  if (data.scheduled.length > 0) {
+    data.scheduled.forEach(function(s, idx) {
+      html += '<div class="cal-ev">' +
+        '<div class="cal-ev-dot" style="background:#a78bfa"></div>' +
+        '<div class="cal-ev-info"><div class="cal-ev-name">' + (s.planName || 'Allenamento') + '</div>' +
+        '<div class="cal-ev-meta">🗓️ Pianificato' + (s.time ? ' alle ' + s.time : '') + '</div></div>' +
+        '<div class="cal-ev-del" onclick="calRemoveScheduled(\'' + _calSelDate + '\',' + idx + ')">✕</div></div>';
+    });
+  }
+
+  // No events
+  if (data.completed.length === 0 && data.scheduled.length === 0) {
+    html += '<div style="text-align:center;padding:16px;color:var(--t3);font-size:.82rem">' +
+      (isPastOrToday ? '😴 Giorno di riposo' : '📝 Nessun allenamento pianificato') + '</div>';
+  }
+
+  // Schedule form (future or today)
+  if (isFuture || _calSelDate === todayStr) {
+    var plans = getWorkouts();
+    if (plans.length > 0) {
+      html += '<div class="cal-schedule-row">' +
+        '<select id="cal-sched-plan">';
+      plans.forEach(function(p, i) {
+        html += '<option value="' + i + '">' + (p.name || 'Scheda ' + (i + 1)) + '</option>';
+      });
+      html += '</select>' +
+        '<button onclick="calScheduleWorkout()">+ Pianifica</button></div>';
+    }
+  }
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function calScheduleWorkout() {
+  var sel = document.getElementById('cal-sched-plan');
+  if (!sel) return;
+  var plans = getWorkouts();
+  var planIdx = parseInt(sel.value);
+  var plan = plans[planIdx];
+  if (!plan) return;
+  var sched = getScheduled();
+  sched.push({ date: _calSelDate, planName: plan.name || 'Scheda ' + (planIdx + 1), planIdx: planIdx });
+  saveScheduled(sched);
+  renderCalendar();
+  toast('📅 Allenamento pianificato!', 'gr');
+  calSetReminder(_calSelDate, plan.name || 'Allenamento');
+}
+
+function calRemoveScheduled(date, idx) {
+  var sched = getScheduled();
+  var dayScheduled = [];
+  var rest = [];
+  sched.forEach(function(s) {
+    if (s.date === date) dayScheduled.push(s); else rest.push(s);
+  });
+  dayScheduled.splice(idx, 1);
+  saveScheduled(rest.concat(dayScheduled));
+  renderCalendar();
+  toast('🗑️ Rimosso dal calendario', 'bl');
+}
+
+function calSetReminder(dateStr, planName) {
+  if (typeof Notification === 'undefined' || Notification.permission === 'denied') return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+  // Schedule reminder for 9:00 AM on the day
+  var parts = dateStr.split('-');
+  var target = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 9, 0, 0);
+  var now = new Date();
+  var ms = target.getTime() - now.getTime();
+  if (ms <= 0) return;
+  // Only if within 7 days (avoid long timeouts)
+  if (ms > 7 * 24 * 60 * 60 * 1000) return;
+  setTimeout(function() {
+    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      new Notification('🏋️ AURA — Allenamento oggi!', { body: planName + ' • È ora di allenarti!', icon: 'https://tropicalblackie.github.io/AURAMOBILE/icon-192.png' });
+    }
+  }, ms);
+}
+
+// Set reminders on app load for upcoming scheduled workouts
+(function() {
+  var todayStr = new Date().toISOString().slice(0,10);
+  getScheduled().forEach(function(s) {
+    if (s.date >= todayStr) calSetReminder(s.date, s.planName || 'Allenamento');
+  });
+})();
+
+// ═══════════════════════════════════════════════════
 //  12. PROGRESS PHOTO GALLERY
 // ═══════════════════════════════════════════════════
 var PROGPHOTO_KEY = 'aura_progress_photos';
@@ -7349,7 +7668,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v13') caches.delete(name);
+        if (name !== 'aura-v14') caches.delete(name);
       });
     });
   }
