@@ -22,6 +22,11 @@ if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then
 <!-- CDN libs loaded lazily on first use (MediaPipe, Quagga, Firebase) -->
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+@property --or{
+  syntax:'<color>';
+  inherits:true;
+  initial-value:#f97316;
+}
 :root{
   --or:#f97316;--or2:#ea6c0d;--or3:#fb923c;
   --bg:#000000;--s9:#0a0f1a;--s8:#151c2b;--s7:#2a3345;--s6:#3d4a5f;
@@ -30,6 +35,11 @@ if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then
   --nav-h:68px;--safe-b:env(safe-area-inset-bottom,16px);
   --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
   --spring:cubic-bezier(.34,1.56,.64,1);
+  animation:breathe 4s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{--or:#f97316}
+  50%{--or:#fb923c}
 }
 html,body{
   height:100%;width:100%;overflow:hidden;
