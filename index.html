@@ -6968,12 +6968,15 @@ function hideAuth() {
 }
 
 // Auth tabs
-document.querySelectorAll('.auth-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('on'));
-    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('on'));
-    tab.classList.add('on');
-    document.getElementById('form-' + tab.dataset.auth).classList.add('on');
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('on'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('on'));
+      tab.classList.add('on');
+      document.getElementById('form-' + tab.dataset.auth).classList.add('on');
+    });
   });
 });
 
@@ -9577,6 +9580,12 @@ function isDeloadWeek() {
   } else {
     showAuth();
     hideOnboarding();
+  }
+
+  // Prevent auth screen from reappearing if onboarding is in progress
+  if (user && user._needsOnboarding) {
+    hideAuth();
+    startOnboarding();
   }
   // Handle deep-link from notification (?tab=workout etc)
   try {
