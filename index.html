@@ -6893,7 +6893,18 @@ function setUser(u) {
 
 function clearUser() {
   localStorage.removeItem(AUTH_KEY);
+  console.log('[DEBUG] User cleared from localStorage');
 }
+
+// TEMPORARY DEBUG: Add to window for easy access
+window.debugAuth = {
+  clearStorage: function() {
+    localStorage.clear();
+    location.reload();
+  },
+  getUser: getUser,
+  clearUser: clearUser
+};
 
 // Apply user data across the app
 function applyUserData(u) {
@@ -9576,6 +9587,8 @@ function isDeloadWeek() {
 // ── INIT — Check stored session ──────────────────
 (function initAuth() {
   const user = getUser();
+  console.log('[DEBUG] initAuth - user found:', user);
+  console.log('[DEBUG] localStorage aura_user:', localStorage.getItem('aura_user'));
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
