@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v19')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v24')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -4710,6 +4710,7 @@ function updateRings() {
 function updateHydro() {
   var arc = document.getElementById('hydro-arc');
   var val = document.getElementById('hydro-val');
+  if (!arc || !val) return;
   var circ = 87.96;
   var pct = S.hydration / S.hydGoal;
   arc.style.strokeDashoffset = circ * (1 - pct);
@@ -4719,15 +4720,18 @@ function updateHydro() {
   var sub = document.querySelector('.hydro-mini-sub');
   if (sub) sub.textContent = 'di ' + S.hydGoal + 'L';
 }
-document.getElementById('add-water').addEventListener('click', function() {
-  if (S.hydration >= S.hydGoal) { toast('🎉 Obiettivo raggiunto!', 'gr'); return; }
-  S.hydration = Math.min(+(S.hydration + 0.25).toFixed(2), S.hydGoal);
-  updateHydro();
-  this.style.transform = 'scale(1.3)';
-  setTimeout(() => { this.style.transform = 'scale(1)'; }, 160);
-  if (S.hydration >= S.hydGoal) toast('🎉 Idratazione completata! 🏆', 'gr');
-  else toast(`💧 +250ml · Ancora ${(S.hydGoal - S.hydration).toFixed(2)}L`, 'bl');
-});
+var _addWaterBtn = document.getElementById('add-water');
+if (_addWaterBtn) {
+  _addWaterBtn.addEventListener('click', function() {
+    if (S.hydration >= S.hydGoal) { toast('🎉 Obiettivo raggiunto!', 'gr'); return; }
+    S.hydration = Math.min(+(S.hydration + 0.25).toFixed(2), S.hydGoal);
+    updateHydro();
+    this.style.transform = 'scale(1.3)';
+    setTimeout(() => { this.style.transform = 'scale(1)'; }, 160);
+    if (S.hydration >= S.hydGoal) toast('🎉 Idratazione completata! 🏆', 'gr');
+    else toast(`💧 +250ml · Ancora ${(S.hydGoal - S.hydration).toFixed(2)}L`, 'bl');
+  });
+}
 updateHydro();
 
 // ── BPM ────────────────────────────────────────────
@@ -8521,7 +8525,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v19') caches.delete(name);
+        if (name !== 'aura-v24') caches.delete(name);
       });
     });
   }
