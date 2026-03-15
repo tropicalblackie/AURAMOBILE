@@ -78,6 +78,7 @@ html,body{
   scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:none;
+  overflow-wrap:break-word;word-break:break-word;
 }
 .screen::-webkit-scrollbar{display:none}
 
@@ -207,7 +208,7 @@ html,body{
 .nb{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
   padding:8px 2px;background:none;border:none;color:var(--t4);
-  font-size:.55rem;font-weight:600;letter-spacing:.3px;
+  font-size:.64rem;font-weight:600;letter-spacing:.3px;
   transition:color .2s var(--spring);position:relative;
 }
 .nb.on{color:var(--or)}
@@ -218,11 +219,11 @@ html,body{
 /* ── CARDS ── */
 .card{background:var(--s9);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
 .card.glass{background:rgba(10,15,26,.5);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-color:rgba(255,255,255,.08)}
-.sec-title{font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t4);margin-bottom:10px;margin-top:18px}
+.sec-title{font-family:var(--fd);font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:10px;margin-top:18px}
 .sec-title:first-child{margin-top:4px}
 
 /* ── DISPLAY TYPOGRAPHY ── */
-.disp-title{font-family:var(--fd);font-size:2.8rem;font-weight:800;letter-spacing:-2px;line-height:.95;color:var(--t1)}
+.disp-title{font-family:var(--fd);font-size:clamp(1.4rem,5vw,1.8rem);font-weight:800;letter-spacing:-1px;line-height:1;color:var(--t1)}
 
 /* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:.65rem 1.2rem;border-radius:12px;font-weight:600;font-size:.85rem;transition:all .2s var(--spring);border:none;cursor:pointer}
@@ -265,7 +266,7 @@ html,body{
 /* ══════ HOME ══════ */
 .home-header{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:center}
 .greeting-sm{font-size:.82rem;color:var(--t3)}
-.greeting-name{font-family:var(--fd);font-size:2.8rem;font-weight:800;letter-spacing:-2px;line-height:.95}
+.greeting-name{font-family:var(--fd);font-size:clamp(1.5rem,6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;max-width:100%;overflow-wrap:break-word}
 .hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .lvl-badge{font-size:.65rem;font-weight:700;color:var(--or);background:#f9731615;border:1px solid #f9731440;padding:3px 10px;border-radius:50px;white-space:nowrap}
 
@@ -278,7 +279,7 @@ html,body{
 .rec-msg .acc{color:var(--or);font-weight:600}
 .rec-actions{display:flex;gap:8px;margin-top:10px}
 
-.stat-label{font-size:.62rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t4);text-align:left;margin-bottom:10px}
+.stat-label{font-size:.68rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3);text-align:left;margin-bottom:10px}
 
 /* Activity Rings */
 .rings-wrap{position:relative;width:160px;height:160px;margin:0 auto}
@@ -291,7 +292,7 @@ html,body{
 .ring-leg-val{font-family:var(--fd);font-weight:800;margin-left:auto;font-size:.8rem}
 .rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .rings-center-val{font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1;color:var(--t1)}
-.rings-center-sub{font-size:.55rem;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.rings-center-sub{font-size:.64rem;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 
 /* Hydro mini */
 .hydro-mini{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;background:var(--s9);border:1px solid var(--s8);border-radius:14px}
@@ -305,7 +306,7 @@ html,body{
 .mn{font-size:.72rem;color:var(--t2);width:46px;flex-shrink:0}
 .mb{flex:1;height:4px;background:var(--s8);border-radius:10px;overflow:hidden}
 .mf{height:100%;border-radius:10px}
-.mp{font-size:.67rem;font-weight:700;width:28px;text-align:right}
+.mp{font-size:.67rem;font-weight:700;width:34px;text-align:right}
 
 .metrics-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
 .mc{display:flex;align-items:center;gap:5px;padding:.38rem .8rem;background:var(--s9);border:1px solid var(--s8);border-radius:50px;font-size:.73rem;color:var(--t2)}
@@ -352,21 +353,21 @@ html,body{
 .fb.err{background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:var(--re)}
 .qs{position:absolute;bottom:14px;left:14px;background:rgba(5,13,26,.82);backdrop-filter:blur(10px);border:1px solid var(--s7);border-radius:11px;padding:.48rem .8rem;text-align:center;z-index:14}
 .qn{font-family:var(--fd);font-size:1.55rem;font-weight:800;color:var(--gr);line-height:1}
-.ql{font-size:.6rem;color:var(--t3);margin-top:2px}
+.ql{font-size:.65rem;color:var(--t3);margin-top:2px}
 .cam-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:10;border-radius:22px}
 .cam-status{position:absolute;top:14px;left:14px;padding:4px 10px;border-radius:8px;font-size:.66rem;font-weight:700;z-index:14;backdrop-filter:blur(8px)}
 .cam-status.live{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:var(--gr)}
 .cam-status.off{background:rgba(100,116,139,.2);border:1px solid rgba(100,116,139,.4);color:var(--t3)}
 .cam-status.nolight{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:var(--re)}
 .cam-rep-badge{position:absolute;bottom:14px;right:14px;background:var(--or);color:#fff;font-family:var(--fd);font-weight:800;font-size:1rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:14;box-shadow:0 4px 16px #f9731640}
-.cam-angle-tag{position:absolute;background:rgba(5,13,26,.75);backdrop-filter:blur(6px);border:1px solid var(--s7);border-radius:6px;padding:2px 6px;font-size:.58rem;font-weight:700;color:var(--or);z-index:14;pointer-events:none;white-space:nowrap}
+.cam-angle-tag{position:absolute;background:rgba(5,13,26,.75);backdrop-filter:blur(6px);border:1px solid var(--s7);border-radius:6px;padding:2px 6px;font-size:.65rem;font-weight:700;color:var(--or);z-index:14;pointer-events:none;white-space:nowrap}
 .flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flashOut .35s ease forwards;z-index:15;border-radius:inherit}
 @keyframes flashOut{from{opacity:.88}to{opacity:0}}
 
 .cam-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;margin-bottom:12px}
 .cam-stat{background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:10px 8px;text-align:center}
 .cam-stat-val{font-family:var(--fd);font-size:1.3rem;font-weight:800;line-height:1}
-.cam-stat-label{font-size:.62rem;color:var(--t3);margin-top:3px}
+.cam-stat-label{font-size:.66rem;color:var(--t3);margin-top:3px}
 .cam-exercise-select{width:100%;padding:.65rem .9rem;background:var(--s9);color:var(--t1);border:1px solid var(--s8);border-radius:12px;font-size:.85rem;font-weight:600;font-family:var(--fb);margin-bottom:10px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 .cam-target-row{display:flex;gap:8px;align-items:center;padding:0 16px 8px}
 .cam-target-row label{font-size:.78rem;color:var(--t3);white-space:nowrap;font-weight:600}
@@ -378,13 +379,13 @@ html,body{
 .cam-summary-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
 .cam-summary-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .cam-summary-body{padding:40px 20px;text-align:center;flex:1;overflow-y:auto}
-.cam-summary-grade{font-size:4rem;margin-bottom:8px}
+.cam-summary-grade{font-size:3rem;margin-bottom:8px}
 .cam-summary-title{font-family:var(--fd);font-weight:800;font-size:1.4rem;margin-bottom:4px}
 .cam-summary-sub{font-size:.85rem;color:var(--t3);margin-bottom:28px}
 .cam-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
 .cam-summary-card{background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:16px 10px}
 .cam-summary-card-val{font-family:var(--fd);font-weight:800;font-size:1.3rem;color:var(--or)}
-.cam-summary-card-lbl{font-size:.7rem;color:var(--t4);margin-top:2px}
+.cam-summary-card-lbl{font-size:.7rem;color:var(--t3);margin-top:2px}
 .cam-summary-tips{text-align:left;background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px;margin-bottom:20px}
 .cam-summary-tips-title{font-weight:700;font-size:.85rem;margin-bottom:8px}
 .cam-summary-tip{font-size:.78rem;color:var(--t2);padding:4px 0;display:flex;align-items:flex-start;gap:6px}
@@ -593,11 +594,11 @@ html,body{
 .chat-back{width:36px;height:36px;border-radius:50%;background:var(--s8);border:none;display:flex;align-items:center;justify-content:center;color:var(--t1);cursor:pointer}
 .chat-uname{font-family:var(--fd);font-weight:800;font-size:1rem;flex:1}
 .chat-msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
-.chat-day{text-align:center;font-size:.65rem;color:var(--t4);margin:8px 0}
+.chat-day{text-align:center;font-size:.68rem;color:var(--t3);margin:8px 0}
 .chat-bub{max-width:78%;padding:10px 14px;border-radius:16px;font-size:.82rem;line-height:1.5;word-break:break-word}
 .chat-bub.them{background:var(--s8);color:var(--t1);border-bottom-left-radius:4px;align-self:flex-start}
 .chat-bub.me{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
-.chat-bub-time{font-size:.58rem;opacity:.6;margin-top:3px}
+.chat-bub-time{font-size:.64rem;opacity:.7;margin-top:3px}
 .chat-input-row{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--s8);flex-shrink:0;background:var(--bg)}
 .chat-input{flex:1;padding:10px 14px;background:var(--s8);border:1px solid var(--s7);border-radius:24px;color:var(--t1);font-size:.85rem;outline:none;font-family:var(--fb)}
 .chat-input::placeholder{color:var(--t4)}
@@ -610,12 +611,12 @@ html,body{
 .prof-header{padding:14px 20px;display:flex;align-items:center;gap:14px}
 .prof-name{font-family:var(--fd);font-size:1.3rem;font-weight:800}
 .prof-tag{font-size:.72rem;color:var(--or);margin:3px 0}
-.prof-since{font-size:.68rem;color:var(--t4)}
+.prof-since{font-size:.68rem;color:var(--t3)}
 
 .pstats{display:flex;background:var(--s8);border-radius:16px;overflow:hidden;margin-bottom:12px}
 .psi{flex:1;text-align:center;padding:.85rem .4rem}
 .psv{font-family:var(--fd);font-size:1.3rem;font-weight:800}
-.psl{font-size:.62rem;color:var(--t4);margin-top:2px}
+.psl{font-size:.68rem;color:var(--t3);margin-top:2px}
 .psep{width:1px;height:34px;background:var(--s7);align-self:center}
 
 .whi{display:flex;align-items:center;gap:10px;padding:.68rem 0;border-bottom:1px solid var(--s8)}
@@ -897,8 +898,8 @@ html,body{
 .badge-item.locked{opacity:.4;filter:grayscale(1)}
 .badge-ico{font-size:1.6rem}
 .badge-name{font-size:.68rem;font-weight:700;line-height:1.2}
-.badge-desc{font-size:.58rem;color:var(--t4);line-height:1.2}
-.badge-date{font-size:.55rem;color:var(--or);font-weight:600;margin-top:2px}
+.badge-desc{font-size:.65rem;color:var(--t3);line-height:1.2}
+.badge-date{font-size:.62rem;color:var(--or);font-weight:600;margin-top:2px}
 
 /* ══════ EXERCISE LIBRARY & BUILDER ══════ */
 .exlib-ov{position:absolute;inset:0;z-index:3600;display:none;flex-direction:column;background:var(--bg)}
@@ -930,7 +931,7 @@ html,body{
 .exdet-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .exdet-hero{height:200px;background:var(--s8);display:flex;align-items:center;justify-content:center;position:relative}
 .exdet-hero img{height:100%;object-fit:contain}
-.exdet-hero-emoji{font-size:4rem}
+.exdet-hero-emoji{font-size:3rem}
 .exdet-body{padding:20px}
 .exdet-name{font-family:var(--fd);font-size:1.3rem;font-weight:800;margin-bottom:4px}
 .exdet-muscle{font-size:.78rem;color:var(--or);font-weight:600;margin-bottom:10px}
@@ -1127,7 +1128,7 @@ html,body{
 .hiit-phase.work{color:var(--re)}
 .hiit-phase.rest{color:var(--gr)}
 .hiit-phase.prep{color:var(--bl)}
-.hiit-time{font-family:var(--fd);font-size:4rem;font-weight:800;line-height:1;margin-bottom:6px}
+.hiit-time{font-family:var(--fd);font-size:clamp(2.5rem,8vw,3.2rem);font-weight:800;line-height:1;margin-bottom:6px}
 .hiit-round{font-size:.85rem;color:var(--t3)}
 
 /* ── STORE ── */
@@ -1178,7 +1179,7 @@ html,body{
 
 /* ── 1RM CALCULATOR ── */
 .rm-result{text-align:center;padding:20px;background:var(--s9);border:1px solid var(--s8);border-radius:18px;margin:16px 0}
-.rm-val{font-family:var(--fd);font-weight:900;font-size:2.8rem;color:var(--or);line-height:1}
+.rm-val{font-family:var(--fd);font-weight:900;font-size:2rem;color:var(--or);line-height:1}
 .rm-label{font-size:.78rem;color:var(--t3);margin-top:4px}
 .rm-pct-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0}
 .rm-pct{text-align:center;background:var(--s9);border:1px solid var(--s8);border-radius:12px;padding:10px 4px}
@@ -1792,11 +1793,11 @@ html,body{
       </div>
       <div style="padding:0 16px">
         <!-- Quick actions -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">
-          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Schede</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem" onclick="openExerciseLibrary()"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#a78bfa;color:#a78bfa" onclick="openCalendar()"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendario</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem" onclick="openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Schede</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem" onclick="openExerciseLibrary()"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem;border-color:#a78bfa;color:#a78bfa" onclick="openCalendar()"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendario</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#ef4444;color:#ef4444" onclick="open1RM()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5h11M6 12h12M17.5 17.5h-11"/><rect x="2" y="9" width="4" height="6" rx="1"/><rect x="18" y="9" width="4" height="6" rx="1"/></svg> 1RM Calc</button>
@@ -2776,11 +2777,11 @@ html,body{
     <div style="font-weight:800;font-size:1rem;margin-bottom:4px" id="mood-pre-title">Come ti senti?</div>
     <div style="font-size:.75rem;color:var(--t3);margin-bottom:18px">Seleziona il tuo stato prima dell'allenamento</div>
     <div class="mood-row">
-      <button class="mood-btn" onclick="moodSelectPre(1)">😫<span style="font-size:.55rem;display:block;margin-top:2px">Scarso</span></button>
-      <button class="mood-btn" onclick="moodSelectPre(2)">😔<span style="font-size:.55rem;display:block;margin-top:2px">Basso</span></button>
-      <button class="mood-btn" onclick="moodSelectPre(3)">😐<span style="font-size:.55rem;display:block;margin-top:2px">Medio</span></button>
-      <button class="mood-btn" onclick="moodSelectPre(4)">😊<span style="font-size:.55rem;display:block;margin-top:2px">Buono</span></button>
-      <button class="mood-btn" onclick="moodSelectPre(5)">🔥<span style="font-size:.55rem;display:block;margin-top:2px">Top</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(1)">😫<span style="font-size:.62rem;display:block;margin-top:2px">Scarso</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(2)">😔<span style="font-size:.62rem;display:block;margin-top:2px">Basso</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(3)">😐<span style="font-size:.62rem;display:block;margin-top:2px">Medio</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(4)">😊<span style="font-size:.62rem;display:block;margin-top:2px">Buono</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(5)">🔥<span style="font-size:.62rem;display:block;margin-top:2px">Top</span></button>
     </div>
   </div>
 </div>
@@ -6714,7 +6715,7 @@ function renderRecipes() {
 
   AURA_RECIPES.forEach(function(r, i) {
     html += '<div class="recipe-card" onclick="openRecipeDetail(' + i + ')">';
-    html += '<div class="recipe-img" style="display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,var(--s9),var(--s8))">' + r.img + '</div>';
+    html += '<div class="recipe-img" style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,var(--s9),var(--s8))">' + r.img + '</div>';
     html += '<div class="recipe-info-wrap">';
     html += '<div class="recipe-title">' + r.title + '</div>';
     html += '<div class="recipe-meta"><span>⏱ ' + r.time + '</span><span>📊 ' + r.difficulty + '</span><span>🍽 ' + r.servings + ' porz.</span></div>';
@@ -6733,7 +6734,7 @@ function openRecipeDetail(index) {
   var r = AURA_RECIPES[index];
   if (!r) return;
   var body = document.getElementById('recipe-detail-body');
-  var html = '<div class="recipe-detail-img" style="display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,var(--s9),var(--s8))">' + r.img + '</div>';
+  var html = '<div class="recipe-detail-img" style="display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,var(--s9),var(--s8))">' + r.img + '</div>';
   html += '<div class="recipe-detail-title">' + r.title + '</div>';
   html += '<div class="recipe-detail-meta">⏱ ' + r.time + ' · 📊 ' + r.difficulty + ' · 🍽 ' + r.servings + ' porzione/i</div>';
 
