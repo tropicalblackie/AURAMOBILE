@@ -1739,14 +1739,14 @@ html,body{
         </div>
         <!-- Upsell -->
         <div class="card" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;margin-bottom:10px">
-          <div style="font-size:1.8rem;flex-shrink:0"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:1.8rem;height:1.8rem"><path d="M2 8.82a15 15 0 0120 0M5 12.86a10 10 0 0114 0M8.5 16.43a5 5 0 017 0"/><circle cx="12" cy="20" r="1"/></svg></div>
+          <div style="font-size:1.8rem;flex-shrink:0">⚡</div>
           <div style="flex:1">
-            <div style="font-weight:700;font-size:.85rem;margin-bottom:3px">Telefono che cade?</div>
-            <div style="font-size:.76rem;color:var(--t2)"><strong>Treppiedi AURA in omaggio</strong> + piano dietetico personalizzato incluso</div>
+            <div style="font-weight:700;font-size:.85rem;margin-bottom:3px">Sblocca tutto il potenziale</div>
+            <div style="font-size:.76rem;color:var(--t2)"><strong>Piano dietetico personalizzato</strong> + coaching IA settimanale incluso</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
             <div style="font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--or)">9,99€<small style="font-size:.6rem;color:var(--t3)">/mese</small></div>
-            <button class="btn btn-or btn-sm" style="margin-top:5px;white-space:nowrap" onclick="showModal('⚡','Passa a AURA PRO','Con il piano PRO a <strong>9,99€/mese</strong> ottieni:<br><br>🍽️ <strong>Piano dietetico personalizzato</strong> basato sui tuoi obiettivi, biometria e allenamenti — aggiornato ogni settimana dall\'IA.<br><br>📡 <strong>Treppiedi AURA in omaggio</strong> (valore 49€)<br>📊 Analisi forma illimitata<br>🤖 Coaching IA settimanale','Abbonati — 9,99€/mese','var(--or)')">PRO →</button>
+            <button class="btn btn-or btn-sm" style="margin-top:5px;white-space:nowrap" onclick="showModal('⚡','Passa a AURA PRO','Con il piano PRO a <strong>9,99€/mese</strong> ottieni:<br><br>🍽️ <strong>Piano dietetico personalizzato</strong> basato sui tuoi obiettivi, biometria e allenamenti — aggiornato ogni settimana dall\'IA.<br><br>📊 Analisi forma illimitata<br>🤖 Coaching IA settimanale<br>📸 Foto progresso con confronto','Abbonati — 9,99€/mese','var(--or)')">PRO →</button>
           </div>
         </div>
       </div>
@@ -2167,7 +2167,7 @@ html,body{
         <div class="sec-title">Hardware & Store</div>
         <div class="hwg">
           <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M3 11h18M6.5 11L12 3l5.5 8"/></svg></div><div class="hwn">Bilancia BMI</div><div class="hwd">Composizione corporea sync con AURA.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
-          <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M2 8.82a15 15 0 0120 0M5 12.86a10 10 0 0114 0M8.5 16.43a5 5 0 017 0"/><circle cx="12" cy="20" r="1"/></svg></div><div class="hwn">Treppiedi PRO</div><div class="hwd">Analisi movimento senza mani.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
+
           <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/><path d="M3.5 12h4l2.5-5 3 10 2.5-5h5"/></svg></div><div class="hwn">Fascia HRV</div><div class="hwd">Monitoraggio HRV avanzato.</div><button class="btn-hw2" onclick="openStore()">Shop →</button></div>
           <div class="card hwc"><div class="hwico"><svg class="ico ico-lg" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57L22 7H6"/></svg></div><div class="hwn">AURA Store</div><div class="hwd">Esplora i nostri prodotti.</div><button class="btn-hw2" onclick="openStore()">Apri →</button></div>
         </div>
@@ -2655,7 +2655,7 @@ html,body{
       <li>Piano dietetico personalizzato IA</li>
       <li>Analisi forma illimitata</li>
       <li>Coaching IA settimanale</li>
-      <li>Treppiedi AURA in omaggio (alla prima sottoscrizione)</li>
+
     </ul>
     <h3>5.3 Servizi Premium</h3>
     <ul>
@@ -9085,7 +9085,6 @@ function showAnnualPlan() {
     '✅ AI Coach conversazionale<br>' +
     '✅ Foto progresso con confronto<br>' +
     '✅ HIIT Timer avanzato<br>' +
-    '✅ Treppiedi AURA in omaggio<br>' +
     '✅ Supporto prioritario</div>',
     'Abbonati — 79,99€/anno', 'var(--or)');
   _modalCtaAction = function() {
@@ -9194,7 +9193,6 @@ function checkReferralCount() {
 //  20. AURA STORE
 // ═══════════════════════════════════════════════════
 var STORE_ITEMS = [
-  { id: 'tripod', name: 'Treppiedi AURA Pro', desc: 'Supporto stabile per analisi movimento, regolabile, con custodia.', price: 49.99, img: '', emoji: '📡' },
   { id: 'bands', name: 'Set Elastici Resistenza', desc: '5 elastici con diverse resistenze + maniglie + aggancio porta.', price: 24.99, img: '', emoji: '🏋️' },
   { id: 'scale', name: 'Bilancia Smart BMI', desc: 'Bilancia con composizione corporea, sync Bluetooth con AURA.', price: 39.99, img: '', emoji: '⚖️' },
   { id: 'hrband', name: 'Fascia Cardio HR', desc: 'Fascia toracica Bluetooth per monitoraggio HR in tempo reale.', price: 34.99, img: '', emoji: '💓' },
