@@ -1881,12 +1881,12 @@ html,body{
 
         <!-- Upsell -->
         <div class="card prem-card">
-          <div class="pbadge"><svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg> PREMIUM — UMANO</div>
-          <div class="pt">Revisione con Nutrizionista Certificato</div>
-          <div class="pd">Un nutrizionista certificato <strong style="color:var(--t1)">esaminerà e validerà</strong> il tuo piano IA, lo correggerà dove necessario e ti darà feedback personalizzato.</div>
+          <div class="pbadge"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h-4.18c.11.31.18.65.18 1a3 3 0 01-6 0c0-.35.07-.69.18-1H7a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg> PRO — IA AVANZATA</div>
+          <div class="pt">Revisione Dieta con IA Avanzata</div>
+          <div class="pd">L'IA analizza il tuo piano alimentare, identifica <strong style="color:var(--t1)">carenze, eccessi e incompatibilità</strong>, e lo ribilancia in base ai tuoi obiettivi e biometria.</div>
           <div class="pf">
-            <div class="pp">50€<small> una tantum</small></div>
-            <button class="btn-pu" onclick="showModal('👨‍⚕️','Revisione Nutrizionista','Il tuo piano alimentare IA verrà esaminato da un nutrizionista certificato entro 48h. Riceverai correzioni, integrazioni e una sessione di follow-up inclusa.','Richiedi — 50€','var(--pu)')">Richiedi</button>
+            <div class="pp" style="color:var(--or)">Incluso nel PRO</div>
+            <button class="btn-pu" style="background:var(--or)" onclick="requestAIDietReview()">Analizza ora</button>
           </div>
         </div>
       </div>
@@ -2561,7 +2561,6 @@ html,body{
     </div>
     <ul>
       <li><strong>Fornitori di servizi:</strong> hosting (server UE), analytics, elaborazione pagamenti — tutti conformi GDPR</li>
-      <li><strong>Professionisti sanitari:</strong> solo se richiedi la revisione con nutrizionista, e solo con il tuo consenso esplicito</li>
       <li><strong>Autorità competenti:</strong> solo se richiesto dalla legge</li>
     </ul>
 
@@ -2659,7 +2658,7 @@ html,body{
     </ul>
     <h3>5.3 Servizi Premium</h3>
     <ul>
-      <li>Revisione nutrizionista certificato: 50€ una tantum</li>
+      <li>Revisione dieta IA avanzata: inclusa nel piano PRO</li>
       <li>Hardware (bilancia, fascia HRV): prezzi specificati nello Store</li>
     </ul>
     <h3>5.4 Pagamenti e Rinnovi</h3>
@@ -6424,6 +6423,35 @@ function openDietPlan() {
 }
 function closeDietPlan() {
   document.getElementById('diet-plan-ov').classList.remove('on');
+}
+
+function requestAIDietReview() {
+  var u = getUser() || {};
+  var meals = JSON.parse(localStorage.getItem('aura_meals') || '[]');
+  var todayMeals = meals.filter(function(m) { return m.date === new Date().toISOString().slice(0,10); });
+  if (todayMeals.length === 0) {
+    toast('Registra almeno un pasto oggi per la revisione IA', 're');
+    return;
+  }
+  var targets = calcUserTDEE();
+  var totalKcal = todayMeals.reduce(function(s,m) { return s + (m.kcal||0); }, 0);
+  var totalP = todayMeals.reduce(function(s,m) { return s + (m.protein||0); }, 0);
+  var totalC = todayMeals.reduce(function(s,m) { return s + (m.carbs||0); }, 0);
+  var totalF = todayMeals.reduce(function(s,m) { return s + (m.fat||0); }, 0);
+  var mealList = todayMeals.map(function(m) { return m.meal + ': ' + m.name + ' (' + m.kcal + 'kcal, P' + m.protein + ' C' + m.carbs + ' F' + m.fat + ')'; }).join('\n');
+  var prompt = 'Analizza criticamente questa giornata alimentare e fornisci una revisione professionale.\n\n' +
+    'UTENTE: ' + (u.name||'') + ', ' + (u.sex==='F'?'Donna':'Uomo') + ', ' + (u.age||25) + ' anni, ' + (u.weight||70) + 'kg, ' + (u.height||175) + 'cm\n' +
+    'Obiettivo: ' + (u.goal||'massa') + '\n' +
+    'TDEE target: ' + targets.kcal + ' kcal (' + targets.protein + 'g P / ' + targets.carbs + 'g C / ' + targets.fat + 'g F)\n\n' +
+    'PASTI DI OGGI:\n' + mealList + '\n\n' +
+    'Totale: ' + totalKcal + ' kcal, P' + totalP + ' C' + totalC + ' F' + totalF + '\n\n' +
+    'Rispondi con:\n1. VALUTAZIONE GENERALE (voto 1-10)\n2. CARENZE identificate\n3. ECCESSI identificati\n4. CORREZIONI CONSIGLIATE specifiche\n5. PIANO CORRETTIVO per domani (3 pasti + 2 snack suggeriti con macro)';
+  showModal('🤖', 'Revisione IA in corso…', '<div style="text-align:center;padding:20px"><div style="font-size:2rem;animation:pulse 1s infinite">🔍</div><br>Analisi avanzata del tuo piano alimentare…</div>', '', 'var(--or)');
+  callGeminiCoach(prompt).then(function(answer) {
+    closeModal();
+    showModal('🤖', 'Revisione Dieta IA', '<div style="font-size:.82rem;line-height:1.6">' + answer + '</div>', 'Chiudi', 'var(--or)');
+    _modalCtaAction = function() { closeModal(); };
+  });
 }
 
 function generateDietPlan() {
