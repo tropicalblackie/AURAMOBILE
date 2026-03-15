@@ -1745,8 +1745,8 @@ html,body{
             <div style="font-size:.76rem;color:var(--t2)"><strong>Piano dietetico personalizzato</strong> + coaching IA settimanale incluso</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
-            <div style="font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--or)">9,99€<small style="font-size:.6rem;color:var(--t3)">/mese</small></div>
-            <button class="btn btn-or btn-sm" style="margin-top:5px;white-space:nowrap" onclick="showModal('⚡','Passa a AURA PRO','Con il piano PRO a <strong>9,99€/mese</strong> ottieni:<br><br>🍽️ <strong>Piano dietetico personalizzato</strong> basato sui tuoi obiettivi, biometria e allenamenti — aggiornato ogni settimana dall\'IA.<br><br>📊 Analisi forma illimitata<br>🤖 Coaching IA settimanale<br>📸 Foto progresso con confronto','Abbonati — 9,99€/mese','var(--or)')">PRO →</button>
+            <div style="font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--or)">4,99€<small style="font-size:.6rem;color:var(--t3)">/mese</small></div>
+            <button class="btn btn-or btn-sm" style="margin-top:5px;white-space:nowrap" onclick="showModal('⚡','Passa a AURA PRO','Con il piano PRO a <strong>4,99€/mese</strong> ottieni:<br><br>🍽️ <strong>Piano dietetico personalizzato</strong> basato sui tuoi obiettivi, biometria e allenamenti — aggiornato ogni settimana dall\'IA.<br><br>📊 Analisi forma illimitata<br>🤖 Coaching IA settimanale<br>📸 Foto progresso con confronto<br>🔍 Revisione dieta IA avanzata','Abbonati — 4,99€/mese','var(--or)')">PRO →</button>
           </div>
         </div>
       </div>
@@ -2178,7 +2178,7 @@ html,body{
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Piano Annuale</div>
-              <div style="font-size:.72rem;color:var(--t3)">79,99€/anno — risparmi il 33%</div>
+              <div style="font-size:.72rem;color:var(--t3)">39,99€/anno — risparmi il 33%</div>
             </div>
             <button class="btn btn-or btn-sm" onclick="showAnnualPlan()">Scopri →</button>
           </div>
@@ -2649,7 +2649,7 @@ html,body{
     <h2>5. Piani e Pagamenti</h2>
     <h3>5.1 Piano Gratuito</h3>
     <p>Include funzionalità base: workout tracker, analisi camera limitata, community.</p>
-    <h3>5.2 Piano PRO (9,99€/mese)</h3>
+    <h3>5.2 Piano PRO (4,99€/mese)</h3>
     <ul>
       <li>Piano dietetico personalizzato IA</li>
       <li>Analisi forma illimitata</li>
@@ -9099,13 +9099,13 @@ function confirmImport() {
 })();
 
 // ═══════════════════════════════════════════════════
-//  18. ANNUAL PLAN (79.99€)
+//  18. ANNUAL PLAN (39.99€)
 // ═══════════════════════════════════════════════════
 function showAnnualPlan() {
   showModal('⚡', 'Piano Annuale AURA PRO',
     '<div style="text-align:center;margin-bottom:12px">' +
-    '<div style="font-size:.75rem;color:var(--t3);text-decoration:line-through">119,88€/anno (9,99€/mese)</div>' +
-    '<div style="font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--or)">79,99€<small style="font-size:.7rem;color:var(--t3)">/anno</small></div>' +
+    '<div style="font-size:.75rem;color:var(--t3);text-decoration:line-through">59,88€/anno (4,99€/mese)</div>' +
+    '<div style="font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--or)">39,99€<small style="font-size:.7rem;color:var(--t3)">/anno</small></div>' +
     '<div class="chip chip-gr" style="display:inline-block;margin-top:6px">🎉 Risparmi 33%!</div></div>' +
     '<div style="font-size:.82rem;color:var(--t2);line-height:1.6">' +
     '✅ Piano dietetico personalizzato IA<br>' +
@@ -9113,8 +9113,9 @@ function showAnnualPlan() {
     '✅ AI Coach conversazionale<br>' +
     '✅ Foto progresso con confronto<br>' +
     '✅ HIIT Timer avanzato<br>' +
+    '✅ Revisione dieta IA avanzata<br>' +
     '✅ Supporto prioritario</div>',
-    'Abbonati — 79,99€/anno', 'var(--or)');
+    'Abbonati — 39,99€/anno', 'var(--or)');
   _modalCtaAction = function() {
     closeModal();
     toast('⚡ Abbonamento annuale attivato! Grazie per il supporto.', 'gr');
