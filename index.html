@@ -1238,6 +1238,26 @@ html,body{
 .cycle-legend{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
 .cycle-legend-item{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--t3)}
 .cycle-legend-dot{width:10px;height:10px;border-radius:50%}
+/* ── MOOD & ENERGY LOG ── */
+.mood-picker{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:20px}
+.mood-picker.on{display:flex}
+.mood-picker-title{font-weight:800;font-size:1rem;text-align:center}
+.mood-picker-sub{font-size:.78rem;color:var(--t3);text-align:center}
+.mood-row{display:flex;gap:10px;justify-content:center}
+.mood-btn{width:56px;height:56px;border-radius:50%;border:2px solid var(--s8);background:var(--s9);display:flex;align-items:center;justify-content:center;font-size:1.6rem;cursor:pointer;transition:all .2s var(--spring)}
+.mood-btn:active,.mood-btn.sel{transform:scale(1.15);border-color:var(--or);box-shadow:0 0 16px #f9731640}
+.mood-label{font-size:.62rem;text-align:center;color:var(--t3);margin-top:2px}
+.mood-mini{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--s9);border:1px solid var(--s8);border-radius:12px;margin-bottom:8px}
+.mood-mini-emoji{font-size:1.2rem}
+.mood-mini-info{flex:1}
+.mood-mini-date{font-size:.68rem;color:var(--t3)}
+.mood-mini-val{font-weight:700;font-size:.8rem}
+/* ── DELOAD ALERT ── */
+.deload-alert{padding:16px;border-radius:16px;border:1px solid #f9731630;background:linear-gradient(135deg,#f9731610,var(--s9));margin-bottom:12px;display:none}
+.deload-alert.show{display:block}
+.deload-title{font-weight:800;font-size:.9rem;color:var(--or);margin-bottom:4px}
+.deload-desc{font-size:.78rem;color:var(--t3);line-height:1.4}
+.deload-actions{display:flex;gap:8px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -1564,6 +1584,30 @@ html,body{
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg><span id="home-streak">0 giorni streak</span></div>
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="home-workouts">0 allenamenti</span></div>
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 01-2-2V5h4M18 9h2a2 2 0 002-2V5h-4M4 5h16v4a6 6 0 01-6 6h-4a6 6 0 01-6-6V5zM9 15l-1 5h8l-1-5M9 20h6"/></svg><span id="home-points">0 punti</span></div>
+        </div>
+
+        <!-- Deload Alert -->
+        <div class="deload-alert" id="deload-alert">
+          <div class="deload-title">⚠️ Settimana di Scarico Consigliata</div>
+          <div class="deload-desc" id="deload-desc">Hai allenarti intensamente per diverse settimane. Una settimana di deload previene infortuni e overtraining.</div>
+          <div class="deload-actions">
+            <button class="btn btn-or btn-sm" onclick="acceptDeload()">✅ Accetto</button>
+            <button class="btn btn-ghost btn-sm" onclick="dismissDeload()">Posticipa</button>
+          </div>
+        </div>
+
+        <!-- Mood Widget -->
+        <div class="card glass" style="padding:12px;margin-bottom:10px;display:none" id="mood-widget">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="mood-widget-emoji" style="font-size:1.3rem">😊</span>
+              <div>
+                <div style="font-weight:700;font-size:.82rem" id="mood-widget-label">Umore di oggi</div>
+                <div style="font-size:.68rem;color:var(--t3)" id="mood-widget-sub">Registra come ti senti</div>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="font-size:.7rem" onclick="openMoodHistory()">📊 Storico</button>
+          </div>
         </div>
 
         <!-- CTA -->
@@ -2708,6 +2752,33 @@ html,body{
   <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="wh-content"></div>
 </div>
 
+<!-- ═══ PRE-WORKOUT MOOD PICKER ═══ -->
+<div class="mood-picker" id="mood-pre-ov">
+  <div class="mood-picker-inner" style="background:var(--card);border-radius:24px;padding:28px 20px;max-width:340px;width:90%;text-align:center">
+    <div style="font-size:1.6rem;margin-bottom:4px">🧠</div>
+    <div style="font-weight:800;font-size:1rem;margin-bottom:4px" id="mood-pre-title">Come ti senti?</div>
+    <div style="font-size:.75rem;color:var(--t3);margin-bottom:18px">Seleziona il tuo stato prima dell'allenamento</div>
+    <div class="mood-row">
+      <button class="mood-btn" onclick="moodSelectPre(1)">😫<span style="font-size:.55rem;display:block;margin-top:2px">Scarso</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(2)">😔<span style="font-size:.55rem;display:block;margin-top:2px">Basso</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(3)">😐<span style="font-size:.55rem;display:block;margin-top:2px">Medio</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(4)">😊<span style="font-size:.55rem;display:block;margin-top:2px">Buono</span></button>
+      <button class="mood-btn" onclick="moodSelectPre(5)">🔥<span style="font-size:.55rem;display:block;margin-top:2px">Top</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MOOD HISTORY OVERLAY ═══ -->
+<div class="legal-ov" id="mood-hist-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="document.getElementById('mood-hist-ov').classList.remove('on')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title">Mood & Energia</div>
+  </div>
+  <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="mood-hist-content"></div>
+</div>
+
 <!-- ═══ WORKOUT SESSION OVERLAY ═══ -->
 <div class="ws-ov" id="ws-ov">
   <div class="legal-topbar">
@@ -3287,6 +3358,8 @@ const ACCT_KEY = 'aura_accounts';
 const WS_PROG_KEY = 'aura_ws_progression';
 const BM_KEY = 'aura_body_measurements';
 const CYCLE_KEY = 'aura_cycle_data';
+const MOOD_KEY = 'aura_mood_log';
+const DELOAD_KEY = 'aura_deload';
 
 // ── WORKOUT SESSION ─────────────────────────────
 function getCompletedWorkouts() {
@@ -3297,7 +3370,7 @@ const MET_MAP = { 'Principiante': 3.5, 'Intermedio': 5.0, 'Avanzato': 6.0 };
 let ws = {
   active:false, planIdx:-1, planName:'', exercises:[], exIdx:0, setNum:1,
   resting:false, restSec:0, _restTotal:0, totalSec:0, paused:false, timer:null,
-  calories:0, exerciseTimeSec:0, setWeights:{}
+  calories:0, exerciseTimeSec:0, setWeights:{}, moodPre:0, moodPost:0
 };
 
 // Progression helpers
@@ -3368,6 +3441,21 @@ function startWorkoutSession(planIdx) {
     toast('Aggiungi esercizi prima di avviare!', 're');
     return;
   }
+  // Store planIdx and show pre-workout mood picker
+  ws._pendingPlanIdx = planIdx;
+  ws.moodPre = 0; ws.moodPost = 0;
+  document.getElementById('mood-pre-ov').classList.add('on');
+}
+
+function moodSelectPre(val) {
+  ws.moodPre = val;
+  document.getElementById('mood-pre-ov').classList.remove('on');
+  _doStartWorkoutSession(ws._pendingPlanIdx);
+}
+
+function _doStartWorkoutSession(planIdx) {
+  const plans = getWorkouts();
+  const plan = plans[planIdx];
   ws.active = true;
   ws.planIdx = planIdx;
   ws.planName = plan.name;
@@ -3378,6 +3466,8 @@ function startWorkoutSession(planIdx) {
   ws.exIdx = 0; ws.setNum = 1; ws.totalSec = 0;
   ws.resting = false; ws.restSec = 0; ws._restTotal = 0; ws.paused = false;
   ws.calories = 0; ws.exerciseTimeSec = 0; ws.setWeights = {};
+  // If mood is low, suggest lighter intensity
+  if (ws.moodPre <= 2) toast('💡 Energia bassa — considera pesi più leggeri oggi', 'or');
   document.getElementById('ws-ov').classList.add('on');
   renderWsView();
   ws.timer = setInterval(wsTick, 1000);
@@ -3499,15 +3589,24 @@ function wsCalcProgressions() {
 
 function wsSaveAndClose() {
   var cw = getCompletedWorkouts();
+  var today = new Date().toISOString().slice(0,10);
   cw.push({
-    date: new Date().toISOString().slice(0,10),
+    date: today,
     planName: ws.planName,
     exercises: ws.exercises.map(function(e, i) { return { id:e.id, name:e.name, sets:e.sets, reps:e.reps, weights:ws.setWeights[i]||{} }; }),
     duration: ws.totalSec,
     calories: ws.calories,
-    completedAt: new Date().toISOString()
+    completedAt: new Date().toISOString(),
+    moodPre: ws.moodPre || 0,
+    moodPost: ws.moodPost || 0
   });
   localStorage.setItem(CW_KEY, JSON.stringify(cw));
+  // Save mood log entry
+  if (ws.moodPre > 0 || ws.moodPost > 0) {
+    var mlog = getMoodLog();
+    mlog.push({ date: today, pre: ws.moodPre, post: ws.moodPost, plan: ws.planName });
+    saveMoodLog(mlog);
+  }
   // Save progression
   var prog = getProgression();
   var progs = wsCalcProgressions();
@@ -3515,6 +3614,8 @@ function wsSaveAndClose() {
   if (progs.length > 0) saveProgression(prog);
   document.getElementById('ws-ov').classList.remove('on');
   updateProfileStats();
+  updateMoodWidget();
+  checkDeloadNeeded();
   // Update activity rings with workout data
   S.move = Math.min(S.move + ws.calories, S.moveGoal);
   S.exercise = Math.min(S.exercise + Math.round(ws.totalSec / 60), S.exGoal);
@@ -3553,6 +3654,7 @@ function renderWsView() {
   var ts = parseInt(ex.sets) || 3;
   var total = ws.exercises.length;
   var pct = Math.round((ws.exIdx / total) * 100);
+  var _deloadBanner = isDeloadWeek() ? '<div style="background:linear-gradient(135deg,#ff9500,#ff6b00);color:#fff;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:.72rem;font-weight:700;text-align:center">🧘 Settimana di Deload — Riduci pesi del 40-50%</div>' : '';
   document.getElementById('ws-title').textContent = ws.planName;
   if (ws.resting) {
     var nextInfo = ws.setNum < ts
@@ -3566,7 +3668,7 @@ function renderWsView() {
     var isAdapted = ws._restTotal !== baseSec;
     content.innerHTML =
       '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
-      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' +
+      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' + _deloadBanner +
       '<div class="ws-card">' +
         '<div class="ws-rest-label">\u23f1 Recupero</div>' +
         '<div class="ws-rest-ring-wrap">' +
@@ -3599,7 +3701,7 @@ function renderWsView() {
     }
     content.innerHTML =
       '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
-      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' +
+      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' + _deloadBanner +
       '<div class="ws-card">' +
         '<div class="ws-ex-emoji">'+ex.emoji+'</div>' +
         '<div class="ws-ex-name">' + wsEsc(ex.name) + '</div>' +
@@ -3655,6 +3757,15 @@ function renderWsSummary() {
     });
     html += '</div>';
   }
+  // Post-workout mood picker
+  var moodEmojis = ['','😫','😔','😐','😊','🔥'];
+  html += '<div style="margin:18px 0 12px;text-align:center">';
+  html += '<div style="font-weight:700;font-size:.85rem;margin-bottom:8px">Come è andata? 💬</div>';
+  html += '<div class="mood-row" id="mood-post-row">';
+  for (var mi = 1; mi <= 5; mi++) {
+    html += '<button class="mood-btn' + (ws.moodPost === mi ? ' sel' : '') + '" onclick="moodSelectPost(' + mi + ')">' + moodEmojis[mi] + '</button>';
+  }
+  html += '</div></div>';
   html += '<button class="ws-btn-save" onclick="wsSaveAndClose()">Salva e Chiudi</button></div>';
   content.innerHTML = html;
   confetti();
@@ -7433,8 +7544,10 @@ function getCoachSystemPrompt() {
     '- Schede create: ' + plans.length + '\n' +
     '- Workout completati: ' + completed.length + '\n' +
     '- Pasti registrati oggi: ' + meals.filter(function(m) { return m.date === new Date().toISOString().slice(0,10); }).length + '\n' +
-    (lastWorkout ? '- Ultimo workout: ' + lastWorkout.planName + ' (' + lastWorkout.date + ')\n' : '') +
+    (lastWorkout ? '- Ultimo workout: ' + lastWorkout.planName + ' (' + lastWorkout.date + ')' + (lastWorkout.moodPre ? ' mood pre:' + lastWorkout.moodPre + '/5 post:' + lastWorkout.moodPost + '/5' : '') + '\n' : '') +
     '- Idratazione: ' + (S.hydration || 0) + '/' + (S.hydGoal || 2.5) + 'L\n' +
+    (function() { var ml = getMoodLog(); if (ml.length > 0) { var r = ml.slice(-5); var avg = r.reduce(function(s,m){return s+(m.pre+m.post)/2;},0)/r.length; return '- Mood medio ultime ' + r.length + ' sessioni: ' + avg.toFixed(1) + '/5\n'; } return ''; })() +
+    (isDeloadWeek() ? '- ⚠️ SETTIMANA DI DELOAD ATTIVA: suggerisci pesi ridotti del 40-50%, meno volume, focus tecnica e recupero\n' : '') +
     (function() { if (u.sex === 'F') { var p = cycleGetPhase(new Date().toISOString().slice(0,10)); if (p) return '- Fase ciclo mestruale: ' + p.name + ' (' + p.workout + ')\n'; } return ''; })() +
     'Rispondi in modo personalizzato basandoti su questi dati reali.';
 }
@@ -9146,10 +9259,178 @@ function storeCheckout() {
   };
 }
 
+// ── MOOD & ENERGY LOG ─────────────────────────────
+function getMoodLog() { try { return JSON.parse(localStorage.getItem(MOOD_KEY)) || []; } catch(e) { return []; } }
+function saveMoodLog(d) { localStorage.setItem(MOOD_KEY, JSON.stringify(d)); }
+
+var MOOD_EMOJIS = ['','😫','😔','😐','😊','🔥'];
+var MOOD_LABELS = ['','Scarso','Basso','Medio','Buono','Top'];
+
+function moodSelectPost(val) {
+  ws.moodPost = val;
+  var btns = document.querySelectorAll('#mood-post-row .mood-btn');
+  btns.forEach(function(b, i) { b.classList.toggle('sel', i === val - 1); });
+}
+
+function updateMoodWidget() {
+  var widget = document.getElementById('mood-widget');
+  if (!widget) return;
+  var mlog = getMoodLog();
+  if (mlog.length === 0) { widget.style.display = 'none'; return; }
+  widget.style.display = 'block';
+  var last = mlog[mlog.length - 1];
+  var avg = mlog.slice(-7).reduce(function(s, m) { return s + ((m.pre + m.post) / 2); }, 0) / Math.min(mlog.length, 7);
+  var avgR = Math.round(avg);
+  document.getElementById('mood-widget-emoji').textContent = MOOD_EMOJIS[avgR] || '😐';
+  document.getElementById('mood-widget-label').textContent = 'Umore: ' + MOOD_LABELS[avgR];
+  document.getElementById('mood-widget-sub').textContent = 'Media 7gg: ' + avg.toFixed(1) + '/5 · ' + mlog.length + ' registrazioni';
+}
+
+function openMoodHistory() {
+  document.getElementById('mood-hist-ov').classList.add('on');
+  renderMoodHistory();
+}
+
+function renderMoodHistory() {
+  var el = document.getElementById('mood-hist-content');
+  var mlog = getMoodLog();
+  if (mlog.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--t3)"><div style="font-size:2.5rem;margin-bottom:12px">🧠</div><b>Nessun dato mood</b><br><span style="font-size:.78rem">Completa un allenamento per registrare il tuo umore</span></div>';
+    return;
+  }
+  var html = '';
+  // Correlation summary
+  var totalPre = 0, totalPost = 0, improved = 0;
+  mlog.forEach(function(m) {
+    totalPre += m.pre; totalPost += m.post;
+    if (m.post > m.pre) improved++;
+  });
+  var avgPre = (totalPre / mlog.length).toFixed(1);
+  var avgPost = (totalPost / mlog.length).toFixed(1);
+  var impPct = Math.round((improved / mlog.length) * 100);
+  html += '<div class="card glass" style="padding:14px;margin-bottom:14px">';
+  html += '<div style="font-weight:800;font-size:.85rem;margin-bottom:10px">📊 Correlazioni Mood</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">';
+  html += '<div><div style="font-size:1.2rem;font-weight:800;color:var(--or)">' + avgPre + '</div><div style="font-size:.65rem;color:var(--t3)">Media Pre</div></div>';
+  html += '<div><div style="font-size:1.2rem;font-weight:800;color:var(--or)">' + avgPost + '</div><div style="font-size:.65rem;color:var(--t3)">Media Post</div></div>';
+  html += '<div><div style="font-size:1.2rem;font-weight:800;color:var(--or)">' + impPct + '%</div><div style="font-size:.65rem;color:var(--t3)">Migliora</div></div>';
+  html += '</div>';
+  if (parseFloat(avgPost) > parseFloat(avgPre)) {
+    html += '<div style="font-size:.72rem;color:#4cd964;margin-top:8px;text-align:center">✅ L\'allenamento migliora il tuo umore in media!</div>';
+  }
+  html += '</div>';
+  // Mood trend (last 14 entries bar chart)
+  var recent = mlog.slice(-14);
+  html += '<div class="card glass" style="padding:14px;margin-bottom:14px">';
+  html += '<div style="font-weight:800;font-size:.85rem;margin-bottom:10px">📈 Trend (ultime ' + recent.length + ' sessioni)</div>';
+  html += '<div style="display:flex;align-items:flex-end;gap:4px;height:80px">';
+  recent.forEach(function(m) {
+    var avg = (m.pre + m.post) / 2;
+    var pct = (avg / 5) * 100;
+    var col = avg >= 4 ? '#4cd964' : avg >= 3 ? 'var(--or)' : '#ff3b30';
+    html += '<div style="flex:1;background:' + col + ';border-radius:4px 4px 0 0;height:' + pct + '%;min-height:4px;opacity:.8" title="' + m.date + ': ' + avg.toFixed(1) + '"></div>';
+  });
+  html += '</div>';
+  html += '<div style="display:flex;justify-content:space-between;font-size:.55rem;color:var(--t3);margin-top:4px"><span>' + recent[0].date.slice(5) + '</span><span>' + recent[recent.length-1].date.slice(5) + '</span></div>';
+  html += '</div>';
+  // Entries list
+  html += '<div style="font-weight:800;font-size:.85rem;margin-bottom:8px">📝 Storico</div>';
+  mlog.slice().reverse().forEach(function(m) {
+    html += '<div class="mood-mini">';
+    html += '<span class="mood-mini-emoji">' + MOOD_EMOJIS[m.pre] + '→' + MOOD_EMOJIS[m.post] + '</span>';
+    html += '<div class="mood-mini-info">';
+    html += '<div class="mood-mini-date">' + m.date + ' · ' + (m.plan || '') + '</div>';
+    html += '<div class="mood-mini-val">Pre: ' + m.pre + '/5 → Post: ' + m.post + '/5</div>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+// ── DELOAD WEEK ───────────────────────────────────
+function getDeloadData() { try { return JSON.parse(localStorage.getItem(DELOAD_KEY)) || {}; } catch(e) { return {}; } }
+function saveDeloadData(d) { localStorage.setItem(DELOAD_KEY, JSON.stringify(d)); }
+
+function checkDeloadNeeded() {
+  var cw = getCompletedWorkouts();
+  if (cw.length < 8) return; // Need enough data
+  var dd = getDeloadData();
+  // If user dismissed recently (within 7 days), don't show
+  if (dd.dismissed) {
+    var diff = (Date.now() - new Date(dd.dismissed).getTime()) / 86400000;
+    if (diff < 7) return;
+  }
+  // If currently in deload week, don't show
+  if (dd.deloadUntil && new Date(dd.deloadUntil) > new Date()) return;
+  // Count distinct training weeks
+  var weeks = {};
+  cw.forEach(function(w) {
+    var d = new Date(w.date);
+    var yr = d.getFullYear();
+    var weekNum = Math.ceil(((d - new Date(yr, 0, 1)) / 86400000 + new Date(yr, 0, 1).getDay() + 1) / 7);
+    weeks[yr + '-W' + weekNum] = (weeks[yr + '-W' + weekNum] || 0) + 1;
+  });
+  var weekKeys = Object.keys(weeks).sort();
+  if (weekKeys.length < 4) return;
+  // Check consecutive weeks with >= 2 workouts (active training weeks)
+  var consecutiveActive = 0;
+  var lastDeloadWeek = dd.lastDeload ? dd.lastDeload : null;
+  for (var i = weekKeys.length - 1; i >= 0; i--) {
+    if (weeks[weekKeys[i]] >= 2) {
+      consecutiveActive++;
+    } else break;
+  }
+  // Also check mood trend - if declining, suggest earlier
+  var mlog = getMoodLog();
+  var moodDecline = false;
+  if (mlog.length >= 6) {
+    var first3 = mlog.slice(-6, -3).reduce(function(s, m) { return s + m.pre; }, 0) / 3;
+    var last3 = mlog.slice(-3).reduce(function(s, m) { return s + m.pre; }, 0) / 3;
+    if (last3 < first3 - 0.5) moodDecline = true;
+  }
+  var threshold = moodDecline ? 3 : 4;
+  if (consecutiveActive >= threshold) {
+    var alertEl = document.getElementById('deload-alert');
+    var descEl = document.getElementById('deload-desc');
+    if (alertEl) {
+      var reason = consecutiveActive + ' settimane consecutive di allenamento intenso.';
+      if (moodDecline) reason += ' Il tuo umore pre-workout è in calo — il tuo corpo ha bisogno di recupero.';
+      else reason += ' Una settimana di scarico previene infortuni e overtraining.';
+      descEl.textContent = reason;
+      alertEl.classList.add('show');
+    }
+  }
+}
+
+function acceptDeload() {
+  var dd = getDeloadData();
+  var until = new Date(); until.setDate(until.getDate() + 7);
+  dd.deloadUntil = until.toISOString().slice(0, 10);
+  dd.lastDeload = new Date().toISOString().slice(0, 10);
+  dd.dismissed = null;
+  saveDeloadData(dd);
+  document.getElementById('deload-alert').classList.remove('show');
+  toast('🧘 Settimana di deload attivata! Riduci pesi del 40-50%', 'or');
+}
+
+function dismissDeload() {
+  var dd = getDeloadData();
+  dd.dismissed = new Date().toISOString();
+  saveDeloadData(dd);
+  document.getElementById('deload-alert').classList.remove('show');
+  toast('⏭️ Deload posticipato di 7 giorni', 'or');
+}
+
+function isDeloadWeek() {
+  var dd = getDeloadData();
+  return dd.deloadUntil && new Date(dd.deloadUntil) >= new Date();
+}
+
 // ── INIT — Check stored session ──────────────────
 (function initAuth() {
   const user = getUser();
   updateProfileStats();
+  updateMoodWidget();
+  checkDeloadNeeded();
   startBpmSim(); // Start BPM sim only after DOM is ready, home tab is default
   if (user && !user._needsOnboarding) {
     applyUserData(user);
