@@ -179,7 +179,7 @@ html,body{
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 20px 10px;flex-shrink:0;
 }
-.topbar-logo{font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-logo{font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:3px;background:linear-gradient(90deg,#fff 0%,#fff 40%,rgba(255,255,255,.5) 50%,#fff 60%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 6s linear infinite}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .notif-btn{width:36px;height:36px;border-radius:50%;background:var(--s8);border:1px solid var(--s7);display:flex;align-items:center;justify-content:center;position:relative}
 .notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--or);border:1.5px solid var(--bg)}
@@ -233,7 +233,25 @@ html,body{
 .sec-title:first-child{margin-top:4px}
 
 /* ── DISPLAY TYPOGRAPHY ── */
-.disp-title{font-family:var(--fd);font-size:clamp(1.4rem,5vw,1.8rem);font-weight:800;letter-spacing:-1px;line-height:1;color:var(--t1)}
+.disp-title{font-family:var(--fd);font-size:clamp(1.4rem,5vw,1.8rem);font-weight:800;letter-spacing:-1px;line-height:1;background:linear-gradient(90deg,#fff 0%,#fff 40%,rgba(255,255,255,.5) 50%,#fff 60%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 6s linear infinite}
+
+/* ── GRADIENT SHIMMER ON TITLES ── */
+.grad-title{background:linear-gradient(90deg,#fff 0%,#fff 40%,rgba(255,255,255,.5) 50%,#fff 60%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 6s linear infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* ── FERRARI DASHBOARD NUMBERS ── */
+.ferrari-num{font-family:var(--fd);font-weight:900;letter-spacing:-.06em;line-height:.85}
+
+/* ── PRO BLUR LOCK ── */
+.pro-blur{filter:blur(4px);-webkit-filter:blur(4px);user-select:none;pointer-events:none;transition:filter .4s ease}
+
+/* ── CINEMATIC HEADLINE ── */
+.cine-hl{font-family:var(--fd);font-size:clamp(1.1rem,4.5vw,1.45rem);font-weight:800;letter-spacing:-.5px;line-height:1.15;color:var(--t1)}
+.cine-hl .hl{color:var(--or);font-size:110%;text-shadow:0 0 18px rgba(249,115,22,.45)}
+
+/* ── SLOT MACHINE DIGITS ── */
+.slot-wrap{display:inline-flex;overflow:hidden;vertical-align:baseline}
+.slot-digit{display:inline-block;transition:transform .5s cubic-bezier(.23,1,.32,1);will-change:transform}
 
 /* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:.65rem 1.2rem;border-radius:12px;font-weight:600;font-size:.85rem;transition:all .2s var(--spring);border:none;cursor:pointer}
@@ -301,7 +319,7 @@ html,body{
 .ring-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .ring-leg-val{font-family:var(--fd);font-weight:800;margin-left:auto;font-size:.8rem}
 .rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.rings-center-val{font-family:var(--fd);font-size:1.6rem;font-weight:800;line-height:1;color:var(--t1)}
+.rings-center-val{font-family:var(--fd);font-size:2.2rem;font-weight:900;line-height:.85;color:var(--t1);letter-spacing:-.06em}
 .rings-center-sub{font-size:.64rem;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 
 /* Hydro mini */
@@ -698,7 +716,8 @@ html,body{
 }
 .auth-logo{
   font-family:var(--fd);font-size:2.4rem;font-weight:800;letter-spacing:5px;
-  background:linear-gradient(135deg,#fff 30%,var(--or));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  background:linear-gradient(90deg,#fff 0%,#fff 40%,rgba(255,255,255,.5) 50%,#fff 60%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shimmer 6s linear infinite;
   margin-bottom:6px;
 }
 .auth-tagline{font-size:.82rem;color:var(--t3);margin-bottom:36px;text-align:center}
@@ -1309,7 +1328,7 @@ html,body{
   <div id="auth-screen">
     <div class="auth-scroll">
       <div class="auth-logo">AURA</div>
-      <div class="auth-tagline">Il tuo coach IA per corpo e mente</div>
+      <div class="cine-hl" style="margin-bottom:36px;text-align:center">Allenati come non hai <span class="hl">mai</span> fatto</div>
 
       <div class="auth-card">
         <div class="auth-tabs">
@@ -1780,7 +1799,7 @@ html,body{
                     <svg class="ico" viewBox="0 0 24 24" style="width:1.5rem;height:1.5rem;stroke:#38bdf8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> Posizionati a <strong style="margin:0 3px">1,5 m</strong> con <strong style="margin:0 3px">buona luce</strong> per l'analisi ottimale. Inquadra il corpo intero.
         </div>
         <!-- Upsell -->
-        <div class="card" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;margin-bottom:10px">
+        <div class="card pro-blur" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;margin-bottom:10px">
           <div style="font-size:1.8rem;flex-shrink:0">⚡</div>
           <div style="flex:1">
             <div style="font-weight:700;font-size:.85rem;margin-bottom:3px">Sblocca tutto il potenziale</div>
@@ -1922,7 +1941,7 @@ html,body{
         </div>
 
         <!-- Upsell -->
-        <div class="card prem-card">
+        <div class="card prem-card pro-blur">
           <div class="pbadge"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h-4.18c.11.31.18.65.18 1a3 3 0 01-6 0c0-.35.07-.69.18-1H7a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg> PRO — IA AVANZATA</div>
           <div class="pt">Revisione Dieta con IA Avanzata</div>
           <div class="pd">L'IA analizza il tuo piano alimentare, identifica <strong style="color:var(--t1)">carenze, eccessi e incompatibilità</strong>, e lo ribilancia in base ai tuoi obiettivi e biometria.</div>
@@ -4116,7 +4135,7 @@ function updateProfileStats() {
   const hw = document.getElementById('home-workouts');
   if (hw) hw.textContent = totalWorkouts + ' allenamenti';
   const hp = document.getElementById('home-points');
-  if (hp) hp.textContent = calcTotalXP() + ' punti';
+  if (hp) slotRoll(hp, calcTotalXP() + ' punti');
   // Profile streak chip
   const psc = document.getElementById('prof-streak-chip');
   if (psc) psc.textContent = '🔥 ' + streak + 'gg streak';
@@ -4639,7 +4658,7 @@ function updateRings() {
     if (lbl) lbl.textContent = Math.round(r.val) + '/' + r.goal + ' ' + r.unit;
   });
   var kcEl = document.getElementById('rings-kcal');
-  if (kcEl) kcEl.textContent = Math.round(S.move);
+  if (kcEl) slotRoll(kcEl, Math.round(S.move));
 }
 
 // Simulate ring data on load with staggered reveal
@@ -4678,7 +4697,7 @@ function startBpmSim() {
   if (_bpmInterval) return;
   _bpmInterval = setInterval(() => {
     S.bpm = 68 + Math.floor(Math.random() * 12);
-    const a = document.getElementById('bpm-val'); if (a) a.textContent = S.bpm + ' BPM';
+    const a = document.getElementById('bpm-val'); if (a) slotRoll(a, S.bpm + ' BPM');
   }, 3000);
 }
 function stopBpmSim() {
@@ -9556,6 +9575,43 @@ function isDeloadWeek() {
     }
   }, {passive:true});
 })();
+
+/* ── SLOT MACHINE NUMBER ROLL ── */
+function slotRoll(el, newVal) {
+  if (!el) return;
+  var str = String(newVal);
+  var old = el.getAttribute('data-slot') || '';
+  if (str === old) return;
+  el.setAttribute('data-slot', str);
+  var h = el.offsetHeight || 24;
+  var html = '';
+  for (var i = 0; i < str.length; i++) {
+    var ch = str[i];
+    if (ch >= '0' && ch <= '9') {
+      var oldCh = (i < old.length && old[i] >= '0' && old[i] <= '9') ? old[i] : ch;
+      var delay = (i * 60);
+      html += '<span class="slot-wrap" style="height:' + h + 'px">' +
+        '<span class="slot-digit" style="display:flex;flex-direction:column;transition-delay:' + delay + 'ms">' +
+        '<span style="height:' + h + 'px;display:flex;align-items:center;justify-content:center">' + ch + '</span>' +
+        '</span></span>';
+    } else {
+      html += '<span>' + ch + '</span>';
+    }
+  }
+  el.innerHTML = html;
+  // Trigger roll animation from below
+  var digits = el.querySelectorAll('.slot-digit');
+  for (var d = 0; d < digits.length; d++) {
+    digits[d].style.transform = 'translateY(-100%)';
+    /* jshint ignore:start */
+    (function(dd) {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { dd.style.transform = 'translateY(0)'; });
+      });
+    })(digits[d]);
+    /* jshint ignore:end */
+  }
+}
 </script>
 </body>
 </html>
