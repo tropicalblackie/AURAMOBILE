@@ -1599,6 +1599,8 @@ html,body{
   <!-- STATUS BAR -->
   <div class="statusbar">
     <span id="sb-time">09:41</span>
+    <!-- TEMP DEBUG: Reset button -->
+    <button onclick="debugAuth.clearStorage()" style="position:fixed;top:10px;right:10px;z-index:9999;background:var(--re);color:white;border:none;padding:8px 12px;border-radius:6px;font-size:10px;cursor:pointer">RESET</button>
     <span style="display:flex;align-items:center;gap:6px">
       <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M1.5 8.5C5.5 4.5 18.5 4.5 22.5 8.5L20.5 10.5C17.5 7.5 6.5 7.5 3.5 10.5L1.5 8.5ZM5.5 12.5C8 10 16 10 18.5 12.5L16.5 14.5C15 13 9 13 7.5 14.5L5.5 12.5ZM9.5 16.5L12 14L14.5 16.5L12 19L9.5 16.5Z"/></svg>
       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="10"><rect x="0" y="3" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="19" y="7" width="2" height="6" rx="1"/><rect x="1.5" y="4.5" width="11" height="9" rx="1" fill="currentColor"/></svg>
@@ -6893,13 +6895,15 @@ function setUser(u) {
 
 function clearUser() {
   localStorage.removeItem(AUTH_KEY);
-  console.log('[DEBUG] User cleared from localStorage');
+  sessionStorage.removeItem('aura_session_login');
+  console.log('[DEBUG] User and session cleared');
 }
 
 // TEMPORARY DEBUG: Add to window for easy access
 window.debugAuth = {
   clearStorage: function() {
     localStorage.clear();
+    sessionStorage.clear();
     location.reload();
   },
   getUser: getUser,
@@ -7085,6 +7089,8 @@ document.getElementById('form-login').addEventListener('submit', function(e) {
     ? { name:account.name, email:account.email, goal:account.goal, level:account.level, weight:account.weight, height:account.height, age:account.age, sex:account.sex, freq:account.freq, createdAt:account.createdAt }
     : { name: email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), email, goal:'massa', createdAt:new Date().toISOString() };
   setUser(user);
+  // Mark as logged in this session
+  sessionStorage.setItem('aura_session_login', 'true');
   applyUserData(user);
   hideAuth();
   toast('👋 Bentornato ' + user.name.split(' ')[0] + '!', 'or');
@@ -7121,6 +7127,8 @@ document.getElementById('form-register').addEventListener('submit', function(e) 
   localStorage.setItem(ACCT_KEY, JSON.stringify(stored));
   const user = { name, email, goal, createdAt, _needsOnboarding:true };
   setUser(user);
+  // Mark as logged in this session
+  sessionStorage.setItem('aura_session_login', 'true');
   applyUserData(user);
   hideAuth();
   // Show onboarding instead of going straight to app
@@ -7144,6 +7152,8 @@ function socialLogin(provider) {
   setTimeout(() => {
     const user = { name: 'Utente ' + provider, email: provider.toLowerCase() + '@example.com', goal:'massa', createdAt:new Date().toISOString(), _needsOnboarding:true };
     setUser(user);
+    // Mark as logged in this session
+    sessionStorage.setItem('aura_session_login', 'true');
     applyUserData(user);
     hideAuth();
     startOnboarding();
@@ -9587,12 +9597,23 @@ function isDeloadWeek() {
 // ── INIT — Check stored session ──────────────────
 (function initAuth() {
   const user = getUser();
+  const hasLoggedInThisSession = sessionStorage.getItem('aura_session_login') === 'true';
   console.log('[DEBUG] initAuth - user found:', user);
   console.log('[DEBUG] localStorage aura_user:', localStorage.getItem('aura_user'));
+  console.log('[DEBUG] hasLoggedInThisSession:', hasLoggedInThisSession);
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
   startBpmSim(); // Start BPM sim only after DOM is ready, home tab is default
+  
+  // FORCE AUTH SCREEN if no explicit session login
+  if (!hasLoggedInThisSession) {
+    showAuth();
+    hideOnboarding();
+    toast('[DEBUG] initAuth: nessuna sessione login, forzo auth', 'bl');
+    return;
+  }
+  
   if (user && !user._needsOnboarding) {
     applyUserData(user);
     hideAuth();
