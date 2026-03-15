@@ -6962,6 +6962,7 @@ document.getElementById('prof-photo-input').addEventListener('change', function(
 // Show / hide auth screen
 function showAuth() {
   document.getElementById('auth-screen').classList.remove('hidden');
+  toast('[DEBUG] showAuth chiamato', 'bl');
 }
 function hideAuth() {
   document.getElementById('auth-screen').classList.add('hidden');
@@ -7164,6 +7165,7 @@ function startOnboarding() {
   if (u && u.goal) obData.goal = u.goal;
   renderObStep();
   document.getElementById('onboarding').classList.remove('hidden');
+  toast('[DEBUG] startOnboarding chiamato', 'or');
 }
 
 function hideOnboarding() {
@@ -9573,19 +9575,16 @@ function isDeloadWeek() {
     hideAuth();
     hideOnboarding();
     setTimeout(() => toast('👋 Bentornato ' + user.name.split(' ')[0] + '!', 'or'), 900);
+    toast('[DEBUG] initAuth: utente completo, mostro app', 'gr');
   } else if (user && user._needsOnboarding) {
     applyUserData(user);
     hideAuth();
     startOnboarding();
+    toast('[DEBUG] initAuth: utente deve fare onboarding', 'or');
   } else {
     showAuth();
     hideOnboarding();
-  }
-
-  // Prevent auth screen from reappearing if onboarding is in progress
-  if (user && user._needsOnboarding) {
-    hideAuth();
-    startOnboarding();
+    toast('[DEBUG] initAuth: nessun utente, mostro auth', 'bl');
   }
   // Handle deep-link from notification (?tab=workout etc)
   try {
