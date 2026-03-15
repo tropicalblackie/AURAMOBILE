@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v16')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v17')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -976,6 +976,36 @@ html,body{
 .ws-summary-stat-lbl{font-size:.7rem;color:var(--t4);margin-top:2px}
 .ws-btn-save{width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer}
 .ws-btn-save:active{transform:scale(.96)}
+
+/* Smart Rest Timer */
+.ws-rest-ring-wrap{position:relative;width:160px;height:160px;margin:12px auto}
+.ws-rest-ring-wrap svg{display:block}
+.ws-rest-ring-time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ws-rest-ring-time .ws-timer-big{margin:0;font-size:2.4rem}
+.ws-rest-ring-time .ws-rest-sub{font-size:.65rem;color:var(--t4);margin-top:2px}
+.ws-rest-adjust{display:flex;gap:10px;justify-content:center;margin:10px 0 6px}
+.ws-rest-adj-btn{padding:6px 16px;border-radius:10px;background:var(--s8);color:var(--t1);border:none;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--fd);transition:all .18s}
+.ws-rest-adj-btn:active{transform:scale(.94);background:var(--s7,#1e293b)}
+.ws-smart-badge{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--or);background:#f9731612;border:1px solid #f9731630;border-radius:50px;padding:3px 10px;margin-top:6px}
+
+/* Weight Input */
+.ws-weight-row{display:flex;align-items:center;gap:8px;justify-content:center;margin:14px 0 16px}
+.ws-weight-adj{width:44px;height:44px;border-radius:12px;background:var(--s8);color:var(--t1);border:none;font-size:.85rem;font-weight:800;font-family:var(--fd);cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center}
+.ws-weight-adj:active{transform:scale(.9);background:var(--or);color:#fff}
+.ws-weight-display{display:flex;align-items:center;gap:4px;background:var(--s8);border:1px solid var(--s7,#334155);border-radius:14px;padding:0 12px}
+.ws-weight-display input{width:64px;background:transparent;border:none;color:var(--t1);font-family:var(--fd);font-size:1.3rem;font-weight:800;text-align:center;padding:8px 0;outline:none}
+.ws-weight-display input::-webkit-inner-spin-button{-webkit-appearance:none}
+.ws-weight-unit{font-size:.75rem;font-weight:700;color:var(--t3)}
+.ws-weight-label{font-size:.7rem;color:var(--t4);text-align:center;margin-bottom:2px}
+
+/* Progression Cards */
+.ws-prog-section{margin-top:24px;text-align:left}
+.ws-prog-title{font-family:var(--fd);font-weight:800;font-size:.92rem;margin-bottom:12px;text-align:center}
+.ws-prog-card{background:var(--s9);border:1px solid #22c55e30;border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.ws-prog-ex{font-size:.82rem;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ws-prog-detail{font-size:.75rem;color:var(--t3);text-align:right}
+.ws-prog-detail strong{color:#22c55e;font-weight:800}
+.ws-prog-badge{font-size:.6rem;font-weight:800;color:#22c55e;background:#22c55e15;border:1px solid #22c55e30;border-radius:6px;padding:2px 6px;white-space:nowrap;margin-left:4px}
 
 /* Workout History */
 .wh-item{background:var(--s9);border:1px solid var(--s8);border-radius:16px;padding:14px;margin-bottom:10px}
@@ -3030,6 +3060,7 @@ function deletePlan(pi) {
 // ── STORAGE KEYS ────────────────────────────────
 const CW_KEY = 'aura_completed_workouts';
 const ACCT_KEY = 'aura_accounts';
+const WS_PROG_KEY = 'aura_ws_progression';
 
 // ── WORKOUT SESSION ─────────────────────────────
 function getCompletedWorkouts() {
@@ -3039,9 +3070,69 @@ const MET_MAP = { 'Principiante': 3.5, 'Intermedio': 5.0, 'Avanzato': 6.0 };
 
 let ws = {
   active:false, planIdx:-1, planName:'', exercises:[], exIdx:0, setNum:1,
-  resting:false, restSec:0, totalSec:0, paused:false, timer:null,
-  calories:0, exerciseTimeSec:0
+  resting:false, restSec:0, _restTotal:0, totalSec:0, paused:false, timer:null,
+  calories:0, exerciseTimeSec:0, setWeights:{}
 };
+
+// Progression helpers
+function getProgression() { try { return JSON.parse(localStorage.getItem(WS_PROG_KEY)) || {}; } catch { return {}; } }
+function saveProgression(d) { localStorage.setItem(WS_PROG_KEY, JSON.stringify(d)); }
+function wsGetLastWeight(exId) { var p = getProgression(); return (p[exId] && p[exId].suggested) ? p[exId].suggested : (p[exId] && p[exId].weight) ? p[exId].weight : 0; }
+
+// Smart rest: adapts to exercise type, set number, weight
+var _WS_COMPOUNDS = ['bench','squat','deadlift','stacco','ohp','military','row','pullup','dips','leg_press','hip_thrust','rdl','front_squat','incline_db'];
+function wsSmartRest(ex, setNum, totalSets, weight) {
+  var base = parseInt(ex.rest) || 90;
+  var isCompound = _WS_COMPOUNDS.some(function(c) { return ex.id.indexOf(c) >= 0; }) || ex.diff === 'Avanzato';
+  if (isCompound) base = Math.max(base, 120); else base = Math.min(base, 90);
+  if (setNum >= 3) base += 15;
+  if (setNum >= 4) base += 15;
+  var prev = wsGetLastWeight(ex.id);
+  if (weight > 0 && prev > 0 && weight >= prev) base += 15;
+  return Math.max(30, Math.min(300, base));
+}
+
+// Beep for rest countdown
+var _wsAudioCtx = null;
+function wsBeep(freq, dur) {
+  try {
+    if (!_wsAudioCtx) _wsAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = _wsAudioCtx.createOscillator(), g = _wsAudioCtx.createGain();
+    o.connect(g); g.connect(_wsAudioCtx.destination);
+    o.frequency.value = freq; g.gain.value = 0.25;
+    o.start(); o.stop(_wsAudioCtx.currentTime + dur / 1000);
+  } catch(e) {}
+}
+
+function wsRestDoneNotify() {
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+  try {
+    if (NOTIF.swReg) {
+      NOTIF.swReg.showNotification('\ud83d\udcaa Recupero finito!', { body: 'Pronto per il prossimo set', vibrate: [200,100,200,100,200], tag: 'aura-rest', renotify: true });
+    } else { new Notification('\ud83d\udcaa Recupero finito!', { body: 'Pronto per il prossimo set', tag: 'aura-rest' }); }
+  } catch(e) {}
+}
+
+function wsAdjRest(delta) {
+  ws.restSec = Math.max(0, ws.restSec + delta);
+  ws._restTotal = Math.max(ws._restTotal, ws.restSec);
+  wsUpdateTimers();
+  wsUpdateRestRing();
+}
+
+function wsUpdateRestRing() {
+  var ring = document.getElementById('ws-rest-ring-progress');
+  if (!ring || !ws._restTotal) return;
+  var circ = 339.292;
+  ring.setAttribute('stroke-dashoffset', String(circ * (1 - ws.restSec / ws._restTotal)));
+}
+
+function wsAdjWeight(delta) {
+  var inp = document.getElementById('ws-weight-input');
+  if (!inp) return;
+  var v = parseFloat(inp.value) || 0;
+  inp.value = Math.max(0, +(v + delta).toFixed(1));
+}
 
 function startWorkoutSession(planIdx) {
   const plans = getWorkouts();
@@ -3059,8 +3150,8 @@ function startWorkoutSession(planIdx) {
     return { id:ex.id, sets:ex.sets, reps:ex.reps, rest:ex.rest||90, name:e?e.name:ex.id, emoji:e?e.emoji:'💪', gif:e?e.gif:'', diff:e?e.diff:'Intermedio' };
   });
   ws.exIdx = 0; ws.setNum = 1; ws.totalSec = 0;
-  ws.resting = false; ws.restSec = 0; ws.paused = false;
-  ws.calories = 0; ws.exerciseTimeSec = 0;
+  ws.resting = false; ws.restSec = 0; ws._restTotal = 0; ws.paused = false;
+  ws.calories = 0; ws.exerciseTimeSec = 0; ws.setWeights = {};
   document.getElementById('ws-ov').classList.add('on');
   renderWsView();
   ws.timer = setInterval(wsTick, 1000);
@@ -3073,7 +3164,11 @@ function wsTick() {
   ws.totalSec++;
   if (ws.resting) {
     ws.restSec--;
+    wsUpdateRestRing();
+    if (ws.restSec === 3 || ws.restSec === 2 || ws.restSec === 1) wsBeep(800, 80);
     if (ws.restSec <= 0) {
+      wsBeep(1000, 250); haptic(200);
+      wsRestDoneNotify();
       ws.resting = false;
       wsAdvance();
     }
@@ -3100,11 +3195,21 @@ function wsAdvance() {
 function wsCompleteSet() {
   var ex = ws.exercises[ws.exIdx];
   var ts = parseInt(ex.sets) || 3;
+  // Capture weight
+  var inp = document.getElementById('ws-weight-input');
+  var w = inp ? parseFloat(inp.value) : 0;
+  if (w > 0) {
+    if (!ws.setWeights[ws.exIdx]) ws.setWeights[ws.exIdx] = {};
+    ws.setWeights[ws.exIdx][ws.setNum] = w;
+  }
   if (ws.setNum >= ts && ws.exIdx >= ws.exercises.length - 1) {
     wsFinish(); return;
   }
+  // Smart rest
+  var smartSec = wsSmartRest(ex, ws.setNum, ts, w);
   ws.resting = true;
-  ws.restSec = parseInt(ex.rest) || 90;
+  ws.restSec = smartSec;
+  ws._restTotal = smartSec;
   renderWsView();
 }
 
@@ -3151,17 +3256,37 @@ function wsFinish() {
   diHide();
 }
 
+function wsCalcProgressions() {
+  var suggestions = [];
+  ws.exercises.forEach(function(ex, i) {
+    var ts = parseInt(ex.sets) || 3;
+    var weights = ws.setWeights[i];
+    if (!weights) return;
+    if (Object.keys(weights).length < ts) return;
+    var maxW = Math.max.apply(null, Object.keys(weights).map(function(k) { return weights[k]; }));
+    if (maxW <= 0) return;
+    var prev = wsGetLastWeight(ex.id);
+    suggestions.push({ id:ex.id, name:ex.name, emoji:ex.emoji, weight:maxW, prevWeight:prev, suggested:+(maxW+2.5).toFixed(1) });
+  });
+  return suggestions;
+}
+
 function wsSaveAndClose() {
   var cw = getCompletedWorkouts();
   cw.push({
     date: new Date().toISOString().slice(0,10),
     planName: ws.planName,
-    exercises: ws.exercises.map(function(e) { return { id:e.id, name:e.name, sets:e.sets, reps:e.reps }; }),
+    exercises: ws.exercises.map(function(e, i) { return { id:e.id, name:e.name, sets:e.sets, reps:e.reps, weights:ws.setWeights[i]||{} }; }),
     duration: ws.totalSec,
     calories: ws.calories,
     completedAt: new Date().toISOString()
   });
   localStorage.setItem(CW_KEY, JSON.stringify(cw));
+  // Save progression
+  var prog = getProgression();
+  var progs = wsCalcProgressions();
+  progs.forEach(function(s) { prog[s.id] = { weight:s.weight, suggested:s.suggested, date:new Date().toISOString().slice(0,10) }; });
+  if (progs.length > 0) saveProgression(prog);
   document.getElementById('ws-ov').classList.remove('on');
   updateProfileStats();
   // Update activity rings with workout data
@@ -3207,12 +3332,31 @@ function renderWsView() {
     var nextInfo = ws.setNum < ts
       ? 'Set ' + (ws.setNum+1) + ' di ' + ts + ' \u00b7 ' + wsEsc(ex.name)
       : (ws.exIdx+1 < total ? wsEsc(ws.exercises[ws.exIdx+1].name) : 'Fine!');
+    var circ = 339.292;
+    var offset = ws._restTotal > 0 ? circ * (1 - ws.restSec / ws._restTotal) : 0;
+    var rm = String(Math.floor(ws.restSec/60)).padStart(2,'0');
+    var rs = String(ws.restSec%60).padStart(2,'0');
+    var baseSec = parseInt(ex.rest) || 90;
+    var isAdapted = ws._restTotal !== baseSec;
     content.innerHTML =
       '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
       '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' +
       '<div class="ws-card">' +
         '<div class="ws-rest-label">\u23f1 Recupero</div>' +
-        '<div class="ws-timer-big" id="ws-rest-timer">' + String(Math.floor(ws.restSec/60)).padStart(2,'0') + ':' + String(ws.restSec%60).padStart(2,'0') + '</div>' +
+        '<div class="ws-rest-ring-wrap">' +
+          '<svg viewBox="0 0 120 120" width="160" height="160">' +
+            '<circle cx="60" cy="60" r="54" stroke="var(--s8)" stroke-width="6" fill="none"/>' +
+            '<circle id="ws-rest-ring-progress" cx="60" cy="60" r="54" stroke="var(--or)" stroke-width="6" fill="none" stroke-dasharray="339.292" stroke-dashoffset="'+offset+'" stroke-linecap="round" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s linear"/>' +
+          '</svg>' +
+          '<div class="ws-rest-ring-time">' +
+            '<div class="ws-timer-big" id="ws-rest-timer">'+rm+':'+rs+'</div>' +
+            (isAdapted ? '<div class="ws-smart-badge">\u26a1 Smart</div>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="ws-rest-adjust">' +
+          '<button class="ws-rest-adj-btn" onclick="wsAdjRest(-15)">\u221215s</button>' +
+          '<button class="ws-rest-adj-btn" onclick="wsAdjRest(15)">+15s</button>' +
+        '</div>' +
         '<div class="ws-rest-next">Prossimo: ' + nextInfo + '</div>' +
         '<button class="ws-btn-skip" onclick="wsSkipRest()">Salta Recupero \u2192</button>' +
       '</div>' +
@@ -3221,6 +3365,12 @@ function renderWsView() {
         '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">\u25a0 Termina</button>' +
       '</div>';
   } else {
+    var lastW = 0;
+    if (ws.setWeights[ws.exIdx] && ws.setWeights[ws.exIdx][ws.setNum - 1]) {
+      lastW = ws.setWeights[ws.exIdx][ws.setNum - 1];
+    } else if (ws.setNum === 1) {
+      lastW = wsGetLastWeight(ex.id);
+    }
     content.innerHTML =
       '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
       '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' +
@@ -3229,6 +3379,12 @@ function renderWsView() {
         '<div class="ws-ex-name">' + wsEsc(ex.name) + '</div>' +
         '<div class="ws-ex-info">Set '+ws.setNum+' di '+ts+' \u00b7 '+ex.reps+' rep</div>' +
         (ex.gif ? '<img class="ws-ex-gif" src="'+ex.gif+'" alt="">' : '') +
+        '<div class="ws-weight-label">\ud83c\udfcb\ufe0f Peso utilizzato</div>' +
+        '<div class="ws-weight-row">' +
+          '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">\u22122.5</button>' +
+          '<div class="ws-weight-display"><input type="number" id="ws-weight-input" inputmode="decimal" step="0.5" min="0" value="'+(lastW||'')+'" placeholder="0"><span class="ws-weight-unit">kg</span></div>' +
+          '<button class="ws-weight-adj" onclick="wsAdjWeight(2.5)">+2.5</button>' +
+        '</div>' +
         '<button class="ws-btn-set" onclick="wsCompleteSet()">\u2713 Set Completato</button>' +
       '</div>' +
       '<div class="ws-controls">' +
@@ -3245,7 +3401,7 @@ function renderWsSummary() {
   var ss = String(ws.totalSec%60).padStart(2,'0');
   document.getElementById('ws-title').textContent = 'Completato!';
   var tt = document.getElementById('ws-total-time'); if (tt) tt.textContent = '';
-  content.innerHTML =
+  var html =
     '<div class="ws-summary">' +
       '<div class="ws-summary-ico">\ud83c\udf89</div>' +
       '<div class="ws-summary-title">Allenamento Completato!</div>' +
@@ -3255,9 +3411,26 @@ function renderWsSummary() {
         '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\ud83d\udcaa '+ws.exercises.length+'</div><div class="ws-summary-stat-lbl">Esercizi</div></div>' +
         '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\ud83d\udd25 '+ws.calories+'</div><div class="ws-summary-stat-lbl">Calorie</div></div>' +
         '<div class="ws-summary-stat"><div class="ws-summary-stat-val">\u26a1 +200</div><div class="ws-summary-stat-lbl">XP</div></div>' +
-      '</div>' +
-      '<button class="ws-btn-save" onclick="wsSaveAndClose()">Salva e Chiudi</button>' +
-    '</div>';
+      '</div>';
+  // Progression suggestions
+  var progs = wsCalcProgressions();
+  if (progs.length > 0) {
+    html += '<div class="ws-prog-section"><div class="ws-prog-title">\ud83d\udcc8 Progressione Automatica</div>';
+    progs.forEach(function(p) {
+      html += '<div class="ws-prog-card">';
+      html += '<div class="ws-prog-ex">' + p.emoji + ' ' + wsEsc(p.name) + '</div>';
+      if (p.prevWeight > 0 && p.prevWeight < p.suggested) {
+        html += '<div class="ws-prog-detail">' + p.prevWeight + ' \u2192 <strong>' + p.suggested + ' kg</strong></div>';
+      } else {
+        html += '<div class="ws-prog-detail">Prossima: <strong>' + p.suggested + ' kg</strong></div>';
+      }
+      html += '<div class="ws-prog-badge">+2.5 kg</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  html += '<button class="ws-btn-save" onclick="wsSaveAndClose()">Salva e Chiudi</button></div>';
+  content.innerHTML = html;
   confetti();
 }
 
@@ -7863,7 +8036,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v16') caches.delete(name);
+        if (name !== 'aura-v17') caches.delete(name);
       });
     });
   }
