@@ -10,7 +10,7 @@
 <title>AURA</title>
 <script>
 // Cleanup old SW caches on load
-if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v17')caches.delete(k)})});}
+if('caches' in window){caches.keys().then(function(n){n.forEach(function(k){if(k!=='aura-v18')caches.delete(k)})});}
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -1176,6 +1176,35 @@ html,body{
 .rm-hist-del{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f43f5e20;color:#f43f5e;cursor:pointer;font-size:.9rem}
 .rm-chart{width:100%;height:140px;position:relative;margin:10px 0}
 .rm-chart canvas{width:100%!important;height:100%!important}
+/* ── BODY MEASUREMENTS ── */
+.bm-part-btn{display:flex;align-items:center;gap:10px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:8px;cursor:pointer;text-align:left;width:100%;color:var(--t1)}
+.bm-part-btn .bm-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.bm-part-btn .bm-info{flex:1}
+.bm-part-btn .bm-name{font-weight:700;font-size:.86rem}
+.bm-part-btn .bm-last{font-size:.7rem;color:var(--t3)}
+.bm-part-btn .bm-val{font-family:var(--fd);font-weight:800;font-size:1.05rem;color:var(--or)}
+.bm-chart{width:100%;height:140px;position:relative;margin:10px 0}
+.bm-chart canvas{width:100%!important;height:100%!important}
+.bm-input-row{display:flex;gap:8px;margin-bottom:10px}
+.bm-input-row input{flex:1;padding:12px;border-radius:12px;border:1px solid var(--s8);background:var(--s9);color:var(--t1);font-size:.9rem;font-family:var(--fb)}
+.bm-input-row input:focus{border-color:var(--or);outline:none}
+.bm-entry{display:flex;align-items:center;gap:10px;padding:10px;background:var(--s9);border:1px solid var(--s8);border-radius:12px;margin-bottom:5px}
+.bm-entry-val{font-family:var(--fd);font-weight:700;color:var(--or);min-width:55px}
+.bm-entry-date{font-size:.7rem;color:var(--t3);flex:1}
+.bm-entry-del{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f43f5e20;color:#f43f5e;cursor:pointer;font-size:.8rem}
+.bm-diff{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.bm-diff.pos{color:#22c55e;background:#22c55e18}
+.bm-diff.neg{color:#f97316;background:#f9731618}
+/* ── SHARE/IMPORT TEMPLATES ── */
+.share-code-box{position:relative;background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px;word-break:break-all;font-family:var(--fd);font-size:.72rem;color:var(--t2);max-height:180px;overflow-y:auto;margin:10px 0}
+.share-copy-btn{position:absolute;top:8px;right:8px;padding:6px 12px;border-radius:8px;background:var(--or);color:#000;font-weight:700;font-size:.7rem;cursor:pointer;border:none}
+.share-plan-card{padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:10px;cursor:pointer}
+.share-plan-card:hover,.share-plan-card:active{border-color:var(--or)}
+.share-plan-name{font-weight:700;font-size:.88rem}
+.share-plan-meta{font-size:.72rem;color:var(--t3);margin-top:3px}
+.share-qr-wrap{display:flex;justify-content:center;padding:16px;background:white;border-radius:14px;margin:10px 0}
+.share-import-area{margin:10px 0}
+.share-import-area textarea{width:100%;min-height:100px;padding:12px;border-radius:12px;border:1px solid var(--s8);background:var(--s9);color:var(--t1);font-size:.82rem;font-family:var(--fd);resize:vertical}
 </style>
 </head>
 <body>
@@ -1678,6 +1707,10 @@ html,body{
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#ef4444;color:#ef4444" onclick="open1RM()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5h11M6 12h12M17.5 17.5h-11"/><rect x="2" y="9" width="4" height="6" rx="1"/><rect x="18" y="9" width="4" height="6" rx="1"/></svg> 1RM Calc</button>
           <div class="card" style="padding:.85rem;border-radius:14px;text-align:center;cursor:pointer" onclick="openWorkoutHistory()"><span style="font-size:.84rem;color:var(--t2)">📊 Storico</span></div>
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#22c55e;color:#22c55e" onclick="openShareExport()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Condividi</button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#38bdf8;color:#38bdf8" onclick="openShareImport()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Importa</button>
+        </div>
         <!-- AI plans -->
         <div class="sec-title">Schede IA Generate</div>
         <div id="workout-tab-ai-plans"></div>
@@ -1993,6 +2026,20 @@ html,body{
               <div>
                 <div style="font-weight:700;font-size:.88rem">Foto Progresso</div>
                 <div style="font-size:.7rem;color:var(--t3)">Confronto visivo settimanale</div>
+              </div>
+            </div>
+            <span class="sarr">›</span>
+          </div>
+        </div>
+
+        <!-- Misure Corpo -->
+        <div class="card" style="padding:14px;cursor:pointer" onclick="openBodyMeasure()">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+              <div>
+                <div style="font-weight:700;font-size:.88rem">Misure Corpo</div>
+                <div style="font-size:.7rem;color:var(--t3)">Girovita, petto, braccia, cosce</div>
               </div>
             </div>
             <span class="sarr">›</span>
@@ -2715,6 +2762,72 @@ html,body{
   </div>
 </div>
 
+<!-- ══ BODY MEASUREMENTS OVERLAY ══ -->
+<div class="legal-ov" id="bm-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeBodyMeasure()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Misure Corpo</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <div id="bm-overview"></div>
+    <div id="bm-detail" style="display:none">
+      <div id="bm-detail-title" style="font-weight:800;font-size:1.1rem;margin-bottom:12px"></div>
+      <div class="sec-title">Nuova Misurazione</div>
+      <div class="bm-input-row">
+        <input type="number" id="bm-value" placeholder="cm" min="1" max="300" step="0.1" inputmode="decimal">
+        <button class="cta" style="white-space:nowrap;padding:12px 20px" onclick="bmSave()">+ Salva</button>
+      </div>
+      <div class="sec-title">Grafico</div>
+      <div class="bm-chart"><canvas id="bm-chart"></canvas></div>
+      <div class="sec-title">Cronologia</div>
+      <div id="bm-history"></div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:14px" onclick="bmShowOverview()">← Torna alle misure</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHARE EXPORT OVERLAY ══ -->
+<div class="legal-ov" id="share-export-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeShareExport()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Condividi Scheda</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <div class="sec-title">Seleziona Scheda</div>
+    <div id="share-plan-list"></div>
+    <div id="share-result" style="display:none">
+      <div class="sec-title">QR Code</div>
+      <div class="share-qr-wrap" id="share-qr"></div>
+      <div class="sec-title">Codice Condivisione</div>
+      <div class="share-code-box" id="share-code"><button class="share-copy-btn" onclick="shareCodeCopy()">Copia</button><span id="share-code-text"></span></div>
+      <div class="sec-title">Link Diretto</div>
+      <div class="share-code-box" id="share-link-box"><button class="share-copy-btn" onclick="shareLinkCopy()">Copia</button><span id="share-link-text"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHARE IMPORT OVERLAY ══ -->
+<div class="legal-ov" id="share-import-ov">
+  <div class="legal-topbar">
+    <button class="legal-back" onclick="closeShareImport()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Importa Scheda</div>
+  </div>
+  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
+    <div class="sec-title">Incolla Codice Condivisione</div>
+    <div class="share-import-area">
+      <textarea id="import-code" placeholder="Incolla qui il codice della scheda..."></textarea>
+    </div>
+    <button class="cta" style="width:100%;margin:10px 0" onclick="importPlan()">📥 Importa Scheda</button>
+    <div id="import-preview" style="display:none"></div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════
 //  AURA MOBILE — JS
@@ -3061,6 +3174,7 @@ function deletePlan(pi) {
 const CW_KEY = 'aura_completed_workouts';
 const ACCT_KEY = 'aura_accounts';
 const WS_PROG_KEY = 'aura_ws_progression';
+const BM_KEY = 'aura_body_measurements';
 
 // ── WORKOUT SESSION ─────────────────────────────
 function getCompletedWorkouts() {
@@ -8036,7 +8150,7 @@ if ('serviceWorker' in navigator) {
   if (window.caches) {
     caches.keys().then(function(names) {
       names.forEach(function(name) {
-        if (name !== 'aura-v17') caches.delete(name);
+        if (name !== 'aura-v18') caches.delete(name);
       });
     });
   }
@@ -8056,6 +8170,344 @@ if ('serviceWorker' in navigator) {
     }).catch(function() {});
   });
 }
+
+// ═══════════════════════════════════════════════════
+//  BODY MEASUREMENTS LOG
+// ═══════════════════════════════════════════════════
+var BM_PARTS = [
+  { key: 'vita', name: 'Girovita', ico: '📏', color: '#f97316' },
+  { key: 'petto', name: 'Petto', ico: '💪', color: '#22c55e' },
+  { key: 'braccio_dx', name: 'Braccio DX', ico: '💪', color: '#38bdf8' },
+  { key: 'braccio_sx', name: 'Braccio SX', ico: '💪', color: '#a78bfa' },
+  { key: 'coscia_dx', name: 'Coscia DX', ico: '🦵', color: '#ec4899' },
+  { key: 'coscia_sx', name: 'Coscia SX', ico: '🦵', color: '#f43f5e' },
+  { key: 'fianchi', name: 'Fianchi', ico: '📐', color: '#eab308' },
+  { key: 'polpaccio', name: 'Polpaccio', ico: '🦵', color: '#14b8a6' }
+];
+var _bmCurrentPart = null;
+
+function getBM() { try { return JSON.parse(localStorage.getItem(BM_KEY)) || {}; } catch(e) { return {}; } }
+function saveBM(d) { localStorage.setItem(BM_KEY, JSON.stringify(d)); }
+
+function openBodyMeasure() {
+  document.getElementById('bm-ov').classList.add('on');
+  bmShowOverview();
+}
+function closeBodyMeasure() { document.getElementById('bm-ov').classList.remove('on'); }
+
+function bmShowOverview() {
+  document.getElementById('bm-detail').style.display = 'none';
+  var ov = document.getElementById('bm-overview');
+  ov.style.display = '';
+  var data = getBM();
+  var html = '<div class="sec-title">Le Tue Misure</div>';
+  BM_PARTS.forEach(function(p) {
+    var entries = data[p.key] || [];
+    var last = entries.length > 0 ? entries[entries.length - 1] : null;
+    var diffHtml = '';
+    if (entries.length >= 2) {
+      var diff = (entries[entries.length - 1].val - entries[entries.length - 2].val).toFixed(1);
+      var sign = diff > 0 ? '+' : '';
+      diffHtml = '<span class="bm-diff ' + (diff >= 0 ? 'pos' : 'neg') + '">' + sign + diff + ' cm</span>';
+    }
+    html += '<button class="bm-part-btn" onclick="bmOpenPart(\'' + p.key + '\')">' +
+      '<div class="bm-ico" style="background:' + p.color + '18;border:1px solid ' + p.color + '40;color:' + p.color + '">' + p.ico + '</div>' +
+      '<div class="bm-info"><div class="bm-name">' + p.name + '</div>' +
+      '<div class="bm-last">' + (last ? last.date + ' ' + diffHtml : 'Nessuna misurazione') + '</div></div>' +
+      '<div class="bm-val">' + (last ? last.val + ' cm' : '—') + '</div></button>';
+  });
+  // Summary card
+  var total = 0;
+  BM_PARTS.forEach(function(p) { total += (data[p.key] || []).length; });
+  html += '<div class="card glass" style="padding:14px;margin-top:14px;text-align:center">' +
+    '<div style="font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-weight:700">Totale Misurazioni</div>' +
+    '<div style="font-family:var(--fd);font-weight:900;font-size:1.6rem;color:var(--or)">' + total + '</div></div>';
+  ov.innerHTML = html;
+}
+
+function bmOpenPart(key) {
+  _bmCurrentPart = key;
+  var part = BM_PARTS.find(function(p) { return p.key === key; });
+  document.getElementById('bm-overview').style.display = 'none';
+  document.getElementById('bm-detail').style.display = '';
+  document.getElementById('bm-detail-title').textContent = part.ico + ' ' + part.name;
+  document.getElementById('bm-value').value = '';
+  bmRenderHistory();
+  bmDrawChart();
+}
+
+function bmSave() {
+  if (!_bmCurrentPart) return;
+  var val = parseFloat(document.getElementById('bm-value').value);
+  if (!val || val <= 0 || val > 300) { toast('Inserisci un valore valido (cm)', 're'); return; }
+  var data = getBM();
+  if (!data[_bmCurrentPart]) data[_bmCurrentPart] = [];
+  data[_bmCurrentPart].push({ val: Math.round(val * 10) / 10, date: new Date().toISOString().slice(0, 10) });
+  saveBM(data);
+  document.getElementById('bm-value').value = '';
+  bmRenderHistory();
+  bmDrawChart();
+  toast('Misurazione salvata! 📏', 'gr');
+}
+
+function bmRenderHistory() {
+  var data = getBM();
+  var entries = (data[_bmCurrentPart] || []).slice().reverse();
+  var part = BM_PARTS.find(function(p) { return p.key === _bmCurrentPart; });
+  var html = '';
+  if (entries.length === 0) {
+    html = '<div style="text-align:center;padding:20px;color:var(--t3);font-size:.84rem">Nessuna misurazione ancora.<br>Aggiungi la prima!</div>';
+  }
+  entries.forEach(function(e, i) {
+    var realIdx = entries.length - 1 - i;
+    html += '<div class="bm-entry"><div class="bm-entry-val" style="color:' + part.color + '">' + e.val + ' cm</div>' +
+      '<div class="bm-entry-date">' + e.date + '</div>' +
+      '<div class="bm-entry-del" onclick="bmDelete(' + realIdx + ')">×</div></div>';
+  });
+  document.getElementById('bm-history').innerHTML = html;
+}
+
+function bmDelete(idx) {
+  var data = getBM();
+  var arr = data[_bmCurrentPart] || [];
+  if (idx >= 0 && idx < arr.length) {
+    arr.splice(idx, 1);
+    data[_bmCurrentPart] = arr;
+    saveBM(data);
+    bmRenderHistory();
+    bmDrawChart();
+    toast('Misurazione eliminata', 're');
+  }
+}
+
+function bmDrawChart() {
+  var data = getBM();
+  var entries = data[_bmCurrentPart] || [];
+  var canvas = document.getElementById('bm-chart');
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = 140 * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = '140px';
+  ctx.scale(dpr, dpr);
+  var W = rect.width, H = 140;
+  ctx.clearRect(0, 0, W, H);
+  if (entries.length < 2) {
+    ctx.fillStyle = '#64748b'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Servono almeno 2 misurazioni per il grafico', W / 2, H / 2);
+    return;
+  }
+  var part = BM_PARTS.find(function(p) { return p.key === _bmCurrentPart; });
+  var clr = part ? part.color : '#f97316';
+  var vals = entries.map(function(d) { return d.val; });
+  var mn = Math.min.apply(null, vals) - 2;
+  var mx = Math.max.apply(null, vals) + 2;
+  if (mn === mx) { mn -= 5; mx += 5; }
+  var pad = { l: 40, r: 16, t: 12, b: 24 };
+  var cW = W - pad.l - pad.r;
+  var cH = H - pad.t - pad.b;
+  ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+  for (var g = 0; g < 4; g++) {
+    var gy = pad.t + (cH / 3) * g;
+    ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(W - pad.r, gy); ctx.stroke();
+    var gv = (mx - (mx - mn) * (g / 3)).toFixed(1);
+    ctx.fillStyle = '#64748b'; ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(gv, pad.l - 6, gy + 4);
+  }
+  ctx.strokeStyle = clr; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  entries.forEach(function(d, i) {
+    var x = pad.l + (cW / Math.max(entries.length - 1, 1)) * i;
+    var y = pad.t + cH - ((d.val - mn) / (mx - mn)) * cH;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  ctx.lineTo(pad.l + cW, pad.t + cH);
+  ctx.lineTo(pad.l, pad.t + cH);
+  ctx.closePath();
+  var grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + cH);
+  grad.addColorStop(0, clr + '40');
+  grad.addColorStop(1, clr + '00');
+  ctx.fillStyle = grad; ctx.fill();
+  entries.forEach(function(d, i) {
+    var x = pad.l + (cW / Math.max(entries.length - 1, 1)) * i;
+    var y = pad.t + cH - ((d.val - mn) / (mx - mn)) * cH;
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = clr; ctx.fill();
+    ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+  ctx.fillStyle = '#64748b'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  var step = Math.max(1, Math.floor(entries.length / 5));
+  entries.forEach(function(d, i) {
+    if (i % step === 0 || i === entries.length - 1) {
+      var x = pad.l + (cW / Math.max(entries.length - 1, 1)) * i;
+      ctx.fillText(d.date.slice(5), x, H - 4);
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  WORKOUT TEMPLATES SHARING (Export / Import)
+// ═══════════════════════════════════════════════════
+function openShareExport() {
+  document.getElementById('share-export-ov').classList.add('on');
+  document.getElementById('share-result').style.display = 'none';
+  var plans = getWorkouts();
+  var html = '';
+  if (plans.length === 0) {
+    html = '<div style="text-align:center;padding:20px;color:var(--t3)">Nessuna scheda da condividere.<br>Crea prima una scheda!</div>';
+  }
+  plans.forEach(function(p, i) {
+    var exCount = (p.exercises || []).length;
+    html += '<div class="share-plan-card" onclick="shareSelectPlan(' + i + ')">' +
+      '<div class="share-plan-name">' + _escHtml(p.name || 'Scheda ' + (i + 1)) + '</div>' +
+      '<div class="share-plan-meta">' + exCount + ' esercizi' + (p._aiGenerated ? ' • IA' : ' • Manuale') + '</div></div>';
+  });
+  document.getElementById('share-plan-list').innerHTML = html;
+}
+function closeShareExport() { document.getElementById('share-export-ov').classList.remove('on'); }
+
+function _escHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function shareSelectPlan(idx) {
+  var plans = getWorkouts();
+  var plan = plans[idx];
+  if (!plan) return;
+  // Build shareable object (strip personal data)
+  var shareable = {
+    _aura: 1,
+    name: plan.name || 'Scheda',
+    exercises: (plan.exercises || []).map(function(ex) {
+      return { name: ex.name, sets: ex.sets, reps: ex.reps, rest: ex.rest, notes: ex.notes || '' };
+    }),
+    _ai: plan._aiGenerated ? 1 : 0,
+    _created: new Date().toISOString().slice(0, 10)
+  };
+  var json = JSON.stringify(shareable);
+  var code = btoa(unescape(encodeURIComponent(json)));
+  document.getElementById('share-plan-list').style.display = 'none';
+  document.getElementById('share-result').style.display = '';
+  document.getElementById('share-code-text').textContent = code;
+  // Build import link
+  var baseUrl = window.location.origin + window.location.pathname;
+  var link = baseUrl + '?import=' + encodeURIComponent(code);
+  document.getElementById('share-link-text').textContent = link;
+  // QR Code (generate via inline SVG-based QR)
+  generateQR(code);
+}
+
+function shareCodeCopy() {
+  var text = document.getElementById('share-code-text').textContent;
+  navigator.clipboard.writeText(text).then(function() { toast('Codice copiato! 📋', 'gr'); });
+}
+function shareLinkCopy() {
+  var text = document.getElementById('share-link-text').textContent;
+  navigator.clipboard.writeText(text).then(function() { toast('Link copiato! 🔗', 'gr'); });
+}
+
+// Minimal QR Code generator (alphanumeric, embedded)
+function generateQR(data) {
+  var qrDiv = document.getElementById('share-qr');
+  // Use a canvas-based QR approach: encode data into a simple visual matrix
+  // For reliable QR we embed qrcode-generator logic (minified Kazuhiko Arase)
+  if (typeof qrcode === 'undefined') {
+    // Fallback: show the code as visual text matrix
+    qrDiv.innerHTML = '<div style="text-align:center;padding:12px;color:#333;font-size:.72rem">Scansiona il codice QR non disponibile.<br>Usa il codice o il link sopra.</div>';
+    // Load QR lib dynamically
+    var sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    sc.onload = function() { _renderQR(data); };
+    sc.onerror = function() {
+      qrDiv.innerHTML = '<div style="text-align:center;padding:12px;color:#666;font-size:.8rem">📋 Usa il codice o link sopra per condividere</div>';
+    };
+    document.head.appendChild(sc);
+    return;
+  }
+  _renderQR(data);
+}
+function _renderQR(data) {
+  var qrDiv = document.getElementById('share-qr');
+  try {
+    var qr = qrcode(0, 'L');
+    qr.addData(data);
+    qr.make();
+    qrDiv.innerHTML = qr.createSvgTag(5, 0);
+  } catch(e) {
+    qrDiv.innerHTML = '<div style="text-align:center;padding:12px;color:#666;font-size:.8rem">QR troppo lungo. Usa il codice sopra.</div>';
+  }
+}
+
+// ── IMPORT ──
+function openShareImport() {
+  document.getElementById('share-import-ov').classList.add('on');
+  document.getElementById('import-code').value = '';
+  document.getElementById('import-preview').style.display = 'none';
+}
+function closeShareImport() { document.getElementById('share-import-ov').classList.remove('on'); }
+
+function importPlan() {
+  var raw = document.getElementById('import-code').value.trim();
+  if (!raw) { toast('Incolla un codice valido', 're'); return; }
+  try {
+    var json = decodeURIComponent(escape(atob(raw)));
+    var plan = JSON.parse(json);
+    if (!plan._aura || !plan.exercises || !Array.isArray(plan.exercises)) throw new Error('Invalid');
+    // Show preview
+    var html = '<div class="card glass" style="padding:14px;margin-top:14px">' +
+      '<div style="font-weight:800;font-size:1rem;margin-bottom:8px">' + _escHtml(plan.name) + '</div>' +
+      '<div style="font-size:.78rem;color:var(--t3);margin-bottom:10px">' + plan.exercises.length + ' esercizi • ' + (plan._ai ? 'Generata IA' : 'Manuale') + '</div>';
+    plan.exercises.forEach(function(ex) {
+      html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--s8)">' +
+        '<span style="font-size:.82rem;font-weight:600">' + _escHtml(ex.name) + '</span>' +
+        '<span style="font-size:.78rem;color:var(--t3)">' + (ex.sets || 3) + '×' + (ex.reps || 10) + '</span></div>';
+    });
+    html += '<button class="cta" style="width:100%;margin-top:12px" onclick="confirmImport()">✅ Conferma Importazione</button></div>';
+    document.getElementById('import-preview').style.display = '';
+    document.getElementById('import-preview').innerHTML = html;
+    // Store temporarily
+    window._pendingImport = plan;
+  } catch(e) {
+    toast('Codice non valido. Controlla e riprova.', 're');
+  }
+}
+
+function confirmImport() {
+  var plan = window._pendingImport;
+  if (!plan) return;
+  var plans = getWorkouts();
+  plans.push({
+    name: plan.name + ' (importata)',
+    exercises: plan.exercises.map(function(ex) {
+      return { name: ex.name, sets: ex.sets || 3, reps: ex.reps || 10, rest: ex.rest || 60, notes: ex.notes || '' };
+    }),
+    _aiGenerated: false,
+    _imported: true,
+    _importDate: new Date().toISOString()
+  });
+  saveWorkouts(plans);
+  window._pendingImport = null;
+  toast('Scheda importata con successo! 🎉', 'gr');
+  closeShareImport();
+  renderWorkoutTab();
+}
+
+// ── AUTO-IMPORT FROM URL ──
+(function checkUrlImport() {
+  var params = new URLSearchParams(window.location.search);
+  var importCode = params.get('import');
+  if (importCode) {
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+    // Wait for DOM
+    setTimeout(function() {
+      openShareImport();
+      document.getElementById('import-code').value = importCode;
+      importPlan();
+    }, 1000);
+  }
+})();
 
 // ═══════════════════════════════════════════════════
 //  18. ANNUAL PLAN (79.99€)
