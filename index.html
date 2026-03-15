@@ -47,7 +47,7 @@ html,body{
 /* Noise texture overlay for depth */
 .app::before{
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-  opacity:.03;
+  opacity:.04;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat:repeat;background-size:128px 128px;
 }
@@ -1277,6 +1277,19 @@ html,body{
 .deload-title{font-weight:800;font-size:.9rem;color:var(--or);margin-bottom:4px}
 .deload-desc{font-size:.78rem;color:var(--t3);line-height:1.4}
 .deload-actions{display:flex;gap:8px;margin-top:10px}
+
+/* ── PARALLAX Z-DEPTH ── */
+.z-near{transform:translateY(0);transition:transform .05s linear;will-change:transform}
+.z-mid{transform:translateY(0);transition:transform .05s linear;will-change:transform}
+.z-far{transform:translateY(0);transition:transform .05s linear;will-change:transform}
+
+/* ── WORKOUT VIGNETTE ── */
+.ws-vignette{
+  position:fixed;inset:0;z-index:3599;pointer-events:none;
+  box-shadow:inset 0 0 120px 40px rgba(0,0,0,.7);
+  opacity:0;transition:opacity .8s ease;
+}
+.ws-vignette.on{opacity:1}
 </style>
 </head>
 <body>
@@ -1538,7 +1551,7 @@ html,body{
       <div style="padding:0 16px">
 
         <!-- Activity Rings -->
-        <div class="card glass" style="padding:16px;margin-bottom:12px">
+        <div class="card glass z-near" style="padding:16px;margin-bottom:12px">
           <div class="stat-label">Attività Oggi</div>
           <div style="display:flex;align-items:center;gap:16px">
             <div class="rings-wrap" style="flex-shrink:0">
@@ -1587,7 +1600,7 @@ html,body{
         </div>
 
         <!-- Muscoli -->
-        <div class="card glass" style="padding:14px;margin-bottom:12px">
+        <div class="card glass z-mid" style="padding:14px;margin-bottom:12px">
           <div class="stat-label">AURA Muscolare</div>
           <div class="mrow">
             <div class="mi"><span class="mn">Gambe</span><div class="mb"><div class="mf" style="width:90%;background:var(--or)"></div></div><span class="mp" style="color:var(--or)">90%</span></div>
@@ -1598,7 +1611,7 @@ html,body{
         </div>
 
         <!-- Metriche -->
-        <div class="metrics-chips">
+        <div class="metrics-chips z-far">
           <div class="mc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span id="bpm-val">72 BPM</span></div>
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg><span id="home-streak">0 giorni streak</span></div>
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="home-workouts">0 allenamenti</span></div>
@@ -1616,7 +1629,7 @@ html,body{
         </div>
 
         <!-- Mood Widget -->
-        <div class="card glass" style="padding:12px;margin-bottom:10px;display:none" id="mood-widget">
+        <div class="card glass z-mid" style="padding:12px;margin-bottom:10px;display:none" id="mood-widget">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div style="display:flex;align-items:center;gap:8px">
               <span id="mood-widget-emoji" style="font-size:1.3rem">😊</span>
@@ -1657,7 +1670,7 @@ html,body{
 
         <!-- Prossimo -->
         <div class="sec-title">Prossimo consigliato</div>
-        <div class="card" style="display:flex;align-items:center;gap:12px">
+        <div class="card z-far" style="display:flex;align-items:center;gap:12px">
           <div style="width:42px;height:42px;border-radius:11px;background:#f9731618;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg class="ico ico-lg" viewBox="0 0 24 24" style="stroke:var(--or)"><path d="M4 20h16M12 4v16M8 8l4-4 4 4"/></svg></div>
           <div style="flex:1">
             <div style="font-weight:700;font-size:.87rem">Mobilità & Stretching</div>
@@ -2770,6 +2783,8 @@ html,body{
   <div class="legal-scroll" style="padding:12px 20px calc(var(--nav-h) + var(--safe-b) + 20px)" id="wh-content"></div>
 </div>
 
+<div class="ws-vignette" id="ws-vignette"></div>
+
 <!-- ═══ PRE-WORKOUT MOOD PICKER ═══ -->
 <div class="mood-picker" id="mood-pre-ov">
   <div class="mood-picker-inner" style="background:var(--card);border-radius:24px;padding:28px 20px;max-width:340px;width:90%;text-align:center">
@@ -3487,6 +3502,7 @@ function _doStartWorkoutSession(planIdx) {
   // If mood is low, suggest lighter intensity
   if (ws.moodPre <= 2) toast('💡 Energia bassa — considera pesi più leggeri oggi', 'or');
   document.getElementById('ws-ov').classList.add('on');
+  document.getElementById('ws-vignette').classList.add('on');
   renderWsView();
   ws.timer = setInterval(wsTick, 1000);
   closeWorkoutBuilder();
@@ -3565,13 +3581,14 @@ function wsSkipExercise() {
 }
 
 function stopWorkoutSession() {
-  if (!ws.active) { document.getElementById('ws-ov').classList.remove('on'); return; }
+  if (!ws.active) { document.getElementById('ws-ov').classList.remove('on'); document.getElementById('ws-vignette').classList.remove('on'); return; }
   if (ws.totalSec > 30) {
     if (!confirm('Vuoi terminare l\'allenamento?')) return;
     wsFinish();
   } else {
     clearInterval(ws.timer); ws.active = false;
     document.getElementById('ws-ov').classList.remove('on');
+    document.getElementById('ws-vignette').classList.remove('on');
     diHide();
   }
 }
@@ -3586,6 +3603,7 @@ function wsCalcCalories() {
 function wsFinish() {
   clearInterval(ws.timer); ws.active = false;
   ws.calories = wsCalcCalories();
+  document.getElementById('ws-vignette').classList.remove('on');
   renderWsSummary();
   diHide();
 }
@@ -3631,6 +3649,7 @@ function wsSaveAndClose() {
   progs.forEach(function(s) { prog[s.id] = { weight:s.weight, suggested:s.suggested, date:new Date().toISOString().slice(0,10) }; });
   if (progs.length > 0) saveProgression(prog);
   document.getElementById('ws-ov').classList.remove('on');
+  document.getElementById('ws-vignette').classList.remove('on');
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
@@ -9504,6 +9523,28 @@ function isDeloadWeek() {
       }, 500);
     }
   } catch(e) {}
+})();
+
+/* ── PARALLAX Z-DEPTH SCROLL ── */
+(function(){
+  var scr = document.getElementById('screen');
+  if (!scr) return;
+  var ticking = false;
+  scr.addEventListener('scroll', function(){
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(function(){
+        var st = scr.scrollTop;
+        var nears = scr.querySelectorAll('.z-near');
+        var mids  = scr.querySelectorAll('.z-mid');
+        var fars  = scr.querySelectorAll('.z-far');
+        for (var i=0;i<nears.length;i++) nears[i].style.transform = 'translateY(' + (st * 0.03) + 'px)';
+        for (var i=0;i<mids.length;i++)  mids[i].style.transform  = 'translateY(' + (st * 0.015) + 'px)';
+        for (var i=0;i<fars.length;i++)  fars[i].style.transform   = 'translateY(' + (st * 0.005) + 'px)';
+        ticking = false;
+      });
+    }
+  }, {passive:true});
 })();
 </script>
 </body>
