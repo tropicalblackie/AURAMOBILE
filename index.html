@@ -6976,17 +6976,20 @@ function hideAuth() {
 // Auth tabs
 
 
-// Inizializzazione listener tab auth SEMPRE in fondo, dopo tutto il DOM
+
+// Event delegation: listener unico sul contenitore dei tab
 window.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      toast('[DEBUG] click tab: ' + tab.dataset.auth, 'or');
+  var tabsWrap = document.querySelector('.auth-tabs');
+  if (tabsWrap) {
+    tabsWrap.addEventListener('click', function(e) {
+      const tab = e.target.closest('.auth-tab');
+      if (!tab) return;
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('on'));
       document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('on'));
       tab.classList.add('on');
       document.getElementById('form-' + tab.dataset.auth).classList.add('on');
     });
-  });
+  }
 });
 
 // Password visibility toggles
