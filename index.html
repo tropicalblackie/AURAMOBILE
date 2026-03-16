@@ -913,7 +913,7 @@ body::-webkit-scrollbar{display:none}
   border-radius:14px;
 }
 .ob-sum-label{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
-.ob-sum-val{font-family:var(--fd);font-weight:800;font-size:.95rem}
+.ob-sum-val{font-family:var(--fb);font-weight:500;font-size:.95rem;color:var(--t1)}
 
 /* ── ONBOARDING AI STEP ── */
 .ob-ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:16px;padding:20px}
@@ -8372,13 +8372,13 @@ for (let i = 1; i <= 4; i++) {
 }
 
 function buildObSummary() {
-  const goalLabels = { massa:'💪 Massa Muscolare', dimagrimento:'🔥 Dimagrimento', benessere:'🧘 Benessere', resistenza:'🏃 Resistenza' };
-  const lvlLabels = { principiante:'🌱 Principiante', intermedio:'💫 Intermedio', avanzato:'🏆 Avanzato' };
+  const goalLabels = { massa:'Massa Muscolare', dimagrimento:'Dimagrimento', benessere:'Benessere', resistenza:'Resistenza' };
+  const lvlLabels = { principiante:'Principiante', intermedio:'Intermedio', avanzato:'Avanzato' };
   const freqLabels = { '1-2':'1-2 volte/sett.', '2-3':'2-3 volte/sett.', '4-5':'4-5 volte/sett.' };
   const rows = [
     ['Obiettivo', goalLabels[obData.goal]||obData.goal],
     ['Livello', lvlLabels[obData.level]||obData.level],
-    ['Fisico', obData.weight+'kg · '+obData.height+'cm · '+obData.age+' anni · '+(obData.sex==='M'?'♂':'♀')],
+    ['Fisico', obData.weight+'kg · '+obData.height+'cm · '+obData.age+' anni · '+(obData.sex==='M'?'Uomo':'Donna')],
     ['Frequenza', freqLabels[obData.freq]||obData.freq],
   ];
   document.getElementById('ob-summary').innerHTML = rows.map(([l,v]) =>
@@ -8513,7 +8513,7 @@ function generateAIPlanWithLLM(user) {
     'ESERCIZI DISPONIBILI (usa SOLO questi id):\n' + exList + '\n\n' +
     'ISTRUZIONI:\n- Crea esattamente ' + daysPerWeek + ' schede giornaliere\n- Ogni scheda deve avere 4-6 esercizi\n- Adatta serie e ripetizioni al livello e obiettivo\n- Includi tempo di riposo in secondi\n- Dai un nome descrittivo a ogni giornata\n\n' +
     'RISPONDI SOLO con un JSON valido (nessun testo extra), in questo formato esatto:\n' +
-    '[{"name":"Lunedì — Push","exercises":[{"id":"bench","sets":4,"reps":"8-10","rest":120}]}]\n' +
+    '[{"name":"Giorno 1 — Push","exercises":[{"id":"bench","sets":4,"reps":"8-10","rest":120}]}]\n' +
     'Ogni oggetto ha: name (string), exercises (array di {id, sets, reps, rest}).';
 
   return fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -8673,7 +8673,7 @@ function generateAIPlan(user) {
 
   // Build the actual workout plans
   var plans = [];
-  var dayNames = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+  var dayNames = Array.from({length: daysPerWeek}, function(_, i) { return 'Giorno ' + (i + 1); });
 
   splits.forEach(function(split, di) {
     var exercises = [];
