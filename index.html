@@ -41,6 +41,20 @@ if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then
   0%,100%{--or:#f97316}
   50%{--or:#fb923c}
 }
+:root.light{
+  --bg:#f0f2f7;--s9:#ffffff;--s8:#e6e9f0;--s7:#d4d8e4;--s6:#bfc4d0;
+  --t1:#0d1117;--t2:#2d3348;--t3:#5a6280;--t4:#8892aa;
+}
+:root.light html,:root.light body{background:#f0f2f7;color:#0d1117}
+.light .app{background:#f0f2f7}
+.light .app::after{opacity:.05}
+.light .topbar{background:#f0f2f7;border-bottom:1px solid #e6e9f0}
+.light .bottomnav{background:#ffffffd0;border-top:1px solid #e6e9f0}
+.light .screen{background:#f0f2f7}
+.light .card{background:var(--s9)!important}
+.light .sitem{border-bottom-color:#e6e9f0}
+.light .nb{color:#5a6280}
+.light .nb.on{color:#f97316}
 html,body{
   height:100%;width:100%;overflow:hidden;
   font-family:var(--fb);background:var(--bg);color:var(--t1);
@@ -1173,14 +1187,19 @@ body::-webkit-scrollbar{display:none}
 .xp-fill{height:100%;background:linear-gradient(90deg,var(--or),var(--or2));border-radius:50px;transition:width .6s var(--spring)}
 .xp-label{font-size:.65rem;color:var(--t3);margin-top:4px;text-align:right}
 
-.badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.badge-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;text-align:center;transition:all .2s}
-.badge-item.unlocked{border-color:#f9731640;background:#f9731608}
-.badge-item.locked{opacity:.4;filter:grayscale(1)}
-.badge-ico{font-size:1.6rem}
-.badge-name{font-size:.68rem;font-weight:700;line-height:1.2}
-.badge-desc{font-size:.65rem;color:var(--t3);line-height:1.2}
-.badge-date{font-size:.62rem;color:var(--or);font-weight:600;margin-top:2px}
+.badges-scroll{display:flex;overflow-x:auto;gap:10px;padding:4px 2px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.badges-scroll::-webkit-scrollbar{display:none}
+.badge-pill{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 12px;background:var(--s9);border:1px solid var(--s8);border-radius:18px;text-align:center;flex-shrink:0;min-width:76px;transition:transform .2s var(--spring),border-color .2s}
+.badge-pill.unlocked{border-color:#f9731650;background:linear-gradient(160deg,#f9731610,var(--s9))}
+.badge-pill.unlocked:active{transform:scale(.94)}
+.badge-pill.locked{opacity:.35;filter:grayscale(1)}
+.badge-ico{font-size:1.55rem;line-height:1}
+.badge-name{font-size:.65rem;font-weight:700;line-height:1.2;white-space:nowrap}
+.badge-desc{font-size:.6rem;color:var(--t3);line-height:1.2;max-width:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge-date{font-size:.58rem;color:var(--or);font-weight:700;margin-top:1px}
+.lang-pills{display:flex;gap:8px;margin:4px 0 0}
+.lang-pill{padding:6px 16px;border-radius:50px;font-size:.78rem;font-weight:700;font-family:var(--fd);background:var(--s8);color:var(--t2);border:1.5px solid transparent;cursor:pointer;transition:all .18s var(--spring)}
+.lang-pill.on{background:var(--pu)18;color:var(--pu);border-color:var(--pu)60}
 
 /* ══════ EXERCISE LIBRARY & BUILDER ══════ */
 .exlib-ov{position:absolute;inset:0;z-index:3600;display:none;flex-direction:column;background:var(--bg)}
@@ -2401,73 +2420,7 @@ body::-webkit-scrollbar{display:none}
 
         <!-- Badge -->
         <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">Badge & Achievement <span style="font-size:.7rem;color:var(--t4);font-weight:400" id="badge-count">0/0</span></div>
-        <div class="badges-grid" id="badges-grid"></div>
-        <div style="height:14px"></div>
-
-        <!-- Progressi -->
-        <div class="sec-title">I Miei Progressi</div>
-
-        <div class="card" style="padding:14px;cursor:pointer" onclick="openProgress()">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M2 12l5 5L22 5"/></svg></span>
-              <div>
-                <div style="font-weight:700;font-size:.88rem">Storico Progressi</div>
-                <div style="font-size:.7rem;color:var(--t3)">Peso, Forza, Resistenza nel tempo</div>
-              </div>
-            </div>
-            <span class="sarr">›</span>
-          </div>
-        </div>
-
-        <!-- Foto Progresso -->
-        <div class="card" style="padding:14px;cursor:pointer" onclick="openProgressPhotos()">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
-              <div>
-                <div style="font-weight:700;font-size:.88rem">Foto Progresso</div>
-                <div style="font-size:.7rem;color:var(--t3)">Confronto visivo settimanale</div>
-              </div>
-            </div>
-            <span class="sarr">›</span>
-          </div>
-        </div>
-
-        <!-- Misure Corpo -->
-        <div class="card" style="padding:14px;cursor:pointer" onclick="openBodyMeasure()">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
-              <div>
-                <div style="font-weight:700;font-size:.88rem">Misure Corpo</div>
-                <div style="font-size:.7rem;color:var(--t3)">Girovita, petto, braccia, cosce</div>
-              </div>
-            </div>
-            <span class="sarr">›</span>
-          </div>
-        </div>
-
-        <!-- Storico Allenamenti -->
-        <div class="sec-title">Storico Allenamenti</div>
-        <div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutHistory()">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg></span>
-              <div>
-                <div style="font-weight:700;font-size:.88rem">I Miei Workout</div>
-                <div style="font-size:.7rem;color:var(--t3)" id="wh-summary">Tutti gli allenamenti completati</div>
-              </div>
-            </div>
-            <span class="sarr">›</span>
-          </div>
-        </div>
-
-        <!-- Diario -->
-        <div class="sec-title">Diario Allenamenti</div>
-        <div class="card" style="padding:0 14px" id="prof-diary">
-          <div class="prog-empty" id="diary-empty" style="padding:20px 10px"><b>Nessun allenamento registrato</b>I tuoi workout appariranno qui</div>
-        </div>
+        <div class="badges-scroll" id="badges-grid"></div>
 
         <!-- Store -->
         <div class="sec-title">Store</div>
@@ -2529,10 +2482,15 @@ body::-webkit-scrollbar{display:none}
         <div class="card" style="padding:0 14px">
           <div class="sitem" onclick="openEditProfile()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg> Modifica dati personali</span><span class="sarr">›</span></div>
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg> Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
-          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Obiettivo: Massa Muscolare</span><span class="sarr">›</span></div>
-          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg> Modalità Riposo Auto</span><div class="tog on" id="tog-sleep"></div></div>
-          <div class="sitem" onclick="openAIKeySettings()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> AI Coach (Groq)</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="toast('Email di reset inviata.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Sicurezza & Privacy</span><span class="sarr">›</span></div>
+          <div class="sitem" style="flex-direction:column;align-items:flex-start;gap:10px;padding:14px 0">
+            <span style="display:flex;align-items:center;gap:8px"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg> Lingua</span>
+            <div class="lang-pills">
+              <button class="lang-pill on" id="lang-it" onclick="applyLang('it')">IT</button>
+              <button class="lang-pill" id="lang-en" onclick="applyLang('en')">EN</button>
+              <button class="lang-pill" id="lang-es" onclick="applyLang('es')">ES</button>
+            </div>
+          </div>
+          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Tema chiaro</span><div class="tog" id="tog-theme" onclick="applyTheme(this.classList.contains('on')?'dark':'light')"></div></div>
           <div class="sitem" onclick="openLegal('privacy-ov')"><span>Privacy Policy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('terms-ov')"><span>Termini di Servizio</span><span class="sarr">›</span></div>
           <div class="sitem" id="logout-btn"><span style="color:var(--re)">Esci dall'account</span><span class="sarr" style="color:var(--re)">›</span></div>
@@ -4504,19 +4462,17 @@ function updateXPandBadges() {
     });
   }
 
-  // Render badges grid with 3D effect
+  // Render badges as horizontal scroll pills
   const grid = document.getElementById('badges-grid');
   if (grid) {
     const months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
     grid.innerHTML = BADGES.map((b, i) => {
       const u = unlocked[b.id];
       const cls = u ? 'unlocked' : 'locked';
-      const rarity = Math.floor(i / 5); // 0=bronze, 1=silver, 2=gold, 3=crystal
-      // const badge3D = create3DBadge(b.ico, rarity, !!u); // Temporarily disabled
       const badgeIcon = '<div class="badge-ico">' + (u ? b.ico : '🔒') + '</div>';
       let dateStr = '';
-      if (u) { const dp = new Date(u); dateStr = '<div class="badge-date">' + dp.getDate() + ' ' + months[dp.getMonth()] + ' ' + dp.getFullYear() + '</div>'; }
-      return '<div class="badge-item ' + cls + '">' + badgeIcon + '<div class="badge-info"><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div></div>';
+      if (u) { const dp = new Date(u); dateStr = '<div class="badge-date">' + dp.getDate() + ' ' + months[dp.getMonth()] + '</div>'; }
+      return '<div class="badge-pill ' + cls + '">' + badgeIcon + '<div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div>';
     }).join('');
   }
   const bc = document.getElementById('badge-count');
@@ -4589,6 +4545,39 @@ function openEditProfile() {
 function closeEditProfile() {
   document.getElementById('editprof-ov').classList.remove('on');
 }
+
+// ── LANG & THEME ─────────────────────────────────
+const LANG_LABELS = {
+  it: { greeting: null },
+  en: { greeting: null },
+  es: { greeting: null }
+};
+function applyLang(lang) {
+  localStorage.setItem('aura_lang', lang);
+  ['it','en','es'].forEach(l => {
+    const el = document.getElementById('lang-' + l);
+    if (el) el.classList.toggle('on', l === lang);
+  });
+  const names = { it: 'Italiano', en: 'English', es: 'Español' };
+  toast('Lingua: ' + names[lang], 'pu');
+}
+function applyTheme(mode) {
+  const isLight = mode === 'light';
+  document.documentElement.classList.toggle('light', isLight);
+  localStorage.setItem('aura_theme', mode);
+  const tog = document.getElementById('tog-theme');
+  if (tog) tog.classList.toggle('on', isLight);
+}
+function initLangTheme() {
+  const lang = localStorage.getItem('aura_lang') || 'it';
+  const theme = localStorage.getItem('aura_theme') || 'dark';
+  ['it','en','es'].forEach(l => {
+    const el = document.getElementById('lang-' + l);
+    if (el) el.classList.toggle('on', l === lang);
+  });
+  applyTheme(theme);
+}
+
 function saveEditProfile() {
   const u = getUser();
   if (!u) return;
@@ -10171,6 +10160,7 @@ function isDeloadWeek() {
 (function initAuth() {
   const user = getUser();
   const hasLoggedInThisSession = sessionStorage.getItem('aura_session_login') === 'true';
+  initLangTheme();
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
