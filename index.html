@@ -1395,15 +1395,6 @@ body::-webkit-scrollbar{display:none}
 .progphoto-compare-card img{width:100%;aspect-ratio:3/4;object-fit:cover}
 .progphoto-compare-card .overlay-data{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:.7rem;color:#fff}
 
-/* ── HIIT TIMER ── */
-.hiit-display{text-align:center;padding:30px 20px;margin-bottom:14px;background:var(--s9);border:1px solid var(--s8);border-radius:22px}
-.hiit-phase{font-family:var(--fd);font-size:1.2rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;color:var(--or)}
-.hiit-phase.work{color:var(--re)}
-.hiit-phase.rest{color:var(--gr)}
-.hiit-phase.prep{color:var(--bl)}
-.hiit-time{font-family:var(--fd);font-size:clamp(2.5rem,8vw,3.2rem);font-weight:800;line-height:1;margin-bottom:6px}
-.hiit-round{font-size:.85rem;color:var(--t3)}
-
 /* ── STORE ── */
 .store-item{display:flex;gap:14px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:16px;margin-bottom:10px}
 .store-item img{width:80px;height:80px;object-fit:cover;border-radius:12px;flex-shrink:0;background:var(--s8)}
@@ -1450,24 +1441,6 @@ body::-webkit-scrollbar{display:none}
 .cal-stat-val{font-family:var(--fd);font-weight:800;font-size:1.2rem;color:var(--or)}
 .cal-stat-lbl{font-size:.68rem;color:var(--t3);margin-top:2px}
 
-/* ── 1RM CALCULATOR ── */
-.rm-result{text-align:center;padding:20px;background:var(--s9);border:1px solid var(--s8);border-radius:18px;margin:16px 0}
-.rm-val{font-family:var(--fd);font-weight:900;font-size:2rem;color:var(--or);line-height:1}
-.rm-label{font-size:.78rem;color:var(--t3);margin-top:4px}
-.rm-pct-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0}
-.rm-pct{text-align:center;background:var(--s9);border:1px solid var(--s8);border-radius:12px;padding:10px 4px}
-.rm-pct-reps{font-size:.68rem;color:var(--t3)}
-.rm-pct-kg{font-family:var(--fd);font-weight:700;font-size:.92rem;color:var(--t1)}
-.rm-input-row{display:flex;gap:10px;margin-bottom:6px}
-.rm-input-row input,.rm-input-row select{flex:1;padding:12px;border-radius:12px;border:1px solid var(--s8);background:var(--s9);color:var(--t1);font-size:.9rem;font-family:var(--fb)}
-.rm-input-row input:focus{border-color:var(--or);outline:none}
-.rm-hist-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:6px}
-.rm-hist-ex{font-weight:600;font-size:.84rem;flex:1}
-.rm-hist-val{font-family:var(--fd);font-weight:800;font-size:1rem;color:var(--or)}
-.rm-hist-meta{font-size:.68rem;color:var(--t3)}
-.rm-hist-del{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f43f5e20;color:#f43f5e;cursor:pointer;font-size:.9rem}
-.rm-chart{width:100%;height:140px;position:relative;margin:10px 0}
-.rm-chart canvas{width:100%!important;height:100%!important}
 /* ── BODY MEASUREMENTS ── */
 .bm-part-btn{display:flex;align-items:center;gap:10px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:14px;margin-bottom:8px;cursor:pointer;text-align:left;width:100%;color:var(--t1)}
 .bm-part-btn .bm-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
@@ -2054,11 +2027,6 @@ body::-webkit-scrollbar{display:none}
           <svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> Chiedi al Coach IA
         </button>
 
-        <!-- HIIT Timer CTA -->
-        <button class="cta" style="margin-bottom:10px;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openHIIT()">
-          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> Timer HIIT / Tabata
-        </button>
-
         <!-- Workout live (session overlay) -->
 
         <!-- Prossimo -->
@@ -2202,14 +2170,10 @@ body::-webkit-scrollbar{display:none}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
           <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem" onclick="openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Schede</button>
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem" onclick="openExerciseLibrary()"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem;border-color:var(--or);color:var(--or)" onclick="openHIIT()"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT</button>
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem;border-color:#a78bfa;color:#a78bfa" onclick="openCalendar()"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendario</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#ef4444;color:#ef4444" onclick="open1RM()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5h11M6 12h12M17.5 17.5h-11"/><rect x="2" y="9" width="4" height="6" rx="1"/><rect x="18" y="9" width="4" height="6" rx="1"/></svg> 1RM Calc</button>
           <div class="card" style="padding:.85rem;border-radius:14px;text-align:center;cursor:pointer" onclick="openWorkoutHistory()"><span style="font-size:.84rem;color:var(--t2)">📊 Storico</span></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#22c55e;color:#22c55e" onclick="openShareExport()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Condividi</button>
           <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#38bdf8;color:#38bdf8" onclick="openShareImport()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Importa</button>
         </div>
@@ -2760,42 +2724,6 @@ body::-webkit-scrollbar{display:none}
   </div>
 </div>
 
-<!-- 1RM CALCULATOR OVERLAY -->
-<div class="legal-ov" id="rm-ov">
-  <div class="legal-topbar">
-    <button class="legal-back" onclick="close1RM()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-    </button>
-    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5h11M6 12h12M17.5 17.5h-11"/><rect x="2" y="9" width="4" height="6" rx="1"/><rect x="18" y="9" width="4" height="6" rx="1"/></svg> 1RM Calculator</div>
-  </div>
-  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
-    <!-- Exercise select -->
-    <div class="sec-title">Esercizio</div>
-    <div class="rm-input-row">
-      <select id="rm-exercise" onchange="rmUpdateHistory()">
-        <option value="">Seleziona esercizio...</option>
-      </select>
-    </div>
-    <!-- Input -->
-    <div class="sec-title" style="margin-top:10px">Peso × Ripetizioni</div>
-    <div class="rm-input-row">
-      <input type="number" id="rm-weight" placeholder="Peso (kg)" min="1" max="500" inputmode="decimal">
-      <input type="number" id="rm-reps" placeholder="Reps" min="1" max="30" inputmode="numeric">
-    </div>
-    <button class="cta" style="width:100%;margin:10px 0" onclick="rmCalc()">🏋️ Calcola 1RM</button>
-    <!-- Result -->
-    <div id="rm-result" style="display:none"></div>
-    <!-- Percentage table -->
-    <div id="rm-pct-table" style="display:none"></div>
-    <!-- Save -->
-    <button class="btn btn-or btn-fw" id="rm-save-btn" style="display:none;margin:10px 0" onclick="rmSave()">💾 Salva nel Registro</button>
-    <!-- History -->
-    <div class="sec-title" style="margin-top:16px">📈 Progressione</div>
-    <div id="rm-chart-wrap" style="display:none"><canvas id="rm-chart"></canvas></div>
-    <div id="rm-history"></div>
-  </div>
-</div>
-
 <!-- WORKOUT CALENDAR OVERLAY -->
 <div class="legal-ov" id="cal-ov">
   <div class="legal-topbar">
@@ -2891,42 +2819,6 @@ body::-webkit-scrollbar{display:none}
     </div>
     <div class="sec-title">Log HR recente</div>
     <div id="ble-hr-log" class="card" style="padding:14px;font-size:.8rem;color:var(--t3)">Nessun dato HR registrato.</div>
-  </div>
-</div>
-
-<!-- HIIT TIMER OVERLAY -->
-<div class="legal-ov" id="hiit-ov">
-  <div class="legal-topbar">
-    <button class="legal-back" onclick="closeHIIT()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-    </button>
-    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M10 2h4M16.5 7.5l1.5-1.5M12 9v4"/></svg> HIIT / Tabata</div>
-  </div>
-  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
-    <div class="hiit-display" id="hiit-display">
-      <div class="hiit-phase" id="hiit-phase">PRONTO</div>
-      <div class="hiit-time" id="hiit-time">00:00</div>
-      <div class="hiit-round" id="hiit-round">Round 0/0</div>
-    </div>
-    <div class="hiit-settings" id="hiit-settings">
-      <div class="sec-title">Impostazioni</div>
-      <div class="card" style="padding:14px">
-        <div class="ep-field"><label class="ep-label">Lavoro (sec)</label><input class="ep-input" type="number" id="hiit-work" value="20" min="5" max="300"></div>
-        <div class="ep-field"><label class="ep-label">Riposo (sec)</label><input class="ep-input" type="number" id="hiit-rest" value="10" min="5" max="300"></div>
-        <div class="ep-field"><label class="ep-label">Round</label><input class="ep-input" type="number" id="hiit-rounds" value="8" min="1" max="50"></div>
-        <div class="ep-field"><label class="ep-label">Preparazione (sec)</label><input class="ep-input" type="number" id="hiit-prep" value="5" min="3" max="30"></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-        <button class="btn btn-or btn-fw" onclick="setHIITPreset(20,10,8)">Tabata 20/10×8</button>
-        <button class="btn btn-ghost btn-fw" onclick="setHIITPreset(30,15,10)">HIIT 30/15×10</button>
-        <button class="btn btn-ghost btn-fw" onclick="setHIITPreset(40,20,6)">EMOM 40/20×6</button>
-        <button class="btn btn-ghost btn-fw" onclick="setHIITPreset(45,15,12)">Endurance 45/15×12</button>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:10px">
-      <button class="cta pulse" style="flex:1;margin:0" id="hiit-start-btn" onclick="toggleHIIT()">▶ Avvia</button>
-      <button class="btn btn-ghost" style="padding:.8rem 1.2rem" id="hiit-reset-btn" onclick="resetHIIT()">↺ Reset</button>
-    </div>
   </div>
 </div>
 
@@ -9204,224 +9096,6 @@ function calSetReminder(dateStr, planName) {
 })();
 
 // ═══════════════════════════════════════════════════
-//  11c. 1RM CALCULATOR
-// ═══════════════════════════════════════════════════
-var RM_KEY = 'aura_1rm_history';
-
-function get1RMHistory() {
-  try { return JSON.parse(localStorage.getItem(RM_KEY)) || []; } catch(e) { return []; }
-}
-function save1RMHistory(arr) { localStorage.setItem(RM_KEY, JSON.stringify(arr)); }
-
-function open1RM() {
-  document.getElementById('rm-ov').classList.add('on');
-  // Populate exercise select
-  var sel = document.getElementById('rm-exercise');
-  if (sel.options.length <= 1) {
-    var groups = {};
-    EXERCISES.forEach(function(e) {
-      if (!groups[e.muscle]) groups[e.muscle] = [];
-      groups[e.muscle].push(e);
-    });
-    Object.keys(groups).sort().forEach(function(g) {
-      var og = document.createElement('optgroup');
-      og.label = g;
-      groups[g].forEach(function(e) {
-        var o = document.createElement('option');
-        o.value = e.id;
-        o.textContent = e.emoji + ' ' + e.name;
-        og.appendChild(o);
-      });
-      sel.appendChild(og);
-    });
-  }
-  rmUpdateHistory();
-}
-function close1RM() { document.getElementById('rm-ov').classList.remove('on'); }
-
-function rmCalcEpley(weight, reps) {
-  if (reps <= 0 || weight <= 0) return 0;
-  if (reps === 1) return weight;
-  return Math.round(weight * (1 + reps / 30));
-}
-
-function rmCalc() {
-  var w = parseFloat(document.getElementById('rm-weight').value);
-  var r = parseInt(document.getElementById('rm-reps').value);
-  if (!w || w <= 0 || !r || r <= 0 || r > 30) { toast('⚠️ Inserisci peso e reps validi (1-30)', 're'); return; }
-  var oneRM = rmCalcEpley(w, r);
-
-  // Show result
-  var resEl = document.getElementById('rm-result');
-  resEl.style.display = 'block';
-  resEl.innerHTML = '<div class="rm-result">' +
-    '<div class="rm-val">' + oneRM + ' kg</div>' +
-    '<div class="rm-label">1RM stimato (Epley)</div>' +
-    '<div style="font-size:.72rem;color:var(--t3);margin-top:6px">Basato su ' + w + ' kg × ' + r + ' reps</div></div>';
-
-  // Percentage table
-  var pctEl = document.getElementById('rm-pct-table');
-  pctEl.style.display = 'block';
-  var pcts = [
-    {p:100,r:'1'},  {p:95,r:'2'},  {p:90,r:'3-4'}, {p:85,r:'5-6'},
-    {p:80,r:'7-8'}, {p:75,r:'9-10'},{p:70,r:'11-12'},{p:65,r:'13-15'}
-  ];
-  pctEl.innerHTML = '<div class="sec-title">Tabella Percentuali</div><div class="rm-pct-grid">' +
-    pcts.map(function(x) {
-      return '<div class="rm-pct"><div class="rm-pct-reps">' + x.p + '% • ' + x.r + 'r</div><div class="rm-pct-kg">' + Math.round(oneRM * x.p / 100) + ' kg</div></div>';
-    }).join('') + '</div>';
-
-  // Show save button
-  document.getElementById('rm-save-btn').style.display = 'block';
-}
-
-function rmSave() {
-  var exId = document.getElementById('rm-exercise').value;
-  var w = parseFloat(document.getElementById('rm-weight').value);
-  var r = parseInt(document.getElementById('rm-reps').value);
-  if (!exId) { toast('⚠️ Seleziona un esercizio', 're'); return; }
-  if (!w || !r) { toast('⚠️ Calcola prima il 1RM', 're'); return; }
-  var oneRM = rmCalcEpley(w, r);
-  var ex = EXERCISES.find(function(e) { return e.id === exId; });
-  var hist = get1RMHistory();
-  hist.push({
-    date: new Date().toISOString().slice(0, 10),
-    exId: exId,
-    exName: ex ? ex.name : exId,
-    weight: w,
-    reps: r,
-    oneRM: oneRM
-  });
-  save1RMHistory(hist);
-  rmUpdateHistory();
-  toast('💾 1RM salvato: ' + (ex ? ex.name : exId) + ' — ' + oneRM + ' kg', 'gr');
-}
-
-function rmUpdateHistory() {
-  var exId = document.getElementById('rm-exercise').value;
-  var hist = get1RMHistory();
-  var histEl = document.getElementById('rm-history');
-  var chartWrap = document.getElementById('rm-chart-wrap');
-
-  // Filter by exercise if selected
-  var filtered = exId ? hist.filter(function(h) { return h.exId === exId; }) : hist;
-  filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
-
-  if (filtered.length === 0) {
-    histEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--t3);font-size:.82rem">Nessun record salvato' + (exId ? ' per questo esercizio' : '') + '.</div>';
-    chartWrap.style.display = 'none';
-    return;
-  }
-
-  // Render chart if exercise selected and 2+ records
-  if (exId && filtered.length >= 2) {
-    chartWrap.style.display = 'block';
-    rmDrawChart(filtered.slice().reverse());
-  } else {
-    chartWrap.style.display = 'none';
-  }
-
-  // Render list
-  histEl.innerHTML = filtered.slice(0, 20).map(function(h, i) {
-    return '<div class="rm-hist-item">' +
-      '<div style="flex:1">' +
-        '<div class="rm-hist-ex">' + (h.exName || h.exId) + '</div>' +
-        '<div class="rm-hist-meta">' + h.date + ' • ' + h.weight + 'kg × ' + h.reps + 'r</div>' +
-      '</div>' +
-      '<div class="rm-hist-val">' + h.oneRM + ' kg</div>' +
-      '<div class="rm-hist-del" onclick="rmDelete(' + (hist.indexOf(h)) + ')">✕</div>' +
-    '</div>';
-  }).join('');
-}
-
-function rmDelete(idx) {
-  var hist = get1RMHistory();
-  hist.splice(idx, 1);
-  save1RMHistory(hist);
-  rmUpdateHistory();
-  toast('🗑️ Record rimosso', 'bl');
-}
-
-function rmDrawChart(data) {
-  var canvas = document.getElementById('rm-chart');
-  var ctx = canvas.getContext('2d');
-  var dpr = window.devicePixelRatio || 1;
-  var rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = 140 * dpr;
-  canvas.style.width = rect.width + 'px';
-  canvas.style.height = '140px';
-  ctx.scale(dpr, dpr);
-  var W = rect.width, H = 140;
-
-  ctx.clearRect(0, 0, W, H);
-
-  var vals = data.map(function(d) { return d.oneRM; });
-  var mn = Math.min.apply(null, vals) - 5;
-  var mx = Math.max.apply(null, vals) + 5;
-  if (mn === mx) { mn -= 10; mx += 10; }
-  var pad = { l: 40, r: 16, t: 12, b: 24 };
-  var cW = W - pad.l - pad.r;
-  var cH = H - pad.t - pad.b;
-
-  // Grid lines
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1;
-  for (var g = 0; g < 4; g++) {
-    var gy = pad.t + (cH / 3) * g;
-    ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(W - pad.r, gy); ctx.stroke();
-    var gv = Math.round(mx - (mx - mn) * (g / 3));
-    ctx.fillStyle = '#64748b'; ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
-    ctx.fillText(gv + '', pad.l - 6, gy + 4);
-  }
-
-  // Line + dots
-  ctx.strokeStyle = '#f97316';
-  ctx.lineWidth = 2.5;
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  data.forEach(function(d, i) {
-    var x = pad.l + (cW / Math.max(data.length - 1, 1)) * i;
-    var y = pad.t + cH - ((d.oneRM - mn) / (mx - mn)) * cH;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  });
-  ctx.stroke();
-
-  // Gradient fill
-  ctx.lineTo(pad.l + cW, pad.t + cH);
-  ctx.lineTo(pad.l, pad.t + cH);
-  ctx.closePath();
-  var grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + cH);
-  grad.addColorStop(0, '#f9731640');
-  grad.addColorStop(1, '#f9731600');
-  ctx.fillStyle = grad;
-  ctx.fill();
-
-  // Dots
-  data.forEach(function(d, i) {
-    var x = pad.l + (cW / Math.max(data.length - 1, 1)) * i;
-    var y = pad.t + cH - ((d.oneRM - mn) / (mx - mn)) * cH;
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#f97316';
-    ctx.fill();
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-  });
-
-  // Date labels
-  ctx.fillStyle = '#64748b'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
-  var step = Math.max(1, Math.floor(data.length / 5));
-  data.forEach(function(d, i) {
-    if (i % step === 0 || i === data.length - 1) {
-      var x = pad.l + (cW / Math.max(data.length - 1, 1)) * i;
-      ctx.fillText(d.date.slice(5), x, H - 4);
-    }
-  });
-}
-
-// ═══════════════════════════════════════════════════
 //  12. PROGRESS PHOTO GALLERY
 // ═══════════════════════════════════════════════════
 var PROGPHOTO_KEY = 'aura_progress_photos';
@@ -9542,160 +9216,6 @@ function renderBLELog() {
   var last10 = BLE.hrValues.slice(-10).reverse();
   el.innerHTML = last10.map(function(v) { return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--s8)">' +
     '<span>' + v.time + '</span><span style="color:var(--re);font-weight:700">' + v.hr + ' BPM</span></div>'; }).join('');
-}
-
-// ═══════════════════════════════════════════════════
-//  14. HIIT / TABATA TIMER
-// ═══════════════════════════════════════════════════
-var HIIT = { running: false, paused: false, interval: null, phase: 'idle', currentRound: 0, secondsLeft: 0, totalRounds: 8, workSec: 20, restSec: 10, prepSec: 5, noSleepVideo: null };
-
-function openHIIT() { document.getElementById('hiit-ov').classList.add('on'); }
-function closeHIIT() {
-  if (HIIT.running) resetHIIT();
-  document.getElementById('hiit-ov').classList.remove('on');
-}
-
-function setHIITPreset(work, rest, rounds) {
-  document.getElementById('hiit-work').value = work;
-  document.getElementById('hiit-rest').value = rest;
-  document.getElementById('hiit-rounds').value = rounds;
-}
-
-function toggleHIIT() {
-  if (HIIT.running && !HIIT.paused) {
-    HIIT.paused = true;
-    clearInterval(HIIT.interval);
-    document.getElementById('hiit-start-btn').textContent = '▶ Riprendi';
-    return;
-  }
-  if (HIIT.paused) {
-    HIIT.paused = false;
-    document.getElementById('hiit-start-btn').textContent = '⏸ Pausa';
-    HIIT.interval = setInterval(hiitTick, 1000);
-    return;
-  }
-  HIIT.workSec = parseInt(document.getElementById('hiit-work').value) || 20;
-  HIIT.restSec = parseInt(document.getElementById('hiit-rest').value) || 10;
-  HIIT.totalRounds = parseInt(document.getElementById('hiit-rounds').value) || 8;
-  HIIT.prepSec = parseInt(document.getElementById('hiit-prep').value) || 5;
-  HIIT.currentRound = 0;
-  HIIT.phase = 'prep';
-  HIIT.secondsLeft = HIIT.prepSec;
-  HIIT.running = true;
-  HIIT.paused = false;
-  document.getElementById('hiit-settings').style.display = 'none';
-  document.getElementById('hiit-start-btn').textContent = '⏸ Pausa';
-  enableNoSleep();
-  updateHIITDisplay();
-  HIIT.interval = setInterval(hiitTick, 1000);
-}
-
-function hiitTick() {
-  HIIT.secondsLeft--;
-  if (HIIT.secondsLeft <= 3 && HIIT.secondsLeft > 0) hiitBeep(800, 80);
-  if (HIIT.secondsLeft <= 0) {
-    if (HIIT.phase === 'prep') {
-      HIIT.phase = 'work';
-      HIIT.currentRound = 1;
-      HIIT.secondsLeft = HIIT.workSec;
-      hiitBeep(1000, 200);
-    } else if (HIIT.phase === 'work') {
-      if (HIIT.currentRound >= HIIT.totalRounds) {
-        finishHIIT();
-        return;
-      }
-      HIIT.phase = 'rest';
-      HIIT.secondsLeft = HIIT.restSec;
-      hiitBeep(600, 150);
-    } else if (HIIT.phase === 'rest') {
-      HIIT.phase = 'work';
-      HIIT.currentRound++;
-      HIIT.secondsLeft = HIIT.workSec;
-      hiitBeep(1000, 200);
-    }
-  }
-  updateHIITDisplay();
-}
-
-function updateHIITDisplay() {
-  var phaseEl = document.getElementById('hiit-phase');
-  var timeEl = document.getElementById('hiit-time');
-  var roundEl = document.getElementById('hiit-round');
-  var labels = { prep: 'PREPARATI', work: 'LAVORO!', rest: 'RIPOSO', idle: 'PRONTO' };
-  phaseEl.textContent = labels[HIIT.phase] || 'PRONTO';
-  phaseEl.className = 'hiit-phase ' + HIIT.phase;
-  var m = Math.floor(HIIT.secondsLeft / 60);
-  var s = HIIT.secondsLeft % 60;
-  timeEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  roundEl.textContent = 'Round ' + HIIT.currentRound + '/' + HIIT.totalRounds;
-}
-
-function finishHIIT() {
-  clearInterval(HIIT.interval);
-  HIIT.running = false;
-  HIIT.phase = 'idle';
-  disableNoSleep();
-  document.getElementById('hiit-phase').textContent = 'COMPLETATO! 🎉';
-  document.getElementById('hiit-phase').className = 'hiit-phase';
-  document.getElementById('hiit-phase').style.color = 'var(--gr)';
-  document.getElementById('hiit-start-btn').textContent = '▶ Avvia';
-  document.getElementById('hiit-settings').style.display = '';
-  hiitBeep(1200, 500);
-  toast('🎉 HIIT completato! ' + HIIT.totalRounds + ' round in ' + formatHIITTotal() + '!', 'gr');
-}
-
-function resetHIIT() {
-  clearInterval(HIIT.interval);
-  HIIT.running = false;
-  HIIT.paused = false;
-  HIIT.phase = 'idle';
-  HIIT.currentRound = 0;
-  HIIT.secondsLeft = 0;
-  disableNoSleep();
-  document.getElementById('hiit-phase').textContent = 'PRONTO';
-  document.getElementById('hiit-phase').className = 'hiit-phase';
-  document.getElementById('hiit-phase').style.color = '';
-  document.getElementById('hiit-time').textContent = '00:00';
-  document.getElementById('hiit-round').textContent = 'Round 0/0';
-  document.getElementById('hiit-start-btn').textContent = '▶ Avvia';
-  document.getElementById('hiit-settings').style.display = '';
-}
-
-function formatHIITTotal() {
-  var total = HIIT.totalRounds * (HIIT.workSec + HIIT.restSec) + HIIT.prepSec;
-  var m = Math.floor(total / 60);
-  return m + ' min';
-}
-
-var hiitAudioCtx = null;
-function hiitBeep(freq, duration) {
-  try {
-    if (!hiitAudioCtx) hiitAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    var osc = hiitAudioCtx.createOscillator();
-    var gain = hiitAudioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(hiitAudioCtx.destination);
-    osc.frequency.value = freq;
-    gain.gain.value = 0.3;
-    osc.start();
-    osc.stop(hiitAudioCtx.currentTime + duration / 1000);
-  } catch(e) {}
-}
-
-function enableNoSleep() {
-  try {
-    if (navigator.wakeLock) {
-      navigator.wakeLock.request('screen').then(function(lock) { HIIT.noSleepVideo = lock; });
-    }
-  } catch(e) {}
-}
-function disableNoSleep() {
-  try {
-    if (HIIT.noSleepVideo && HIIT.noSleepVideo.release) {
-      HIIT.noSleepVideo.release();
-      HIIT.noSleepVideo = null;
-    }
-  } catch(e) {}
 }
 
 // ═══════════════════════════════════════════════════
