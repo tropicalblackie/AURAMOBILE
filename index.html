@@ -426,55 +426,24 @@ body::-webkit-scrollbar{display:none}
 .edot{width:7px;height:7px;border-radius:50%;background:var(--s7)}
 
 /* ══════ CAMERA ══════ */
-.cam-top{display:flex;align-items:center;justify-content:space-between;padding:4px 20px 12px}
-.hbchip{display:flex;align-items:center;gap:5px;padding:.38rem .8rem;background:#f9731615;border:1px solid var(--or);border-radius:50px;font-size:.73rem;font-weight:600;color:var(--or);animation:hb 1.5s ease-in-out infinite}
-@keyframes hb{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-
-.vp{
-  position:relative;width:calc(100% - 32px);margin:0 16px 12px;
-  height:340px;background:#050d1a;border-radius:22px;
-  border:1px solid var(--s8);overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-}
-.vgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(249,115,22,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(249,115,22,.04) 1px,transparent 1px);background-size:38px 38px}
-.vp::before,.vp::after{content:'';position:absolute;width:26px;height:26px;border-color:var(--or);border-style:solid;opacity:.7;z-index:12}
-.vp::before{top:16px;left:16px;border-width:2px 0 0 2px;border-radius:3px 0 0 0}
-.vp::after{bottom:16px;right:16px;border-width:0 2px 2px 0;border-radius:0 0 3px 0}
-.skel{position:absolute;width:180px;height:300px;animation:skfloat 3s ease-in-out infinite}
-@keyframes skfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* Skeleton placeholder */
+@keyframes skfloat{0%,100%{transform:translate(-50%,-55%)}50%{transform:translate(-50%,calc(-55% - 8px))}}
 .skl{stroke:var(--or);stroke-width:2.5;stroke-linecap:round;filter:drop-shadow(0 0 4px var(--or))}
 .skn{fill:var(--or);filter:drop-shadow(0 0 5px var(--or))}
-.fb-box{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;gap:5px;z-index:14}
+/* Feedback badges */
 .fb{padding:3px 8px;border-radius:7px;font-size:.66rem;font-weight:700;backdrop-filter:blur(8px)}
 .fb.ok{background:rgba(34,197,94,.18);border:1px solid rgba(34,197,94,.4);color:var(--gr)}
 .fb.warn{background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.4);color:var(--or3)}
 .fb.err{background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:var(--re)}
-.qs{position:absolute;bottom:14px;left:14px;background:rgba(5,13,26,.82);backdrop-filter:blur(10px);border:1px solid var(--s7);border-radius:11px;padding:.48rem .8rem;text-align:center;z-index:14}
+/* Form score + angle tags */
+.qs{position:absolute;background:rgba(5,13,26,.82);backdrop-filter:blur(10px);border:1px solid var(--s7);border-radius:11px;padding:.48rem .8rem;text-align:center;z-index:14}
 .qn{font-family:var(--fd);font-size:1.55rem;font-weight:800;color:var(--gr);line-height:1}
 .ql{font-size:.65rem;color:var(--t3);margin-top:2px}
-.cam-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:10;border-radius:22px}
-.cam-status{position:absolute;top:14px;left:14px;padding:4px 10px;border-radius:8px;font-size:.66rem;font-weight:700;z-index:14;backdrop-filter:blur(8px)}
-.cam-status.live{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:var(--gr)}
-.cam-status.off{background:rgba(100,116,139,.2);border:1px solid rgba(100,116,139,.4);color:var(--t3)}
-.cam-status.nolight{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:var(--re)}
-.cam-rep-badge{position:absolute;bottom:14px;right:14px;background:var(--or);color:#fff;font-family:var(--fd);font-weight:800;font-size:1rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:14;box-shadow:0 4px 16px #f9731640}
 .cam-angle-tag{position:absolute;background:rgba(5,13,26,.75);backdrop-filter:blur(6px);border:1px solid var(--s7);border-radius:6px;padding:2px 6px;font-size:.65rem;font-weight:700;color:var(--or);z-index:14;pointer-events:none;white-space:nowrap}
-.flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flashOut .35s ease forwards;z-index:15;border-radius:inherit}
+.flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flashOut .35s ease forwards;z-index:30;border-radius:inherit}
 @keyframes flashOut{from{opacity:.88}to{opacity:0}}
-
-.cam-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;margin-bottom:12px}
-.cam-stat{background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:10px 8px;text-align:center}
-.cam-stat-val{font-family:var(--fd);font-size:1.3rem;font-weight:800;line-height:1}
-.cam-stat-label{font-size:.66rem;color:var(--t3);margin-top:3px}
-.cam-exercise-select{width:100%;padding:.65rem .9rem;background:var(--s9);color:var(--t1);border:1px solid var(--s8);border-radius:12px;font-size:.85rem;font-weight:600;font-family:var(--fb);margin-bottom:10px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.cam-target-row{display:flex;gap:8px;align-items:center;padding:0 16px 8px}
-.cam-target-row label{font-size:.78rem;color:var(--t3);white-space:nowrap;font-weight:600}
-.cam-target-input{width:60px;padding:.5rem .6rem;background:var(--s9);color:var(--t1);border:1px solid var(--s8);border-radius:10px;font-size:.9rem;font-weight:700;font-family:var(--fd);text-align:center}
-.cam-target-input::-webkit-inner-spin-button{-webkit-appearance:none}
-.cam-progress-bar{height:6px;background:var(--s8);border-radius:3px;overflow:hidden;flex:1}
-.cam-progress-fill{height:100%;background:var(--or);border-radius:3px;transition:width .3s}
-.cam-progress-label{font-size:.7rem;color:var(--t4);font-weight:700;min-width:40px;text-align:right}
-.cam-summary-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
+/* Camera summary overlay (lives inside #cam-ov) */
+.cam-summary-ov{position:absolute;inset:0;z-index:60;display:none;flex-direction:column;background:var(--bg)}
 .cam-summary-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
 .cam-summary-body{padding:40px 20px;text-align:center;flex:1;overflow-y:auto}
 .cam-summary-grade{font-size:3rem;margin-bottom:8px}
@@ -488,9 +457,40 @@ body::-webkit-scrollbar{display:none}
 .cam-summary-tips-title{font-weight:700;font-size:.85rem;margin-bottom:8px}
 .cam-summary-tip{font-size:.78rem;color:var(--t2);padding:4px 0;display:flex;align-items:flex-start;gap:6px}
 .cam-summary-close{width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer}
-.cam-start-btn{width:calc(100% - 32px);margin:8px 16px 12px;padding:.95rem;background:linear-gradient(135deg,var(--or),#e8622d);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;font-family:var(--fb);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px #f9731640;transition:transform .15s,opacity .15s}
-.cam-start-btn:active{transform:scale(.97)}
-.cam-start-btn.running{background:var(--s8);color:var(--t2);box-shadow:none}
+/* ── FULLSCREEN CAMERA OVERLAY ── */
+.cam-ov{position:fixed;inset:0;z-index:4500;display:none;flex-direction:column;background:#000;overflow:hidden}
+.cam-ov.on{display:flex;animation:slideUp .35s cubic-bezier(.32,1,.6,1) forwards}
+@keyframes slideUp{from{transform:translateY(100%);opacity:.6}to{transform:translateY(0);opacity:1}}
+#cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;background:#000}
+#cam-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+#skel-overlay{position:absolute;left:50%;top:50%;width:180px;height:300px;transform:translate(-50%,-55%);z-index:3;animation:skfloat 3s ease-in-out infinite}
+#cam-fb-box{position:absolute;top:calc(env(safe-area-inset-top,44px) + 62px);right:16px;display:flex;flex-direction:column;gap:5px;z-index:9}
+#cam-angle-tags{position:absolute;inset:0;pointer-events:none;z-index:8}
+#cam-qs{position:absolute;top:calc(env(safe-area-inset-top,44px) + 62px);left:16px;z-index:9}
+.cam-status{position:absolute;top:calc(env(safe-area-inset-top,44px) + 8px);right:16px;z-index:20;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:50px;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);font-size:.72rem;font-weight:700;color:#fff;letter-spacing:.5px}
+.cam-status::before{content:'';width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--t4)}
+.cam-status.live::before{background:#22c55e;box-shadow:0 0 6px #22c55e}
+.cam-status.nolight::before{background:#fbbf24;box-shadow:0 0 6px #fbbf24}
+.cam-status.rec::before{background:#ef4444;box-shadow:0 0 6px #ef4444;animation:dot-pulse 1.2s ease-in-out infinite}
+.cam-status.off{opacity:0;pointer-events:none}
+@keyframes dot-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.cam-ov-close{position:absolute;top:calc(env(safe-area-inset-top,44px) + 8px);left:16px;z-index:20;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.cam-ov-bar{position:absolute;bottom:0;left:0;right:0;z-index:20;background:rgba(0,0,0,.78);backdrop-filter:blur(18px);border-radius:24px 24px 0 0;padding:14px 20px calc(env(safe-area-inset-bottom,20px) + 10px)}
+.cam-pills-row{margin-bottom:12px;overflow:hidden}
+.cam-pills-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.cam-pills-scroll::-webkit-scrollbar{display:none}
+.cam-pill{flex-shrink:0;padding:7px 16px;border-radius:50px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--fb)}
+.cam-pill.active{background:var(--or);border-color:var(--or);color:#fff;box-shadow:0 2px 12px #f9731640}
+.cam-ctrl-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cam-ctrl-side{flex:1;display:flex;flex-direction:column;gap:2px}
+.cam-ctrl-side.right{align-items:flex-end}
+.cam-ctrl-num{font-family:var(--fd);font-size:2.4rem;font-weight:900;color:#fff;line-height:1}
+.cam-ctrl-lbl{font-size:.68rem;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.cam-ctrl-btn{width:64px;height:64px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0;background:var(--or);box-shadow:0 4px 20px #f9731650}
+.cam-ctrl-btn.running{background:#ef4444;box-shadow:0 4px 20px #ef444450}
+.cam-ctrl-btn:active{transform:scale(.92)}
+.cam-ws-ctx{text-align:center;font-size:.74rem;color:rgba(255,255,255,.55);font-weight:600;margin-top:4px}
+.cam-progress-fill{height:100%;background:var(--or);border-radius:3px;transition:width .3s}
 
 /* ══════ DIET ══════ */
 .diet-header{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:flex-end}
@@ -1992,6 +1992,11 @@ body::-webkit-scrollbar{display:none}
           <svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> Chiedi al Coach IA
         </button>
 
+        <!-- Camera IA CTA -->
+        <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,#050d1a,#1e3a5f);border:1px solid rgba(249,115,22,.4)" onclick="openCameraOv()">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Apri Camera IA
+        </button>
+
         <!-- Workout live (session overlay) -->
 
         <!-- Prossimo -->
@@ -2011,114 +2016,114 @@ body::-webkit-scrollbar{display:none}
 
     <!-- ══ CAMERA ══ -->
     <div class="tab" id="tab-camera">
-      <div style="padding:8px 20px 8px;display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:.82rem;color:var(--t3)">Analisi Movimento</div>
-          <div class="disp-title">Camera IA</div>
-        </div>
-        <div class="hbchip" id="cam-status-chip">
-          <span class="ld" style="width:6px;height:6px" id="cam-led"></span>
-          <span id="cam-status-text">Spenta</span>
-        </div>
-      </div>
-
-      <div style="padding:0 16px 8px">
-        <select class="cam-exercise-select" id="cam-exercise-sel">
-          <option value="squat">Squat</option>
-          <option value="pushup">Push-Up</option>
-          <option value="deadlift">Stacco da Terra</option>
-          <option value="shoulder_press">Shoulder Press</option>
-          <option value="bicep_curl">Curl Bicipiti</option>
-          <option value="lunge">Affondi</option>
-        </select>
-      </div>
-
-      <!-- Target reps -->
-      <div class="cam-target-row">
-        <label><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Ripetizioni:</label>
-        <input type="number" class="cam-target-input" id="cam-target-reps" value="12" min="1" max="100">
-        <div class="cam-progress-bar"><div class="cam-progress-fill" id="cam-progress-fill" style="width:0%"></div></div>
-        <div class="cam-progress-label" id="cam-progress-label">0/12</div>
-      </div>
-
-      <!-- Start button -->
-      <button class="cam-start-btn" id="cam-start-btn" onclick="toggleCamSession()">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg>
-        Avvia Sessione
-      </button>
-
-      <!-- Viewport -->
-      <div class="vp" id="vp">
-        <div class="vgrid"></div>
-        <video id="cam-video" playsinline autoplay muted style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:5;border-radius:22px;background:#000"></video>
-        <canvas id="cam-canvas" class="cam-canvas"></canvas>
-        <svg class="skel" viewBox="0 0 200 380" id="skel-overlay">
-          <circle cx="100" cy="44" r="17" class="skn"/>
-          <line x1="100" y1="61" x2="100" y2="90" class="skl"/>
-          <line x1="100" y1="90" x2="52" y2="112" class="skl"/>
-          <line x1="100" y1="90" x2="148" y2="112" class="skl"/>
-          <line x1="52" y1="112" x2="32" y2="158" class="skl"/>
-          <line x1="148" y1="112" x2="168" y2="158" class="skl"/>
-          <line x1="32" y1="158" x2="24" y2="202" class="skl"/>
-          <line x1="168" y1="158" x2="176" y2="202" class="skl"/>
-          <line x1="100" y1="90" x2="100" y2="205" class="skl"/>
-          <line x1="100" y1="205" x2="68" y2="212" class="skl"/>
-          <line x1="100" y1="205" x2="132" y2="212" class="skl"/>
-          <line x1="68" y1="212" x2="62" y2="295" class="skl"/>
-          <line x1="132" y1="212" x2="138" y2="295" class="skl"/>
-          <line x1="62" y1="295" x2="58" y2="362" class="skl"/>
-          <line x1="138" y1="295" x2="142" y2="362" class="skl"/>
-          <circle cx="52" cy="112" r="5" class="skn"/><circle cx="148" cy="112" r="5" class="skn"/>
-          <circle cx="32" cy="158" r="5" class="skn"/><circle cx="168" cy="158" r="5" class="skn"/>
-          <circle cx="68" cy="212" r="5" class="skn"/><circle cx="132" cy="212" r="5" class="skn"/>
-          <circle cx="62" cy="295" r="5" class="skn"/><circle cx="138" cy="295" r="5" class="skn"/>
-        </svg>
-        <div class="fb-box" id="cam-fb-box"></div>
-        <div class="cam-status off" id="cam-status-badge">Camera spenta</div>
-        <div class="qs">
-          <div class="qn" id="cam-score">--</div>
-          <div class="ql">Forma</div>
-        </div>
-        <div class="cam-rep-badge" id="cam-rep-badge">0</div>
-        <div id="cam-angle-tags"></div>
-      </div>
-
-      <!-- Cam stats -->
-      <div class="cam-stats-row">
-        <div class="cam-stat"><div class="cam-stat-val" style="color:var(--gr)" id="cstat-form">--</div><div class="cam-stat-label">Forma</div></div>
-        <div class="cam-stat"><div class="cam-stat-val" style="color:var(--bl)" id="cstat-sym">--</div><div class="cam-stat-label">Simmetria</div></div>
-        <div class="cam-stat"><div class="cam-stat-val" style="color:var(--or)" id="cstat-rep">0</div><div class="cam-stat-label">Rep</div></div>
-        <div class="cam-stat"><div class="cam-stat-val" style="color:var(--t1)" id="cstat-cal">0</div><div class="cam-stat-label">Calorie</div></div>
-      </div>
-
-      <div style="padding:0 16px">
-        <div style="display:flex;align-items:flex-start;gap:8px;padding:.75rem .9rem;background:#38bdf808;border:1px solid #38bdf820;border-radius:13px;font-size:.76rem;color:var(--t2);line-height:1.45;margin-bottom:10px">
-                    <svg class="ico" viewBox="0 0 24 24" style="width:1.5rem;height:1.5rem;stroke:#38bdf8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> Posizionati a <strong style="margin:0 3px">1,5 m</strong> con <strong style="margin:0 3px">buona luce</strong> per l'analisi ottimale. Inquadra il corpo intero.
-        </div>
-        <!-- Upsell -->
-        <div class="card" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;margin-bottom:10px">
-          <div style="font-size:1.8rem;flex-shrink:0">⚡</div>
-          <div style="flex:1">
-            <div style="font-weight:700;font-size:.85rem;margin-bottom:3px">Sblocca tutto il potenziale</div>
-            <div style="font-size:.76rem;color:var(--t2)"><strong>Piano dietetico personalizzato</strong> + coaching IA settimanale incluso</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--or)">4,99€<small style="font-size:.6rem;color:var(--t3)">/mese</small></div>
-            <button class="btn btn-or btn-sm" style="margin-top:5px;white-space:nowrap" onclick="showModal('⚡','Passa a AURA PRO','Con il piano PRO a <strong>4,99€/mese</strong> ottieni:<br><br>🍽️ <strong>Piano dietetico personalizzato</strong> basato sui tuoi obiettivi, biometria e allenamenti — aggiornato ogni settimana dall\'IA.<br><br>📊 Analisi forma illimitata<br>🤖 Coaching IA settimanale<br>📸 Foto progresso con confronto<br>🔍 Revisione dieta IA avanzata','Abbonati — 4,99€/mese','var(--or)')">PRO →</button>
-          </div>
-        </div>
-      </div>
+      <!-- Camera IA lives in the fullscreen overlay #cam-ov below -->
     </div>
 
-    <!-- Camera Summary Overlay -->
-    <div class="cam-summary-ov" id="cam-summary-ov">
-      <div class="legal-topbar">
-        <button class="legal-back" onclick="closeCamSummary()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-        </button>
-        <div class="legal-page-title">Riepilogo Esercizio</div>
+    <!-- ══ CAMERA IA FULLSCREEN OVERLAY ══ -->
+    <div class="cam-ov" id="cam-ov">
+      <!-- Video feed -->
+      <video id="cam-video" playsinline autoplay muted></video>
+      <!-- MediaPipe canvas -->
+      <canvas id="cam-canvas"></canvas>
+      <!-- Skeleton placeholder (shown when camera is off) -->
+      <svg viewBox="0 0 200 380" id="skel-overlay">
+        <circle cx="100" cy="44" r="17" class="skn"/>
+        <line x1="100" y1="61" x2="100" y2="90" class="skl"/>
+        <line x1="100" y1="90" x2="52" y2="112" class="skl"/>
+        <line x1="100" y1="90" x2="148" y2="112" class="skl"/>
+        <line x1="52" y1="112" x2="32" y2="158" class="skl"/>
+        <line x1="148" y1="112" x2="168" y2="158" class="skl"/>
+        <line x1="32" y1="158" x2="24" y2="202" class="skl"/>
+        <line x1="168" y1="158" x2="176" y2="202" class="skl"/>
+        <line x1="100" y1="90" x2="100" y2="205" class="skl"/>
+        <line x1="100" y1="205" x2="68" y2="212" class="skl"/>
+        <line x1="100" y1="205" x2="132" y2="212" class="skl"/>
+        <line x1="68" y1="212" x2="62" y2="295" class="skl"/>
+        <line x1="132" y1="212" x2="138" y2="295" class="skl"/>
+        <line x1="62" y1="295" x2="58" y2="362" class="skl"/>
+        <line x1="138" y1="295" x2="142" y2="362" class="skl"/>
+        <circle cx="52" cy="112" r="5" class="skn"/><circle cx="148" cy="112" r="5" class="skn"/>
+        <circle cx="32" cy="158" r="5" class="skn"/><circle cx="168" cy="158" r="5" class="skn"/>
+        <circle cx="68" cy="212" r="5" class="skn"/><circle cx="132" cy="212" r="5" class="skn"/>
+        <circle cx="62" cy="295" r="5" class="skn"/><circle cx="138" cy="295" r="5" class="skn"/>
+      </svg>
+      <!-- Feedback badges -->
+      <div id="cam-fb-box"></div>
+      <!-- Angle tag canvas overlay -->
+      <div id="cam-angle-tags"></div>
+      <!-- Form score (top-left) -->
+      <div class="qs" id="cam-qs">
+        <div class="qn" id="cam-score">--</div>
+        <div class="ql">Forma</div>
       </div>
-      <div class="cam-summary-body" id="cam-summary-body"></div>
+      <!-- Status chip (top-right) — class changes: live/nolight/rec/off -->
+      <div class="cam-status off" id="cam-status-badge">SPENTA</div>
+      <!-- Close button -->
+      <button class="cam-ov-close" onclick="closeCameraOv()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="17" height="17"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <!-- Bottom control bar -->
+      <div class="cam-ov-bar">
+        <!-- Exercise pills -->
+        <div class="cam-pills-row" id="cam-pills-row">
+          <div class="cam-pills-scroll">
+            <button class="cam-pill active" data-ex="squat" onclick="camSelectPill('squat')">Squat</button>
+            <button class="cam-pill" data-ex="pushup" onclick="camSelectPill('pushup')">Push-Up</button>
+            <button class="cam-pill" data-ex="deadlift" onclick="camSelectPill('deadlift')">Stacco</button>
+            <button class="cam-pill" data-ex="shoulder_press" onclick="camSelectPill('shoulder_press')">Military Press</button>
+            <button class="cam-pill" data-ex="bicep_curl" onclick="camSelectPill('bicep_curl')">Curl</button>
+            <button class="cam-pill" data-ex="lunge" onclick="camSelectPill('lunge')">Affondi</button>
+          </div>
+        </div>
+        <!-- Hidden compat elements (IDs required by existing JS) -->
+        <div style="display:none">
+          <input type="number" id="cam-target-reps" value="12" min="1" max="100">
+          <div id="cam-progress-fill" style="width:0%"></div>
+          <div id="cam-progress-label">0/12</div>
+          <select id="cam-exercise-sel">
+            <option value="squat">Squat</option>
+            <option value="pushup">Push-Up</option>
+            <option value="deadlift">Stacco da Terra</option>
+            <option value="shoulder_press">Shoulder Press</option>
+            <option value="bicep_curl">Curl Bicipiti</option>
+            <option value="lunge">Affondi</option>
+          </select>
+          <div id="cstat-form">--</div>
+          <div id="cstat-sym">--</div>
+          <div id="cstat-rep">0</div>
+          <div id="cstat-cal">0</div>
+          <div id="cam-rep-badge">0</div>
+          <span id="cam-led"></span>
+          <span id="cam-status-text">Spenta</span>
+          <div id="cam-status-chip"></div>
+        </div>
+        <!-- Main control row -->
+        <div class="cam-ctrl-main">
+          <div class="cam-ctrl-side">
+            <div class="cam-ctrl-num" id="cam-ctrl-score">--</div>
+            <div class="cam-ctrl-lbl">Forma</div>
+          </div>
+          <button class="cam-ctrl-btn" id="cam-start-btn" onclick="toggleCamSession()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg>
+          </button>
+          <div class="cam-ctrl-side right">
+            <div class="cam-ctrl-num" id="cam-ctrl-reps">0</div>
+            <div class="cam-ctrl-lbl">Rep</div>
+          </div>
+        </div>
+        <!-- Workout context label -->
+        <div class="cam-ws-ctx" id="cam-ws-ctx" style="display:none"></div>
+      </div>
+      <!-- Camera Summary Overlay (inside cam-ov) -->
+      <div class="cam-summary-ov" id="cam-summary-ov">
+        <div class="legal-topbar">
+          <button class="legal-back" onclick="closeCamSummary()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="legal-page-title">Riepilogo Esercizio</div>
+        </div>
+        <div class="cam-summary-body" id="cam-summary-body"></div>
+      </div>
     </div>
 
     <!-- ══ WORKOUT ══ -->
@@ -3963,6 +3968,8 @@ function renderWsView() {
         '<div class="ws-ex-name">' + wsEsc(ex.name) + '</div>' +
         '<div class="ws-ex-info">Set '+ws.setNum+' di '+ts+' \u00b7 '+ex.reps+' rep</div>' +
         (ex.gif ? '<img class="ws-ex-gif" src="'+ex.gif+'" alt="">' : '') +
+        (POSE_EXERCISES[ex.id] ? '<button class="btn btn-ghost btn-fw" style="margin:8px 0;border-color:rgba(249,115,22,.35);color:var(--or);font-size:.8rem" onclick="openCameraOv(\''+ex.id+'\',{setNum:'+ws.setNum+',totalSets:'+ts+',reps:\''+ex.reps+'\'})">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Attiva Camera IA</button>' : '') +
         '<div class="ws-weight-label">\ud83c\udfcb\ufe0f Peso utilizzato</div>' +
         '<div class="ws-weight-row">' +
           '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">\u22122.5</button>' +
@@ -4978,6 +4985,9 @@ document.querySelectorAll('.nb').forEach(btn => {
   btn.addEventListener('click', () => {
     const t = btn.dataset.tab;
     if (!t || t === S.tab || ANIM.tabTransitioning) return;
+
+    // Camera IA opens as fullscreen overlay instead of switching tabs
+    if (t === 'camera') { openCameraOv(); return; }
     
     // 16. CINEMATIC TAB TRANSITION
     cinematicTabTransition(S.tab, t, () => {
@@ -5730,13 +5740,13 @@ function onPoseResults(results) {
   if (brightness < 35) {
     CAM.lowLight = true;
     badge.className = 'cam-status nolight';
-    badge.textContent = '⚠ Luce insufficiente';
+    badge.textContent = 'LUCE BASSA';
     document.getElementById('cam-fb-box').innerHTML = '<div class="fb err">⚠ Migliora l\'illuminazione</div>';
     return;
   } else {
     if (CAM.lowLight) { CAM.lowLight = false; toast('💡 Luce ok!', 'gr'); }
     badge.className = 'cam-status live';
-    badge.textContent = '● MediaPipe attivo';
+    badge.textContent = 'TRACKING';
   }
 
   var hasPose = results.poseLandmarks && results.poseLandmarks.length > 0;
@@ -5745,8 +5755,8 @@ function onPoseResults(results) {
   drawScanLine(ctx, canvas.width, canvas.height, hasPose);
 
   if (!hasPose) {
-    badge.className = 'cam-status live';
-    badge.textContent = '👤 Non rilevato';
+    badge.className = 'cam-status nolight';
+    badge.textContent = 'POSIZIONATI';
     document.getElementById('cam-fb-box').innerHTML = '<div class="fb warn">Posizionati nell\'inquadratura</div>';
     CAM.scanActive = false;
     return;
@@ -5800,6 +5810,9 @@ function onPoseResults(results) {
       if (!CAM.sessionActive) { CAM.sessionActive = true; CAM.startTime = Date.now(); }
       document.getElementById('cam-rep-badge').textContent = CAM.reps;
       document.getElementById('cstat-rep').textContent = CAM.reps;
+      // Sync bottom control bar rep counter
+      var ctrlReps = document.getElementById('cam-ctrl-reps');
+      if (ctrlReps) ctrlReps.textContent = CAM.reps;
       var pct = Math.min(100, Math.round((CAM.reps / CAM.targetReps) * 100));
       document.getElementById('cam-progress-fill').style.width = pct + '%';
       document.getElementById('cam-progress-label').textContent = CAM.reps + '/' + CAM.targetReps;
@@ -5849,6 +5862,9 @@ function onPoseResults(results) {
   scoreEl.style.color = CAM.formScore >= 80 ? '#22c55e' : (CAM.formScore >= 50 ? '#f97316' : '#ef4444');
   document.getElementById('cstat-form').textContent = CAM.formScore;
   document.getElementById('cstat-form').style.color = CAM.formScore >= 80 ? 'var(--gr)' : 'var(--or)';
+  // Sync bottom control bar score
+  var ctrlScore = document.getElementById('cam-ctrl-score');
+  if (ctrlScore) { ctrlScore.textContent = CAM.formScore; ctrlScore.style.color = CAM.formScore >= 80 ? '#22c55e' : (CAM.formScore >= 50 ? '#f97316' : '#ef4444'); }
 
   // Symmetry (unchanged)
   var symKeys = Object.keys(CAM.angles);
@@ -6130,11 +6146,13 @@ async function startCamera() {
 
   // Lazy-load MediaPipe libs on first use
   try {
-    document.getElementById('cam-status-badge').textContent = 'Caricamento AI…';
+    document.getElementById('cam-status-badge').className = 'cam-status rec';
+    document.getElementById('cam-status-badge').textContent = 'AVVIO';
     await ensureMediaPipe();
   } catch(e) {
     toast('⚠ Errore caricamento MediaPipe', 're');
-    document.getElementById('cam-status-badge').textContent = 'Errore AI';
+    document.getElementById('cam-status-badge').className = 'cam-status off';
+    document.getElementById('cam-status-badge').textContent = 'ERRORE';
     return;
   }
   try {
@@ -6166,8 +6184,8 @@ async function startCamera() {
 
     document.getElementById('cam-status-text').textContent = 'Attiva';
     document.getElementById('cam-led').style.background = 'var(--gr)';
-    document.getElementById('cam-status-badge').className = 'cam-status live';
-    document.getElementById('cam-status-badge').textContent = 'Caricamento...';
+    document.getElementById('cam-status-badge').className = 'cam-status rec';
+    document.getElementById('cam-status-badge').textContent = 'AVVIO';
 
     // Init MediaPipe Pose
     if (!mpPose) {
@@ -6205,15 +6223,15 @@ async function startCamera() {
     var badge = document.getElementById('cam-status-badge');
     badge.className = 'cam-status off';
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-      badge.textContent = 'Permesso negato';
+      badge.textContent = 'ERRORE';
       if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Permesso fotocamera negato</strong><br><br>Per usare la Camera IA devi consentire l\'accesso alla fotocamera.<br><br>👉 Vai nelle <strong>Impostazioni del browser</strong> → Sito → Fotocamera → Consenti<br><br>Poi riprova.</div>';
       toast('📷 Permesso fotocamera negato. Controlla le impostazioni del browser.', 're');
     } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-      badge.textContent = 'Nessuna fotocamera';
+      badge.textContent = 'ERRORE';
       if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Nessuna fotocamera rilevata</strong><br><br>Il dispositivo non ha una fotocamera disponibile.</div>';
       toast('📷 Nessuna fotocamera trovata sul dispositivo.', 're');
     } else {
-      badge.textContent = 'Non disponibile';
+      badge.textContent = 'ERRORE';
       if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Camera non disponibile</strong><br><br>Errore: ' + (err.message || 'sconosciuto') + '<br>Riprova.</div>';
       toast('📹 Camera non disponibile. Controlla i permessi.', 're');
     }
@@ -6238,7 +6256,7 @@ function stopCamera() {
   document.getElementById('cam-status-text').textContent = 'Spenta';
   document.getElementById('cam-led').style.background = 'var(--t3)';
   document.getElementById('cam-status-badge').className = 'cam-status off';
-  document.getElementById('cam-status-badge').textContent = 'Camera spenta';
+  document.getElementById('cam-status-badge').textContent = 'SPENTA';
   document.getElementById('cam-fb-box').innerHTML = '';
   document.getElementById('cam-angle-tags').innerHTML = '';
 }
@@ -6265,6 +6283,71 @@ document.getElementById('cam-target-reps').addEventListener('change', function()
   document.getElementById('cam-progress-label').textContent = CAM.reps + '/' + CAM.targetReps;
 });
 
+// ── CAMERA OVERLAY FUNCTIONS ────────────────────────
+
+var _camOvWsCtx = null; // stores {setNum, totalSets, reps} when opened from workout session
+
+function openCameraOv(exId, wsCtx) {
+  var ov = document.getElementById('cam-ov');
+  ov.classList.add('on');
+  _camOvWsCtx = wsCtx || null;
+  // Select exercise
+  var targetEx = exId || 'squat';
+  camSelectPill(targetEx);
+  // Show/hide pills row
+  var pillsRow = document.getElementById('cam-pills-row');
+  if (exId) {
+    pillsRow.style.display = 'none';
+  } else {
+    pillsRow.style.display = '';
+  }
+  // Show workout context label
+  var wsCtxEl = document.getElementById('cam-ws-ctx');
+  if (wsCtx && exId) {
+    wsCtxEl.style.display = '';
+    var exDef = POSE_EXERCISES[exId];
+    var name = exDef ? exDef.name : exId;
+    wsCtxEl.textContent = name + ' \u00b7 Set ' + wsCtx.setNum + '/' + wsCtx.totalSets + ' \u00b7 ' + wsCtx.reps + ' rep';
+    // Set target reps from workout plan
+    var m = wsCtx.reps.match(/(\d+)/);
+    if (m) document.getElementById('cam-target-reps').value = m[1];
+  } else {
+    wsCtxEl.style.display = 'none';
+  }
+}
+
+function closeCameraOv() {
+  if (cameraActive) {
+    stopCamera();
+    var btn = document.getElementById('cam-start-btn');
+    if (btn) { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg>'; btn.classList.remove('running'); }
+  }
+  if (_camOvWsCtx && CAM.reps > 0) {
+    toast('\ud83d\udcf9 ' + CAM.reps + ' rep registrate', 'gr');
+  }
+  _camOvWsCtx = null;
+  document.getElementById('cam-ov').classList.remove('on');
+}
+
+function camSelectPill(exId) {
+  CAM.exercise = exId;
+  document.getElementById('cam-exercise-sel').value = exId;
+  document.querySelectorAll('.cam-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.ex === exId);
+  });
+  // Reset session state
+  CAM.reps = 0; CAM.phase = 'up'; CAM.frameScores = []; CAM.failedChecks = {};
+  CAM.sessionActive = false; CAM.startTime = 0; CAM.formTipGiven = false;
+  document.getElementById('cam-rep-badge').textContent = '0';
+  document.getElementById('cstat-rep').textContent = '0';
+  document.getElementById('cstat-cal').textContent = '0';
+  document.getElementById('cam-progress-fill').style.width = '0%';
+  var tgt = parseInt(document.getElementById('cam-target-reps').value) || 12;
+  document.getElementById('cam-progress-label').textContent = '0/' + tgt;
+  var cr = document.getElementById('cam-ctrl-reps'); if (cr) cr.textContent = '0';
+  var cs = document.getElementById('cam-ctrl-score'); if (cs) { cs.textContent = '--'; cs.style.color = '#fff'; }
+}
+
 // Toggle camera session from start button
 function toggleCamSession() {
   var btn = document.getElementById('cam-start-btn');
@@ -6272,11 +6355,11 @@ function toggleCamSession() {
   unlockSpeech();
   if (cameraActive) {
     stopCamera();
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg> Avvia Sessione';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg>';
     btn.classList.remove('running');
   } else {
     startCamera();
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Ferma Sessione';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="26" height="26"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
     btn.classList.add('running');
     // Announce start
     setTimeout(function() {
@@ -6293,7 +6376,7 @@ allTabBtns.forEach(function(btn) {
     if (!btn.dataset.tab || btn.dataset.tab !== 'camera') {
       stopCamera();
       var sb = document.getElementById('cam-start-btn');
-      if (sb) { sb.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5,3 19,12 5,21"/></svg> Avvia Sessione'; sb.classList.remove('running'); }
+      if (sb) { sb.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg>'; sb.classList.remove('running'); }
     }
   });
 });
