@@ -4787,7 +4787,6 @@ function initScrollIndicator() {
 // Initialize scroll indicator and animations
 function initMicroInteractions() {
   initScrollIndicator();
-  initFingerFollower();
   initElasticScroll();
   initStatusBarSampling();
 }
@@ -5110,73 +5109,6 @@ function cinematicTabTransition(fromTab, toTab, callback) {
       callback();
     }, 280);
   }, 50);
-}
-
-// 17. Finger Following Element - Magical light orb
-function initFingerFollower() {
-  // Create finger follower element
-  const follower = document.createElement('div');
-  follower.id = 'finger-follower';
-  follower.style.cssText = `
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, #f97316 0%, rgba(249, 115, 22, 0.3) 50%, transparent 100%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1000;
-    transition: opacity 0.3s;
-    opacity: 0;
-    box-shadow: 0 0 15px #f97316;
-  `;
-  document.getElementById('tab-home').appendChild(follower);
-  
-  // Track touch/mouse events on home tab only
-  const homeTab = document.getElementById('tab-home');
-  let isActive = false;
-  
-  function updateFollowerPosition(x, y) {
-    const rect = homeTab.getBoundingClientRect();
-    ANIM.fingerFollower.targetX = ((x - rect.left) / rect.width) * 100;
-    ANIM.fingerFollower.targetY = ((y - rect.top) / rect.height) * 100;
-    if (!isActive) {
-      isActive = true;
-      follower.style.opacity = '1';
-      animateFollower();
-    }
-  }
-  
-  homeTab.addEventListener('touchstart', (e) => {
-    if (S.tab === 'home') {
-      updateFollowerPosition(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
-  
-  homeTab.addEventListener('mousemove', (e) => {
-    if (S.tab === 'home') {
-      updateFollowerPosition(e.clientX, e.clientY);
-    }
-  });
-  
-  homeTab.addEventListener('mouseleave', () => {
-    isActive = false;
-    follower.style.opacity = '0';
-  });
-  
-  function animateFollower() {
-    if (!isActive) return;
-    
-    // Smooth interpolation towards target
-    const dx = ANIM.fingerFollower.targetX - ANIM.fingerFollower.x;
-    const dy = ANIM.fingerFollower.targetY - ANIM.fingerFollower.y;
-    ANIM.fingerFollower.x += dx * 0.1;
-    ANIM.fingerFollower.y += dy * 0.1;
-    
-    follower.style.left = ANIM.fingerFollower.x + '%';
-    follower.style.top = ANIM.fingerFollower.y + '%';
-    
-    requestAnimationFrame(animateFollower);
-  }
 }
 
 // 18. Badge Unlock Particle Explosion
