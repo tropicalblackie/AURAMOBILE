@@ -4516,19 +4516,19 @@ function updateProfileStats() {
   document.getElementById('ps-adherence').textContent = Math.round((days7/7)*100) + '%';
   // Home chips
   const hs = document.getElementById('home-streak');
-  if (hs) hs.innerHTML = createStreakFlame(streak) + '<span>' + streak + ' giorni streak</span>';
+  if (hs) hs.innerHTML = '🔥 <span>' + streak + ' giorni streak</span>';
   const hw = document.getElementById('home-workouts');
   if (hw) hw.textContent = totalWorkouts + ' allenamenti';
   const hp = document.getElementById('home-points');
   if (hp) slotRoll(hp, calcTotalXP() + ' punti');
   // Profile streak chip with flame
   const psc = document.getElementById('prof-streak-chip');
-  if (psc) psc.innerHTML = createStreakFlame(Math.max(streak / 3, 1)) + '<span>' + streak + 'gg streak</span>';
+  if (psc) psc.innerHTML = '🔥 <span>' + streak + 'gg streak</span>';
   
-  // Generate workout heatmap
-  setTimeout(() => {
-    generateWorkoutHeatmap('workout-heatmap-container');
-  }, 100);
+  // Generate workout heatmap  
+  // setTimeout(() => {
+  //   generateWorkoutHeatmap('workout-heatmap-container');
+  // }, 100);
   // Workout history summary
   const whSum = document.getElementById('wh-summary');
   if (whSum) {
@@ -4633,7 +4633,7 @@ function updateXPandBadges() {
   
   // Check for level up explosion
   if (lvl > previousLevel) {
-    triggerLevelUpExplosion(lvl);
+    // triggerLevelUpExplosion(lvl); // Temporarily disabled
     if (user) {
       user.lastKnownLevel = lvl;
       setUser(user);
@@ -4659,12 +4659,8 @@ function updateXPandBadges() {
       const xpBar = fill.closest('.xp-bar');
       if (xpBar) {
         const lastPct = user._lastXP ? ((user._lastXP - xpCur) / xpNeeded) * 100 : 0;
-        xpBar.style.setProperty('--target-width', pct + '%');
-        fill.classList.add('filling');
-        setTimeout(() => {
-          fill.classList.remove('filling');
-          fill.style.width = pct + '%';
-        }, 1200);
+        // animateXPFill(xpBar, user._lastXP, 1000, progressXP); // Temporarily disabled
+        fill.style.width = pct + '%';
       }
     } else {
       fill.style.width = pct + '%';
@@ -4725,10 +4721,11 @@ function updateXPandBadges() {
       const u = unlocked[b.id];
       const cls = u ? 'unlocked' : 'locked';
       const rarity = Math.floor(i / 5); // 0=bronze, 1=silver, 2=gold, 3=crystal
-      const badge3D = create3DBadge(b.ico, rarity, !!u);
+      // const badge3D = create3DBadge(b.ico, rarity, !!u); // Temporarily disabled
+      const badgeIcon = '<div class="badge-ico">' + (u ? b.ico : '🔒') + '</div>';
       let dateStr = '';
       if (u) { const dp = new Date(u); dateStr = '<div class="badge-date">' + dp.getDate() + ' ' + months[dp.getMonth()] + ' ' + dp.getFullYear() + '</div>'; }
-      return '<div class="badge-item ' + cls + '">' + badge3D + '<div class="badge-info"><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div></div>';
+      return '<div class="badge-item ' + cls + '">' + badgeIcon + '<div class="badge-info"><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div></div>';
     }).join('');
   }
   const bc = document.getElementById('badge-count');
@@ -5016,38 +5013,6 @@ function calculateStreak() {
   }
   
   return streak;
-}
-  if (type === 'workout') {
-    return `
-      <div class="empty-state empty-state-workout">
-        <svg class="empty-state-icon" viewBox="0 0 80 80" fill="none">
-          <circle cx="40" cy="40" r="3" fill="currentColor" opacity="0.3"/>
-          <g class="dumbbell-orbit">
-            <rect x="54" y="36" width="12" height="8" rx="2" fill="var(--or)" opacity="0.6"/>
-            <rect x="58" y="32" width="4" height="16" rx="1" fill="var(--or)"/>
-            <rect x="62" y="36" width="12" height="8" rx="2" fill="var(--or)" opacity="0.6"/>
-          </g>
-        </svg>
-        <div class="empty-state-title">Inizia il tuo fitness journey</div>
-        <div class="empty-state-desc">Crea la tua prima scheda di allenamento e inizia a trasformare il tuo corpo</div>
-      </div>`;
-  } else if (type === 'diet') {
-    return `
-      <div class="empty-state empty-state-diet">
-        <svg class="empty-state-icon" viewBox="0 0 80 80" fill="none">
-          <circle cx="40" cy="45" r="25" stroke="var(--or)" stroke-width="2" fill="none" opacity="0.4"/>
-          <g class="plate-rhythm">
-            <path d="M25 40 L35 45 M45 40 L35 45" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
-          </g>
-          <g class="plate-rhythm" style="animation-delay: 1s">
-            <path d="M45 40 L55 45 M65 40 L55 45" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
-          </g>
-        </svg>
-        <div class="empty-state-title">Nutre il tuo corpo</div>
-        <div class="empty-state-desc">Inizia a tracciare i tuoi pasti per raggiungere i tuoi obiettivi nutrizionali</div>
-      </div>`;
-  }
-  return '';
 }
 
 // Initialize all micro-interactions
