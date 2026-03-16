@@ -956,7 +956,169 @@ body::-webkit-scrollbar{display:none}
 .empty-state-workout .empty-state-icon{animation:dumbbellOrbit 8s linear infinite}
 .empty-state-diet .empty-state-icon{animation:plateRhythm 2s ease-in-out infinite}
 .empty-state-title{font-size:1.1rem;font-weight:600;color:var(--txt);margin-bottom:0.5rem}
-.empty-state-desc{opacity:0.7;line-height:1.4}
+/* ── GAMIFICATION STYLES ──────────────────────── */
+
+/* 26. Level up explosion overlay */
+.level-up-overlay{
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+}
+.level-up-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+.level-up-number{
+  font-size:8rem;
+  font-weight:900;
+  color:#f97316;
+  text-shadow:0 0 30px #f97316;
+  animation:levelUpExplosion 2s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.shock-wave{
+  position:absolute;
+  width:100px;
+  height:100px;
+  border:3px solid #f97316;
+  border-radius:50%;
+  animation:shockWave 1s ease-out forwards;
+}
+
+/* 27. Streak flame */
+.streak-flame{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:var(--flame-size,40px);
+  height:var(--flame-size,50px);
+  animation:flameFlicker 2s ease-in-out infinite,flameGlow 3s ease-in-out infinite;
+}
+.streak-flame svg{
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 0 8px #f97316);
+}
+
+/* 28. Liquid XP bar */
+.xp-bar{
+  position:relative;
+  width:100%;
+  height:12px;
+  background:var(--s8);
+  border-radius:6px;
+  overflow:hidden;
+}
+.xp-liquid{
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  background:linear-gradient(90deg,#f97316,#fb923c,#f97316);
+  border-radius:6px;
+  transition:width 0.3s ease;
+}
+.xp-liquid.filling{
+  animation:liquidFill 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+.xp-wave{
+  position:absolute;
+  top:-2px;
+  right:-10px;
+  width:20px;
+  height:16px;
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,0.3),transparent);
+  border-radius:50%;
+  opacity:0;
+}
+.xp-liquid.filling .xp-wave{
+  animation:liquidWave 1.2s ease-out;
+}
+
+/* 29. 3D Glass badges */
+.badge-3d{
+  position:relative;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+  cursor:pointer;
+  animation:badgeFloat 4s ease-in-out infinite;
+  transition:transform 0.2s;
+}
+.badge-3d:hover{
+  transform:translateY(-4px) scale(1.05);
+}
+.badge-3d.bronze{
+  background:linear-gradient(135deg,#cd7f32 0%,#e6a85c 50%,#8b4513 100%);
+  box-shadow:0 4px 15px rgba(205,127,50,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.badge-3d.silver{
+  background:linear-gradient(135deg,#c0c0c0 0%,#e8e8e8 50%,#a8a8a8 100%);
+  box-shadow:0 4px 15px rgba(192,192,192,0.4),inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.badge-3d.gold{
+  background:linear-gradient(135deg,#ffd700 0%,#ffed4e 50%,#b8860b 100%);
+  box-shadow:0 6px 20px rgba(255,215,0,0.5),inset 0 1px 0 rgba(255,255,255,0.4);
+}
+.badge-3d.crystal{
+  background:linear-gradient(135deg,#e0e7ff 0%,#c7d2fe 30%,#a5b4fc 70%,#818cf8 100%);
+  box-shadow:0 8px 25px rgba(129,140,248,0.6),inset 0 1px 0 rgba(255,255,255,0.5);
+  animation:badgeFloat 4s ease-in-out infinite,badgeShine 3s linear infinite;
+}
+.badge-3d::before{
+  content:'';
+  position:absolute;
+  top:-2px;
+  left:-2px;
+  right:-2px;
+  bottom:-2px;
+  background:linear-gradient(45deg,transparent 30%,rgba(255,255,255,0.1) 50%,transparent 70%);
+  border-radius:50%;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.badge-3d:hover::before{
+  opacity:1;
+}
+
+/* 30. Workout heatmap */
+.workout-heatmap{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:2px;
+  padding:16px;
+  background:var(--card);
+  border-radius:16px;
+  margin:1rem 0;
+}
+.heat-cell{
+  width:12px;
+  height:12px;
+  border-radius:2px;
+  background:var(--s9);
+  cursor:pointer;
+  transition:all 0.2s;
+  position:relative;
+}
+.heat-cell:hover{
+  animation:heatPulse 0.6s ease-in-out;
+}
+.heat-cell.heat-0{background:#161b22}
+.heat-cell.heat-1{background:#0e4429}
+.heat-cell.heat-2{background:#218838}
+.heat-cell.heat-3{background:#26a641}
+.heat-cell.heat-4{background:#39d353}
+.heat-legend{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:0.7rem;color:var(--s5)}
+.heat-legend .heat-sample{width:8px;height:8px;border-radius:1px}
 .prog-last{font-size:.72rem;color:var(--t4);margin-top:6px;text-align:right}
 .prog-val-big{font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--t1)}
 .prog-val-unit{font-size:.85rem;color:var(--t3);font-weight:600}
@@ -1430,6 +1592,59 @@ body::-webkit-scrollbar{display:none}
   0%,100%{transform:rotate(-3deg)}
   50%{transform:rotate(3deg)}
 }
+
+/* ── GAMIFICATION ANIMATIONS ──────────────────────── */
+
+/* 26. Level up explosion effect */
+@keyframes levelUpExplosion{
+  0%{opacity:0;transform:scale(0);filter:blur(10px)}
+  50%{opacity:1;transform:scale(1.5);filter:blur(0px)}
+  100%{opacity:1;transform:scale(1);filter:blur(0px)}
+}
+@keyframes shockWave{
+  0%{transform:scale(0);opacity:0.8}
+  100%{transform:scale(4);opacity:0}
+}
+
+/* 27. Streak flame animation */
+@keyframes flameFlicker{
+  0%,100%{transform:scaleY(1) scaleX(1)}
+  25%{transform:scaleY(1.1) scaleX(0.95)}
+  50%{transform:scaleY(0.95) scaleX(1.05)}
+  75%{transform:scaleY(1.05) scaleX(0.98)}
+}
+@keyframes flameGlow{
+  0%,100%{filter:drop-shadow(0 0 8px #f97316)}
+  50%{filter:drop-shadow(0 0 16px #f97316) drop-shadow(0 0 24px #fb923c)}
+}
+
+/* 28. XP liquid fill animation */
+@keyframes liquidFill{
+  0%{width:0%;overflow:hidden}
+  70%{width:var(--target-width)}
+  85%{width:calc(var(--target-width) + 3%)}
+  100%{width:var(--target-width)}
+}
+@keyframes liquidWave{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+
+/* 29. 3D Badge materials */
+@keyframes badgeFloat{
+  0%,100%{transform:translateY(0px) rotateX(0deg)}
+  50%{transform:translateY(-2px) rotateX(5deg)}
+}
+@keyframes badgeShine{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+/* 30. Heatmap cell animation */
+@keyframes heatPulse{
+  0%,100%{transform:scale(1);opacity:var(--heat-opacity)}
+  50%{transform:scale(1.1);opacity:1}
+}
 /* ── CYCLE TRACKER ── */
 .cycle-phase{padding:16px;border-radius:16px;margin-bottom:12px;border:1px solid}
 .cycle-phase-icon{font-size:1.6rem;margin-bottom:6px}
@@ -1791,7 +2006,7 @@ body::-webkit-scrollbar{display:none}
         <!-- Metriche -->
         <div class="metrics-chips z-far">
           <div class="mc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span id="bpm-val">72 BPM</span></div>
-          <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg><span id="home-streak">0 giorni streak</span></div>
+          <div class="mc" id="streak-display">Loading...</div>
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="home-workouts">0 allenamenti</span></div>
           <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 01-2-2V5h4M18 9h2a2 2 0 002-2V5h-4M4 5h16v4a6 6 0 01-6 6h-4a6 6 0 01-6-6V5zM9 15l-1 5h8l-1-5M9 20h6"/></svg><span id="home-points">0 punti</span></div>
         </div>
@@ -2264,7 +2479,7 @@ body::-webkit-scrollbar{display:none}
           <div class="prof-tag" id="prof-tag"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lv.1 — Principiante</div>
           <div class="prof-since" id="prof-since">Membro da Gennaio 2024</div>
           <div style="display:flex;gap:6px;margin-top:8px">
-            <div class="chip chip-or" style="font-size:.65rem" id="prof-streak-chip"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg> 0gg streak</div>
+            <div class="chip chip-or" style="font-size:.65rem;display:flex;align-items:center;gap:6px" id="prof-streak-chip">Loading...</div>
             <div class="chip chip-gr" style="font-size:.65rem" id="prof-goal-chip"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Massa</div>
           </div>
         </div>
@@ -2282,12 +2497,23 @@ body::-webkit-scrollbar{display:none}
           <div class="psi"><div class="psv" id="ps-adherence">0%</div><div class="psl">Aderenza</div></div>
         </div>
 
-        <!-- XP Bar -->
-        <div class="xp-bar-wrap" id="xp-bar-section">
-          <div class="xp-header"><span class="xp-lvl" id="xp-lvl-label">Livello 1</span><span class="xp-next" id="xp-next-label">0 / 120 XP</span></div>
-          <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
-          <div class="xp-label" id="xp-label">120 XP per il prossimo livello</div>
+        <!-- Liquid XP Bar -->
+        <div class="xp-bar-wrap" id="xp-bar-container">
+          <div class="xp-header"><span class="xp-lvl" id="xp-lvl-label">Livello 1</span><span class="xp-next" id="xp-next-label">0 / 1000 XP</span></div>
+          <div class="xp-bar">
+            <div class="xp-liquid" id="xp-fill" style="width:0%">
+              <div class="xp-wave"></div>
+            </div>
+          </div>
+          <div class="xp-label" id="xp-label">1000 XP per il prossimo livello</div>
         </div>
+        
+        <!-- Workout Heatmap -->
+        <div style="margin:0.5rem 0">
+          <div class="section-title" style="font-size:1rem;margin-bottom:0.5rem">📊 La tua attività</div>
+          <div id="workout-heatmap-container"></div>
+        </div>
+        <div class="section-divider"></div>
 
         <!-- Badge -->
         <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">Badge & Achievement <span style="font-size:.7rem;color:var(--t4);font-weight:400" id="badge-count">0/0</span></div>
@@ -4290,14 +4516,19 @@ function updateProfileStats() {
   document.getElementById('ps-adherence').textContent = Math.round((days7/7)*100) + '%';
   // Home chips
   const hs = document.getElementById('home-streak');
-  if (hs) hs.textContent = streak + ' giorni streak';
+  if (hs) hs.innerHTML = createStreakFlame(streak) + '<span>' + streak + ' giorni streak</span>';
   const hw = document.getElementById('home-workouts');
   if (hw) hw.textContent = totalWorkouts + ' allenamenti';
   const hp = document.getElementById('home-points');
   if (hp) slotRoll(hp, calcTotalXP() + ' punti');
-  // Profile streak chip
+  // Profile streak chip with flame
   const psc = document.getElementById('prof-streak-chip');
-  if (psc) psc.textContent = '🔥 ' + streak + 'gg streak';
+  if (psc) psc.innerHTML = createStreakFlame(Math.max(streak / 3, 1)) + '<span>' + streak + 'gg streak</span>';
+  
+  // Generate workout heatmap
+  setTimeout(() => {
+    generateWorkoutHeatmap('workout-heatmap-container');
+  }, 100);
   // Workout history summary
   const whSum = document.getElementById('wh-summary');
   if (whSum) {
@@ -4395,8 +4626,20 @@ function saveUnlockedBadges(b) { localStorage.setItem(BADGE_STORE_KEY, JSON.stri
 
 function updateXPandBadges() {
   const d = getProgress();
+  const user = getUser();
   const xp = calcTotalXP();
   const lvl = getLevelFromXP(xp);
+  const previousLevel = user?.lastKnownLevel || 1;
+  
+  // Check for level up explosion
+  if (lvl > previousLevel) {
+    triggerLevelUpExplosion(lvl);
+    if (user) {
+      user.lastKnownLevel = lvl;
+      setUser(user);
+    }
+  }
+  
   const lvlName = getLevelName(lvl);
   const xpCur = XP_TABLE[lvl - 1] || 0;
   const xpNext = XP_TABLE[lvl] || XP_TABLE[XP_TABLE.length - 1];
@@ -4404,13 +4647,34 @@ function updateXPandBadges() {
   const xpNeeded = xpNext - xpCur;
   const pct = xpNeeded > 0 ? Math.min((xpInLevel / xpNeeded) * 100, 100) : 100;
 
-  // XP bar
+  // Liquid XP bar with animation
   const lvlLabel = document.getElementById('xp-lvl-label');
   if (lvlLabel) lvlLabel.textContent = 'Livello ' + lvl + ' — ' + lvlName;
   const nextLabel = document.getElementById('xp-next-label');
   if (nextLabel) nextLabel.textContent = xp + ' / ' + xpNext + ' XP';
+  
   const fill = document.getElementById('xp-fill');
-  if (fill) fill.style.width = pct + '%';
+  if (fill) {
+    if (user && user._lastXP !== undefined && user._lastXP !== xp) {
+      const xpBar = fill.closest('.xp-bar');
+      if (xpBar) {
+        const lastPct = user._lastXP ? ((user._lastXP - xpCur) / xpNeeded) * 100 : 0;
+        xpBar.style.setProperty('--target-width', pct + '%');
+        fill.classList.add('filling');
+        setTimeout(() => {
+          fill.classList.remove('filling');
+          fill.style.width = pct + '%';
+        }, 1200);
+      }
+    } else {
+      fill.style.width = pct + '%';
+    }
+    if (user) {
+      user._lastXP = xp;
+      setUser(user);
+    }
+  }
+  
   const xpLbl = document.getElementById('xp-label');
   if (xpLbl) {
     if (lvl >= 20) xpLbl.textContent = 'Livello massimo raggiunto!';
@@ -4453,16 +4717,18 @@ function updateXPandBadges() {
     });
   }
 
-  // Render badges grid
+  // Render badges grid with 3D effect
   const grid = document.getElementById('badges-grid');
   if (grid) {
     const months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
-    grid.innerHTML = BADGES.map(b => {
+    grid.innerHTML = BADGES.map((b, i) => {
       const u = unlocked[b.id];
       const cls = u ? 'unlocked' : 'locked';
+      const rarity = Math.floor(i / 5); // 0=bronze, 1=silver, 2=gold, 3=crystal
+      const badge3D = create3DBadge(b.ico, rarity, !!u);
       let dateStr = '';
       if (u) { const dp = new Date(u); dateStr = '<div class="badge-date">' + dp.getDate() + ' ' + months[dp.getMonth()] + ' ' + dp.getFullYear() + '</div>'; }
-      return '<div class="badge-item ' + cls + '"><div class="badge-ico">' + (u ? b.ico : '🔒') + '</div><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div>';
+      return '<div class="badge-item ' + cls + '">' + badge3D + '<div class="badge-info"><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div>' + dateStr + '</div></div>';
     }).join('');
   }
   const bc = document.getElementById('badge-count');
@@ -4471,6 +4737,50 @@ function updateXPandBadges() {
     const done = Object.keys(unlocked).length;
     bc.textContent = done + '/' + total;
   }
+}
+
+// Calculate current streak
+function calculateStreak() {
+  const workouts = getCompletedWorkouts();
+  if (workouts.length === 0) return 0;
+  
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  
+  // Group workouts by date
+  const workoutDates = [...new Set(workouts.map(w => w.date))].sort().reverse();
+  
+  let streak = 0;
+  let checkDate = today;
+  
+  // Check if user worked out today or yesterday
+  if (!workoutDates.includes(today) && !workoutDates.includes(yesterday)) {
+    return 0;
+  }
+  
+  // Start from today or yesterday
+  if (workoutDates.includes(today)) {
+    streak = 1;
+    checkDate = today;
+  } else if (workoutDates.includes(yesterday)) {
+    streak = 1; 
+    checkDate = yesterday;
+  }
+  
+  // Count consecutive days backwards
+  let currentDate = new Date(checkDate);
+  for (let i = 1; i < workoutDates.length; i++) {
+    currentDate.setDate(currentDate.getDate() - 1);
+    const prevDay = currentDate.toISOString().slice(0, 10);
+    
+    if (workoutDates.includes(prevDay)) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  
+  return streak;
 }
 
 // ── EDIT PROFILE ─────────────────────────────────
@@ -4664,8 +4974,49 @@ function initStatusBarSampling() {
   });
 }
 
-// Create animated empty state SVGs
-function createEmptyStateSVG(type) {
+// Calculate current streak
+function calculateStreak() {
+  const workouts = getCompletedWorkouts();
+  if (workouts.length === 0) return 0;
+  
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  
+  // Group workouts by date
+  const workoutDates = [...new Set(workouts.map(w => w.date))].sort().reverse();
+  
+  let streak = 0;
+  let checkDate = today;
+  
+  // Check if user worked out today or yesterday
+  if (!workoutDates.includes(today) && !workoutDates.includes(yesterday)) {
+    return 0;
+  }
+  
+  // Start from today or yesterday
+  if (workoutDates.includes(today)) {
+    streak = 1;
+    checkDate = today;
+  } else if (workoutDates.includes(yesterday)) {
+    streak = 1; 
+    checkDate = yesterday;
+  }
+  
+  // Count consecutive days backwards
+  let currentDate = new Date(checkDate);
+  for (let i = 1; i < workoutDates.length; i++) {
+    currentDate.setDate(currentDate.getDate() - 1);
+    const prevDay = currentDate.toISOString().slice(0, 10);
+    
+    if (workoutDates.includes(prevDay)) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  
+  return streak;
+}
   if (type === 'workout') {
     return `
       <div class="empty-state empty-state-workout">
@@ -4704,6 +5055,154 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initMicroInteractions);
 } else {
   initMicroInteractions();
+}
+
+// ── GAMIFICATION SYSTEM ────────────────────────────────────────
+
+// 26. Level up explosion effect
+function triggerLevelUpExplosion(newLevel) {
+  const overlay = document.createElement('div');
+  overlay.className = 'level-up-overlay';
+  
+  // Level number
+  const levelNum = document.createElement('div');
+  levelNum.className = 'level-up-number';
+  levelNum.textContent = newLevel;
+  
+  // Shock wave rings
+  const wave1 = document.createElement('div');
+  const wave2 = document.createElement('div');
+  const wave3 = document.createElement('div');
+  wave1.className = wave2.className = wave3.className = 'shock-wave';
+  wave2.style.animationDelay = '0.3s';
+  wave3.style.animationDelay = '0.6s';
+  
+  overlay.appendChild(levelNum);
+  overlay.appendChild(wave1);
+  overlay.appendChild(wave2);
+  overlay.appendChild(wave3);
+  document.body.appendChild(overlay);
+  
+  // Trigger animation
+  requestAnimationFrame(() => {
+    overlay.classList.add('active');
+  });
+  
+  // Remove after 2 seconds
+  setTimeout(() => {
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 300);
+  }, 2000);
+}
+
+// 27. Generate dynamic streak flame
+function createStreakFlame(days) {
+  const size = Math.min(20 + days * 2, 80); // Grows with streak
+  const intensity = Math.min(days / 30, 1); // Max intensity at 30 days
+  
+  return `
+    <div class="streak-flame" style="--flame-size:${size}px">
+      <svg viewBox="0 0 24 32" fill="none">
+        <path d="M12 2C8 6 6 10 8 16C6 14 4 16 6 20C8 18 10 20 12 18C14 20 16 18 18 20C20 16 18 14 16 16C18 10 16 6 12 2Z" 
+              fill="url(#flameGradient${days})" 
+              filter="url(#flameGlow)"/>
+        <defs>
+          <linearGradient id="flameGradient${days}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fbbf24" stop-opacity="${0.9 + intensity * 0.1}"/>
+            <stop offset="40%" stop-color="#f97316" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#dc2626" stop-opacity="${0.8 + intensity * 0.2}"/>
+          </linearGradient>
+          <filter id="flameGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="${2 + intensity * 3}" result="coloredBlur"/>
+            <feMerge> 
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+    </div>
+  `;
+}
+
+// 28. Liquid XP bar animation
+function animateXPFill(element, currentXP, maxXP, newXP) {
+  const currentPercent = (currentXP / maxXP) * 100;
+  const targetPercent = (newXP / maxXP) * 100;
+  
+  const liquid = element.querySelector('.xp-liquid');
+  const wave = element.querySelector('.xp-wave');
+  
+  if (!liquid) return;
+  
+  // Set CSS custom property for animation target
+  liquid.style.setProperty('--target-width', targetPercent + '%');
+  liquid.classList.add('filling');
+  
+  // Remove animation class after completion
+  setTimeout(() => {
+    liquid.classList.remove('filling');
+    liquid.style.width = targetPercent + '%';
+  }, 1200);
+}
+
+// 29. Create 3D badge with rarity
+function create3DBadge(icon, rarity = 'bronze', unlocked = false) {
+  const rarityClass = ['bronze', 'silver', 'gold', 'crystal'][Math.min(rarity, 3)];
+  const opacity = unlocked ? '1' : '0.3';
+  
+  return `
+    <div class="badge-3d ${rarityClass}" style="opacity:${opacity}">
+      <span>${icon}</span>
+    </div>
+  `;
+}
+
+// 30. Generate workout heatmap
+function generateWorkoutHeatmap(containerId, year = new Date().getFullYear()) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  const startDate = new Date(year, 0, 1);
+  const endDate = new Date(year, 11, 31);
+  const workouts = getCompletedWorkouts();
+  
+  // Create workout intensity map
+  const workoutMap = {};
+  workouts.forEach(w => {
+    const date = w.date;
+    workoutMap[date] = (workoutMap[date] || 0) + 1;
+  });
+  
+  let html = '<div class="workout-heatmap">';
+  
+  // Generate cells for each day
+  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().slice(0, 10);
+    const intensity = workoutMap[dateStr] || 0;
+    const heatLevel = Math.min(Math.floor(intensity / 2), 4); // 0-4 heat levels
+    
+    html += `<div class="heat-cell heat-${heatLevel}" 
+                  data-date="${dateStr}" 
+                  data-workouts="${intensity}" 
+                  title="${dateStr}: ${intensity} workout${intensity !== 1 ? 's' : ''}"
+                  style="--heat-opacity:${0.3 + heatLevel * 0.175}"></div>`;
+  }
+  
+  html += '</div>';
+  html += `
+    <div class="heat-legend">
+      <span>Meno</span>
+      <div class="heat-sample heat-0"></div>
+      <div class="heat-sample heat-1"></div>
+      <div class="heat-sample heat-2"></div>
+      <div class="heat-sample heat-3"></div>
+      <div class="heat-sample heat-4"></div>
+      <span>Più</span>
+    </div>
+  `;
+  
+  container.innerHTML = html;
 }
 
 document.querySelectorAll('.nb').forEach(btn => {
