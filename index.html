@@ -1910,49 +1910,42 @@ body::-webkit-scrollbar{display:none}
 
       <div style="padding:0 16px">
 
-        <!-- Activity Rings -->
+        <!-- Muscoli Settimana -->
         <div class="card glass z-near" style="padding:16px;margin-bottom:12px">
-          <div class="stat-label">Attività Oggi</div>
+          <div class="stat-label">Muscoli Questa Settimana</div>
           <div style="display:flex;align-items:center;gap:16px">
             <div class="rings-wrap" style="flex-shrink:0">
               <svg width="160" height="160" viewBox="0 0 160 160">
-                <!-- Move (outer) r=72 circ=452.4 -->
-                <circle cx="80" cy="80" r="72" class="ring-bg" stroke="#f97316" stroke-width="11"/>
-                <circle cx="80" cy="80" r="72" class="ring-fg" id="ring-move" stroke="#f97316" stroke-width="11" style="--ring-c:#f97316"
+                <!-- Gambe (outer) r=72 circ=452.4 -->
+                <circle cx="80" cy="80" r="72" class="ring-bg" stroke="#f97316" stroke-width="10"/>
+                <circle cx="80" cy="80" r="72" class="ring-fg" id="ring-gambe" stroke="#f97316" stroke-width="10" style="--ring-c:#f97316"
                   stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
-                <!-- Exercise (mid) r=58 circ=364.4 -->
-                <circle cx="80" cy="80" r="58" class="ring-bg" stroke="#22c55e" stroke-width="11"/>
-                <circle cx="80" cy="80" r="58" class="ring-fg" id="ring-exercise" stroke="#22c55e" stroke-width="11" style="--ring-c:#22c55e"
+                <!-- Petto r=58 circ=364.4 -->
+                <circle cx="80" cy="80" r="58" class="ring-bg" stroke="#22c55e" stroke-width="10"/>
+                <circle cx="80" cy="80" r="58" class="ring-fg" id="ring-petto" stroke="#22c55e" stroke-width="10" style="--ring-c:#22c55e"
                   stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
-                <!-- Stand (inner) r=44 circ=276.5 -->
-                <circle cx="80" cy="80" r="44" class="ring-bg" stroke="#38bdf8" stroke-width="11"/>
-                <circle cx="80" cy="80" r="44" class="ring-fg" id="ring-stand" stroke="#38bdf8" stroke-width="11" style="--ring-c:#38bdf8"
+                <!-- Schiena r=44 circ=276.5 -->
+                <circle cx="80" cy="80" r="44" class="ring-bg" stroke="#38bdf8" stroke-width="10"/>
+                <circle cx="80" cy="80" r="44" class="ring-fg" id="ring-schiena" stroke="#38bdf8" stroke-width="10" style="--ring-c:#38bdf8"
                   stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
+                <!-- Spalle (inner) r=30 circ=188.5 -->
+                <circle cx="80" cy="80" r="30" class="ring-bg" stroke="#a78bfa" stroke-width="10"/>
+                <circle cx="80" cy="80" r="30" class="ring-fg" id="ring-spalle" stroke="#a78bfa" stroke-width="10" style="--ring-c:#a78bfa"
+                  stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
               </svg>
               <div class="rings-center">
                 <div class="rings-center-val" id="rings-kcal">0</div>
-                <div class="rings-center-sub">kcal</div>
+                <div class="rings-center-sub">workout</div>
               </div>
             </div>
             <div style="flex:1">
               <div class="ring-legend">
-                <div class="ring-leg"><div class="ring-dot" style="background:#f97316"></div><span style="color:var(--t2)">Movimento</span><span class="ring-leg-val" style="color:#f97316" id="ring-move-val">0/500 kcal</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#22c55e"></div><span style="color:var(--t2)">Esercizio</span><span class="ring-leg-val" style="color:#22c55e" id="ring-ex-val">0/30 min</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#38bdf8"></div><span style="color:var(--t2)">In Piedi</span><span class="ring-leg-val" style="color:#38bdf8" id="ring-stand-val">0/12 h</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#f97316"></div><span style="color:var(--t2)">Gambe</span><span class="ring-leg-val" style="color:#f97316" id="ring-gambe-val">0/2</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#22c55e"></div><span style="color:var(--t2)">Petto</span><span class="ring-leg-val" style="color:#22c55e" id="ring-petto-val">0/2</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#38bdf8"></div><span style="color:var(--t2)">Schiena</span><span class="ring-leg-val" style="color:#38bdf8" id="ring-schiena-val">0/2</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#a78bfa"></div><span style="color:var(--t2)">Spalle</span><span class="ring-leg-val" style="color:#a78bfa" id="ring-spalle-val">0/2</span></div>
               </div>
-
             </div>
-          </div>
-        </div>
-
-        <!-- Muscoli -->
-        <div class="card glass z-mid" style="padding:14px;margin-bottom:12px">
-          <div class="stat-label">AURA Muscolare</div>
-          <div class="mrow">
-            <div class="mi"><span class="mn">Gambe</span><div class="mb"><div class="mf" style="width:90%;background:var(--or)"></div></div><span class="mp" style="color:var(--or)">90%</span></div>
-            <div class="mi"><span class="mn">Petto</span><div class="mb"><div class="mf" style="width:100%;background:var(--gr)"></div></div><span class="mp" style="color:var(--gr)">✓</span></div>
-            <div class="mi"><span class="mn">Schiena</span><div class="mb"><div class="mf" style="width:72%;background:#475569"></div></div><span class="mp" style="color:#64748b">72%</span></div>
-            <div class="mi"><span class="mn">Spalle</span><div class="mb"><div class="mf" style="width:55%;background:var(--bl)"></div></div><span class="mp" style="color:var(--bl)">55%</span></div>
           </div>
         </div>
 
@@ -3270,7 +3263,7 @@ body::-webkit-scrollbar{display:none}
 //  AURA MOBILE — JS
 // ═══════════════════════════════════════════════════
 
-const S = { tab:'home', hydration:1.2, hydGoal:2.5, bpm:72, move:0, moveGoal:500, exercise:0, exGoal:30, stand:0, standGoal:12 };
+const S = { tab:'home', hydration:1.2, hydGoal:2.5, bpm:72 };
 
 // ── HAPTIC FEEDBACK ────────────────────────────────
 var _hapticCtx;
@@ -3880,11 +3873,6 @@ function wsSaveAndClose() {
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
-  // Update activity rings with workout data
-  S.move = Math.min(S.move + ws.calories, S.moveGoal);
-  S.exercise = Math.min(S.exercise + Math.round(ws.totalSec / 60), S.exGoal);
-  S.stand = Math.min(S.stand + 1, S.standGoal);
-  
   // Cinematic workout completion flash
   cinematicWorkoutFlash(() => {
     updateRings();
@@ -5392,20 +5380,35 @@ function confetti() {
 
 // ── ACTIVITY RINGS ─────────────────────────────────
 function updateRings() {
+  var weekAgo = new Date(Date.now() - 7 * 86400000);
+  var cw = getCompletedWorkouts().filter(function(w) { return new Date(w.date) >= weekAgo; });
+  var muscles = { Gambe: 0, Petto: 0, Schiena: 0, Spalle: 0 };
+  cw.forEach(function(w) {
+    var hit = {};
+    (w.exercises || []).forEach(function(ex) {
+      var def = EXERCISES.find(function(e) { return e.id === ex.id; });
+      if (def && muscles.hasOwnProperty(def.muscle) && !hit[def.muscle]) {
+        muscles[def.muscle]++;
+        hit[def.muscle] = true;
+      }
+    });
+  });
+  var GOAL = 2;
   var rings = [
-    { id:'ring-move', circ:452.4, val:S.move, goal:S.moveGoal, label:'ring-move-val', unit:'kcal' },
-    { id:'ring-exercise', circ:364.4, val:S.exercise, goal:S.exGoal, label:'ring-ex-val', unit:'min' },
-    { id:'ring-stand', circ:276.5, val:S.stand, goal:S.standGoal, label:'ring-stand-val', unit:'h' }
+    { id:'ring-gambe',   circ:452.4, val:muscles.Gambe,   lbl:'ring-gambe-val' },
+    { id:'ring-petto',   circ:364.4, val:muscles.Petto,   lbl:'ring-petto-val' },
+    { id:'ring-schiena', circ:276.5, val:muscles.Schiena, lbl:'ring-schiena-val' },
+    { id:'ring-spalle',  circ:188.5, val:muscles.Spalle,  lbl:'ring-spalle-val' }
   ];
   rings.forEach(function(r) {
     var el = document.getElementById(r.id);
-    var pct = Math.min(r.val / r.goal, 1);
+    var pct = Math.min(r.val / GOAL, 1);
     if (el) el.style.strokeDashoffset = r.circ * (1 - pct);
-    var lbl = document.getElementById(r.label);
-    if (lbl) lbl.textContent = Math.round(r.val) + '/' + r.goal + ' ' + r.unit;
+    var lbl = document.getElementById(r.lbl);
+    if (lbl) lbl.textContent = r.val + '/' + GOAL;
   });
   var kcEl = document.getElementById('rings-kcal');
-  if (kcEl) slotRoll(kcEl, Math.round(S.move));
+  if (kcEl) slotRoll(kcEl, cw.length);
 }
 
 // Simulate ring data on load with staggered reveal
