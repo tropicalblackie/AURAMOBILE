@@ -7989,7 +7989,7 @@ function applyUserData(u) {
   const initial = first.charAt(0).toUpperCase();
   // Home greeting
   const gName = document.querySelector('.greeting-name');
-  if (gName) gName.textContent = first + ' 👋';
+  if (gName) gName.textContent = first;
   // Avatars
   document.querySelectorAll('#topbar-av, #prof-av').forEach(el => el.textContent = initial);
   const homeAv = document.querySelector('.home-header .av');
