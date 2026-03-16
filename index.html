@@ -1618,25 +1618,6 @@ body::-webkit-scrollbar{display:none}
   0%,100%{transform:scale(1);opacity:var(--heat-opacity)}
   50%{transform:scale(1.1);opacity:1}
 }
-/* ── CYCLE TRACKER ── */
-.cycle-phase{padding:16px;border-radius:16px;margin-bottom:12px;border:1px solid}
-.cycle-phase-icon{font-size:1.6rem;margin-bottom:6px}
-.cycle-phase-name{font-weight:800;font-size:1rem;margin-bottom:4px}
-.cycle-phase-desc{font-size:.78rem;color:var(--t3);line-height:1.4}
-.cycle-phase-tip{margin-top:8px;padding:10px;border-radius:10px;font-size:.76rem;font-weight:600}
-.cycle-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:14px 0}
-.cycle-cal-hd{font-size:.6rem;color:var(--t3);text-align:center;font-weight:700;text-transform:uppercase}
-.cycle-day{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;color:var(--t2)}
-.cycle-day.today{box-shadow:0 0 0 2px var(--or)}
-.cycle-day.mestrual{background:#f43f5e30;color:#f43f5e}
-.cycle-day.follicular{background:#22c55e20;color:#22c55e}
-.cycle-day.ovulation{background:#f9731630;color:#f97316}
-.cycle-day.luteal{background:#a78bfa25;color:#a78bfa}
-.cycle-log-btn{display:flex;align-items:center;gap:10px;padding:12px;background:var(--s9);border:1px solid var(--s8);border-radius:12px;margin-bottom:6px;cursor:pointer;width:100%;color:var(--t1);text-align:left}
-.cycle-log-btn:active{border-color:var(--or)}
-.cycle-legend{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
-.cycle-legend-item{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--t3)}
-.cycle-legend-dot{width:10px;height:10px;border-radius:50%}
 /* ── MOOD & ENERGY LOG ── */
 .mood-picker{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:20px}
 .mood-picker.on{display:flex}
@@ -2486,20 +2467,6 @@ body::-webkit-scrollbar{display:none}
         <!-- Progressi -->
         <div class="sec-title">I Miei Progressi</div>
 
-        <!-- Ciclo Mestruale (solo donne) -->
-        <div class="card" style="padding:14px;cursor:pointer;display:none" id="cycle-card" onclick="openCycleTracker()">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:1.4rem">🌙</span>
-              <div>
-                <div style="font-weight:700;font-size:.88rem">Ciclo Mestruale</div>
-                <div style="font-size:.7rem;color:var(--t3)" id="cycle-card-phase">Traccia il tuo ciclo per consigli personalizzati</div>
-              </div>
-            </div>
-            <span class="sarr">›</span>
-          </div>
-        </div>
-
         <div class="card" style="padding:14px;cursor:pointer" onclick="openProgress()">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div style="display:flex;align-items:center;gap:10px">
@@ -3304,40 +3271,6 @@ body::-webkit-scrollbar{display:none}
   </div>
 </div>
 
-<!-- ══ CYCLE TRACKER OVERLAY ══ -->
-<div class="legal-ov" id="cycle-ov">
-  <div class="legal-topbar">
-    <button class="legal-back" onclick="closeCycleTracker()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-    </button>
-    <div class="legal-page-title">🌙 Ciclo Mestruale</div>
-  </div>
-  <div class="legal-scroll" style="padding:16px 20px calc(var(--nav-h) + var(--safe-b) + 20px)">
-    <div id="cycle-phase-card"></div>
-    <div class="sec-title">Calendario Ciclo</div>
-    <div class="cycle-legend">
-      <div class="cycle-legend-item"><div class="cycle-legend-dot" style="background:#f43f5e"></div> Mestruale</div>
-      <div class="cycle-legend-item"><div class="cycle-legend-dot" style="background:#22c55e"></div> Follicolare</div>
-      <div class="cycle-legend-item"><div class="cycle-legend-dot" style="background:#f97316"></div> Ovulazione</div>
-      <div class="cycle-legend-item"><div class="cycle-legend-dot" style="background:#a78bfa"></div> Luteale</div>
-    </div>
-    <div id="cycle-calendar"></div>
-    <div class="sec-title">Registra</div>
-    <div id="cycle-log-section"></div>
-    <div class="sec-title">Impostazioni Ciclo</div>
-    <div class="card" style="padding:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <span style="font-size:.82rem;font-weight:600">Durata ciclo (giorni)</span>
-        <input type="number" id="cycle-length" value="28" min="21" max="40" style="width:60px;padding:8px;border-radius:10px;border:1px solid var(--s8);background:var(--s9);color:var(--t1);text-align:center;font-weight:700" onchange="cycleSaveSettings()">
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:.82rem;font-weight:600">Durata mestruazioni (giorni)</span>
-        <input type="number" id="cycle-period-length" value="5" min="2" max="10" style="width:60px;padding:8px;border-radius:10px;border:1px solid var(--s8);background:var(--s9);color:var(--t1);text-align:center;font-weight:700" onchange="cycleSaveSettings()">
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 // ═══════════════════════════════════════════════════
 //  AURA MOBILE — JS
@@ -3685,7 +3618,6 @@ const CW_KEY = 'aura_completed_workouts';
 const ACCT_KEY = 'aura_accounts';
 const WS_PROG_KEY = 'aura_ws_progression';
 const BM_KEY = 'aura_body_measurements';
-const CYCLE_KEY = 'aura_cycle_data';
 const MOOD_KEY = 'aura_mood_log';
 const DELOAD_KEY = 'aura_deload';
 
@@ -8731,7 +8663,6 @@ function getCoachSystemPrompt() {
     '- Idratazione: ' + (S.hydration || 0) + '/' + (S.hydGoal || 2.5) + 'L\n' +
     (function() { var ml = getMoodLog(); if (ml.length > 0) { var r = ml.slice(-5); var avg = r.reduce(function(s,m){return s+(m.pre+m.post)/2;},0)/r.length; return '- Mood medio ultime ' + r.length + ' sessioni: ' + avg.toFixed(1) + '/5\n'; } return ''; })() +
     (isDeloadWeek() ? '- ⚠️ SETTIMANA DI DELOAD ATTIVA: suggerisci pesi ridotti del 40-50%, meno volume, focus tecnica e recupero\n' : '') +
-    (function() { if (u.sex === 'F') { var p = cycleGetPhase(new Date().toISOString().slice(0,10)); if (p) return '- Fase ciclo mestruale: ' + p.name + ' (' + p.workout + ')\n'; } return ''; })() +
     'Rispondi in modo personalizzato basandoti su questi dati reali.';
 }
 
@@ -9543,182 +9474,6 @@ function ocrAddManual() {
   closeOCRScanner();
   toast('✅ ' + name + ' aggiunto!', 'gr');
 }
-
-// ═══════════════════════════════════════════════════
-//  MENSTRUAL CYCLE TRACKER
-// ═══════════════════════════════════════════════════
-var CYCLE_PHASES = [
-  { key: 'mestrual', name: 'Fase Mestruale', icon: '🔴', color: '#f43f5e', bg: '#f43f5e15', border: '#f43f5e30',
-    desc: 'Periodo di mestruazione. Il corpo sta rinnovando il rivestimento uterino.',
-    workout: '🧘 Yoga leggero, stretching, camminate. Evita allenamenti intensi.',
-    recovery: 'Recupero aumentato. Ascolta il tuo corpo, riposa di più.' },
-  { key: 'follicular', name: 'Fase Follicolare', icon: '🌱', color: '#22c55e', bg: '#22c55e15', border: '#22c55e30',
-    desc: 'Estrogeni in aumento. Energia crescente, umore positivo.',
-    workout: '💪 Momento ideale per allenamenti intensi! Forza, HIIT, pesi pesanti.',
-    recovery: 'Recupero veloce. Puoi aumentare volume e intensità.' },
-  { key: 'ovulation', name: 'Ovulazione', icon: '🔥', color: '#f97316', bg: '#f9731615', border: '#f9731630',
-    desc: 'Picco di estrogeni e testosterone. Massima energia e forza.',
-    workout: '🏋️ Picco performance! PR, carichi massimi, competizioni.',
-    recovery: 'Attenzione alle articolazioni (lassità legamentosa). Riscaldamento accurato.' },
-  { key: 'luteal', name: 'Fase Luteale', icon: '🌙', color: '#a78bfa', bg: '#a78bfa15', border: '#a78bfa30',
-    desc: 'Progesterone dominante. Energia in calo, possibile ritenzione idrica.',
-    workout: '🚶 Cardio moderato, resistenza, volume ridotto. Focus su tecnica.',
-    recovery: 'Metabolismo più alto (+100-300 kcal). Più carboidrati e sonno.' }
-];
-
-function getCycleData() { try { return JSON.parse(localStorage.getItem(CYCLE_KEY)) || {}; } catch(e) { return {}; } }
-function saveCycleData(d) { localStorage.setItem(CYCLE_KEY, JSON.stringify(d)); }
-
-function openCycleTracker() {
-  document.getElementById('cycle-ov').classList.add('on');
-  var data = getCycleData();
-  if (data.cycleLength) document.getElementById('cycle-length').value = data.cycleLength;
-  if (data.periodLength) document.getElementById('cycle-period-length').value = data.periodLength;
-  cycleRender();
-}
-function closeCycleTracker() { document.getElementById('cycle-ov').classList.remove('on'); }
-
-function cycleSaveSettings() {
-  var data = getCycleData();
-  data.cycleLength = parseInt(document.getElementById('cycle-length').value) || 28;
-  data.periodLength = parseInt(document.getElementById('cycle-period-length').value) || 5;
-  saveCycleData(data);
-  cycleRender();
-}
-
-function cycleGetPhase(date) {
-  var data = getCycleData();
-  var periods = data.periods || [];
-  if (periods.length === 0) return null;
-  // Find most recent period start
-  var lastPeriod = periods[periods.length - 1];
-  var start = new Date(lastPeriod);
-  var target = new Date(date);
-  var daysDiff = Math.floor((target - start) / 86400000);
-  if (daysDiff < 0) return null;
-  var cycleLen = data.cycleLength || 28;
-  var periodLen = data.periodLength || 5;
-  var dayInCycle = daysDiff % cycleLen;
-  if (dayInCycle < periodLen) return CYCLE_PHASES[0]; // mestrual
-  if (dayInCycle < 13) return CYCLE_PHASES[1]; // follicular
-  if (dayInCycle < 16) return CYCLE_PHASES[2]; // ovulation
-  return CYCLE_PHASES[3]; // luteal
-}
-
-function cycleRender() {
-  var data = getCycleData();
-  var today = new Date().toISOString().slice(0, 10);
-  var phase = cycleGetPhase(today);
-
-  // Phase card
-  var phaseHtml = '';
-  if (phase) {
-    phaseHtml = '<div class="cycle-phase" style="background:' + phase.bg + ';border-color:' + phase.border + '">' +
-      '<div class="cycle-phase-icon">' + phase.icon + '</div>' +
-      '<div class="cycle-phase-name" style="color:' + phase.color + '">' + phase.name + '</div>' +
-      '<div class="cycle-phase-desc">' + phase.desc + '</div>' +
-      '<div class="cycle-phase-tip" style="background:' + phase.color + '12;color:' + phase.color + '">' + phase.workout + '</div>' +
-      '<div class="cycle-phase-tip" style="background:' + phase.color + '08;color:var(--t2);margin-top:4px">' + phase.recovery + '</div></div>';
-  } else {
-    phaseHtml = '<div class="card glass" style="padding:20px;text-align:center">' +
-      '<div style="font-size:2rem;margin-bottom:8px">🌙</div>' +
-      '<div style="font-weight:700;margin-bottom:6px">Registra il tuo ciclo</div>' +
-      '<div style="font-size:.78rem;color:var(--t3)">Premi "Inizia mestruazioni" per attivare il tracking e ricevere consigli personalizzati.</div></div>';
-  }
-  document.getElementById('cycle-phase-card').innerHTML = phaseHtml;
-
-  // Calendar (current month)
-  var now = new Date();
-  var year = now.getFullYear(), month = now.getMonth();
-  var firstDay = new Date(year, month, 1).getDay();
-  var daysInMonth = new Date(year, month + 1, 0).getDate();
-  var todayDate = now.getDate();
-  var dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
-  var calHtml = '<div class="cycle-cal">';
-  dayNames.forEach(function(d) { calHtml += '<div class="cycle-cal-hd">' + d + '</div>'; });
-  var adj = firstDay === 0 ? 6 : firstDay - 1;
-  for (var e = 0; e < adj; e++) calHtml += '<div></div>';
-  for (var d = 1; d <= daysInMonth; d++) {
-    var dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-    var p = cycleGetPhase(dateStr);
-    var cls = 'cycle-day';
-    if (d === todayDate) cls += ' today';
-    if (p) cls += ' ' + p.key;
-    calHtml += '<div class="' + cls + '">' + d + '</div>';
-  }
-  calHtml += '</div>';
-  document.getElementById('cycle-calendar').innerHTML = calHtml;
-
-  // Log section
-  var periods = data.periods || [];
-  var logHtml = '<button class="cycle-log-btn" onclick="cycleLogPeriod()">' +
-    '<span style="font-size:1.2rem">🔴</span>' +
-    '<div><div style="font-weight:700;font-size:.84rem">Inizia mestruazioni</div>' +
-    '<div style="font-size:.7rem;color:var(--t3)">Registra l\'inizio del ciclo di oggi</div></div></button>';
-  if (periods.length > 0) {
-    logHtml += '<div class="sec-title" style="margin-top:10px">Storico</div>';
-    periods.slice().reverse().forEach(function(p, i) {
-      var realIdx = periods.length - 1 - i;
-      logHtml += '<div class="bm-entry"><div class="bm-entry-val" style="color:#f43f5e">🔴</div>' +
-        '<div class="bm-entry-date">' + p + '</div>' +
-        '<div class="bm-entry-del" onclick="cycleDeletePeriod(' + realIdx + ')">×</div></div>';
-    });
-  }
-  document.getElementById('cycle-log-section').innerHTML = logHtml;
-}
-
-function cycleLogPeriod() {
-  var data = getCycleData();
-  if (!data.periods) data.periods = [];
-  var today = new Date().toISOString().slice(0, 10);
-  // Prevent duplicate
-  if (data.periods.indexOf(today) >= 0) { toast('Già registrato per oggi', 'bl'); return; }
-  data.periods.push(today);
-  data.periods.sort();
-  saveCycleData(data);
-  cycleRender();
-  updateCycleCard();
-  toast('🔴 Ciclo registrato per oggi', 'gr');
-}
-
-function cycleDeletePeriod(idx) {
-  var data = getCycleData();
-  if (data.periods && idx >= 0 && idx < data.periods.length) {
-    data.periods.splice(idx, 1);
-    saveCycleData(data);
-    cycleRender();
-    updateCycleCard();
-    toast('Registrazione rimossa', 're');
-  }
-}
-
-function updateCycleCard() {
-  var u = getUser();
-  var card = document.getElementById('cycle-card');
-  if (!card) return;
-  if (!u || u.sex !== 'F') { card.style.display = 'none'; return; }
-  card.style.display = '';
-  var phase = cycleGetPhase(new Date().toISOString().slice(0, 10));
-  var txt = document.getElementById('cycle-card-phase');
-  if (phase) {
-    txt.innerHTML = phase.icon + ' <strong style="color:' + phase.color + '">' + phase.name + '</strong> — ' + phase.workout.split('.')[0];
-  } else {
-    txt.textContent = 'Inizia a tracciare il tuo ciclo';
-  }
-}
-
-// Initialize cycle card visibility on profile load
-(function() {
-  var origApplyUser = window.applyUserData;
-  if (origApplyUser) {
-    window.applyUserData = function(u) {
-      origApplyUser(u);
-      updateCycleCard();
-    };
-  }
-  // Also try on DOM ready
-  document.addEventListener('DOMContentLoaded', function() { setTimeout(updateCycleCard, 500); });
-})();
 
 // ═══════════════════════════════════════════════════
 //  WORKOUT TEMPLATES SHARING (Export / Import)
