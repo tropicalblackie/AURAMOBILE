@@ -1956,14 +1956,6 @@ body::-webkit-scrollbar{display:none}
           </div>
         </div>
 
-        <!-- Metriche -->
-        <div class="metrics-chips z-far">
-          <div class="mc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span id="bpm-val">72 BPM</span></div>
-          <div class="mc" id="streak-display">Loading...</div>
-          <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="home-workouts">0 allenamenti</span></div>
-          <div class="mc"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 01-2-2V5h4M18 9h2a2 2 0 002-2V5h-4M4 5h16v4a6 6 0 01-6 6h-4a6 6 0 01-6-6V5zM9 15l-1 5h8l-1-5M9 20h6"/></svg><span id="home-points">0 punti</span></div>
-        </div>
-
         <!-- Deload Alert -->
         <div class="deload-alert" id="deload-alert">
           <div class="deload-title">⚠️ Settimana di Scarico Consigliata</div>
@@ -2203,18 +2195,14 @@ body::-webkit-scrollbar{display:none}
         </div>
 
         <!-- Azioni rapide -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
-          <button class="btn btn-or btn-fw" style="padding:.8rem;border-radius:14px;font-size:.78rem" onclick="openBarcodeScanner()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 8v8M11 8v8M15 8v8M19 8v8"/></svg>
-            Barcode
-          </button>
-          <button class="btn btn-ghost btn-fw" style="padding:.8rem;border-radius:14px;font-size:.78rem;border-color:#22c55e;color:#22c55e" onclick="openOCRScanner()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-            Scan Etichetta
-          </button>
-          <button class="btn btn-ghost btn-fw" style="padding:.8rem;border-radius:14px;font-size:.78rem" onclick="openFoodSearch()">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.8rem;gap:8px" onclick="openFoodSearch()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Aggiungi
+          </button>
+          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.8rem;gap:8px" onclick="openBarcodeScanner()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 8v8M11 8v8M15 8v8M19 8v8"/></svg>
+            Barcode
           </button>
         </div>
 
@@ -7886,17 +7874,8 @@ function applyUserData(u) {
   }
   // Profile photo
   if (u.photo) applyProfilePhoto(u.photo);
-  // Physical stats in metrics if present
-  if (u.weight || u.height) {
-    const metricsArea = document.querySelector('.metrics-chips');
-    if (metricsArea && !document.getElementById('mc-body')) {
-      const chip = document.createElement('div');
-      chip.className = 'mc'; chip.id = 'mc-body';
-      chip.innerHTML = '📏 <span>' + (u.weight?u.weight+'kg':'') + (u.weight&&u.height?' · ':'') + (u.height?u.height+'cm':'') + '</span>';
-      metricsArea.appendChild(chip);
-    }
-  }
 }
+
 
 // ── Profile photo upload ──
 function applyProfilePhoto(src) {
