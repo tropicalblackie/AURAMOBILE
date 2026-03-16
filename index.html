@@ -1817,20 +1817,19 @@ body::-webkit-scrollbar{display:none}
         <div class="ob-input-row">
           <div class="ob-input-group">
             <div class="ob-input-label">Peso</div>
-            <input class="ob-input" id="ob-weight" type="number" placeholder="75" min="30" max="250" step="0.1"/>
+            <input class="ob-input" id="ob-weight" type="number" placeholder="--" min="30" max="250" step="0.1"/>
             <div class="ob-input-unit">kg</div>
           </div>
           <div class="ob-input-group">
             <div class="ob-input-label">Altezza</div>
-            <input class="ob-input" id="ob-height" type="number" placeholder="178" min="100" max="230" step="1"/>
+            <input class="ob-input" id="ob-height" type="number" placeholder="---" min="100" max="230" step="1"/>
             <div class="ob-input-unit">cm</div>
           </div>
         </div>
         <div class="ob-input-row">
           <div class="ob-input-group">
-            <div class="ob-input-label">Età</div>
-            <input class="ob-input" id="ob-age" type="number" placeholder="25" min="13" max="100" step="1"/>
-            <div class="ob-input-unit">anni</div>
+            <div class="ob-input-label">Data di nascita</div>
+            <input class="ob-input" id="ob-age" type="date" style="font-size:.82rem;padding-right:4px"/>
           </div>
           <div class="ob-input-group">
             <div class="ob-input-label">Sesso</div>
@@ -8298,7 +8297,7 @@ function renderObStep() {
   // Fill inputs
   if (obData.weight) document.getElementById('ob-weight').value = obData.weight;
   if (obData.height) document.getElementById('ob-height').value = obData.height;
-  if (obData.age) document.getElementById('ob-age').value = obData.age;
+  if (obData.dob) document.getElementById('ob-age').value = obData.dob;
 }
 
 function syncObOpts(containerId, val) {
@@ -8340,8 +8339,12 @@ for (let i = 0; i < 4; i++) {
       if (!w || !h || !a) { toast('⚠️ Compila tutti i campi.', 're'); return; }
       if (+w < 30 || +w > 250) { toast('⚠️ Peso non valido.', 're'); return; }
       if (+h < 100 || +h > 230) { toast('⚠️ Altezza non valida.', 're'); return; }
-      if (+a < 13 || +a > 100) { toast('⚠️ Età non valida.', 're'); return; }
-      obData.weight = +w; obData.height = +h; obData.age = +a;
+      const _dob = new Date(a); const _today = new Date();
+      let _age = _today.getFullYear() - _dob.getFullYear();
+      const _dm = _today.getMonth() - _dob.getMonth();
+      if (_dm < 0 || (_dm === 0 && _today.getDate() < _dob.getDate())) _age--;
+      if (_age < 13 || _age > 100) { toast('⚠️ Data di nascita non valida.', 're'); return; }
+      obData.weight = +w; obData.height = +h; obData.age = _age; obData.dob = a;
     }
     obStep = i + 1;
     renderObStep();
@@ -8355,7 +8358,14 @@ for (let i = 1; i <= 4; i++) {
     const a = document.getElementById('ob-age').value;
     if (w) obData.weight = +w;
     if (h) obData.height = +h;
-    if (a) obData.age = +a;
+    if (a) {
+      obData.dob = a;
+      const _d = new Date(a); const _t = new Date();
+      let _ag = _t.getFullYear() - _d.getFullYear();
+      const _m = _t.getMonth() - _d.getMonth();
+      if (_m < 0 || (_m === 0 && _t.getDate() < _d.getDate())) _ag--;
+      if (_ag >= 13 && _ag <= 100) obData.age = _ag;
+    }
     obStep = i - 1;
     renderObStep();
   });
