@@ -1212,9 +1212,12 @@ body::-webkit-scrollbar{display:none}
 .exf.on{background:#f9731615;color:var(--or);border-color:var(--or)}
 .ex-card{display:flex;gap:12px;padding:14px;background:var(--s9);border:1px solid var(--s8);border-radius:16px;margin-bottom:10px;cursor:pointer;transition:all .2s}
 .ex-card:active{transform:scale(.98);border-color:var(--or)}
-.ex-thumb{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--s8);display:flex;align-items:center;justify-content:center}
-.ex-thumb img{width:100%;height:100%;object-fit:cover}
-.ex-thumb-emoji{font-size:1.8rem}
+.ex-thumb{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--s8);display:flex;align-items:center;justify-content:center;position:relative}
+.ex-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px}
+.ex-thumb-emoji{font-size:1.8rem;position:relative;z-index:0}
+.wt-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.wt-act-btn{display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 8px;background:var(--s9);border:1.5px solid var(--s8);border-radius:16px;color:var(--t2);font-family:var(--fb);font-size:.72rem;font-weight:600;cursor:pointer;transition:all .15s var(--spring)}
+.wt-act-btn:active{background:var(--s8);transform:scale(.95)}
 .ex-info{flex:1;min-width:0}
 .ex-info-name{font-weight:700;font-size:.88rem;margin-bottom:2px}
 .ex-info-muscle{font-size:.68rem;color:var(--or);font-weight:600}
@@ -2101,31 +2104,32 @@ body::-webkit-scrollbar{display:none}
     <div class="tab" id="tab-workout">
       <div style="padding:8px 20px 8px;display:flex;justify-content:space-between;align-items:center">
         <div>
-          <div style="font-size:.82rem;color:var(--t3)">Le Tue Schede</div>
-          <div class="disp-title">Allenamento</div>
+          <div style="font-size:.82rem;color:var(--t3)">I Tuoi Allenamenti</div>
+          <div class="disp-title">Workout</div>
         </div>
-        <div class="chip chip-or" id="workout-tab-count"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> 0 schede</div>
+        <button class="btn btn-or" style="padding:.6rem 1.1rem;border-radius:50px;font-size:.82rem;gap:6px" onclick="openWorkoutBuilder()">
+          <svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nuova
+        </button>
       </div>
       <div style="padding:0 16px">
-        <!-- Quick actions -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-          <button class="btn btn-or btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem" onclick="openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Schede</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem" onclick="openExerciseLibrary()"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.82rem;border-color:#a78bfa;color:#a78bfa" onclick="openCalendar()"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendario</button>
+        <div class="wt-actions">
+          <button class="wt-act-btn" onclick="openExerciseLibrary()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            Libreria
+          </button>
+          <button class="wt-act-btn" onclick="openCalendar()">
+            <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Calendario
+          </button>
+          <button class="wt-act-btn" onclick="openWorkoutHistory()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            Storico
+          </button>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-          <div class="card" style="padding:.85rem;border-radius:14px;text-align:center;cursor:pointer" onclick="openWorkoutHistory()"><span style="font-size:.84rem;color:var(--t2)">📊 Storico</span></div>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#22c55e;color:#22c55e" onclick="openShareExport()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Condividi</button>
-          <button class="btn btn-ghost btn-fw" style="padding:.85rem;border-radius:14px;font-size:.84rem;border-color:#38bdf8;color:#38bdf8" onclick="openShareImport()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Importa</button>
-        </div>
-        <!-- AI plans -->
-        <div class="sec-title">Schede IA Generate</div>
-        <div id="workout-tab-ai-plans"></div>
-        <!-- Manual plans -->
-        <div class="sec-title">Schede Manuali</div>
-        <div id="workout-tab-manual-plans"></div>
-        <!-- CTA create -->
-        <button class="cta" style="margin:14px 0" onclick="openWorkoutBuilder()">+ Crea Nuova Scheda</button>
+        <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">Le Mie Schede <span style="font-size:.7rem;color:var(--t4);font-weight:400" id="workout-tab-count">0 schede</span></div>
+        <div id="workout-tab-plans"></div>
+        <div style="height:16px"></div>
       </div>
     </div>
 
@@ -3390,7 +3394,7 @@ function renderExerciseLibrary() {
   const el = document.getElementById('exlib-list');
   if (list.length === 0) { el.innerHTML = '<div class="prog-empty"><b>Nessun esercizio trovato</b>Prova un altro filtro</div>'; return; }
   el.innerHTML = list.map(e => {
-    const thumb = e.gif ? '<img src="'+e.gif+'" alt="'+e.name+'" loading="lazy">' : '<span class="ex-thumb-emoji">'+e.emoji+'</span>';
+    const thumb = '<span class="ex-thumb-emoji">'+e.emoji+'</span>'+(e.gif?'<img src="'+e.gif+'" loading="lazy" onerror="this.remove()">':'');
     return '<div class="ex-card" onclick="openExDetail(\'' + e.id + '\')">' +
       '<div class="ex-thumb">' + thumb + '</div>' +
       '<div class="ex-info"><div class="ex-info-name">' + e.name + '</div>' +
@@ -3405,9 +3409,10 @@ function openExDetail(id) {
   const e = EXERCISES.find(x => x.id === id);
   if (!e) return;
   document.getElementById('exdet-title').textContent = e.name;
-  const hero = e.gif ? '<img src="'+e.gif+'" alt="'+e.name+'" style="height:100%;object-fit:contain">' : '<span class="exdet-hero-emoji">'+e.emoji+'</span>';
+  const heroEmoji = '<span class="exdet-hero-emoji">'+e.emoji+'</span>';
+  const hero = e.gif ? heroEmoji+'<img src="'+e.gif+'" alt="'+e.name+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" onerror="this.remove()">' : heroEmoji;
   document.getElementById('exdet-content').innerHTML =
-    '<div class="exdet-hero">' + hero + '</div>' +
+    '<div class="exdet-hero" style="position:relative">' + hero + '</div>' +
     '<div class="exdet-body">' +
     '<div class="exdet-name">' + e.name + '</div>' +
     '<div class="exdet-muscle">' + e.muscle + ' · ' + e.diff + ' · ' + e.sets + 'x' + e.reps + '</div>' +
@@ -3431,26 +3436,39 @@ let wbEditingIdx = -1; // -1 = none, >= 0 = editing plan index
 
 function renderWorkoutTab() {
   var plans = getWorkouts();
-  var aiPlans = plans.filter(function(p) { return p._aiGenerated; });
-  var manualPlans = plans.filter(function(p) { return !p._aiGenerated; });
   var chip = document.getElementById('workout-tab-count');
-  if (chip) chip.textContent = '📋 ' + plans.length + ' schede';
-  function planCard(p, pi) {
-    var exCount = p.exercises ? p.exercises.length : 0;
-    return '<div class="card" style="padding:14px;cursor:pointer" onclick="openWorkoutBuilder()">' +
-      '<div style="display:flex;align-items:center;justify-content:space-between">' +
-      '<div style="display:flex;align-items:center;gap:10px">' +
-      '<span style="font-size:1.4rem">' + (p._aiGenerated ? '🤖' : '📋') + '</span>' +
-      '<div><div style="font-weight:700;font-size:.88rem">' + (p.name||'Scheda') + '</div>' +
-      '<div style="font-size:.7rem;color:var(--t3)">' + exCount + ' esercizi</div></div></div>' +
-      '<div style="display:flex;gap:6px;align-items:center">' +
-      (exCount > 0 ? '<button class="btn btn-or btn-sm" onclick="event.stopPropagation();startWorkoutSession(' + pi + ')">▶ Avvia</button>' : '') +
-      '<span class="sarr">›</span></div></div></div>';
+  if (chip) chip.textContent = plans.length + ' schede';
+  var el = document.getElementById('workout-tab-plans');
+  if (!el) return;
+  if (plans.length === 0) {
+    el.innerHTML = '<div class="card" style="padding:28px;text-align:center">' +
+      '<div style="margin-bottom:10px"><svg class="ico" viewBox="0 0 24 24" style="width:2.4rem;height:2.4rem;color:var(--t4)"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg></div>' +
+      '<div style="font-weight:700;font-size:.9rem;margin-bottom:4px">Nessuna scheda ancora</div>' +
+      '<div style="font-size:.78rem;color:var(--t3)">Crea la tua prima scheda personalizzata!</div></div>' +
+      '<button class="cta" style="margin-top:12px" onclick="openWorkoutBuilder()">+ Crea Prima Scheda</button>';
+    return;
   }
-  var aiEl = document.getElementById('workout-tab-ai-plans');
-  var manEl = document.getElementById('workout-tab-manual-plans');
-  if (aiEl) aiEl.innerHTML = aiPlans.length > 0 ? aiPlans.map(function(p) { return planCard(p, plans.indexOf(p)); }).join('') : '<div class="card" style="padding:16px;text-align:center;color:var(--t3);font-size:.82rem">Nessuna scheda IA. Completa l\'onboarding per generarne una!</div>';
-  if (manEl) manEl.innerHTML = manualPlans.length > 0 ? manualPlans.map(function(p) { return planCard(p, plans.indexOf(p)); }).join('') : '<div class="card" style="padding:16px;text-align:center;color:var(--t3);font-size:.82rem">Nessuna scheda manuale. Creane una!</div>';
+  el.innerHTML = plans.map(function(p, pi) {
+    var exCount = p.exercises ? p.exercises.length : 0;
+    var aiChip = p._aiGenerated ? '<span class="chip chip-pu" style="font-size:.58rem;padding:2px 7px;margin-left:6px">IA</span>' : '';
+    var seen = [];
+    if (exCount > 0) p.exercises.slice(0,4).forEach(function(ex){
+      var e = EXERCISES.find(function(x){ return x.id === ex.id; });
+      if (e && seen.indexOf(e.muscle) < 0) seen.push(e.muscle);
+    });
+    var muscles = seen.join(' · ');
+    return '<div class="card" style="padding:14px;margin-bottom:10px">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between">' +
+      '<div style="display:flex;align-items:center;gap:12px">' +
+      '<div style="width:42px;height:42px;border-radius:12px;background:var(--or)15;display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
+      '<svg class="ico" viewBox="0 0 24 24" style="color:var(--or)"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg></div>' +
+      '<div><div style="display:flex;align-items:center;flex-wrap:wrap"><span style="font-weight:700;font-size:.9rem">'+(p.name||'Scheda')+'</span>'+aiChip+'</div>' +
+      '<div style="font-size:.7rem;color:var(--t3);margin-top:2px">'+exCount+' esercizi'+(muscles?' · '+muscles:'')+'</div></div></div>' +
+      '<div style="display:flex;gap:6px;align-items:center">' +
+      (exCount > 0 ? '<button class="btn btn-or btn-sm" onclick="event.stopPropagation();startWorkoutSession('+pi+')"><svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>' : '') +
+      '<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openWorkoutBuilder()"><svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>' +
+      '</div></div></div>';
+  }).join('');
 }
 
 function openWorkoutBuilder() {
