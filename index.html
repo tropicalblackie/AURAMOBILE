@@ -1912,7 +1912,7 @@ body::-webkit-scrollbar{display:none}
 
         <!-- Muscoli Settimana -->
         <div class="card glass z-near" style="padding:16px;margin-bottom:12px">
-          <div class="stat-label">Muscoli Questa Settimana</div>
+          <div class="stat-label">AURA Score</div>
           <div style="display:flex;align-items:center;gap:16px">
             <div class="rings-wrap" style="flex-shrink:0">
               <svg width="160" height="160" viewBox="0 0 160 160">
@@ -1940,10 +1940,10 @@ body::-webkit-scrollbar{display:none}
             </div>
             <div style="flex:1">
               <div class="ring-legend">
-                <div class="ring-leg"><div class="ring-dot" style="background:#f97316"></div><span style="color:var(--t2)">Gambe</span><span class="ring-leg-val" style="color:#f97316" id="ring-gambe-val">0/2</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#22c55e"></div><span style="color:var(--t2)">Petto</span><span class="ring-leg-val" style="color:#22c55e" id="ring-petto-val">0/2</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#38bdf8"></div><span style="color:var(--t2)">Schiena</span><span class="ring-leg-val" style="color:#38bdf8" id="ring-schiena-val">0/2</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#a78bfa"></div><span style="color:var(--t2)">Spalle</span><span class="ring-leg-val" style="color:#a78bfa" id="ring-spalle-val">0/2</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#f97316"></div><span style="color:var(--t2)">Gambe</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#22c55e"></div><span style="color:var(--t2)">Petto</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#38bdf8"></div><span style="color:var(--t2)">Schiena</span></div>
+                <div class="ring-leg"><div class="ring-dot" style="background:#a78bfa"></div><span style="color:var(--t2)">Spalle</span></div>
               </div>
             </div>
           </div>
@@ -5382,30 +5382,27 @@ function confetti() {
 function updateRings() {
   var weekAgo = new Date(Date.now() - 7 * 86400000);
   var cw = getCompletedWorkouts().filter(function(w) { return new Date(w.date) >= weekAgo; });
+  // Count individual exercises per muscle group (goal: 6 exercises/muscle/week)
   var muscles = { Gambe: 0, Petto: 0, Schiena: 0, Spalle: 0 };
+  var GOAL = 6;
   cw.forEach(function(w) {
-    var hit = {};
     (w.exercises || []).forEach(function(ex) {
       var def = EXERCISES.find(function(e) { return e.id === ex.id; });
-      if (def && muscles.hasOwnProperty(def.muscle) && !hit[def.muscle]) {
+      if (def && muscles.hasOwnProperty(def.muscle)) {
         muscles[def.muscle]++;
-        hit[def.muscle] = true;
       }
     });
   });
-  var GOAL = 2;
   var rings = [
-    { id:'ring-gambe',   circ:452.4, val:muscles.Gambe,   lbl:'ring-gambe-val' },
-    { id:'ring-petto',   circ:364.4, val:muscles.Petto,   lbl:'ring-petto-val' },
-    { id:'ring-schiena', circ:276.5, val:muscles.Schiena, lbl:'ring-schiena-val' },
-    { id:'ring-spalle',  circ:188.5, val:muscles.Spalle,  lbl:'ring-spalle-val' }
+    { id:'ring-gambe',   circ:452.4, val:muscles.Gambe   },
+    { id:'ring-petto',   circ:364.4, val:muscles.Petto   },
+    { id:'ring-schiena', circ:276.5, val:muscles.Schiena },
+    { id:'ring-spalle',  circ:188.5, val:muscles.Spalle  }
   ];
   rings.forEach(function(r) {
     var el = document.getElementById(r.id);
     var pct = Math.min(r.val / GOAL, 1);
     if (el) el.style.strokeDashoffset = r.circ * (1 - pct);
-    var lbl = document.getElementById(r.lbl);
-    if (lbl) lbl.textContent = r.val + '/' + GOAL;
   });
   var kcEl = document.getElementById('rings-kcal');
   if (kcEl) slotRoll(kcEl, cw.length);
