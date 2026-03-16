@@ -8164,7 +8164,7 @@ document.getElementById('form-login').addEventListener('submit', function(e) {
   sessionStorage.setItem('aura_session_login', 'true');
   applyUserData(user);
   hideAuth();
-  toast('👋 Bentornato ' + user.name.split(' ')[0] + '!', 'or');
+  toast('Bentornato ' + user.name.split(' ')[0] + '!', 'or');
 });
 
 // ── REGISTER ──
@@ -10323,7 +10323,7 @@ function isDeloadWeek() {
     applyUserData(user);
     hideAuth();
     hideOnboarding();
-    setTimeout(() => toast('👋 Bentornato ' + user.name.split(' ')[0] + '!', 'or'), 900);
+    setTimeout(() => toast('Bentornato ' + user.name.split(' ')[0] + '!', 'or'), 900);
   } else if (user && user._needsOnboarding) {
     applyUserData(user);
     hideAuth();
