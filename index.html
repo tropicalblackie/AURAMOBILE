@@ -1848,9 +1848,9 @@ body::-webkit-scrollbar{display:none}
         <div class="ob-title">Quante volte ti alleni?</div>
         <div class="ob-desc">AURA pianificherà la tua settimana in base alla tua disponibilità.</div>
         <div class="ob-options" id="ob-freq-opts">
-          <div class="ob-opt" data-val="2-3"><span class="ob-opt-ico" style="color:#22c55e">●</span><div class="ob-opt-text"><div class="ob-opt-label">2-3 volte</div><div class="ob-opt-sub">Ideale per iniziare o mantenere</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt sel" data-val="4-5"><span class="ob-opt-ico" style="color:var(--or)">●</span><div class="ob-opt-text"><div class="ob-opt-label">4-5 volte</div><div class="ob-opt-sub">Buon equilibrio allenamento/recupero</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="6+"><span class="ob-opt-ico" style="color:var(--re)">●</span><div class="ob-opt-text"><div class="ob-opt-label">6+ volte</div><div class="ob-opt-sub">Allenamento intensivo quotidiano</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt" data-val="1-2"><span class="ob-opt-ico" style="color:#22c55e">●</span><div class="ob-opt-text"><div class="ob-opt-label">1-2 volte</div><div class="ob-opt-sub">Ideale per iniziare o mantenersi attivi</div></div><div class="ob-check"></div></div>
+          <div class="ob-opt sel" data-val="2-3"><span class="ob-opt-ico" style="color:var(--or)">●</span><div class="ob-opt-text"><div class="ob-opt-label">2-3 volte</div><div class="ob-opt-sub">Buon equilibrio allenamento/recupero</div></div><div class="ob-check">✓</div></div>
+          <div class="ob-opt" data-val="4-5"><span class="ob-opt-ico" style="color:var(--re)">●</span><div class="ob-opt-text"><div class="ob-opt-label">4-5 volte</div><div class="ob-opt-sub">Allenamento intensivo progressivo</div></div><div class="ob-check"></div></div>
         </div>
         <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-3">← Indietro</button><button class="cta" style="flex:1" id="ob-next-3">Avanti →</button></div></div>
       </div>
@@ -8374,7 +8374,7 @@ for (let i = 1; i <= 4; i++) {
 function buildObSummary() {
   const goalLabels = { massa:'💪 Massa Muscolare', dimagrimento:'🔥 Dimagrimento', benessere:'🧘 Benessere', resistenza:'🏃 Resistenza' };
   const lvlLabels = { principiante:'🌱 Principiante', intermedio:'💫 Intermedio', avanzato:'🏆 Avanzato' };
-  const freqLabels = { '2-3':'2-3 volte/sett.', '4-5':'4-5 volte/sett.', '6+':'6+ volte/sett.' };
+  const freqLabels = { '1-2':'1-2 volte/sett.', '2-3':'2-3 volte/sett.', '4-5':'4-5 volte/sett.' };
   const rows = [
     ['Obiettivo', goalLabels[obData.goal]||obData.goal],
     ['Livello', lvlLabels[obData.level]||obData.level],
