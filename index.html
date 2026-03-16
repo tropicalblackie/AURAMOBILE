@@ -390,6 +390,38 @@ body::-webkit-scrollbar{display:none}
 /* ── TOPBAR COACH BUTTON ── */
 .coach-btn{width:36px;height:36px;border-radius:50%;background:var(--s8);border:1px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s var(--spring)}
 .coach-btn:active{transform:scale(.92);background:var(--s7)}
+
+/* ── AURA PULSE BAR ── */
+#aura-pulse-bar{height:3px;background:var(--s8);flex-shrink:0;overflow:hidden}
+#aura-pulse-fill{height:100%;width:0%;background:linear-gradient(90deg,#7f1d1d,#dc2626);transition:width 1.2s var(--spring);border-radius:0 2px 2px 0}
+#aura-pulse-bar.active #aura-pulse-fill{background:linear-gradient(90deg,#dc2626,var(--or))}
+#aura-pulse-bar.full #aura-pulse-fill{background:linear-gradient(90deg,var(--or),#fcd34d);box-shadow:0 0 6px var(--or)}
+#aura-pulse-bar.idle #aura-pulse-fill{animation:pulsebar 2.8s ease-in-out infinite}
+@keyframes pulsebar{0%,100%{opacity:.25}50%{opacity:.9}}
+
+/* ── BRIEFING OVERLAY ── */
+#briefing-ov{position:fixed;inset:0;z-index:199;background:var(--bg);transform:translateY(100%);transition:transform .42s var(--spring);display:flex;flex-direction:column;pointer-events:none}
+#briefing-ov.on{transform:translateY(0);pointer-events:all}
+.briefing-header{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--s8);padding-bottom:16px}
+.briefing-close{width:36px;height:36px;border-radius:50%;background:var(--s8);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.briefing-header-info{display:flex;flex-direction:column}
+.briefing-tag{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:4px}
+.briefing-name{font-family:var(--fd);font-size:1.35rem;font-weight:900;color:var(--t1);line-height:1.1}
+.briefing-meta{font-size:.76rem;color:var(--t2);margin-top:3px}
+.briefing-list{flex:1;overflow-y:auto;padding:8px 16px;-webkit-overflow-scrolling:touch}
+.briefing-ex-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--s8)}
+.briefing-ex-item:last-child{border-bottom:none}
+.briefing-ex-num{font-family:var(--fd);font-size:.7rem;font-weight:800;color:var(--t4);width:18px;flex-shrink:0;text-align:right}
+.briefing-ex-dot{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.briefing-ex-body{flex:1}
+.briefing-ex-name{font-size:.86rem;font-weight:600;color:var(--t1)}
+.briefing-ex-detail{font-size:.7rem;color:var(--t3);margin-top:2px}
+.briefing-actions{padding:14px 16px;padding-bottom:calc(14px + var(--safe-b));display:flex;flex-direction:column;gap:9px;flex-shrink:0;border-top:1px solid var(--s8)}
+.briefing-btn-cam{width:100%;padding:15px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:16px;font-family:var(--fd);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 5px 18px rgba(249,115,22,.3);cursor:pointer;transition:transform .15s var(--spring)}
+.briefing-btn-cam:active{transform:scale(.97)}
+.briefing-btn-classic{width:100%;padding:13px;background:var(--s8);color:var(--t2);border:1px solid var(--s7);border-radius:16px;font-family:var(--fd);font-weight:600;font-size:.88rem;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform .15s var(--spring)}
+.briefing-btn-classic:active{transform:scale(.97)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .ld{width:7px;height:7px;border-radius:50%;background:var(--or);box-shadow:0 0 7px var(--or);flex-shrink:0}
 .ld:nth-child(1){animation:thinkingDot1 1.8s ease-in-out infinite}
 .ld:nth-child(2){animation:thinkingDot2 1.8s ease-in-out infinite}
@@ -1877,6 +1909,9 @@ body::-webkit-scrollbar{display:none}
     </div>
   </div>
 
+  <!-- AURA PULSE BAR -->
+  <div id="aura-pulse-bar" class="idle"><div id="aura-pulse-fill"></div></div>
+
   <!-- SCROLLABLE CONTENT -->
   <div class="screen" id="screen">
 
@@ -1938,11 +1973,7 @@ body::-webkit-scrollbar{display:none}
         </div>
       </div>
 
-      <!-- 4. BOTTONE CAMERA IA -->
-      <button class="home-camera-btn" onclick="openCameraOv()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Camera IA
-      </button>
+      <!-- 4. BOTTONE CAMERA IA rimosso — unificato nel briefing -->
 
     </div>
 
@@ -2644,6 +2675,31 @@ body::-webkit-scrollbar{display:none}
     </div>
     <!-- Day detail -->
     <div id="cal-day-detail"></div>
+  </div>
+</div>
+
+<!-- BRIEFING OVERLAY -->
+<div id="briefing-ov">
+  <div class="briefing-header">
+    <div class="briefing-header-info">
+      <div class="briefing-tag">ALLENAMENTO DI OGGI</div>
+      <div class="briefing-name" id="briefing-plan-name">Allenamento</div>
+      <div class="briefing-meta" id="briefing-plan-meta"></div>
+    </div>
+    <button class="briefing-close" onclick="closeBriefing()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="briefing-list" id="briefing-ex-list"></div>
+  <div class="briefing-actions">
+    <button class="briefing-btn-cam" id="briefing-btn-cam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Avvia con Camera IA
+    </button>
+    <button class="briefing-btn-classic" id="briefing-btn-classic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M5 3l14 9-14 9V3z"/></svg>
+      Avvia Classico
+    </button>
   </div>
 </div>
 
@@ -5442,9 +5498,9 @@ function renderHome() {
       '<div class="hero-title">' + (plan.name || 'Allenamento') + '</div>' +
       '<div class="hero-info">' + n + ' esercizi &middot; ~' + mins + ' min</div>' +
       musclesHtml +
-      '<button class="hero-btn hero-btn-primary pulse" onclick="startWorkoutSession(' + planIdx + ')">' +
+      '<button class="hero-btn hero-btn-primary pulse" onclick="openBriefing(' + planIdx + ')">' +
         '<svg viewBox="0 0 24 24" fill="#fff" stroke="none" width="16" height="16"><path d="M5 3l14 9-14 9V3z"/></svg>' +
-        'Inizia Allenamento' +
+        'Allenati Ora' +
       '</button>';
   } else {
     heroCard.style.cssText = 'background:var(--s9);border:1px solid var(--s8);border-left:4px solid var(--s7)';
@@ -5477,6 +5533,66 @@ function renderHome() {
       }
     }
   });
+
+  updatePulseBar();
+}
+
+// ── AURA PULSE BAR ──────────────────────────────────
+function updatePulseBar() {
+  var bar = document.getElementById('aura-pulse-bar');
+  var fill = document.getElementById('aura-pulse-fill');
+  if (!bar || !fill) return;
+  var md = getWeeklyMuscleData();
+  var GOAL = 4;
+  var pct = Math.min(md.totale / GOAL, 1) * 100;
+  fill.style.width = pct + '%';
+  bar.classList.remove('idle', 'active', 'full');
+  if (pct === 0) bar.classList.add('idle');
+  else if (pct >= 100) bar.classList.add('full');
+  else bar.classList.add('active');
+}
+
+// ── BRIEFING OVERLAY ────────────────────────────────
+var _briefingPlanIdx = -1;
+function openBriefing(planIdx) {
+  _briefingPlanIdx = planIdx;
+  var plans = getWorkouts();
+  var plan = plans[planIdx];
+  if (!plan) return;
+  var n = plan.exercises.length;
+  var mins = Math.round(n * 4.5);
+  document.getElementById('briefing-plan-name').textContent = plan.name || 'Allenamento';
+  document.getElementById('briefing-plan-meta').textContent = n + ' esercizi · ~' + mins + ' min';
+  var muscleColors = { Gambe:'#f97316', Petto:'#22c55e', Schiena:'#38bdf8', Spalle:'#a78bfa', Braccia:'#a78bfa', Core:'#64748b', Cardio:'#22c55e' };
+  var listHtml = '';
+  plan.exercises.forEach(function(ex, i) {
+    var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
+    var name = exData ? exData.name : (ex.name || 'Esercizio');
+    var muscle = exData ? exData.muscle : '';
+    var col = muscleColors[muscle] || 'var(--t3)';
+    var sets = ex.sets || 3;
+    var reps = ex.reps || 10;
+    listHtml +=
+      '<div class="briefing-ex-item" style="animation:fadeUp .35s ' + (i * 0.04) + 's both">' +
+        '<div class="briefing-ex-num">' + (i + 1) + '</div>' +
+        '<div class="briefing-ex-dot" style="background:' + col + '20;border:1px solid ' + col + '40">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="' + col + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>' +
+        '</div>' +
+        '<div class="briefing-ex-body">' +
+          '<div class="briefing-ex-name">' + name + '</div>' +
+          '<div class="briefing-ex-detail">' + sets + ' serie · ' + reps + ' reps' + (muscle ? ' · ' + muscle : '') + '</div>' +
+        '</div>' +
+      '</div>';
+  });
+  document.getElementById('briefing-ex-list').innerHTML = listHtml;
+  document.getElementById('briefing-btn-cam').onclick = function() { closeBriefing(); openCameraOv(); };
+  document.getElementById('briefing-btn-classic').onclick = function() { closeBriefing(); startWorkoutSession(_briefingPlanIdx); };
+  document.getElementById('briefing-ov').classList.add('on');
+  haptic(8);
+}
+
+function closeBriefing() {
+  document.getElementById('briefing-ov').classList.remove('on');
 }
 
 // ── AI CAMERA — MEDIAPIPE POSE ─────────────────────
