@@ -185,8 +185,6 @@ body::-webkit-scrollbar{display:none}
 }
 .topbar-logo{font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:3px;background:linear-gradient(90deg,#fff 0%,#fff 40%,rgba(255,255,255,.5) 50%,#fff 60%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 6s linear infinite}
 .topbar-right{display:flex;align-items:center;gap:10px}
-.notif-btn{width:36px;height:36px;border-radius:50%;background:var(--s8);border:1px solid var(--s7);display:flex;align-items:center;justify-content:center;position:relative}
-.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--or);border:1.5px solid var(--bg)}
 
 /* ── AVATAR ── */
 .av{display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:var(--fd);font-weight:800;background:linear-gradient(135deg,var(--or),var(--or3));color:#fff;flex-shrink:0}
@@ -352,58 +350,46 @@ body::-webkit-scrollbar{display:none}
 .fill-pu{background:var(--pu)}
 
 /* ══════ HOME ══════ */
-.home-header{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:center}
-.greeting-sm{font-size:.82rem;color:var(--t3)}
-.greeting-name{font-family:var(--fd);font-size:clamp(1.5rem,6vw,2rem);font-weight:800;letter-spacing:-1px;line-height:1;max-width:100%;overflow-wrap:break-word}
-.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
-.lvl-badge{font-size:.65rem;font-weight:700;color:var(--or);background:#f9731615;border:1px solid #f9731440;padding:3px 10px;border-radius:50px;white-space:nowrap}
+/* ── HOME HEADER ── */
+.home-saluto{padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:center}
+.home-name{font-family:var(--fd);font-size:clamp(1.5rem,6vw,2rem);font-weight:800;color:var(--t1);line-height:1.1}
+.home-meta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:.75rem;font-weight:700;color:var(--or)}
+.home-meta-sep{color:var(--t4);font-weight:400}
 
-.recovery{display:flex;align-items:flex-start;gap:12px;background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630}
-.rec-ico{width:40px;height:40px;border-radius:11px;background:#f9731618;border:1px solid #f9731440;display:flex;align-items:center;justify-content:center;color:var(--or);flex-shrink:0;margin-top:1px}
-.rec-body{flex:1}
-.rec-label{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--or);margin-bottom:3px}
-.rec-msg{font-size:.8rem;color:var(--t2);line-height:1.4}
-.rec-msg strong{color:var(--t1)}
-.rec-msg .acc{color:var(--or);font-weight:600}
-.rec-actions{display:flex;gap:8px;margin-top:10px}
+/* ── HOME CARD EROE ── */
+.hero-card{margin:0 16px;border-radius:24px;padding:20px;position:relative;overflow:hidden;min-height:180px;transition:border-color .3s,background .3s}
+.hero-card::before{content:'';display:block;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.12),rgba(255,255,255,0));pointer-events:none;z-index:2}
+.hero-label{font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.hero-title{font-family:var(--fd);font-weight:800;font-size:1.1rem;color:var(--t1);line-height:1.2;margin-bottom:4px}
+.hero-info{font-size:.78rem;color:var(--t2);margin-bottom:8px}
+.hero-muscles{display:flex;gap:6px;opacity:.6}
+.hero-btn{margin-top:14px;width:100%;padding:14px;border:none;border-radius:16px;font-family:var(--fd);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform .15s var(--spring)}
+.hero-btn:active{transform:scale(.97)}
+.hero-btn-primary{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;box-shadow:0 5px 18px rgba(249,115,22,.3)}
+.hero-btn-secondary{background:var(--s8);color:var(--t2);border:1px solid var(--s7);box-shadow:none}
 
-.stat-label{font-size:.68rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3);text-align:left;margin-bottom:10px}
+/* ── HOME MUSCLE RINGS ── */
+.muscle-rings-card{margin:14px 16px 0}
+.muscle-rings-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
+.muscle-rings-wrap svg{display:block}
+.muscle-ring-bg{fill:none;opacity:.15}
+.muscle-ring-fg{fill:none;stroke-linecap:round;transition:stroke-dashoffset .8s var(--spring);filter:drop-shadow(0 0 4px currentColor)}
+.muscle-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.muscle-rings-num{font-family:var(--fd);font-size:1.45rem;font-weight:900;color:var(--t1);line-height:.95}
+.muscle-rings-sub{font-size:.6rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.muscle-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+.muscle-leg-row{display:flex;align-items:center;gap:8px}
+.muscle-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.muscle-leg-name{font-size:.75rem;color:var(--t2);white-space:nowrap}
+.muscle-leg-val{margin-left:auto;font-family:var(--fd);font-weight:800;font-size:.8rem;display:flex;align-items:center}
 
-/* Activity Rings */
-.rings-wrap{position:relative;width:160px;height:160px;margin:0 auto}
-.rings-wrap svg{transform:rotate(-90deg)}
-.ring-bg{fill:none;opacity:.18}
-.ring-fg{fill:none;stroke-linecap:round;transition:stroke-dashoffset .8s var(--spring);filter:drop-shadow(0 0 4px var(--ring-c))}
-.ring-legend{display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.ring-leg{display:flex;align-items:center;gap:8px;font-size:.75rem}
-.ring-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.ring-leg-val{font-family:var(--fd);font-weight:800;margin-left:auto;font-size:.8rem}
-.rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.rings-center-val{font-family:var(--fd);font-size:1.45rem;font-weight:900;line-height:.95;color:var(--t1);letter-spacing:-.04em}
-/* Prevent ring label word-breaks */
-.ring-leg span {white-space:nowrap}
-.rings-center-sub{font-size:.64rem;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+/* ── HOME CAMERA BUTTON ── */
+.home-camera-btn{margin:14px 16px 0;width:calc(100% - 32px);padding:16px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:16px;font-family:var(--fd);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 5px 18px rgba(249,115,22,.25);cursor:pointer;transition:transform .15s var(--spring)}
+.home-camera-btn:active{transform:scale(.97)}
 
-/* Hydro mini */
-.hydro-mini{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;background:var(--s9);border:1px solid var(--s8);border-radius:14px}
-.hydro-mini-ring{position:relative;width:36px;height:36px;flex-shrink:0}
-.hydro-mini-ring svg{transform:rotate(-90deg)}
-.hydro-mini-val{font-family:var(--fd);font-size:.85rem;font-weight:700;color:var(--t1)}
-.hydro-mini-sub{font-size:.6rem;color:var(--t3)}
-
-.mrow{display:flex;flex-direction:column;gap:7px;margin-top:4px}
-.mi{display:flex;align-items:center;gap:7px}
-.mn{font-size:.72rem;color:var(--t2);width:46px;flex-shrink:0}
-.mb{flex:1;height:4px;background:var(--s8);border-radius:10px;overflow:hidden}
-.mf{height:100%;border-radius:10px}
-.mp{font-size:.67rem;font-weight:700;width:34px;text-align:right}
-
-.metrics-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
-.mc{display:flex;align-items:center;gap:5px;padding:.38rem .8rem;background:var(--s9);border:1px solid var(--s8);border-radius:50px;font-size:.73rem;color:var(--t2)}
-
-/* Workout live */
-.wl{background:var(--s9);border:1px solid var(--s8);border-radius:18px;overflow:hidden;margin-top:10px}
-.wl-hd{display:flex;align-items:center;gap:8px;padding:.75rem 1rem;background:#f9731610;border-bottom:1px solid var(--s8);font-size:.78rem;font-weight:600;color:var(--or)}
+/* ── TOPBAR COACH BUTTON ── */
+.coach-btn{width:36px;height:36px;border-radius:50%;background:var(--s8);border:1px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s var(--spring)}
+.coach-btn:active{transform:scale(.92);background:var(--s7)}
 .ld{width:7px;height:7px;border-radius:50%;background:var(--or);box-shadow:0 0 7px var(--or);flex-shrink:0}
 .ld:nth-child(1){animation:thinkingDot1 1.8s ease-in-out infinite}
 .ld:nth-child(2){animation:thinkingDot2 1.8s ease-in-out infinite}
@@ -1884,9 +1870,8 @@ body::-webkit-scrollbar{display:none}
   <div class="topbar">
     <div class="topbar-logo">AURA</div>
     <div class="topbar-right">
-      <button class="notif-btn" onclick="checkNotifications()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span class="notif-dot"></span>
+      <button class="coach-btn" onclick="openAICoach()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--pu)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/></svg>
       </button>
       <div class="av av-s" id="topbar-av" onclick="document.querySelector('.nb[data-tab=profile]').click()" style="cursor:pointer" title="Il tuo profilo">L</div>
     </div>
@@ -1897,121 +1882,69 @@ body::-webkit-scrollbar{display:none}
 
     <!-- ══ HOME ══ -->
     <div class="tab on" id="tab-home">
-      <div class="home-header">
+
+      <!-- 1. HEADER SALUTO -->
+      <div class="home-saluto">
         <div>
-          <div class="greeting-sm">Bentornato,</div>
-          <div class="greeting-name">Luca <svg class="ico" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;vertical-align:-.1em"><path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 018 4M22 12c0 5.5-4.5 10-10 10S2 17.5 2 12"/><path d="M15 9h.01M9 9h.01M8 14s1.5 2 4 2 4-2 4-2"/></svg></div>
+          <div class="home-name" id="home-greeting-name">Ciao Atleta</div>
+          <div class="home-meta" id="home-meta-row"></div>
         </div>
-        <div class="hdr-right">
-          <div class="av av-m">L</div>
-          <div class="lvl-badge" id="home-lvl-badge"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lv.1 Principiante</div>
+        <div class="av av-m" id="home-avatar" onclick="document.querySelector('.nb[data-tab=profile]').click()" style="cursor:pointer">A</div>
+      </div>
+
+      <!-- 2. CARD EROE -->
+      <div class="hero-card" id="hero-card" style="background:var(--s9);border:1px solid var(--s8);border-left:4px solid var(--s7)">
+        <!-- populated by renderHome() -->
+      </div>
+
+      <!-- 3. CERCHI MUSCOLARI -->
+      <div class="card glass muscle-rings-card" style="display:flex;align-items:center;gap:16px">
+        <div class="muscle-rings-wrap">
+          <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg)">
+            <circle cx="80" cy="80" r="72" class="muscle-ring-bg" stroke="#f97316" stroke-width="11"/>
+            <circle cx="80" cy="80" r="72" class="muscle-ring-fg" id="muscle-ring-gambe" stroke="#f97316" stroke-width="11" stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
+            <circle cx="80" cy="80" r="58" class="muscle-ring-bg" stroke="#22c55e" stroke-width="11"/>
+            <circle cx="80" cy="80" r="58" class="muscle-ring-fg" id="muscle-ring-petto" stroke="#22c55e" stroke-width="11" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+            <circle cx="80" cy="80" r="44" class="muscle-ring-bg" stroke="#38bdf8" stroke-width="11"/>
+            <circle cx="80" cy="80" r="44" class="muscle-ring-fg" id="muscle-ring-schiena" stroke="#38bdf8" stroke-width="11" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
+            <circle cx="80" cy="80" r="30" class="muscle-ring-bg" stroke="#a78bfa" stroke-width="11"/>
+            <circle cx="80" cy="80" r="30" class="muscle-ring-fg" id="muscle-ring-spalle" stroke="#a78bfa" stroke-width="11" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+          </svg>
+          <div class="muscle-rings-center">
+            <div class="muscle-rings-num" id="muscle-rings-total">0</div>
+            <div class="muscle-rings-sub">questa sett.</div>
+          </div>
+        </div>
+        <div class="muscle-legend">
+          <div class="muscle-leg-row">
+            <div class="muscle-leg-dot" style="background:#f97316"></div>
+            <span class="muscle-leg-name">Gambe</span>
+            <span class="muscle-leg-val" id="muscle-leg-gambe" style="color:#f97316">0/2</span>
+          </div>
+          <div class="muscle-leg-row">
+            <div class="muscle-leg-dot" style="background:#22c55e"></div>
+            <span class="muscle-leg-name">Petto</span>
+            <span class="muscle-leg-val" id="muscle-leg-petto" style="color:#22c55e">0/2</span>
+          </div>
+          <div class="muscle-leg-row">
+            <div class="muscle-leg-dot" style="background:#38bdf8"></div>
+            <span class="muscle-leg-name">Schiena</span>
+            <span class="muscle-leg-val" id="muscle-leg-schiena" style="color:#38bdf8">0/2</span>
+          </div>
+          <div class="muscle-leg-row">
+            <div class="muscle-leg-dot" style="background:#a78bfa"></div>
+            <span class="muscle-leg-name">Spalle</span>
+            <span class="muscle-leg-val" id="muscle-leg-spalle" style="color:#a78bfa">0/2</span>
+          </div>
         </div>
       </div>
 
-      <div style="padding:0 16px">
+      <!-- 4. BOTTONE CAMERA IA -->
+      <button class="home-camera-btn" onclick="openCameraOv()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Camera IA
+      </button>
 
-        <!-- Muscoli Settimana -->
-        <div class="card glass z-near" style="padding:16px;margin-bottom:12px">
-          <div class="stat-label">AURA Score</div>
-          <div style="display:flex;align-items:center;gap:16px">
-            <div class="rings-wrap" style="flex-shrink:0">
-              <svg width="160" height="160" viewBox="0 0 160 160">
-                <!-- Gambe (outer) r=72 circ=452.4 -->
-                <circle cx="80" cy="80" r="72" class="ring-bg" stroke="#f97316" stroke-width="10"/>
-                <circle cx="80" cy="80" r="72" class="ring-fg" id="ring-gambe" stroke="#f97316" stroke-width="10" style="--ring-c:#f97316"
-                  stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
-                <!-- Petto r=58 circ=364.4 -->
-                <circle cx="80" cy="80" r="58" class="ring-bg" stroke="#22c55e" stroke-width="10"/>
-                <circle cx="80" cy="80" r="58" class="ring-fg" id="ring-petto" stroke="#22c55e" stroke-width="10" style="--ring-c:#22c55e"
-                  stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
-                <!-- Schiena r=44 circ=276.5 -->
-                <circle cx="80" cy="80" r="44" class="ring-bg" stroke="#38bdf8" stroke-width="10"/>
-                <circle cx="80" cy="80" r="44" class="ring-fg" id="ring-schiena" stroke="#38bdf8" stroke-width="10" style="--ring-c:#38bdf8"
-                  stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
-                <!-- Spalle (inner) r=30 circ=188.5 -->
-                <circle cx="80" cy="80" r="30" class="ring-bg" stroke="#a78bfa" stroke-width="10"/>
-                <circle cx="80" cy="80" r="30" class="ring-fg" id="ring-spalle" stroke="#a78bfa" stroke-width="10" style="--ring-c:#a78bfa"
-                  stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
-              </svg>
-              <div class="rings-center">
-                <div class="rings-center-val" id="rings-kcal">0</div>
-                <div class="rings-center-sub">workout</div>
-              </div>
-            </div>
-            <div style="flex:1">
-              <div class="ring-legend">
-                <div class="ring-leg"><div class="ring-dot" style="background:#f97316"></div><span style="color:var(--t2)">Gambe</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#22c55e"></div><span style="color:var(--t2)">Petto</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#38bdf8"></div><span style="color:var(--t2)">Schiena</span></div>
-                <div class="ring-leg"><div class="ring-dot" style="background:#a78bfa"></div><span style="color:var(--t2)">Spalle</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Deload Alert -->
-        <div class="deload-alert" id="deload-alert">
-          <div class="deload-title">⚠️ Settimana di Scarico Consigliata</div>
-          <div class="deload-desc" id="deload-desc">Hai allenarti intensamente per diverse settimane. Una settimana di deload previene infortuni e overtraining.</div>
-          <div class="deload-actions">
-            <button class="btn btn-or btn-sm" onclick="acceptDeload()">✅ Accetto</button>
-            <button class="btn btn-ghost btn-sm" onclick="dismissDeload()">Posticipa</button>
-          </div>
-        </div>
-
-        <!-- Mood Widget -->
-        <div class="card glass z-mid" style="padding:12px;margin-bottom:10px;display:none" id="mood-widget">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span id="mood-widget-emoji" style="font-size:1.3rem">😊</span>
-              <div>
-                <div style="font-weight:700;font-size:.82rem" id="mood-widget-label">Umore di oggi</div>
-                <div style="font-size:.68rem;color:var(--t3)" id="mood-widget-sub">Registra come ti senti</div>
-              </div>
-            </div>
-            <button class="btn btn-ghost btn-sm" style="font-size:.7rem" onclick="openMoodHistory()">📊 Storico</button>
-          </div>
-        </div>
-
-        <!-- CTA -->
-        <div style="display:flex;gap:10px;margin-bottom:10px">
-          <button class="cta pulse" id="start-btn" style="flex:1;margin-bottom:0">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Avvia Workout
-          </button>
-          <button class="cta" style="flex:1;margin-bottom:0;background:var(--s8);color:var(--t1);box-shadow:none" onclick="openWorkoutBuilder()">
-            <svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg> Le Mie Schede
-          </button>
-        </div>
-        <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,var(--or),var(--or2))" onclick="openExerciseLibrary()">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Libreria Esercizi
-        </button>
-
-        <!-- AI Coach CTA -->
-        <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,#a78bfa,#7c3aed)" onclick="openAICoach()">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> Chiedi al Coach IA
-        </button>
-
-        <!-- Camera IA CTA -->
-        <button class="cta" style="margin-bottom:10px;background:linear-gradient(135deg,#050d1a,#1e3a5f);border:1px solid rgba(249,115,22,.4)" onclick="openCameraOv()">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Apri Camera IA
-        </button>
-
-        <!-- Workout live (session overlay) -->
-
-        <!-- Prossimo -->
-        <div class="sec-title">Prossimo consigliato</div>
-        <div class="card z-far" style="display:flex;align-items:center;gap:12px">
-          <div style="width:42px;height:42px;border-radius:11px;background:#f9731618;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg class="ico ico-lg" viewBox="0 0 24 24" style="stroke:var(--or)"><path d="M4 20h16M12 4v16M8 8l4-4 4 4"/></svg></div>
-          <div style="flex:1">
-            <div style="font-weight:700;font-size:.87rem">Mobilità & Stretching</div>
-            <div style="font-size:.72rem;color:var(--t3);margin-top:2px">45 min · Bassa intensità</div>
-            <div style="margin-top:6px"><div class="track"><div class="fill fill-bl" style="width:68%"></div></div></div>
-          </div>
-          <div class="chip chip-gr" style="font-size:.65rem">Consigliato</div>
-        </div>
-
-      </div>
     </div>
 
     <!-- ══ CAMERA ══ -->
@@ -3268,7 +3201,7 @@ body::-webkit-scrollbar{display:none}
 //  AURA MOBILE — JS
 // ═══════════════════════════════════════════════════
 
-const S = { tab:'home', hydration:1.2, hydGoal:2.5, bpm:72 };
+const S = { tab:'home' };
 
 // ── HAPTIC FEEDBACK ────────────────────────────────
 var _hapticCtx;
@@ -3880,7 +3813,7 @@ function wsSaveAndClose() {
   checkDeloadNeeded();
   // Cinematic workout completion flash
   cinematicWorkoutFlash(() => {
-    updateRings();
+    renderHome();
     toast('💪 Allenamento salvato! +200 XP', 'gr');
   });
   var todayDate = new Date().toISOString().slice(0,10);
@@ -4995,7 +4928,7 @@ document.querySelectorAll('.nb').forEach(btn => {
       btn.classList.add('on');
       document.getElementById('screen').scrollTop = 0;
       S.tab = t;
-      if (t === 'home') startBpmSim(); else stopBpmSim();
+      if (t === 'home') renderHome();
       if (t === 'workout') renderWorkoutTab();
     });
   });
@@ -5388,95 +5321,164 @@ function confetti() {
   }
 })();
 
-// ── ACTIVITY RINGS ─────────────────────────────────
-function updateRings() {
-  var weekAgo = new Date(Date.now() - 7 * 86400000);
-  var cw = getCompletedWorkouts().filter(function(w) { return new Date(w.date) >= weekAgo; });
-  // Count individual exercises per muscle group (goal: 6 exercises/muscle/week)
-  var muscles = { Gambe: 0, Petto: 0, Schiena: 0, Spalle: 0 };
-  var GOAL = 6;
-  cw.forEach(function(w) {
+// ── HOME ────────────────────────────────────────────
+function getWeeklyMuscleData() {
+  var cw = getCompletedWorkouts();
+  var now = new Date();
+  var monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  monday.setHours(0, 0, 0, 0);
+  var mondayStr = monday.toISOString().slice(0, 10);
+  var thisWeek = cw.filter(function(w) { return w.date >= mondayStr; });
+  var muscleMap = { Gambe: 0, Petto: 0, Schiena: 0, Spalle: 0 };
+  thisWeek.forEach(function(w) {
+    var muscles = {};
     (w.exercises || []).forEach(function(ex) {
-      var def = EXERCISES.find(function(e) { return e.id === ex.id; });
-      if (def && muscles.hasOwnProperty(def.muscle)) {
-        muscles[def.muscle]++;
+      var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
+      if (exData) {
+        var m = exData.muscle;
+        if (m === 'Gambe' || m === 'Petto' || m === 'Schiena' || m === 'Spalle') muscles[m] = true;
+        if (m === 'Braccia') muscles['Spalle'] = true;
+        if (m === 'Core') muscles['Schiena'] = true;
+        if (m === 'Cardio') muscles['Gambe'] = true;
       }
     });
+    Object.keys(muscles).forEach(function(m) { muscleMap[m]++; });
   });
-  var rings = [
-    { id:'ring-gambe',   circ:452.4, val:muscles.Gambe   },
-    { id:'ring-petto',   circ:364.4, val:muscles.Petto   },
-    { id:'ring-schiena', circ:276.5, val:muscles.Schiena },
-    { id:'ring-spalle',  circ:188.5, val:muscles.Spalle  }
-  ];
-  rings.forEach(function(r) {
-    var el = document.getElementById(r.id);
-    var pct = Math.min(r.val / GOAL, 1);
-    if (el) el.style.strokeDashoffset = r.circ * (1 - pct);
-  });
-  var kcEl = document.getElementById('rings-kcal');
-  if (kcEl) slotRoll(kcEl, cw.length);
+  var goal = 2;
+  return {
+    totale: thisWeek.length,
+    gruppi: [
+      { key: 'gambe',   nome: 'Gambe',   colore: '#f97316', fatto: muscleMap.Gambe,   goal: goal, circ: 452.4 },
+      { key: 'petto',   nome: 'Petto',   colore: '#22c55e', fatto: muscleMap.Petto,   goal: goal, circ: 364.4 },
+      { key: 'schiena', nome: 'Schiena', colore: '#38bdf8', fatto: muscleMap.Schiena, goal: goal, circ: 276.5 },
+      { key: 'spalle',  nome: 'Spalle',  colore: '#a78bfa', fatto: muscleMap.Spalle,  goal: goal, circ: 188.5 }
+    ]
+  };
 }
 
-// Simulate ring data on load with staggered reveal
+function renderHome() {
+  var u = getUser();
+  var first = u ? u.name.split(' ')[0] : 'Atleta';
+  var initial = first.charAt(0).toUpperCase();
 
+  // Header
+  var nameEl = document.getElementById('home-greeting-name');
+  if (nameEl) nameEl.textContent = 'Ciao ' + first;
+  var homeAv = document.getElementById('home-avatar');
+  if (homeAv) {
+    if (u && u.photo) {
+      homeAv.innerHTML = '<img src="' + u.photo + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+    } else {
+      homeAv.textContent = initial;
+    }
+  }
 
-// ── HYDRATION ──────────────────────────────────────
-function updateHydro() {
-  var arc = document.getElementById('hydro-arc');
-  var val = document.getElementById('hydro-val');
-  if (!arc || !val) return;
-  var circ = 87.96;
-  var pct = S.hydration / S.hydGoal;
-  arc.style.strokeDashoffset = circ * (1 - pct);
-  arc.style.stroke = pct >= .8 ? '#22c55e' : '#f97316';
-  arc.style.filter = pct >= .8 ? 'drop-shadow(0 0 3px #22c55e)' : 'drop-shadow(0 0 3px #f97316)';
-  val.innerHTML = S.hydration.toFixed(1) + '<small style="font-size:.55rem;color:#64748b">L</small>';
-  var sub = document.querySelector('.hydro-mini-sub');
-  if (sub) sub.textContent = 'di ' + S.hydGoal + 'L';
-}
-var _addWaterBtn = document.getElementById('add-water');
-if (_addWaterBtn) {
-  _addWaterBtn.addEventListener('click', function() {
-    if (S.hydration >= S.hydGoal) { toast('🎉 Obiettivo raggiunto!', 'gr'); return; }
-    S.hydration = Math.min(+(S.hydration + 0.25).toFixed(2), S.hydGoal);
-    updateHydro();
-    this.style.transform = 'scale(1.3)';
-    setTimeout(() => { this.style.transform = 'scale(1)'; }, 160);
-    if (S.hydration >= S.hydGoal) toast('🎉 Idratazione completata! 🏆', 'gr');
-    else toast(`💧 +250ml · Ancora ${(S.hydGoal - S.hydration).toFixed(2)}L`, 'bl');
-  });
-}
-updateHydro();
+  var streak = calculateStreak();
+  var xp = calcTotalXP();
+  var lvl = getLevelFromXP(xp);
+  var lvlName = getLevelName(lvl);
+  var metaEl = document.getElementById('home-meta-row');
+  if (metaEl) {
+    var fireIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg>';
+    var boltIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
+    if (streak >= 1) {
+      metaEl.innerHTML = fireIcon + '<span>' + streak + ' giorni</span><span class="home-meta-sep">&middot;</span>' + boltIcon + '<span>Lv.' + lvl + ' ' + lvlName + '</span>';
+    } else {
+      metaEl.innerHTML = boltIcon + '<span>Lv.' + lvl + ' ' + lvlName + '</span>';
+    }
+  }
 
-// ── BPM ────────────────────────────────────────────
-var _bpmInterval = null;
-function startBpmSim() {
-  if (_bpmInterval) return;
-  _bpmInterval = setInterval(() => {
-    S.bpm = 68 + Math.floor(Math.random() * 12);
-    const a = document.getElementById('bpm-val'); if (a) slotRoll(a, S.bpm + ' BPM');
-  }, 3000);
-}
-function stopBpmSim() {
-  if (_bpmInterval) { clearInterval(_bpmInterval); _bpmInterval = null; }
-}
-
-// ── WORKOUT ────────────────────────────────────────
-document.getElementById('start-btn').addEventListener('click', function() {
+  // Hero card
+  var todayStr = new Date().toISOString().slice(0,10);
+  var completedToday = getCompletedWorkouts().filter(function(w) { return w.date === todayStr; });
   var plans = getWorkouts();
-  if (plans.length === 0) {
-    toast('Crea prima una scheda!', 'or');
-    openWorkoutBuilder();
-    return;
-  }
-  if (plans.length === 1) {
-    if (plans[0].exercises.length === 0) { toast('Aggiungi esercizi alla scheda!', 'or'); openWorkoutBuilder(); return; }
-    startWorkoutSession(0);
+  var heroCard = document.getElementById('hero-card');
+  if (!heroCard) return;
+
+  if (completedToday.length > 0) {
+    var lastW = completedToday[completedToday.length - 1];
+    var dur = Math.floor((lastW.duration || 0) / 60);
+    var exCount = (lastW.exercises || []).length;
+    var kcal = lastW.calories || 0;
+    heroCard.style.cssText = 'background:linear-gradient(135deg,rgba(34,197,94,.08),var(--s9));border:1px solid rgba(34,197,94,.2);border-left:4px solid var(--gr)';
+    heroCard.innerHTML =
+      '<div class="hero-label" style="color:var(--gr)">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M20 6L9 17l-5-5"/></svg>' +
+        'COMPLETATO' +
+      '</div>' +
+      '<div class="hero-title">' + (lastW.planName || 'Allenamento') + '</div>' +
+      '<div class="hero-info">' + dur + ' min &middot; ' + exCount + ' esercizi &middot; ' + kcal + ' kcal</div>' +
+      '<button class="hero-btn hero-btn-secondary" onclick="openWorkoutBuilder()">Allenati Ancora</button>';
+  } else if (plans.some(function(p) { return p.exercises && p.exercises.length > 0; })) {
+    var plan = plans.find(function(p) { return p.exercises && p.exercises.length > 0; });
+    var planIdx = plans.findIndex(function(p) { return p.exercises && p.exercises.length > 0; });
+    var n = plan.exercises.length;
+    var mins = Math.round(n * 4.5);
+    var muscleColors = { Gambe:'#f97316', Petto:'#22c55e', Schiena:'#38bdf8', Spalle:'#a78bfa', Braccia:'#a78bfa', Core:'#64748b', Cardio:'#22c55e' };
+    var muscleIconPaths = {
+      Gambe: '<path d="M6 4l4 16M18 4l-4 16M4 12h16"/>',
+      Petto: '<path d="M4 8c0-2 3-5 8-5s8 3 8 5M4 8v4c0 3 3 7 8 7s8-4 8-7V8"/>',
+      Schiena: '<path d="M12 2v20M8 6c-2 2-2 6 0 10M16 6c2 2 2 6 0 10"/>',
+      Spalle: '<path d="M4 10c0-4 3.5-7 8-7s8 3 8 7M4 10l3 2M20 10l-3 2M12 3v4"/>',
+      Braccia: '<path d="M4 10c0-4 3.5-7 8-7s8 3 8 7M4 10l3 2M20 10l-3 2M12 3v4"/>',
+      Core: '<path d="M12 2v20M8 6c-2 2-2 6 0 10M16 6c2 2 2 6 0 10"/>',
+      Cardio: '<path d="M6 4l4 16M18 4l-4 16M4 12h16"/>'
+    };
+    var uniqueMuscles = [];
+    plan.exercises.forEach(function(ex) {
+      var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
+      if (exData && exData.muscle && uniqueMuscles.indexOf(exData.muscle) === -1) uniqueMuscles.push(exData.muscle);
+    });
+    var musclesHtml = '<div class="hero-muscles">';
+    uniqueMuscles.forEach(function(m) {
+      var col = muscleColors[m] || 'var(--t3)';
+      var icoPath = muscleIconPaths[m] || '';
+      musclesHtml += '<svg viewBox="0 0 24 24" fill="none" stroke="' + col + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">' + icoPath + '</svg>';
+    });
+    musclesHtml += '</div>';
+    heroCard.style.cssText = 'background:linear-gradient(135deg,rgba(249,115,22,.08),var(--s9));border:1px solid rgba(249,115,22,.2);border-left:4px solid var(--or)';
+    heroCard.innerHTML =
+      '<div class="hero-label" style="color:var(--or)">OGGI</div>' +
+      '<div class="hero-title">' + (plan.name || 'Allenamento') + '</div>' +
+      '<div class="hero-info">' + n + ' esercizi &middot; ~' + mins + ' min</div>' +
+      musclesHtml +
+      '<button class="hero-btn hero-btn-primary pulse" onclick="startWorkoutSession(' + planIdx + ')">' +
+        '<svg viewBox="0 0 24 24" fill="#fff" stroke="none" width="16" height="16"><path d="M5 3l14 9-14 9V3z"/></svg>' +
+        'Inizia Allenamento' +
+      '</button>';
   } else {
-    openWorkoutBuilder();
+    heroCard.style.cssText = 'background:var(--s9);border:1px solid var(--s8);border-left:4px solid var(--s7)';
+    heroCard.innerHTML =
+      '<div style="text-align:center">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" style="margin-bottom:10px"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>' +
+        '<div class="hero-title" style="font-size:1.05rem">Crea il tuo primo allenamento</div>' +
+        '<div class="hero-info" style="margin-bottom:14px">AURA ha bisogno di una scheda per iniziare</div>' +
+        '<button class="hero-btn hero-btn-primary" onclick="openWorkoutBuilder()">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
+          'Crea Scheda' +
+        '</button>' +
+      '</div>';
   }
-});
+
+  // Muscle rings
+  var md = getWeeklyMuscleData();
+  var totalEl = document.getElementById('muscle-rings-total');
+  if (totalEl) totalEl.textContent = md.totale;
+  md.gruppi.forEach(function(g) {
+    var ring = document.getElementById('muscle-ring-' + g.key);
+    if (ring) ring.style.strokeDashoffset = g.circ * (1 - Math.min(g.fatto / g.goal, 1));
+    var leg = document.getElementById('muscle-leg-' + g.key);
+    if (leg) {
+      if (g.fatto >= g.goal) {
+        leg.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--gr)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M20 6L9 17l-5-5"/></svg>';
+      } else {
+        leg.textContent = g.fatto + '/' + g.goal;
+        leg.style.color = g.colore;
+      }
+    }
+  });
+}
 
 // ── AI CAMERA — MEDIAPIPE POSE ─────────────────────
 let cameraStream = null;
@@ -7929,12 +7931,12 @@ function applyUserData(u) {
   const first = u.name.split(' ')[0];
   const initial = first.charAt(0).toUpperCase();
   // Home greeting
-  const gName = document.querySelector('.greeting-name');
-  if (gName) gName.textContent = first;
+  const gName = document.getElementById('home-greeting-name');
+  if (gName) gName.textContent = 'Ciao ' + first;
   // Avatars
   document.querySelectorAll('#topbar-av, #prof-av').forEach(el => el.textContent = initial);
-  const homeAv = document.querySelector('.home-header .av');
-  if (homeAv) homeAv.textContent = initial;
+  const homeAv = document.getElementById('home-avatar');
+  if (homeAv && !homeAv.querySelector('img')) homeAv.textContent = initial;
   // Profile name
   const profName = document.querySelector('.prof-name');
   if (profName) profName.textContent = u.name;
@@ -7962,7 +7964,7 @@ function applyUserData(u) {
 
 // ── Profile photo upload ──
 function applyProfilePhoto(src) {
-  document.querySelectorAll('#prof-av, #topbar-av, .home-header .av').forEach(el => {
+  document.querySelectorAll('#prof-av, #topbar-av, #home-avatar').forEach(el => {
     el.innerHTML = '<img src="' + src + '" alt="foto profilo">';
   });
 }
@@ -8667,6 +8669,7 @@ function showAIPlanResult(user, plans) {
 
 document.getElementById('ob-ai-start').addEventListener('click', function() {
   hideOnboarding();
+  renderHome();
   var user = getUser();
   toast('🎉 Benvenuto in AURA, ' + (user ? user.name.split(' ')[0] : '') + '!', 'gr');
   setTimeout(function() { toast('💪 ' + getWorkouts().length + ' schede pronte. Vai alla sezione Home per iniziare!', 'bl'); }, 1500);
@@ -10065,7 +10068,7 @@ function isDeloadWeek() {
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
-  startBpmSim(); // Start BPM sim only after DOM is ready, home tab is default
+  renderHome(); // Render home on init
   
   // FORCE AUTH SCREEN if no explicit session login
   if (!hasLoggedInThisSession) {
