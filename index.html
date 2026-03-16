@@ -8498,7 +8498,7 @@ function generateAIPlanWithLLM(user) {
   var age = user.age || 25;
   var weight = user.weight || 75;
   var height = user.height || 175;
-  var daysPerWeek = freq === '2-3' ? 3 : freq === '6+' ? 6 : 4;
+  var daysPerWeek = freq === '1-2' ? 2 : freq === '2-3' ? 3 : 5;
 
   // Build available exercise list for the AI
   var exList = EXERCISES.map(function(e) {
@@ -8568,7 +8568,7 @@ function generateAIPlan(user) {
   var weight = user.weight || 75;
 
   // Parse frequency
-  var daysPerWeek = freq === '2-3' ? 3 : freq === '6+' ? 6 : 4;
+  var daysPerWeek = freq === '1-2' ? 2 : freq === '2-3' ? 3 : 5;
 
   // Level multipliers
   var setsMult = level === 'principiante' ? 0.75 : level === 'avanzato' ? 1.25 : 1;
