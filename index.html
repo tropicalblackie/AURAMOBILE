@@ -6164,6 +6164,7 @@ function escapeHtml(s) {
 // Generic toggles (sleep mode etc)
 document.querySelectorAll('.tog').forEach(t => {
   if (t.id === 'tog-notif') return; // handled separately
+  if (t.id === 'tog-theme') return; // handled by applyTheme()
   t.addEventListener('click', () => {
     t.classList.toggle('on');
     toast(t.classList.contains('on') ? 'Attivato.' : 'Disattivato.', 'bl');
