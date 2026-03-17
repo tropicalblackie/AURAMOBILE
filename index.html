@@ -368,20 +368,51 @@ body::-webkit-scrollbar{display:none}
 .hero-btn-primary{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;box-shadow:0 5px 18px rgba(249,115,22,.3)}
 .hero-btn-secondary{background:var(--s8);color:var(--t2);border:1px solid var(--s7);box-shadow:none}
 
-/* ── HOME MUSCLE RINGS ── */
-.muscle-rings-card{margin:14px 16px 0}
-.muscle-rings-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
-.muscle-rings-wrap svg{display:block}
-.muscle-ring-bg{fill:none;opacity:.15}
-.muscle-ring-fg{fill:none;stroke-linecap:round;transition:stroke-dashoffset .8s var(--spring);filter:drop-shadow(0 0 4px currentColor)}
-.muscle-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.muscle-rings-num{font-family:var(--fd);font-size:1.45rem;font-weight:900;color:var(--t1);line-height:.95}
-.muscle-rings-sub{font-size:.6rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
-.muscle-legend{display:flex;flex-direction:column;gap:8px;flex:1}
-.muscle-leg-row{display:flex;align-items:center;gap:8px}
-.muscle-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.muscle-leg-name{font-size:.75rem;color:var(--t2);white-space:nowrap}
-.muscle-leg-val{margin-left:auto;font-family:var(--fd);font-weight:800;font-size:.8rem;display:flex;align-items:center}
+/* ── WEEKLY STREAK ROW ── */
+.weekly-streak{margin:12px 16px 0;display:flex;gap:6px;justify-content:space-between}
+.streak-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:12px;background:var(--s9);border:1px solid var(--s8);transition:all .3s var(--spring)}
+.streak-day.done{background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(249,115,22,.06));border-color:rgba(249,115,22,.4)}
+.streak-day.today{border-color:var(--or);box-shadow:0 0 8px rgba(249,115,22,.25)}
+.streak-day-name{font-size:.58rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.streak-day-ico{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.streak-day.done .streak-day-ico svg{filter:drop-shadow(0 0 4px #f97316)}
+
+/* ── NUTRITION PILL ── */
+.nutri-pill{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:10px;font-size:.72rem}
+.nutri-pill-item{display:flex;align-items:center;gap:5px;color:var(--t2)}
+.nutri-pill-val{font-family:var(--fd);font-weight:800;font-size:.82rem;color:var(--bl)}
+.nutri-pill-sep{color:var(--s7);font-size:.7rem}
+
+/* ── TUTORIAL PHASE (inside ws-ov) ── */
+.ws-tutorial{display:flex;flex-direction:column;align-items:center;padding:16px 20px;gap:14px}
+.ws-tutorial-header{width:100%;display:flex;justify-content:space-between;align-items:center}
+.ws-tutorial-label{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or)}
+.ws-tutorial-set-badge{font-family:var(--fd);font-size:.72rem;font-weight:800;color:var(--t3);padding:4px 10px;background:var(--s8);border-radius:20px}
+.ws-tutorial-name{font-family:var(--fd);font-size:1.4rem;font-weight:900;color:var(--t1);text-align:center;line-height:1.1}
+.ws-tutorial-meta{font-size:.78rem;color:var(--t2);text-align:center}
+.ws-tutorial-media{position:relative;width:100%;max-width:260px;aspect-ratio:1/1;background:var(--s9);border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--s8)}
+.ws-tutorial-emoji{font-size:4rem;z-index:1}
+.ws-tutorial-gif{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.ws-tutorial-steps{width:100%;display:flex;flex-direction:column;gap:6px}
+.ws-tutorial-step{display:flex;align-items:flex-start;gap:8px;font-size:.76rem;color:var(--t2);line-height:1.4}
+.ws-tutorial-step-n{width:18px;height:18px;border-radius:50%;background:var(--or);color:#fff;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ws-tutorial-start-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:18px;font-family:var(--fd);font-weight:900;font-size:1.05rem;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 22px rgba(249,115,22,.35);cursor:pointer;transition:transform .15s var(--spring);text-transform:uppercase}
+.ws-tutorial-start-btn:active{transform:scale(.96)}
+
+/* ── REST PHASE GLASSMORPHISM ── */
+.ws-rest-glass-bg{position:absolute;inset:0;z-index:0;background:rgba(0,0,0,.5);backdrop-filter:blur(16px) saturate(0.5);-webkit-backdrop-filter:blur(16px) saturate(0.5)}
+.ws-rest-immersive{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 20px}
+.ws-rest-glass-label{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);text-shadow:0 0 10px rgba(249,115,22,.5)}
+.ws-rest-glass-timer{font-family:var(--fd);font-size:3.5rem;font-weight:900;color:#fff;text-shadow:0 0 20px rgba(249,115,22,.6);line-height:1}
+.ws-rest-glass-next{font-size:.78rem;color:rgba(255,255,255,.7);text-align:center}
+.ws-rest-glass-weight{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:14px 16px}
+.ws-rest-glass-weight-lbl{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.ws-rest-glass-weight-row{display:flex;align-items:center;gap:10px}
+.ws-rest-glass-weight-adj{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ws-rest-glass-weight-adj:active{background:rgba(249,115,22,.3)}
+.ws-rest-glass-weight-inp{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;font-family:var(--fd);font-size:1.4rem;font-weight:900;text-align:center;border-radius:12px;padding:8px;outline:none}
+.ws-rest-glass-skip{width:100%;padding:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);border-radius:14px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .15s var(--spring)}
+.ws-rest-glass-skip:active{background:rgba(255,255,255,.15)}
 
 /* ── HOME CAMERA BUTTON ── */
 .home-camera-btn{margin:14px 16px 0;width:calc(100% - 32px);padding:16px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:16px;font-family:var(--fd);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 5px 18px rgba(249,115,22,.25);cursor:pointer;transition:transform .15s var(--spring)}
@@ -417,10 +448,8 @@ body::-webkit-scrollbar{display:none}
 .briefing-ex-name{font-size:.86rem;font-weight:600;color:var(--t1)}
 .briefing-ex-detail{font-size:.7rem;color:var(--t3);margin-top:2px}
 .briefing-actions{padding:14px 16px;padding-bottom:calc(14px + var(--safe-b));display:flex;flex-direction:column;gap:9px;flex-shrink:0;border-top:1px solid var(--s8)}
-.briefing-btn-cam{width:100%;padding:15px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:16px;font-family:var(--fd);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 5px 18px rgba(249,115,22,.3);cursor:pointer;transition:transform .15s var(--spring)}
-.briefing-btn-cam:active{transform:scale(.97)}
-.briefing-btn-classic{width:100%;padding:13px;background:var(--s8);color:var(--t2);border:1px solid var(--s7);border-radius:16px;font-family:var(--fd);font-weight:600;font-size:.88rem;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform .15s var(--spring)}
-.briefing-btn-classic:active{transform:scale(.97)}
+.briefing-btn-start{width:100%;padding:17px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:18px;font-family:var(--fd);font-weight:900;font-size:1.08rem;letter-spacing:.6px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 22px rgba(249,115,22,.35);cursor:pointer;transition:transform .15s var(--spring)}
+.briefing-btn-start:active{transform:scale(.97)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .ld{width:7px;height:7px;border-radius:50%;background:var(--or);box-shadow:0 0 7px var(--or);flex-shrink:0}
 .ld:nth-child(1){animation:thinkingDot1 1.8s ease-in-out infinite}
@@ -1942,49 +1971,10 @@ body::-webkit-scrollbar{display:none}
         <!-- populated by renderHome() -->
       </div>
 
-      <!-- 3. CERCHI MUSCOLARI -->
-      <div class="card glass muscle-rings-card" style="display:flex;align-items:center;gap:16px">
-        <div class="muscle-rings-wrap">
-          <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg)">
-            <circle cx="80" cy="80" r="72" class="muscle-ring-bg" stroke="#f97316" stroke-width="11"/>
-            <circle cx="80" cy="80" r="72" class="muscle-ring-fg" id="muscle-ring-gambe" stroke="#f97316" stroke-width="11" stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
-            <circle cx="80" cy="80" r="58" class="muscle-ring-bg" stroke="#22c55e" stroke-width="11"/>
-            <circle cx="80" cy="80" r="58" class="muscle-ring-fg" id="muscle-ring-petto" stroke="#22c55e" stroke-width="11" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
-            <circle cx="80" cy="80" r="44" class="muscle-ring-bg" stroke="#38bdf8" stroke-width="11"/>
-            <circle cx="80" cy="80" r="44" class="muscle-ring-fg" id="muscle-ring-schiena" stroke="#38bdf8" stroke-width="11" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
-            <circle cx="80" cy="80" r="30" class="muscle-ring-bg" stroke="#a78bfa" stroke-width="11"/>
-            <circle cx="80" cy="80" r="30" class="muscle-ring-fg" id="muscle-ring-spalle" stroke="#a78bfa" stroke-width="11" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
-          </svg>
-          <div class="muscle-rings-center">
-            <div class="muscle-rings-num" id="muscle-rings-total">0</div>
-            <div class="muscle-rings-sub">questa sett.</div>
-          </div>
-        </div>
-        <div class="muscle-legend">
-          <div class="muscle-leg-row">
-            <div class="muscle-leg-dot" style="background:#f97316"></div>
-            <span class="muscle-leg-name">Gambe</span>
-            <span class="muscle-leg-val" id="muscle-leg-gambe" style="color:#f97316">0/2</span>
-          </div>
-          <div class="muscle-leg-row">
-            <div class="muscle-leg-dot" style="background:#22c55e"></div>
-            <span class="muscle-leg-name">Petto</span>
-            <span class="muscle-leg-val" id="muscle-leg-petto" style="color:#22c55e">0/2</span>
-          </div>
-          <div class="muscle-leg-row">
-            <div class="muscle-leg-dot" style="background:#38bdf8"></div>
-            <span class="muscle-leg-name">Schiena</span>
-            <span class="muscle-leg-val" id="muscle-leg-schiena" style="color:#38bdf8">0/2</span>
-          </div>
-          <div class="muscle-leg-row">
-            <div class="muscle-leg-dot" style="background:#a78bfa"></div>
-            <span class="muscle-leg-name">Spalle</span>
-            <span class="muscle-leg-val" id="muscle-leg-spalle" style="color:#a78bfa">0/2</span>
-          </div>
-        </div>
+      <!-- 3. STREAK SETTIMANALE -->
+      <div class="weekly-streak" id="weekly-streak">
+        <!-- populated by renderHome() -->
       </div>
-
-      <!-- 4. BOTTONE CAMERA IA rimosso — unificato nel briefing -->
 
     </div>
 
@@ -2643,13 +2633,9 @@ body::-webkit-scrollbar{display:none}
   </div>
   <div class="briefing-list" id="briefing-ex-list"></div>
   <div class="briefing-actions">
-    <button class="briefing-btn-cam" id="briefing-btn-cam">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Avvia con Camera IA
-    </button>
-    <button class="briefing-btn-classic" id="briefing-btn-classic">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M5 3l14 9-14 9V3z"/></svg>
-      Avvia Classico
+    <button class="briefing-btn-start" id="briefing-btn-start">
+      <svg viewBox="0 0 24 24" fill="#fff" stroke="none" width="20" height="20"><path d="M5 3l14 9-14 9V3z"/></svg>
+      INIZIA ALLENAMENTO
     </button>
   </div>
 </div>
@@ -3283,87 +3269,76 @@ function ensureFirebase() {
   return _firebaseReady;
 }
 
-// ── EXERCISE LIBRARY DATA ───────────────────────
+// ── EXERCISE LIBRARY DATA — BIG 20 ───────────────────────
+// 20 esercizi fondamentali multiarticolari con supporto MediaPipe CV
 const EXERCISES = [
-  // PETTO
+  // PETTO (3)
   {id:'bench',name:'Panca Piana',muscle:'Petto',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bench-Press.gif',
-   desc:'Esercizio fondamentale per il petto. Sdraiati sulla panca, impugna il bilanciere a larghezza spalle, abbassa al petto e spingi.',
-   steps:['Sdraiati sulla panca con i piedi a terra','Impugna il bilanciere leggermente piu largo delle spalle','Abbassa il bilanciere al centro del petto controllando il movimento','Spingi esplosivamente fino alla distensione completa delle braccia']},
+   desc:'Esercizio fondamentale multiarticolare per petto, spalle anteriori e tricipiti.',
+   steps:['Sdraiati sulla panca, piedi piatti a terra','Impugna il bilanciere leggermente più largo delle spalle','Abbassa lentamente al centro del petto (gomiti a 45°)','Spingi esplosivamente fino a distensione quasi completa']},
   {id:'incline_db',name:'Panca Inclinata Manubri',muscle:'Petto',emoji:'💪',diff:'Intermedio',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif',
-   desc:'Variante su panca inclinata a 30-45 gradi per enfatizzare il petto alto.',
-   steps:['Imposta la panca a 30-45 gradi','Impugna i manubri e portali alle spalle','Spingi verso l\'alto convergendo leggermente i manubri','Abbassa lentamente fino a sentire lo stretch del petto']},
-  {id:'pushup',name:'Piegamenti (Push-Up)',muscle:'Petto',emoji:'🧑‍💻',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Push-Up.gif',
-   desc:'Esercizio a corpo libero fondamentale per petto, spalle e tricipiti.',
-   steps:['Posizionati in plank con braccia tese','Mani leggermente piu larghe delle spalle','Abbassa il corpo piegando i gomiti fino a sfiorare il pavimento','Spingi esplosivamente tornando in posizione di plank']},
-  {id:'cable_fly',name:'Croci ai Cavi',muscle:'Petto',emoji:'⚔️',diff:'Intermedio',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Crossover.gif',
-   desc:'Isolamento del petto con tensione costante grazie ai cavi.',
-   steps:['Posizionati al centro dei cavi regolati in alto','Inclina leggermente il busto in avanti','Porta le mani al centro con movimento ad arco','Torna lentamente alla posizione di partenza']},
-  // SCHIENA
+   desc:'Variante inclinata per enfatizzare il petto alto e i fasci clavicolari.',
+   steps:['Imposta la panca a 30-45°','Tieni i manubri alle spalle con gomiti larghi','Spingi verso l\'alto convergendo leggermente','Abbassa con controllo fino allo stretch del petto']},
+  {id:'pushup',name:'Push-Up',muscle:'Petto',emoji:'🧑‍💻',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Push-Up.gif',
+   desc:'Fondamentale a corpo libero per petto, spalle e tricipiti.',
+   steps:['Posizionati in plank alto, mani larghezza spalle','Core e glutei contratti durante tutto il movimento','Abbassa il petto sfiorando il pavimento','Spingi esplosivamente tornando in posizione di plank']},
+  // SCHIENA (4)
   {id:'deadlift',name:'Stacco da Terra',muscle:'Schiena',emoji:'💪',diff:'Avanzato',sets:4,reps:'5-6',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Deadlift.gif',
-   desc:'Re degli esercizi multiarticolari. Coinvolge schiena, gambe e core.',
-   steps:['Piedi alla larghezza delle spalle, bilanciere sulle tibie','Afferra la barra con presa alternata o doppia pronata','Distendi anche e ginocchia simultaneamente mantenendo la schiena neutra','Completa il movimento con le anche completamente estese']},
+   desc:'Re degli esercizi compositi. Coinvolge tutta la catena posteriore.',
+   steps:['Piedi alla larghezza dei fianchi, bilanciere sulle tibie','Schiena neutra, petto alto, sguardo avanti','Distendi anche e ginocchia simultaneamente','Termina in piedi con anche completamente estese']},
   {id:'pullup',name:'Trazioni alla Sbarra',muscle:'Schiena',emoji:'🧗',diff:'Avanzato',sets:4,reps:'6-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pull-Up.gif',
-   desc:'Esercizio fondamentale per dorsali e bicipiti a corpo libero.',
-   steps:['Impugna la sbarra con presa prona piu larga delle spalle','Parti da braccia completamente distese','Tira il corpo verso l\'alto portando il mento sopra la sbarra','Scendi controllando il movimento fino a braccia distese']},
-  {id:'row',name:'Rematore con Bilanciere',muscle:'Schiena',emoji:'🚣',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bent-Over-Row.gif',
-   desc:'Esercizio fondamentale per lo spessore della schiena.',
-   steps:['Inclina il busto a 45 gradi con schiena neutra','Impugna il bilanciere a larghezza spalle','Tira il bilanciere verso l\'ombelico stringendo le scapole','Abbassa controllando il peso']},
+   desc:'Fondamentale a corpo libero per dorsali e bicipiti.',
+   steps:['Impugna la sbarra più larga delle spalle (presa prona)','Parti a braccia distese, coprire il petto','Tira portando il mento sopra la sbarra stringendo le scapole','Scendi lentamente controllando l\'eccentrica']},
+  {id:'row',name:'Rematore Bilanciere',muscle:'Schiena',emoji:'🚣',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bent-Over-Row.gif',
+   desc:'Fondamentale per lo spessore della schiena, trapezi e bicipiti.',
+   steps:['Busto inclinato a 45°, schiena neutra','Impugna il bilanciere a larghezza spalle (presa prona)','Tira verso l\'ombelico stringendo le scapole','Abbassa controllando il peso per tutto il range']},
   {id:'lat_pull',name:'Lat Machine',muscle:'Schiena',emoji:'⬇️',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif',
-   desc:'Alternativa guidata alle trazioni per i dorsali.',
-   steps:['Seduto alla macchina, impugna la barra larga','Tira la barra verso il petto sporgendo leggermente il busto','Stringi le scapole in fondo al movimento','Risali lentamente controllando il peso']},
-  // GAMBE
+   desc:'Alternativa guidata alle trazioni, ideale per sviluppare i dorsali.',
+   steps:['Seduto, coscie bloccate sotto i pad','Impugna la barra più larga delle spalle','Tira verso il petto superiore sporgendo leggermente il busto','Risali lentamente mantenendo tensione sui dorsali']},
+  // GAMBE (4)
   {id:'squat',name:'Squat con Bilanciere',muscle:'Gambe',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/BARBELL-SQUAT.gif',
-   desc:'Esercizio fondamentale per quadricipiti, glutei e core.',
-   steps:['Posiziona il bilanciere sulle spalle (trapezio alto)','Piedi alla larghezza delle spalle, punte leggermente in fuori','Scendi piegando anche e ginocchia fino a cosce parallele','Risali spingendo con talloni mantenendo il petto alto']},
+   desc:'Fondamentale assoluto per quadricipiti, glutei e core.',
+   steps:['Bilanciere sulle spalle (trapezio alto o basso)','Piedi larghezza spalle, punte leggermente fuori','Scendi mantenendo il petto alto fino a cosce parallele','Risali spingendo con i talloni, ginocchia allineate alle punte']},
   {id:'leg_press',name:'Leg Press',muscle:'Gambe',emoji:'🦵',diff:'Principiante',sets:4,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Leg-Press.gif',
-   desc:'Pressa per le gambe con guida per sicurezza.',
-   steps:['Seduto sulla macchina, piedi alla larghezza delle spalle sulla pedana','Rilascia i fermi di sicurezza','Piega le ginocchia portando la pedana verso il petto','Spingi la pedana senza bloccare le ginocchia']},
-  {id:'lunge',name:'Affondi con Manubri',muscle:'Gambe',emoji:'🏃',diff:'Principiante',sets:3,reps:'12 per gamba',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lunges.gif',
-   desc:'Esercizio unilaterale per quadricipiti e glutei.',
-   steps:['In piedi con manubri ai fianchi','Fai un passo avanti lungo con una gamba','Abbassa il ginocchio posteriore verso il pavimento','Spingi col tallone anteriore per tornare in posizione']},
+   desc:'Pressa che isola quadricipiti e glutei con guida sicura.',
+   steps:['Seduto, piedi larghezza spalle sulla pedana','Rilascia i fermi di sicurezza','Piega le ginocchia portando la pedana verso il petto (90°)','Spingi la pedana senza bloccare le ginocchia in lockout']},
+  {id:'lunge',name:'Affondi Alternati',muscle:'Gambe',emoji:'🏃',diff:'Principiante',sets:3,reps:'12 per gamba',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lunges.gif',
+   desc:'Esercizio unilaterale per quadricipiti, glutei e stabilità.',
+   steps:['In piedi con manubri ai fianchi','Passo avanti lungo, abbassa il ginocchio posteriore verso terra','Il ginocchio anteriore non deve superare la punta del piede','Spingi col tallone anteriore per tornare in posizione']},
   {id:'rdl',name:'Stacco Rumeno',muscle:'Gambe',emoji:'🦶',diff:'Intermedio',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/06/Barbell-Romanian-Deadlift.gif',
-   desc:'Esercizio per femorali e glutei con enfasi sull\'eccentrica.',
-   steps:['In piedi con bilanciere, ginocchia leggermente flesse','Inclina il busto in avanti spingendo il bacino indietro','Scendi fino a sentire lo stretch nei femorali','Risali contraendo i glutei in cima al movimento']},
-  // SPALLE
+   desc:'Fondamentale per femorali e glutei con enfasi sull\'eccentrica.',
+   steps:['In piedi con bilanciere, ginocchia leggermente flesse','Spingi i fianchi indietro inclinando il busto','Scendi finché senti lo stretch nei femorali (no schiena arrotondata)','Risali contraendo i glutei e riportando le anche in avanti']},
+  // SPALLE (2)
   {id:'ohp',name:'Military Press',muscle:'Spalle',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Overhead-Press.gif',
-   desc:'Esercizio fondamentale per i deltoidi.',
-   steps:['In piedi, bilanciere all\'altezza delle clavicole','Core attivo, piedi alla larghezza delle spalle','Spingi il bilanciere sopra la testa fino a braccia distese','Abbassa lentamente fino alle clavicole']},
-  {id:'lat_raise',name:'Alzate Laterali',muscle:'Spalle',emoji:'🧑‍✈️',diff:'Principiante',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif',
-   desc:'Isolamento dei deltoidi laterali per l\'ampiezza delle spalle.',
-   steps:['In piedi con manubri ai fianchi','Alza le braccia lateralmente fino a parallelo con il pavimento','Mantieni una leggera flessione dei gomiti','Abbassa lentamente resistendo alla gravita']},
-  {id:'face_pull',name:'Face Pull',muscle:'Spalle',emoji:'🎯',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif',
-   desc:'Esercizio per deltoidi posteriori e salute delle spalle.',
-   steps:['Al cavo alto con corda, impugna con presa neutra','Tira la corda verso il viso separando le mani','Ruota esternamente le spalle in fondo al movimento','Torna lentamente alla posizione di partenza']},
-  // BRACCIA
+   desc:'Fondamentale per deltoidi anteriori e medi, tricipiti e core.',
+   steps:['In piedi, bilanciere all\'altezza delle clavicole','Core contratto, piedi larghezza spalle','Spingi il bilanciere verticalmente sopra la testa','Abbassa lentamente fino alle clavicole mantenendo i gomiti avanti']},
+  {id:'dips',name:'Dips alle Parallele',muscle:'Spalle',emoji:'🤸',diff:'Avanzato',sets:3,reps:'8-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Chest-Dip.gif',
+   desc:'Composto per tricipiti, petto e deltoidi anteriori.',
+   steps:['Sospenditi alle parallele con braccia distese','Inclina leggermente il busto in avanti (20-30°) per il petto','Piega i gomiti fino a braccio parallelo al pavimento','Spingi esplosivamente tornando alla posizione di partenza']},
+  // BRACCIA (2)
   {id:'curl',name:'Curl con Bilanciere',muscle:'Braccia',emoji:'💪',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Curl.gif',
-   desc:'Esercizio fondamentale per i bicipiti.',
-   steps:['In piedi con bilanciere in presa supina','Gomiti fissi ai fianchi','Fletti le braccia portando il bilanciere alle spalle','Abbassa lentamente controllando la fase eccentrica']},
-  {id:'hammer',name:'Curl a Martello',muscle:'Braccia',emoji:'🔨',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Hammer-Curl.gif',
-   desc:'Variante del curl per brachiale e brachioradiale.',
-   steps:['In piedi con manubri ai fianchi in presa neutra','Fletti alternando le braccia mantenendo i polsi dritti','Porta i manubri alle spalle senza ruotare','Abbassa controllando il movimento']},
+   desc:'Fondamentale per i bicipiti con carico bilanciale ottimale.',
+   steps:['In piedi con bilanciere in presa supina','Gomiti fissi contro i fianchi per tutto il movimento','Fletti le braccia portando il bilanciere all\'altezza delle spalle','Abbassa lentamente controllando la fase eccentrica']},
   {id:'tri_push',name:'Push-down Tricipiti',muscle:'Braccia',emoji:'⬇️',diff:'Principiante',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pushdown.gif',
-   desc:'Isolamento dei tricipiti al cavo.',
-   steps:['Al cavo alto con barra dritta o corda','Gomiti fissi ai fianchi','Distendi le braccia spingendo il peso verso il basso','Torna lentamente alla posizione di partenza']},
-  {id:'dips',name:'Dips alle Parallele',muscle:'Braccia',emoji:'🤸',diff:'Avanzato',sets:3,reps:'8-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Chest-Dip.gif',
-   desc:'Esercizio composto per tricipiti e petto.',
-   steps:['Sospenditi alle parallele con braccia distese','Inclina leggermente il busto in avanti','Piega i gomiti fino a 90 gradi','Spingi tornando alla posizione di partenza']},
-  // CORE
+   desc:'Isolamento efficiente dei tricipiti al cavo con tensione costante.',
+   steps:['Al cavo alto con barra o corda','Gomiti fissi ai fianchi (non devono muoversi)','Distendi le braccia spingendo verso il basso fino a lockout','Torna lentamente con controllo alla posizione di partenza']},
+  // CORE (2)
   {id:'plank',name:'Plank',muscle:'Core',emoji:'🧘',diff:'Principiante',sets:3,reps:'30-60 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Front-Plank.gif',
-   desc:'Esercizio isometrico fondamentale per la stabilita del core.',
-   steps:['Avambracci e punte dei piedi a terra','Corpo in linea retta dalla testa ai piedi','Core e glutei contratti','Mantieni la posizione senza lasciar cadere i fianchi']},
+   desc:'Fondamentale isometrico per stabilità del core e colonna vertebrale.',
+   steps:['Avambracci e punte dei piedi come appoggio','Corpo in linea retta dalla testa ai talloni','Core, glutei e quadricipiti contratti','Respira normalmente, non cedere ai fianchi']},
   {id:'crunch',name:'Crunch',muscle:'Core',emoji:'🦴',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Crunch.gif',
-   desc:'Esercizio classico per i muscoli addominali.',
-   steps:['Sdraiato a terra con ginocchia piegate','Mani dietro la testa o incrociate sul petto','Solleva le spalle dal pavimento contraendo gli addominali','Torna lentamente alla posizione di partenza']},
-  // CARDIO
-  {id:'run',name:'Corsa',muscle:'Cardio',emoji:'🏃',diff:'Principiante',sets:1,reps:'20-40 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Run.gif',
-   desc:'Attivita cardiovascolare fondamentale per resistenza e consumo calorico.',
-   steps:['Riscaldamento di 5 minuti a passo veloce','Mantieni un ritmo costante in zona cardiaca 2-3','Postura eretta, braccia rilassate oscillanti','Defaticamento di 5 minuti a passo lento']},
+   desc:'Esercizio classico e sicuro per i retti addominali.',
+   steps:['Sdraiato, ginocchia piegate, piedi a terra','Mani incrociate sul petto o alle tempie (non tirare il collo)','Contrai gli addominali sollevando solo spalle e testa','Espira in salita, scendi senza toccare completamente terra']},
+  // CARDIO (3)
   {id:'burpee',name:'Burpees',muscle:'Cardio',emoji:'🔥',diff:'Avanzato',sets:4,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Burpee.gif',
-   desc:'Esercizio ad alta intensita full-body.',
-   steps:['In piedi, scendi in posizione di squat con mani a terra','Lancia i piedi indietro in posizione di plank','Esegui un piegamento (opzionale)','Riporta i piedi vicino alle mani e salta esplosivamente']},
+   desc:'Full-body ad alta intensità: forza, cardio ed esplosività.',
+   steps:['In piedi, scendi in squat con mani a terra','Salta i piedi indietro in plank (esegui un piegamento opzionale)','Riporta i piedi alle mani','Salta esplosivamente con braccia sopra la testa']},
   {id:'jump_rope',name:'Salto con la Corda',muscle:'Cardio',emoji:'⭕',diff:'Principiante',sets:3,reps:'2-3 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2022/02/Jump-Rope.gif',
-   desc:'Cardio ad alta efficienza per coordinazione e resistenza.',
-   steps:['Impugna la corda con le mani ai fianchi','Ruota la corda con i polsi, non con le braccia','Salta con piccoli rimbalzi sugli avampiedi','Mantieni il core attivo e le ginocchia morbide']},
+   desc:'Cardio altamente efficiente per coordinazione e resistenza cardiaca.',
+   steps:['Impugna la corda con le mani ai fianchi','Ruota la corda solo con i polsi, non con le braccia intere','Salta con piccoli rimbalzi sugli avampiedi (non talloni)','Mantieni il core attivo e uno sguardo fisso avanti']},
+  {id:'run',name:'Corsa',muscle:'Cardio',emoji:'🏃',diff:'Principiante',sets:1,reps:'20-40 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Run.gif',
+   desc:'Base cardio fondamentale per resistenza aerobica e consumo calorico.',
+   steps:['Riscaldamento 5 min a passo veloce','Ritmo costante in zona cardiaca 2-3 (puo parlare ma con fatica)','Postura eretta, braccia rilassate oscillanti avanti-dietro','Defaticamento 5 min a passo lento + stretching']},
 ];
 
 const MUSCLE_GROUPS = ['Tutti','Petto','Schiena','Gambe','Spalle','Braccia','Core','Cardio'];
@@ -3575,7 +3550,8 @@ const MET_MAP = { 'Principiante': 3.5, 'Intermedio': 5.0, 'Avanzato': 6.0 };
 let ws = {
   active:false, planIdx:-1, planName:'', exercises:[], exIdx:0, setNum:1,
   resting:false, restSec:0, _restTotal:0, totalSec:0, paused:false, timer:null,
-  calories:0, exerciseTimeSec:0, setWeights:{}, moodPre:0, moodPost:0
+  calories:0, exerciseTimeSec:0, setWeights:{}, moodPre:0, moodPost:0,
+  tutorialPhase:false
 };
 
 // Progression helpers
@@ -3670,7 +3646,7 @@ function _doStartWorkoutSession(planIdx) {
   });
   ws.exIdx = 0; ws.setNum = 1; ws.totalSec = 0;
   ws.resting = false; ws.restSec = 0; ws._restTotal = 0; ws.paused = false;
-  ws.calories = 0; ws.exerciseTimeSec = 0; ws.setWeights = {};
+  ws.calories = 0; ws.exerciseTimeSec = 0; ws.setWeights = {}; ws.tutorialPhase = true;
   // If mood is low, suggest lighter intensity
   if (ws.moodPre <= 2) toast('💡 Energia bassa — considera pesi più leggeri oggi', 'or');
   document.getElementById('ws-ov').classList.add('on');
@@ -3711,6 +3687,12 @@ function wsAdvance() {
     ws.setNum = 1;
     if (ws.exIdx >= ws.exercises.length) { wsFinish(); return; }
   }
+  ws.tutorialPhase = true;
+  renderWsView();
+}
+
+function wsStartSet() {
+  ws.tutorialPhase = false;
   renderWsView();
 }
 
@@ -3870,43 +3852,83 @@ function renderWsView() {
   var pct = Math.round((ws.exIdx / total) * 100);
   var _deloadBanner = isDeloadWeek() ? '<div style="background:linear-gradient(135deg,#ff9500,#ff6b00);color:#fff;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:.72rem;font-weight:700;text-align:center">🧘 Settimana di Deload — Riduci pesi del 40-50%</div>' : '';
   document.getElementById('ws-title').textContent = ws.planName;
-  if (ws.resting) {
+  var progressBar =
+    '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="ws-progress-label">' + (ws.exIdx + 1) + '/' + total + ' esercizi</div>' + _deloadBanner;
+
+  if (ws.tutorialPhase) {
+    // ── TUTORIAL PHASE ──────────────────────────────
+    var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
+    var steps = (exData && exData.steps) ? exData.steps : [];
+    var stepsHtml = '';
+    if (steps.length > 0) {
+      stepsHtml = '<ol class="ws-tutorial-steps">';
+      steps.slice(0, 3).forEach(function(s) { stepsHtml += '<li>' + wsEsc(s) + '</li>'; });
+      stepsHtml += '</ol>';
+    }
+    content.innerHTML =
+      progressBar +
+      '<div class="ws-tutorial">' +
+        '<div class="ws-tutorial-header">Prossimo Esercizio</div>' +
+        '<div class="ws-tutorial-name">' + wsEsc(ex.name) + '</div>' +
+        '<div class="ws-ex-info" style="margin-top:4px">Set ' + ws.setNum + ' di ' + ts + ' &middot; ' + wsEsc(ex.reps) + ' rep</div>' +
+        '<div class="ws-tutorial-media">' +
+          '<div class="ws-tutorial-emoji">' + ex.emoji + '</div>' +
+          (ex.gif ? '<img class="ws-tutorial-gif" src="' + ex.gif + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+        '</div>' +
+        stepsHtml +
+        '<button class="ws-tutorial-start-btn" onclick="wsStartSet()">INIZIA SET</button>' +
+      '</div>' +
+      '<div class="ws-controls">' +
+        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '▶ Riprendi' : '⏸ Pausa') + '</button>' +
+        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">⏭ Salta</button>' +
+        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">■ Termina</button>' +
+      '</div>';
+  } else if (ws.resting) {
+    // ── REST PHASE (glassmorphism) ──────────────────
     var nextInfo = ws.setNum < ts
-      ? 'Set ' + (ws.setNum+1) + ' di ' + ts + ' \u00b7 ' + wsEsc(ex.name)
-      : (ws.exIdx+1 < total ? wsEsc(ws.exercises[ws.exIdx+1].name) : 'Fine!');
+      ? 'Set ' + (ws.setNum + 1) + ' di ' + ts + ' · ' + wsEsc(ex.name)
+      : (ws.exIdx + 1 < total ? wsEsc(ws.exercises[ws.exIdx + 1].name) : 'Fine!');
     var circ = 339.292;
     var offset = ws._restTotal > 0 ? circ * (1 - ws.restSec / ws._restTotal) : 0;
-    var rm = String(Math.floor(ws.restSec/60)).padStart(2,'0');
-    var rs = String(ws.restSec%60).padStart(2,'0');
+    var rm = String(Math.floor(ws.restSec / 60)).padStart(2, '0');
+    var rs = String(ws.restSec % 60).padStart(2, '0');
     var baseSec = parseInt(ex.rest) || 90;
     var isAdapted = ws._restTotal !== baseSec;
     content.innerHTML =
-      '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
-      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' + _deloadBanner +
-      '<div class="ws-card">' +
-        '<div class="ws-rest-label">\u23f1 Recupero</div>' +
+      progressBar +
+      '<div class="ws-rest-glass-bg"></div>' +
+      '<div class="ws-rest-immersive">' +
+        '<div class="ws-rest-label">⏱ Recupero</div>' +
         '<div class="ws-rest-ring-wrap">' +
           '<svg viewBox="0 0 120 120" width="160" height="160">' +
             '<circle cx="60" cy="60" r="54" stroke="var(--s8)" stroke-width="6" fill="none"/>' +
-            '<circle id="ws-rest-ring-progress" cx="60" cy="60" r="54" stroke="var(--or)" stroke-width="6" fill="none" stroke-dasharray="339.292" stroke-dashoffset="'+offset+'" stroke-linecap="round" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s linear"/>' +
+            '<circle id="ws-rest-ring-progress" cx="60" cy="60" r="54" stroke="var(--or)" stroke-width="6" fill="none" stroke-dasharray="339.292" stroke-dashoffset="' + offset + '" stroke-linecap="round" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s linear"/>' +
           '</svg>' +
           '<div class="ws-rest-ring-time">' +
-            '<div class="ws-timer-big" id="ws-rest-timer">'+rm+':'+rs+'</div>' +
-            (isAdapted ? '<div class="ws-smart-badge">\u26a1 Smart</div>' : '') +
+            '<div class="ws-timer-big" id="ws-rest-timer">' + rm + ':' + rs + '</div>' +
+            (isAdapted ? '<div class="ws-smart-badge">⚡ Smart</div>' : '') +
           '</div>' +
         '</div>' +
         '<div class="ws-rest-adjust">' +
-          '<button class="ws-rest-adj-btn" onclick="wsAdjRest(-15)">\u221215s</button>' +
+          '<button class="ws-rest-adj-btn" onclick="wsAdjRest(-15)">−15s</button>' +
           '<button class="ws-rest-adj-btn" onclick="wsAdjRest(15)">+15s</button>' +
         '</div>' +
         '<div class="ws-rest-next">Prossimo: ' + nextInfo + '</div>' +
-        '<button class="ws-btn-skip" onclick="wsSkipRest()">Salta Recupero \u2192</button>' +
-      '</div>' +
-      '<div class="ws-controls">' +
-        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '\u25b6 Riprendi' : '\u23f8 Pausa') + '</button>' +
-        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">\u25a0 Termina</button>' +
+        '<div class="ws-weight-label">🏋️ Peso utilizzato</div>' +
+        '<div class="ws-weight-row">' +
+          '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">−2.5</button>' +
+          '<div class="ws-weight-display"><input type="number" id="ws-weight-input" inputmode="decimal" step="0.5" min="0" value="" placeholder="0"><span class="ws-weight-unit">kg</span></div>' +
+          '<button class="ws-weight-adj" onclick="wsAdjWeight(2.5)">+2.5</button>' +
+        '</div>' +
+        '<button class="ws-btn-skip" onclick="wsSkipRest()">Salta Recupero →</button>' +
+        '<div class="ws-controls" style="margin-top:12px">' +
+          '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '▶ Riprendi' : '⏸ Pausa') + '</button>' +
+          '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">■ Termina</button>' +
+        '</div>' +
       '</div>';
   } else {
+    // ── ACTIVE PHASE ────────────────────────────────
     var lastW = 0;
     if (ws.setWeights[ws.exIdx] && ws.setWeights[ws.exIdx][ws.setNum - 1]) {
       lastW = ws.setWeights[ws.exIdx][ws.setNum - 1];
@@ -3914,27 +3936,24 @@ function renderWsView() {
       lastW = wsGetLastWeight(ex.id);
     }
     content.innerHTML =
-      '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:'+pct+'%"></div></div>' +
-      '<div class="ws-progress-label">'+(ws.exIdx+1)+'/'+total+' esercizi</div>' + _deloadBanner +
+      progressBar +
       '<div class="ws-card">' +
-        '<div class="ws-ex-emoji">'+ex.emoji+'</div>' +
+        '<div class="ws-ex-emoji">' + ex.emoji + '</div>' +
         '<div class="ws-ex-name">' + wsEsc(ex.name) + '</div>' +
-        '<div class="ws-ex-info">Set '+ws.setNum+' di '+ts+' \u00b7 '+ex.reps+' rep</div>' +
-        (ex.gif ? '<img class="ws-ex-gif" src="'+ex.gif+'" alt="">' : '') +
-        (POSE_EXERCISES[ex.id] ? '<button class="btn btn-ghost btn-fw" style="margin:8px 0;border-color:rgba(249,115,22,.35);color:var(--or);font-size:.8rem" onclick="openCameraOv(\''+ex.id+'\',{setNum:'+ws.setNum+',totalSets:'+ts+',reps:\''+ex.reps+'\'})">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Attiva Camera IA</button>' : '') +
-        '<div class="ws-weight-label">\ud83c\udfcb\ufe0f Peso utilizzato</div>' +
+        '<div class="ws-ex-info">Set ' + ws.setNum + ' di ' + ts + ' · ' + wsEsc(ex.reps) + ' rep</div>' +
+        (ex.gif ? '<img class="ws-ex-gif" src="' + ex.gif + '" alt="">' : '') +
+        '<div class="ws-weight-label">🏋️ Peso utilizzato</div>' +
         '<div class="ws-weight-row">' +
-          '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">\u22122.5</button>' +
-          '<div class="ws-weight-display"><input type="number" id="ws-weight-input" inputmode="decimal" step="0.5" min="0" value="'+(lastW||'')+'" placeholder="0"><span class="ws-weight-unit">kg</span></div>' +
+          '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">−2.5</button>' +
+          '<div class="ws-weight-display"><input type="number" id="ws-weight-input" inputmode="decimal" step="0.5" min="0" value="' + (lastW || '') + '" placeholder="0"><span class="ws-weight-unit">kg</span></div>' +
           '<button class="ws-weight-adj" onclick="wsAdjWeight(2.5)">+2.5</button>' +
         '</div>' +
-        '<button class="ws-btn-set" onclick="wsCompleteSet()">\u2713 Set Completato</button>' +
+        '<button class="ws-btn-set" onclick="wsCompleteSet()">✓ Set Completato</button>' +
       '</div>' +
       '<div class="ws-controls">' +
-        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '\u25b6 Riprendi' : '\u23f8 Pausa') + '</button>' +
-        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">\u23ed Salta</button>' +
-        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">\u25a0 Termina</button>' +
+        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '▶ Riprendi' : '⏸ Pausa') + '</button>' +
+        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">⏭ Salta</button>' +
+        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">■ Termina</button>' +
       '</div>';
   }
 }
@@ -5302,38 +5321,52 @@ function confetti() {
 })();
 
 // ── HOME ────────────────────────────────────────────
-function getWeeklyMuscleData() {
+function getWeeklyStreakData() {
   var cw = getCompletedWorkouts();
   var now = new Date();
+  // Build 7-day window: current week Mon-Sun
   var monday = new Date(now);
   monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
   monday.setHours(0, 0, 0, 0);
-  var mondayStr = monday.toISOString().slice(0, 10);
-  var thisWeek = cw.filter(function(w) { return w.date >= mondayStr; });
-  var muscleMap = { Gambe: 0, Petto: 0, Schiena: 0, Spalle: 0 };
-  thisWeek.forEach(function(w) {
-    var muscles = {};
-    (w.exercises || []).forEach(function(ex) {
-      var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
-      if (exData) {
-        var m = exData.muscle;
-        if (m === 'Gambe' || m === 'Petto' || m === 'Schiena' || m === 'Spalle') muscles[m] = true;
-        if (m === 'Braccia') muscles['Spalle'] = true;
-        if (m === 'Core') muscles['Schiena'] = true;
-        if (m === 'Cardio') muscles['Gambe'] = true;
-      }
-    });
-    Object.keys(muscles).forEach(function(m) { muscleMap[m]++; });
-  });
-  var goal = 2;
+  var dayNames = ['L','M','M','G','V','S','D'];
+  var todayStr = now.toISOString().slice(0, 10);
+  var days = [];
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    var dateStr = d.toISOString().slice(0, 10);
+    var done = cw.some(function(w) { return w.date === dateStr; });
+    days.push({ name: dayNames[i], date: dateStr, done: done, today: dateStr === todayStr });
+  }
+  return days;
+}
+
+function getHomeMacros() {
+  var u = getUser() || {};
+  var weight = u.weight || 70;
+  var height = u.height || 175;
+  var age = u.age || 30;
+  var sex = u.sex || 'M';
+  var goal = u.goal || 'benessere';
+  // Mifflin-St Jeor BMR
+  var bmr = sex === 'F'
+    ? (10 * weight + 6.25 * height - 5 * age - 161)
+    : (10 * weight + 6.25 * height - 5 * age + 5);
+  var freq = u.freq || '2-3';
+  var actMult = freq === '6+' ? 1.725 : (freq === '4-5' ? 1.55 : 1.375);
+  var tdee = Math.round(bmr * actMult);
+  var kcalTarget = goal === 'massa' ? tdee + 300 : (goal === 'dimagrimento' ? tdee - 400 : tdee);
+  var proTarget = Math.round(weight * (goal === 'massa' ? 2.2 : 1.8));
+  // Today consumed
+  var meals = getTodayMeals ? getTodayMeals() : [];
+  var kcalConsumed = meals.reduce(function(s, m) { return s + (m.kcal || 0); }, 0);
+  var proConsumed = Math.round(meals.reduce(function(s, m) { return s + (m.protein || 0); }, 0));
   return {
-    totale: thisWeek.length,
-    gruppi: [
-      { key: 'gambe',   nome: 'Gambe',   colore: '#f97316', fatto: muscleMap.Gambe,   goal: goal, circ: 452.4 },
-      { key: 'petto',   nome: 'Petto',   colore: '#22c55e', fatto: muscleMap.Petto,   goal: goal, circ: 364.4 },
-      { key: 'schiena', nome: 'Schiena', colore: '#38bdf8', fatto: muscleMap.Schiena, goal: goal, circ: 276.5 },
-      { key: 'spalle',  nome: 'Spalle',  colore: '#a78bfa', fatto: muscleMap.Spalle,  goal: goal, circ: 188.5 }
-    ]
+    kcalTarget: kcalTarget,
+    kcalConsumed: kcalConsumed,
+    kcalRemaining: Math.max(0, kcalTarget - kcalConsumed),
+    proTarget: proTarget,
+    proConsumed: proConsumed
   };
 }
 
@@ -5369,8 +5402,18 @@ function renderHome() {
     }
   }
 
+  // Nutrition pill data
+  var macros = getHomeMacros();
+  var nutriPill =
+    '<div class="nutri-pill">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="var(--bl)" stroke-width="1.8" width="14" height="14"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>' +
+      '<div class="nutri-pill-item"><span class="nutri-pill-val">' + macros.kcalRemaining + '</span>&nbsp;kcal rimaste</div>' +
+      '<div class="nutri-pill-sep">·</div>' +
+      '<div class="nutri-pill-item">Pro <span class="nutri-pill-val">' + macros.proConsumed + '</span>/<span style="color:var(--t3)">' + macros.proTarget + 'g</span></div>' +
+    '</div>';
+
   // Hero card
-  var todayStr = new Date().toISOString().slice(0,10);
+  var todayStr = new Date().toISOString().slice(0, 10);
   var completedToday = getCompletedWorkouts().filter(function(w) { return w.date === todayStr; });
   var plans = getWorkouts();
   var heroCard = document.getElementById('hero-card');
@@ -5389,43 +5432,22 @@ function renderHome() {
       '</div>' +
       '<div class="hero-title">' + (lastW.planName || 'Allenamento') + '</div>' +
       '<div class="hero-info">' + dur + ' min &middot; ' + exCount + ' esercizi &middot; ' + kcal + ' kcal</div>' +
+      nutriPill +
       '<button class="hero-btn hero-btn-secondary" onclick="openWorkoutBuilder()">Allenati Ancora</button>';
   } else if (plans.some(function(p) { return p.exercises && p.exercises.length > 0; })) {
     var plan = plans.find(function(p) { return p.exercises && p.exercises.length > 0; });
     var planIdx = plans.findIndex(function(p) { return p.exercises && p.exercises.length > 0; });
     var n = plan.exercises.length;
     var mins = Math.round(n * 4.5);
-    var muscleColors = { Gambe:'#f97316', Petto:'#22c55e', Schiena:'#38bdf8', Spalle:'#a78bfa', Braccia:'#a78bfa', Core:'#64748b', Cardio:'#22c55e' };
-    var muscleIconPaths = {
-      Gambe: '<path d="M6 4l4 16M18 4l-4 16M4 12h16"/>',
-      Petto: '<path d="M4 8c0-2 3-5 8-5s8 3 8 5M4 8v4c0 3 3 7 8 7s8-4 8-7V8"/>',
-      Schiena: '<path d="M12 2v20M8 6c-2 2-2 6 0 10M16 6c2 2 2 6 0 10"/>',
-      Spalle: '<path d="M4 10c0-4 3.5-7 8-7s8 3 8 7M4 10l3 2M20 10l-3 2M12 3v4"/>',
-      Braccia: '<path d="M4 10c0-4 3.5-7 8-7s8 3 8 7M4 10l3 2M20 10l-3 2M12 3v4"/>',
-      Core: '<path d="M12 2v20M8 6c-2 2-2 6 0 10M16 6c2 2 2 6 0 10"/>',
-      Cardio: '<path d="M6 4l4 16M18 4l-4 16M4 12h16"/>'
-    };
-    var uniqueMuscles = [];
-    plan.exercises.forEach(function(ex) {
-      var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
-      if (exData && exData.muscle && uniqueMuscles.indexOf(exData.muscle) === -1) uniqueMuscles.push(exData.muscle);
-    });
-    var musclesHtml = '<div class="hero-muscles">';
-    uniqueMuscles.forEach(function(m) {
-      var col = muscleColors[m] || 'var(--t3)';
-      var icoPath = muscleIconPaths[m] || '';
-      musclesHtml += '<svg viewBox="0 0 24 24" fill="none" stroke="' + col + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">' + icoPath + '</svg>';
-    });
-    musclesHtml += '</div>';
-    heroCard.style.cssText = 'background:linear-gradient(135deg,rgba(249,115,22,.08),var(--s9));border:1px solid rgba(249,115,22,.2);border-left:4px solid var(--or)';
+    heroCard.style.cssText = 'background:linear-gradient(135deg,rgba(249,115,22,.1),var(--s9));border:1px solid rgba(249,115,22,.25);border-left:4px solid var(--or)';
     heroCard.innerHTML =
-      '<div class="hero-label" style="color:var(--or)">OGGI</div>' +
-      '<div class="hero-title">' + (plan.name || 'Allenamento') + '</div>' +
+      '<div class="hero-label" style="color:var(--or)">ALLENAMENTO DI OGGI</div>' +
+      '<div class="hero-title" style="font-size:1.4rem">' + (plan.name || 'Allenamento') + '</div>' +
       '<div class="hero-info">' + n + ' esercizi &middot; ~' + mins + ' min</div>' +
-      musclesHtml +
-      '<button class="hero-btn hero-btn-primary pulse" onclick="openBriefing(' + planIdx + ')">' +
-        '<svg viewBox="0 0 24 24" fill="#fff" stroke="none" width="16" height="16"><path d="M5 3l14 9-14 9V3z"/></svg>' +
-        'Allenati Ora' +
+      nutriPill +
+      '<button class="hero-btn hero-btn-primary pulse" style="margin-top:12px;font-size:1rem;padding:16px;letter-spacing:.5px;text-transform:uppercase;font-family:var(--fd);font-weight:900" onclick="openBriefing(' + planIdx + ')">' +
+        '<svg viewBox="0 0 24 24" fill="#fff" stroke="none" width="18" height="18"><path d="M5 3l14 9-14 9V3z"/></svg>' +
+        'INIZIA ALLENAMENTO' +
       '</button>';
   } else {
     heroCard.style.cssText = 'background:var(--s9);border:1px solid var(--s8);border-left:4px solid var(--s7)';
@@ -5434,30 +5456,27 @@ function renderHome() {
         '<svg viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" style="margin-bottom:10px"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>' +
         '<div class="hero-title" style="font-size:1.05rem">Crea il tuo primo allenamento</div>' +
         '<div class="hero-info" style="margin-bottom:14px">AURA ha bisogno di una scheda per iniziare</div>' +
-        '<button class="hero-btn hero-btn-primary" onclick="openWorkoutBuilder()">' +
+        nutriPill +
+        '<button class="hero-btn hero-btn-primary" style="margin-top:12px" onclick="openWorkoutBuilder()">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
           'Crea Scheda' +
         '</button>' +
       '</div>';
   }
 
-  // Muscle rings
-  var md = getWeeklyMuscleData();
-  var totalEl = document.getElementById('muscle-rings-total');
-  if (totalEl) totalEl.textContent = md.totale;
-  md.gruppi.forEach(function(g) {
-    var ring = document.getElementById('muscle-ring-' + g.key);
-    if (ring) ring.style.strokeDashoffset = g.circ * (1 - Math.min(g.fatto / g.goal, 1));
-    var leg = document.getElementById('muscle-leg-' + g.key);
-    if (leg) {
-      if (g.fatto >= g.goal) {
-        leg.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--gr)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M20 6L9 17l-5-5"/></svg>';
-      } else {
-        leg.textContent = g.fatto + '/' + g.goal;
-        leg.style.color = g.colore;
-      }
-    }
-  });
+  // Weekly streak row
+  var streakEl = document.getElementById('weekly-streak');
+  if (streakEl) {
+    var days = getWeeklyStreakData();
+    var fireIcoSvg = '<svg viewBox="0 0 24 24" fill="var(--or)" stroke="none" width="14" height="14"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg>';
+    var emptyIcoSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--s6)" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="9"/></svg>';
+    streakEl.innerHTML = days.map(function(d) {
+      return '<div class="streak-day' + (d.done ? ' done' : '') + (d.today ? ' today' : '') + '">' +
+        '<div class="streak-day-name">' + d.name + '</div>' +
+        '<div class="streak-day-ico">' + (d.done ? fireIcoSvg : emptyIcoSvg) + '</div>' +
+      '</div>';
+    }).join('');
+  }
 
   updatePulseBar();
 }
@@ -5467,9 +5486,10 @@ function updatePulseBar() {
   var bar = document.getElementById('aura-pulse-bar');
   var fill = document.getElementById('aura-pulse-fill');
   if (!bar || !fill) return;
-  var md = getWeeklyMuscleData();
+  var days = getWeeklyStreakData();
+  var done = days.filter(function(d) { return d.done; }).length;
   var GOAL = 4;
-  var pct = Math.min(md.totale / GOAL, 1) * 100;
+  var pct = Math.min(done / GOAL, 1) * 100;
   fill.style.width = pct + '%';
   bar.classList.remove('idle', 'active', 'full');
   if (pct === 0) bar.classList.add('idle');
@@ -5510,8 +5530,7 @@ function openBriefing(planIdx) {
       '</div>';
   });
   document.getElementById('briefing-ex-list').innerHTML = listHtml;
-  document.getElementById('briefing-btn-cam').onclick = function() { closeBriefing(); openCameraOv(); };
-  document.getElementById('briefing-btn-classic').onclick = function() { closeBriefing(); startWorkoutSession(_briefingPlanIdx); };
+  document.getElementById('briefing-btn-start').onclick = function() { closeBriefing(); startWorkoutSession(_briefingPlanIdx); };
   document.getElementById('briefing-ov').classList.add('on');
   haptic(8);
 }
@@ -5542,101 +5561,220 @@ const CAM = {
   lastVoiceTime: 0, lastVoiceMsg: '', voiceEnabled: true,
   sessionActive: false, failedChecks: {}, startTime: 0, formTipGiven: false,
   // New visual states
-  scanLineY: 0, scanLineSpeed: 1, scanActive: false,
-  mercuryLevel: 0, mercuryTarget: 0,
-  segmentColors: {}, angleHUDs: [], lastPoseTime: 0
+  scanActive: false, lastPoseTime: 0
 };
 
-// Exercise definitions for angle analysis
+// Exercise definitions for MediaPipe angle analysis — Big 20
+// errorJoints: landmark indices to highlight red when check fails
 const POSE_EXERCISES = {
   squat: {
-    name: 'Squat',
-    joints: {
-      knee_l: [23, 25, 27],  // hip-knee-ankle left
-      knee_r: [24, 26, 28],
-      hip: [11, 23, 25]
-    },
-    repAngle: 'knee_l',
-    downThresh: 130, upThresh: 145,
+    name: 'Squat con Bilanciere',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 130, upThresh: 145,
     checks: [
-      { name: 'Ginocchia', fn: function(a) { return Math.abs((a.knee_l||180)-(a.knee_r||180)) < 20; }, ok: '✓ Ginocchia simmetriche', warn: '⚠ Ginocchia asimmetriche', voice: 'Ginocchia asimmetriche! Allineale.' },
-      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 130; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più! Cosce parallele al pavimento.' },
-      { name: 'Schiena', fn: function(a) { return (a.hip||0) > 45; }, ok: '✓ Schiena dritta', warn: '⚠ Schiena troppo inclinata', voice: 'Tieni la schiena più dritta!' }
+      { name:'Ginocchia', errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<20;}, ok:'Ginocchia simmetriche', warn:'Ginocchia asimmetriche', voice:'Ginocchia asimmetriche, allineale!' },
+      { name:'Profondità', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<130;}, ok:'Buona profondità', warn:'Scendi di più', voice:'Scendi di più, cosce parallele!' },
+      { name:'Schiena', errorJoints:[11,12,23,24], fn:function(a){return (a.hip||0)>45;}, ok:'Schiena dritta', warn:'Schiena troppo inclinata', voice:'Tieni la schiena dritta!' }
+    ]
+  },
+  bench: {
+    name: 'Panca Piana',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 105, upThresh: 150,
+    checks: [
+      { name:'Gomiti', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<18;}, ok:'Gomiti simmetrici', warn:'Gomiti asimmetrici', voice:'Gomiti asimmetrici, spingi uniforme!' },
+      { name:'Ampiezza', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<110;}, ok:'Buon range di movimento', warn:'Abbassa di più', voice:'Abbassa di più al petto!' },
+      { name:'Spalle', errorJoints:[11,12], fn:function(a){return (a.shoulder_l||0)>65;}, ok:'Spalle stabili', warn:'Non alzare le spalle', voice:'Tieni le spalle abbassate e stabili!' }
+    ]
+  },
+  incline_db: {
+    name: 'Panca Inclinata Manubri',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 110, upThresh: 155,
+    checks: [
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<20;}, ok:'Braccia simmetriche', warn:'Braccia asimmetriche', voice:'Spingi in modo simmetrico!' },
+      { name:'Range', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<115;}, ok:'Buon range', warn:'Abbassa i manubri di più', voice:'Abbassa i manubri per sentire lo stretch!' },
+      { name:'Postura', errorJoints:[11,12,23,24], fn:function(a){return (a.shoulder_l||0)>60;}, ok:'Postura corretta', warn:'Schiena aderente alla panca', voice:'Tieni la schiena sulla panca!' }
     ]
   },
   pushup: {
     name: 'Push-Up',
-    joints: {
-      elbow_l: [11, 13, 15],  // shoulder-elbow-wrist
-      elbow_r: [12, 14, 16],
-      body: [11, 23, 25]
-    },
-    repAngle: 'elbow_l',
-    downThresh: 110, upThresh: 145,
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], body:[11,23,25] },
+    repAngle: 'elbow_l', downThresh: 110, upThresh: 145,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 20; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Allineali.' },
-      { name: 'Corpo', fn: function(a) { return (a.body||180) > 140; }, ok: '✓ Corpo allineato', warn: '⚠ Alza i fianchi', voice: 'Alza i fianchi! Corpo dritto come una tavola.' },
-      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) < 115; }, ok: '✓ Buona ampiezza', warn: '⚠ Scendi di più', voice: 'Scendi di più con il petto!' }
+      { name:'Corpo', errorJoints:[23,24,25,26], fn:function(a){return (a.body||180)>140;}, ok:'Corpo allineato', warn:'Alza i fianchi', voice:'Corpo dritto come una tavola!' },
+      { name:'Gomiti', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<20;}, ok:'Gomiti simmetrici', warn:'Gomiti asimmetrici', voice:'Gomiti simmetrici!' },
+      { name:'Profondità', errorJoints:[11,12,13,14], fn:function(a){return (a.elbow_l||180)<115;}, ok:'Buona profondità', warn:'Scendi di più', voice:'Scendi di più con il petto!' }
     ]
   },
   deadlift: {
     name: 'Stacco da Terra',
-    joints: {
-      hip_l: [11, 23, 25],
-      hip_r: [12, 24, 26],
-      knee_l: [23, 25, 27]
-    },
-    repAngle: 'hip_l',
-    downThresh: 110, upThresh: 150,
+    joints: { hip_l:[11,23,25], hip_r:[12,24,26], knee_l:[23,25,27] },
+    repAngle: 'hip_l', downThresh: 110, upThresh: 150,
     checks: [
-      { name: 'Anche', fn: function(a) { return Math.abs((a.hip_l||180)-(a.hip_r||180)) < 12; }, ok: '✓ Anche simmetriche', warn: '⚠ Anche sbilanciate', voice: 'Anche sbilanciate! Distribuisci il peso.' },
-      { name: 'Ginocchia', fn: function(a) { return (a.knee_l||180) > 140; }, ok: '✓ Gambe ok', warn: '⚠ Non piegare troppo le ginocchia', voice: 'Non piegare troppo le ginocchia!' },
-      { name: 'Schiena', fn: function(a) { return (a.hip_l||180) > 60; }, ok: '✓ Schiena neutra', warn: '⚠ Schiena troppo arrotondata', voice: 'Schiena troppo arrotondata! Mantienila neutra.' }
+      { name:'Schiena', errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||180)>55;}, ok:'Schiena neutra', warn:'Schiena arrotondata', voice:'Schiena neutra, petto in fuori!' },
+      { name:'Anche', errorJoints:[23,24], fn:function(a){return Math.abs((a.hip_l||180)-(a.hip_r||180))<12;}, ok:'Anche simmetriche', warn:'Anche sbilanciate', voice:'Distribuisci il peso uniformemente!' },
+      { name:'Ginocchia', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)>135;}, ok:'Gambe ok', warn:'Non piegare troppo', voice:'Stacco non squat, meno flessione!' }
     ]
   },
-  shoulder_press: {
-    name: 'Shoulder Press',
-    joints: {
-      elbow_l: [11, 13, 15],
-      elbow_r: [12, 14, 16],
-      shoulder_l: [13, 11, 23]
-    },
-    repAngle: 'elbow_l',
-    downThresh: 100, upThresh: 150,
+  pullup: {
+    name: 'Trazioni alla Sbarra',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 95, upThresh: 150,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 15; }, ok: '✓ Braccia simmetriche', warn: '⚠ Braccia asimmetriche', voice: 'Braccia asimmetriche! Spingi in modo uniforme.' },
-      { name: 'Ampiezza', fn: function(a) { return (a.elbow_l||180) > 155; }, ok: '✓ Estensione completa', warn: '⚠ Estendi di più', voice: 'Estendi di più le braccia in alto!' },
-      { name: 'Postura', fn: function(a) { return (a.shoulder_l||0) > 70; }, ok: '✓ Postura ok', warn: '⚠ Non inclinare il busto', voice: 'Non inclinare il busto! Tieniti dritto.' }
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<18;}, ok:'Trazione simmetrica', warn:'Trazione asimmetrica', voice:'Tira simmetricamente con entrambe le braccia!' },
+      { name:'Range completo', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<100;}, ok:'Range completo', warn:'Sali di più', voice:'Mento oltre la sbarra!' },
+      { name:'Scapole', errorJoints:[11,12], fn:function(a){return (a.shoulder_l||0)>55;}, ok:'Scapole attivate', warn:'Attiva le scapole', voice:'Tira con le scapole, non solo le braccia!' }
     ]
   },
-  bicep_curl: {
-    name: 'Curl Bicipiti',
-    joints: {
-      elbow_l: [11, 13, 15],
-      elbow_r: [12, 14, 16],
-      shoulder_l: [13, 11, 23]
-    },
-    repAngle: 'elbow_l',
-    downThresh: 65, upThresh: 135,
+  row: {
+    name: 'Rematore Bilanciere',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], hip_l:[11,23,25] },
+    repAngle: 'elbow_l', downThresh: 105, upThresh: 150,
     checks: [
-      { name: 'Gomiti', fn: function(a) { return Math.abs((a.elbow_l||180)-(a.elbow_r||180)) < 20; }, ok: '✓ Gomiti simmetrici', warn: '⚠ Gomiti asimmetrici', voice: 'Gomiti asimmetrici! Mantienili fermi.' },
-      { name: 'Braccio fermo', fn: function(a) { return (a.shoulder_l||0) < 30; }, ok: '✓ Braccio fermo', warn: '⚠ Non muovere il braccio', voice: 'Non muovere il braccio! Solo l\'avambraccio.' },
-      { name: 'Contrazione', fn: function(a) { return (a.elbow_l||180) < 60; }, ok: '✓ Buona contrazione', warn: '⚠ Contrai di più', voice: 'Contrai di più! Porta il peso più in alto.' }
+      { name:'Schiena', errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||180)>100;}, ok:'Busto stabile', warn:'Busto troppo eretto', voice:'Inclina il busto a 45 gradi!' },
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<18;}, ok:'Braccia simmetriche', warn:'Braccia asimmetriche', voice:'Tira in modo simmetrico!' },
+      { name:'Range', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<110;}, ok:'Buon range', warn:'Tira di più', voice:'Tira il bilanciere all\'ombelico!' }
+    ]
+  },
+  lat_pull: {
+    name: 'Lat Machine',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 100, upThresh: 155,
+    checks: [
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<18;}, ok:'Tirata simmetrica', warn:'Braccia asimmetriche', voice:'Tira simmetricamente!' },
+      { name:'Range', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<105;}, ok:'Buon range', warn:'Tira di più', voice:'Tira la barra al petto superiore!' },
+      { name:'Postura', errorJoints:[11,12,23,24], fn:function(a){return (a.shoulder_l||0)>60;}, ok:'Postura corretta', warn:'Non inclinare troppo', voice:'Leggera inclinazione del busto solo!' }
+    ]
+  },
+  squat_leg: {
+    name: 'Leg Press',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 90, upThresh: 145,
+    checks: [
+      { name:'Profondità', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<95;}, ok:'Buona profondità', warn:'Piega di più', voice:'Porta le ginocchia al petto!' },
+      { name:'Simmetria', errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<18;}, ok:'Simmetria corretta', warn:'Ginocchia asimmetriche', voice:'Piedi simmetrici sulla pedana!' },
+      { name:'Non bloccare', errorJoints:[25,26], fn:function(a){return (a.knee_l||180)<160;}, ok:'Range sicuro', warn:'Non bloccare le ginocchia', voice:'Non estendere le ginocchia in lockout!' }
+    ]
+  },
+  leg_press: {
+    name: 'Leg Press',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 90, upThresh: 145,
+    checks: [
+      { name:'Profondità', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<95;}, ok:'Buona profondità', warn:'Piega di più le ginocchia', voice:'Porta i ginocchi verso il petto!' },
+      { name:'Simmetria', errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<18;}, ok:'Simmetria corretta', warn:'Piedi asimmetrici', voice:'Piedi simmetrici sulla pedana!' },
+      { name:'No lockout', errorJoints:[25,26], fn:function(a){return (a.knee_l||180)<160;}, ok:'Range sicuro', warn:'Non bloccare le ginocchia', voice:'Non bloccare le ginocchia in estensione!' }
     ]
   },
   lunge: {
-    name: 'Affondi',
-    joints: {
-      knee_l: [23, 25, 27],
-      knee_r: [24, 26, 28],
-      hip_l: [11, 23, 25]
-    },
-    repAngle: 'knee_l',
-    downThresh: 115, upThresh: 150,
+    name: 'Affondi Alternati',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip_l:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 115, upThresh: 150,
     checks: [
-      { name: 'Ginocchio ant.', fn: function(a) { return (a.knee_l||180) > 80; }, ok: '✓ Ginocchio ok', warn: '⚠ Ginocchio troppo avanti', voice: 'Ginocchio troppo avanti! Non superare la punta del piede.' },
-      { name: 'Profondità', fn: function(a) { return (a.knee_l||180) < 105; }, ok: '✓ Buona profondità', warn: '⚠ Scendi di più', voice: 'Scendi di più in basso!' },
-      { name: 'Busto', fn: function(a) { return (a.hip_l||0) > 75; }, ok: '✓ Busto eretto', warn: '⚠ Tieni il busto dritto', voice: 'Tieni il busto dritto! Non piegarti in avanti.' }
+      { name:'Ginocchio avanti', errorJoints:[25,27], fn:function(a){return (a.knee_l||180)>82;}, ok:'Ginocchio ok', warn:'Ginocchio troppo avanti', voice:'Non superare le punte con il ginocchio!' },
+      { name:'Profondità', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<110;}, ok:'Buona profondità', warn:'Scendi di più', voice:'Abbassa il ginocchio posteriore!' },
+      { name:'Busto eretto', errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||0)>75;}, ok:'Busto eretto', warn:'Tieni il busto dritto', voice:'Busto eretto, non piegarti in avanti!' }
+    ]
+  },
+  rdl: {
+    name: 'Stacco Rumeno',
+    joints: { hip_l:[11,23,25], hip_r:[12,24,26], knee_l:[23,25,27] },
+    repAngle: 'hip_l', downThresh: 105, upThresh: 155,
+    checks: [
+      { name:'Schiena neutra', errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||180)>50;}, ok:'Schiena neutra', warn:'Schiena arrotondata', voice:'Schiena piatta, non arrotondarla!' },
+      { name:'Ginocchia fisse', errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-160)<25;}, ok:'Ginocchia stabili', warn:'Troppa flessione ginocchia', voice:'Mantieni le ginocchia quasi tese!' },
+      { name:'Simmetria', errorJoints:[23,24], fn:function(a){return Math.abs((a.hip_l||180)-(a.hip_r||180))<12;}, ok:'Anche simmetriche', warn:'Anche asimmetriche', voice:'Distribuisci il peso equamente!' }
+    ]
+  },
+  ohp: {
+    name: 'Military Press',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 100, upThresh: 155,
+    checks: [
+      { name:'Estensione', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)>150;}, ok:'Estensione completa', warn:'Estendi di più', voice:'Spingi completamente in alto!' },
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<15;}, ok:'Braccia simmetriche', warn:'Braccia asimmetriche', voice:'Spingi in modo uniforme!' },
+      { name:'Busto', errorJoints:[11,12,23,24], fn:function(a){return (a.shoulder_l||0)>65;}, ok:'Busto dritto', warn:'Non arcuare la schiena', voice:'Tieni il core contratto, no schiena arcuata!' }
+    ]
+  },
+  dips: {
+    name: 'Dips alle Parallele',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 100, upThresh: 155,
+    checks: [
+      { name:'Profondità', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<105;}, ok:'Buona profondità', warn:'Scendi di più', voice:'Piega i gomiti fino a 90 gradi!' },
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<15;}, ok:'Simmetria corretta', warn:'Braccia asimmetriche', voice:'Spingi uniformemente su entrambi i lati!' },
+      { name:'Spalle', errorJoints:[11,12], fn:function(a){return (a.shoulder_l||0)>55;}, ok:'Spalle stabili', warn:'Non alzare le spalle', voice:'Tieni le spalle basse e stabili!' }
+    ]
+  },
+  curl: {
+    name: 'Curl con Bilanciere',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 65, upThresh: 135,
+    checks: [
+      { name:'Gomiti fermi', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<20;}, ok:'Gomiti simmetrici', warn:'Gomiti asimmetrici', voice:'Tieni i gomiti fermi ai fianchi!' },
+      { name:'Contrazione', errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<65;}, ok:'Buona contrazione', warn:'Contrai di più', voice:'Contrai i bicipiti in cima!' },
+      { name:'No swing', errorJoints:[11,12,23,24], fn:function(a){return (a.shoulder_l||0)<35;}, ok:'Nessuno swing', warn:'Non usare il busto', voice:'Niente ondeggio del busto!' }
+    ]
+  },
+  tri_push: {
+    name: 'Push-down Tricipiti',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 60, upThresh: 120,
+    checks: [
+      { name:'Gomiti fissi', errorJoints:[13,14], fn:function(a){return (a.shoulder_l||0)<30;}, ok:'Gomiti fermi', warn:'Gomiti si muovono', voice:'Tieni i gomiti fermi ai fianchi!' },
+      { name:'Simmetria', errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<18;}, ok:'Simmetria ok', warn:'Braccia asimmetriche', voice:'Premi in modo simmetrico!' },
+      { name:'Full extension', errorJoints:[15,16], fn:function(a){return (a.elbow_l||180)>155;}, ok:'Estensione completa', warn:'Estendi completamente', voice:'Distendi completamente le braccia!' }
+    ]
+  },
+  plank: {
+    name: 'Plank',
+    joints: { body:[11,23,25], hip_l:[11,23,25], shoulder_l:[13,11,23] },
+    repAngle: 'body', downThresh: 155, upThresh: 180,
+    checks: [
+      { name:'Fianchi alti', errorJoints:[23,24,25,26], fn:function(a){return (a.body||0)>155;}, ok:'Fianchi corretti', warn:'Fianchi troppo bassi', voice:'Alza i fianchi, corpo in linea!' },
+      { name:'No picco', errorJoints:[23,24], fn:function(a){return (a.body||0)<175;}, ok:'Posizione piana', warn:'Fianchi troppo alti', voice:'Abbassa leggermente i fianchi!' },
+      { name:'Stabilità', errorJoints:[11,12,23,24], fn:function(a){return Math.abs((a.hip_l||0)-165)<20;}, ok:'Core stabile', warn:'Mantieni la posizione', voice:'Tieni il core contratto!' }
+    ]
+  },
+  crunch: {
+    name: 'Crunch',
+    joints: { torso:[11,23,25], hip_l:[11,23,25], shoulder_l:[13,11,23] },
+    repAngle: 'torso', downThresh: 145, upThresh: 160,
+    checks: [
+      { name:'Contrazione', errorJoints:[11,12,23,24], fn:function(a){return (a.torso||180)<155;}, ok:'Buona contrazione', warn:'Contrai gli addominali', voice:'Contrai gli addominali!' },
+      { name:'Controllo', errorJoints:[11,12], fn:function(a){return Math.abs((a.hip_l||0)-150)>10;}, ok:'Movimento controllato', warn:'Movimento brusco', voice:'Movimenti lenti e controllati!' },
+      { name:'Posizione neutrale', errorJoints:[11,12,13,14], fn:function(a){return (a.shoulder_l||0)<45;}, ok:'Spalle ok', warn:'Non tirare il collo', voice:'Non tirare il collo con le mani!' }
+    ]
+  },
+  burpee: {
+    name: 'Burpees',
+    joints: { knee_l:[23,25,27], hip_l:[11,23,25], elbow_l:[11,13,15] },
+    repAngle: 'knee_l', downThresh: 110, upThresh: 155,
+    checks: [
+      { name:'Plank phase', errorJoints:[23,24,25,26], fn:function(a){return (a.hip_l||0)>140;}, ok:'Corpo allineato nel plank', warn:'Fianchi droop nel plank', voice:'Tieni il corpo allineato nel plank!' },
+      { name:'Squat profondo', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<120;}, ok:'Buon squat', warn:'Squat più profondo', voice:'Scendi nello squat finale!' },
+      { name:'Core', errorJoints:[11,12,23,24], fn:function(a){return Math.abs((a.hip_l||180)-(a.elbow_l||180))>50;}, ok:'Core attivo', warn:'Mantieni il core', voice:'Core contratto durante tutto il movimento!' }
+    ]
+  },
+  jump_rope: {
+    name: 'Salto con la Corda',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], torso:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 155, upThresh: 168,
+    checks: [
+      { name:'Ginocchia morbide', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<170;}, ok:'Ginocchia morbide', warn:'Blocca le ginocchia', voice:'Tieni le ginocchia leggermente flesse!' },
+      { name:'Simmetria', errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<15;}, ok:'Balzi simmetrici', warn:'Balzi asimmetrici', voice:'Salta con entrambi i piedi simmetricamente!' },
+      { name:'Postura', errorJoints:[11,12,23,24], fn:function(a){return (a.torso||0)>140;}, ok:'Postura eretta', warn:'Schiena dritta', voice:'Tieni la schiena dritta durante i salti!' }
+    ]
+  },
+  run: {
+    name: 'Corsa',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], torso:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 140, upThresh: 160,
+    checks: [
+      { name:'Postura', errorJoints:[11,12,23,24], fn:function(a){return (a.torso||0)>140;}, ok:'Postura eretta', warn:'Busto inclinato', voice:'Corri con il busto eretto, leggera inclinazione!' },
+      { name:'Cadenza', errorJoints:[25,26,27,28], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<30;}, ok:'Passo simmetrico', warn:'Passo asimmetrico', voice:'Passo simmetrico!' },
+      { name:'Ginocchia', errorJoints:[25,26], fn:function(a){return (a.knee_l||180)<165;}, ok:'Ginocchia attive', warn:'Solleva le ginocchia', voice:'Alzare le ginocchia per efficienza!' }
     ]
   }
 };
@@ -5792,9 +5930,11 @@ function onPoseResults(results) {
   }
 
   var hasPose = results.poseLandmarks && results.poseLandmarks.length > 0;
-  
-  // 1. SCANLINE ANALYSIS - Radar-like scanning line
-  drawScanLine(ctx, canvas.width, canvas.height, hasPose);
+
+  // ── AURA SEGMENTATION EFFECT ──────────────────────
+  if (results.segmentationMask) {
+    drawAuraEffect(ctx, results, canvas.width, canvas.height);
+  }
 
   if (!hasPose) {
     badge.className = 'cam-status nolight';
@@ -5809,7 +5949,7 @@ function onPoseResults(results) {
   var lm = results.poseLandmarks;
   var w = canvas.width, h = canvas.height;
 
-  // Calculate angles first
+  // Calculate angles
   var exDef = POSE_EXERCISES[CAM.exercise];
   CAM.angles = {};
   Object.keys(exDef.joints).forEach(function(key) {
@@ -5820,30 +5960,47 @@ function onPoseResults(results) {
     }
   });
 
-  // Calculate form quality per segment
-  calculateSegmentColors(exDef);
+  // Collect failing check error joints for red overlay
+  var failingJoints = [];
+  var fbBox = document.getElementById('cam-fb-box');
+  var fbHtml = '';
+  var okCount = 0;
+  var voiceWarnings = [];
+  exDef.checks.forEach(function(ch) {
+    var pass = ch.fn(CAM.angles);
+    if (pass) {
+      okCount++;
+      fbHtml += '<div class="fb ok">' + ch.ok + '</div>';
+    } else {
+      fbHtml += '<div class="fb warn">' + ch.warn + '</div>';
+      if (ch.voice) voiceWarnings.push(ch.voice);
+      if (ch.errorJoints) failingJoints = failingJoints.concat(ch.errorJoints);
+      var warnKey = ch.warn.replace('⚠ ', '');
+      if (!CAM.failedChecks[warnKey]) CAM.failedChecks[warnKey] = 0;
+      CAM.failedChecks[warnKey]++;
+    }
+  });
+  fbBox.innerHTML = fbHtml;
 
-  // 5. SKELETON WITH SEGMENT COLORS - Color-coded by correctness
-  drawSegmentColoredSkeleton(ctx, lm, w, h);
+  // ── ERROR JOINT OVERLAYS (red glow) ───────────────
+  if (failingJoints.length > 0) {
+    drawErrorOverlays(ctx, lm, w, h, failingJoints);
+  }
 
-  // 2. CONSTELLATION LANDMARKS - Star-like joint points
-  drawConstellationLandmarks(ctx, lm, w, h);
-
-  // 4. MILITARY HUD ANGLES - Circular angle displays
-  drawMilitaryHUDAngles(ctx, lm, w, h, exDef);
-  
-  // Clear old HTML angle tags since we now draw them on canvas
   document.getElementById('cam-angle-tags').innerHTML = '';
 
-  // 3. MERCURY THERMOMETER SCORE - Vertical liquid-filled score
-  drawMercuryThermometer(ctx, canvas.width, canvas.height);
+  // Voice feedback
+  if (voiceWarnings.length > 0 && CAM.reps === 3 && !CAM.formTipGiven) {
+    CAM.formTipGiven = true;
+    speak(voiceWarnings[0]);
+  }
 
-  // Rep counting (unchanged logic)
+  // Rep counting
   var repAngle = CAM.angles[exDef.repAngle];
   var repBadge = document.getElementById('cam-rep-badge');
   if (repAngle !== undefined) {
     repBadge.textContent = CAM.reps + (CAM.phase === 'down' ? ' ↓' : ' ↑');
-    repBadge.title = exDef.repAngle + ': ' + repAngle + '° (↓<' + exDef.downThresh + ' ↑>' + exDef.upThresh + ')';
+    repBadge.title = exDef.repAngle + ': ' + repAngle + '°';
     if (CAM.phase === 'up' && repAngle < exDef.downThresh) {
       CAM.phase = 'down';
     } else if (CAM.phase === 'down' && repAngle > exDef.upThresh) {
@@ -5852,7 +6009,6 @@ function onPoseResults(results) {
       if (!CAM.sessionActive) { CAM.sessionActive = true; CAM.startTime = Date.now(); }
       document.getElementById('cam-rep-badge').textContent = CAM.reps;
       document.getElementById('cstat-rep').textContent = CAM.reps;
-      // Sync bottom control bar rep counter
       var ctrlReps = document.getElementById('cam-ctrl-reps');
       if (ctrlReps) ctrlReps.textContent = CAM.reps;
       var pct = Math.min(100, Math.round((CAM.reps / CAM.targetReps) * 100));
@@ -5868,52 +6024,26 @@ function onPoseResults(results) {
     }
   }
 
-  // Form checks (unchanged logic)
-  var fbBox = document.getElementById('cam-fb-box');
-  var fbHtml = '';
-  var okCount = 0;
-  var voiceWarnings = [];
-  exDef.checks.forEach(function(ch) {
-    var pass = ch.fn(CAM.angles);
-    if (pass) { okCount++; fbHtml += '<div class="fb ok">' + ch.ok + '</div>'; }
-    else {
-      fbHtml += '<div class="fb warn">' + ch.warn + '</div>';
-      if (ch.voice) voiceWarnings.push(ch.voice);
-      if (!CAM.failedChecks[ch.warn.replace('⚠ ','')]) CAM.failedChecks[ch.warn.replace('⚠ ','')] = 0;
-      CAM.failedChecks[ch.warn.replace('⚠ ','')]++;
-    }
-  });
-  fbBox.innerHTML = fbHtml;
-
-  if (voiceWarnings.length > 0 && CAM.reps === 3 && !CAM.formTipGiven) {
-    CAM.formTipGiven = true;
-    speak(voiceWarnings[0]);
-  }
-
   // Form score
   var formPct = Math.round((okCount / exDef.checks.length) * 100);
   CAM.frameScores.push(formPct);
   if (CAM.frameScores.length > 60) CAM.frameScores.shift();
-  CAM.formScore = Math.round(CAM.frameScores.reduce(function(a,b){return a+b;},0) / CAM.frameScores.length);
-  
-  // Update mercury thermometer target
-  CAM.mercuryTarget = CAM.formScore;
-  
+  CAM.formScore = Math.round(CAM.frameScores.reduce(function(a, b) { return a + b; }, 0) / CAM.frameScores.length);
+
   var scoreEl = document.getElementById('cam-score');
   scoreEl.textContent = CAM.formScore;
   scoreEl.style.color = CAM.formScore >= 80 ? '#22c55e' : (CAM.formScore >= 50 ? '#f97316' : '#ef4444');
   document.getElementById('cstat-form').textContent = CAM.formScore;
   document.getElementById('cstat-form').style.color = CAM.formScore >= 80 ? 'var(--gr)' : 'var(--or)';
-  // Sync bottom control bar score
   var ctrlScore = document.getElementById('cam-ctrl-score');
   if (ctrlScore) { ctrlScore.textContent = CAM.formScore; ctrlScore.style.color = CAM.formScore >= 80 ? '#22c55e' : (CAM.formScore >= 50 ? '#f97316' : '#ef4444'); }
 
-  // Symmetry (unchanged)
+  // Symmetry
   var symKeys = Object.keys(CAM.angles);
-  var leftKeys = symKeys.filter(function(k){return k.indexOf('_l')>-1;});
+  var leftKeys = symKeys.filter(function(k) { return k.indexOf('_l') > -1; });
   var symTotal = 0, symCount = 0;
   leftKeys.forEach(function(lk) {
-    var rk = lk.replace('_l','_r');
+    var rk = lk.replace('_l', '_r');
     if (CAM.angles[rk] !== undefined) {
       symTotal += 100 - Math.min(100, Math.abs(CAM.angles[lk] - CAM.angles[rk]) * 3);
       symCount++;
@@ -5923,262 +6053,77 @@ function onPoseResults(results) {
   document.getElementById('cstat-sym').textContent = CAM.symScore;
 }
 
-// ── ADVANCED CAMERA AI VISUALS ──────────────────
+// ── AURA EFFECT — segmentation → cyan glow ───────────
+function drawAuraEffect(ctx, results, w, h) {
+  var tmpCanvas = document.createElement('canvas');
+  tmpCanvas.width = w;
+  tmpCanvas.height = h;
+  var tmpCtx = tmpCanvas.getContext('2d');
 
-// 1. Scanline Analysis - Radar-style scanning line
-function drawScanLine(ctx, width, height, hasPose) {
-  // Update scanline position
-  if (CAM.scanActive && hasPose) {
-    CAM.scanLineSpeed = 2; // Faster when pose detected
-    ctx.strokeStyle = '#f97316'; // Orange when active
-    ctx.shadowColor = '#f97316';
-    ctx.shadowBlur = 8;
-  } else {
-    CAM.scanLineSpeed = 1; // Normal speed
-    ctx.strokeStyle = '#64748b'; // Gray when searching
-    ctx.shadowColor = '#64748b';
-    ctx.shadowBlur = 4;
-  }
-  
-  CAM.scanLineY += CAM.scanLineSpeed;
-  if (CAM.scanLineY > height + 20) CAM.scanLineY = -20;
-  
-  // Draw scanning line
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(0, CAM.scanLineY);
-  ctx.lineTo(width, CAM.scanLineY);
-  ctx.stroke();
-  
-  // Draw scan fade effect
-  var gradient = ctx.createLinearGradient(0, CAM.scanLineY - 15, 0, CAM.scanLineY + 15);
-  gradient.addColorStop(0, 'transparent');
-  gradient.addColorStop(0.4, hasPose ? 'rgba(249, 115, 22, 0.1)' : 'rgba(100, 116, 139, 0.05)');
-  gradient.addColorStop(0.6, hasPose ? 'rgba(249, 115, 22, 0.1)' : 'rgba(100, 116, 139, 0.05)');
-  gradient.addColorStop(1, 'transparent');
-  
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, CAM.scanLineY - 15, width, 30);
-  ctx.shadowBlur = 0;
-}
+  // Draw segmentation mask mirrored to match video
+  tmpCtx.save();
+  tmpCtx.translate(w, 0);
+  tmpCtx.scale(-1, 1);
+  tmpCtx.drawImage(results.segmentationMask, 0, 0, w, h);
+  tmpCtx.restore();
 
-// 2. Constellation Landmarks - Star-like joint points
-function drawConstellationLandmarks(ctx, landmarks, width, height) {
-  for (var i = 11; i <= 32; i++) {
-    if (landmarks[i].visibility > 0.5) {
-      var x = (1 - landmarks[i].x) * width;
-      var y = landmarks[i].y * height;
-      
-      // Draw star shape with central point and 4 rays
-      ctx.strokeStyle = '#f97316';
-      ctx.fillStyle = '#f97316';
-      ctx.lineWidth = 1.5;
-      ctx.shadowColor = '#f97316';
-      ctx.shadowBlur = 6;
-      
-      // Central point
-      ctx.beginPath();
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Four rays extending from center
-      var rayLength = 6;
-      ctx.beginPath();
-      // Horizontal ray
-      ctx.moveTo(x - rayLength, y);
-      ctx.lineTo(x + rayLength, y);
-      // Vertical ray 
-      ctx.moveTo(x, y - rayLength);
-      ctx.lineTo(x, y + rayLength);
-      // Diagonal rays
-      ctx.moveTo(x - rayLength * 0.7, y - rayLength * 0.7);
-      ctx.lineTo(x + rayLength * 0.7, y + rayLength * 0.7);
-      ctx.moveTo(x + rayLength * 0.7, y - rayLength * 0.7);
-      ctx.lineTo(x - rayLength * 0.7, y + rayLength * 0.7);
-      ctx.stroke();
+  // Manipulate pixels: person area → cyan aura, background → transparent
+  var imageData = tmpCtx.getImageData(0, 0, w, h);
+  var data = imageData.data;
+  for (var i = 0; i < data.length; i += 4) {
+    var maskVal = data[i]; // red channel = mask value
+    if (maskVal > 128) {
+      data[i]     = 0;    // R
+      data[i + 1] = 220;  // G
+      data[i + 2] = 255;  // B
+      data[i + 3] = 180;  // A
+    } else {
+      data[i + 3] = 0;    // fully transparent for background
     }
   }
-  ctx.shadowBlur = 0;
+  tmpCtx.putImageData(imageData, 0, 0);
+
+  // Draw outer glow (large blur)
+  ctx.save();
+  ctx.filter = 'blur(18px)';
+  ctx.globalAlpha = 0.55;
+  ctx.drawImage(tmpCanvas, 0, 0);
+  ctx.restore();
+
+  // Draw inner glow (sharp)
+  ctx.save();
+  ctx.filter = 'blur(6px)';
+  ctx.globalAlpha = 0.75;
+  ctx.drawImage(tmpCanvas, 0, 0);
+  ctx.restore();
 }
 
-// 3. Mercury Thermometer Score - Vertical liquid-filled gauge
-function drawMercuryThermometer(ctx, width, height) {
-  // Smooth mercury level animation
-  var targetLevel = CAM.mercuryTarget || 0;
-  var diff = targetLevel - CAM.mercuryLevel;
-  CAM.mercuryLevel += diff * 0.1; // Smooth interpolation
-  
-  var thermometerX = width - 25;
-  var thermometerTop = 40;
-  var thermometerHeight = height - 80;
-  var thermometerWidth = 8;
-  
-  // Background tube
-  ctx.fillStyle = 'rgba(100, 116, 139, 0.3)';
-  ctx.beginPath();
-  // Fallback for roundRect if not supported
-  if (ctx.roundRect) {
-    ctx.roundRect(thermometerX - thermometerWidth/2, thermometerTop, thermometerWidth, thermometerHeight, thermometerWidth/2);
-  } else {
-    ctx.rect(thermometerX - thermometerWidth/2, thermometerTop, thermometerWidth, thermometerHeight);
-  }
-  ctx.fill();
-  
-  // Mercury liquid level
-  var mercuryHeight = (CAM.mercuryLevel / 100) * thermometerHeight;
-  var mercuryY = thermometerTop + thermometerHeight - mercuryHeight;
-  
-  // Color based on score
-  var color = CAM.mercuryLevel >= 80 ? '#22c55e' : (CAM.mercuryLevel >= 50 ? '#f97316' : '#ef4444');
-  
-  ctx.fillStyle = color;
-  ctx.shadowColor = color;
-  ctx.shadowBlur = 8;
-  ctx.beginPath();
-  // Fallback for roundRect if not supported
-  if (ctx.roundRect) {
-    ctx.roundRect(thermometerX - thermometerWidth/2, mercuryY, thermometerWidth, mercuryHeight, thermometerWidth/2);
-  } else {
-    ctx.rect(thermometerX - thermometerWidth/2, mercuryY, thermometerWidth, mercuryHeight);
-  }
-  ctx.fill();
-  
-  // Bulb at bottom
-  ctx.beginPath();
-  ctx.arc(thermometerX, thermometerTop + thermometerHeight + 6, 6, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Score text
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 11px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(Math.round(CAM.mercuryLevel), thermometerX, thermometerTop - 8);
-}
-
-// 4. Military HUD Angles - Circular angle displays
-function drawMilitaryHUDAngles(ctx, landmarks, width, height, exDef) {
-  Object.keys(CAM.angles).forEach(function(key) {
-    var angle = CAM.angles[key];
-    var idx = exDef.joints[key];
-    var joint = landmarks[idx[1]];
-    
-    if (joint.visibility > 0.5) {
-      var x = (1 - joint.x) * width;
-      var y = joint.y * height;
-      
-      // Determine if angle is correct based on exercise checks
-      var isCorrect = true;
-      exDef.checks.forEach(function(check) {
-        if (!check.fn(CAM.angles)) {
-          if (check.name.toLowerCase().indexOf(key.replace('_l', '').replace('_r', '')) > -1) {
-            isCorrect = false;
-          }
-        }
-      });
-      
-      var color = isCorrect ? '#22c55e' : '#ef4444';
-      
-      // HUD circle background
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(x, y - 25, 18, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      
-      // Angle arc (shows angle graphically)
-      var startAngle = -Math.PI/2;
-      var endAngle = startAngle + (angle / 180) * Math.PI;
-      
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 6;
-      ctx.beginPath();
-      ctx.arc(x, y - 25, 14, startAngle, endAngle);
-      ctx.stroke();
-      
-      // Center dot
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(x, y - 25, 2, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Angle text
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 8px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(angle + '°', x, y - 20);
-    }
+// ── ERROR OVERLAYS — red radial gradient at bad joints ─
+function drawErrorOverlays(ctx, lm, w, h, failingJoints) {
+  var seen = {};
+  failingJoints.forEach(function(jointIdx) {
+    if (seen[jointIdx]) return;
+    seen[jointIdx] = true;
+    var lmk = lm[jointIdx];
+    if (!lmk || lmk.visibility < 0.3) return;
+    var x = (1 - lmk.x) * w;
+    var y = lmk.y * h;
+    var radius = Math.max(w, h) * 0.09;
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+    grad.addColorStop(0, 'rgba(244,63,94,0.85)');
+    grad.addColorStop(1, 'rgba(244,63,94,0)');
+    ctx.save();
+    ctx.filter = 'blur(10px)';
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   });
 }
 
-// 5. Calculate segment colors based on form correctness
-function calculateSegmentColors(exDef) {
-  // Reset segment colors to default
-  CAM.segmentColors = {
-    torso: '#22c55e',    // Upper body
-    arms: '#22c55e',     // Arms
-    legs: '#22c55e'      // Legs
-  };
-  
-  // Check each form requirement and color segments accordingly
-  exDef.checks.forEach(function(check) {
-    var isCorrect = check.fn(CAM.angles);
-    var checkName = check.name.toLowerCase();
-    
-    if (!isCorrect) {
-      if (checkName.includes('ginocchia') || checkName.includes('profondità') || checkName.includes('gambe') || checkName.includes('anche')) {
-        CAM.segmentColors.legs = '#ef4444'; // Red for incorrect legs
-      }
-      if (checkName.includes('gomiti') || checkName.includes('braccia') || checkName.includes('ampiezza')) {
-        CAM.segmentColors.arms = '#ef4444'; // Red for incorrect arms
-      }
-      if (checkName.includes('schiena') || checkName.includes('busto') || checkName.includes('corpo') || checkName.includes('postura')) {
-        CAM.segmentColors.torso = '#ef4444'; // Red for incorrect torso
-      }
-    }
-  });
-}
 
-// 6. Draw skeleton with segment-based colors
-function drawSegmentColoredSkeleton(ctx, landmarks, width, height) {
-  // Define connection groups by body segment
-  var connections = {
-    torso: [[11,12], [11,23], [12,24], [23,24]], // Torso connections
-    arms: [[11,13], [13,15], [12,14], [14,16]],   // Arm connections  
-    legs: [[23,25], [25,27], [24,26], [26,28], [27,29], [28,30], [29,31], [30,32]] // Leg connections
-  };
-  
-  // Draw animated dashed lines for each segment
-  ctx.lineWidth = 2.5;
-  ctx.shadowBlur = 6;
-  
-  Object.keys(connections).forEach(function(segment) {
-    var color = CAM.segmentColors[segment] || '#f97316';
-    ctx.strokeStyle = color;
-    ctx.shadowColor = color;
-    ctx.setLineDash([5, 5]); // Dashed lines
-    ctx.lineDashOffset = -Date.now() / 50; // Animated dash offset for "energy flow"
-    
-    connections[segment].forEach(function(conn) {
-      var a = landmarks[conn[0]], b = landmarks[conn[1]];
-      if (a.visibility > 0.5 && b.visibility > 0.5) {
-        ctx.beginPath();
-        ctx.moveTo((1-a.x)*width, a.y*height);
-        ctx.lineTo((1-b.x)*width, b.y*height);
-        ctx.stroke();
-      }
-    });
-  });
-  
-  // Reset line dash
-  ctx.setLineDash([]);
-  ctx.shadowBlur = 0;
-}
 
 async function startCamera() {
   if (cameraActive) return;
@@ -6239,7 +6184,8 @@ async function startCamera() {
       mpPose.setOptions({
         modelComplexity: 1,
         smoothLandmarks: true,
-        enableSegmentation: false,
+        enableSegmentation: true,
+        smoothSegmentation: true,
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5
       });
