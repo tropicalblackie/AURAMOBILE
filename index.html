@@ -9704,32 +9704,29 @@ function isDeloadWeek() {
 // ── INIT — Check stored session ──────────────────
 (function initAuth() {
   const user = getUser();
-  const hasLoggedInThisSession = sessionStorage.getItem('aura_session_login') === 'true';
   initLangTheme();
   updateProfileStats();
   updateMoodWidget();
   checkDeloadNeeded();
   renderHome(); // Render home on init
-  
-  // FORCE AUTH SCREEN if no explicit session login
-  if (!hasLoggedInThisSession) {
-    showAuth();
-    hideOnboarding();
-    return;
-  }
-  
+
   if (user && !user._needsOnboarding) {
+    // Returning user — go straight in
+    sessionStorage.setItem('aura_session_login', 'true');
     applyUserData(user);
     hideAuth();
     hideOnboarding();
     setTimeout(() => toast('Bentornato ' + user.name.split(' ')[0] + '!', 'or'), 900);
   } else if (user && user._needsOnboarding) {
+    sessionStorage.setItem('aura_session_login', 'true');
     applyUserData(user);
     hideAuth();
     startOnboarding();
   } else {
+    // No stored user at all — show auth
     showAuth();
     hideOnboarding();
+    return;
   }
   // Handle deep-link from notification (?tab=workout etc)
   try {
