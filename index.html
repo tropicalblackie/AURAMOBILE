@@ -1641,6 +1641,33 @@ body::-webkit-scrollbar{display:none}
   opacity:0;transition:opacity .8s ease;
 }
 .ws-vignette.on{opacity:1}
+/* ── WORKOUT CAMERA MODE ── */
+.cam-ov.ws-mode .cam-ov-bar{display:none!important}
+.cam-ov.ws-mode .cam-ov-close{display:none!important}
+.cam-ov.ws-mode .cam-qs{display:none!important}
+.cam-ov.ws-mode .cam-status{display:none!important}
+.cam-ov.ws-mode #cam-fb-box{display:none!important}
+/* Countdown overlay */
+#ws-countdown-ov{position:absolute;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.72);pointer-events:all}
+#ws-countdown-ov.on{display:flex}
+.ws-cd-ex-name{position:absolute;top:max(env(safe-area-inset-top,44px),44px);left:0;right:0;text-align:center;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.85);padding:0 24px;letter-spacing:.3px}
+.ws-cd-num{font-family:var(--fd);font-size:8rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 0 60px rgba(249,115,22,.9),0 0 20px rgba(249,115,22,.6)}
+.ws-cd-label{font-size:.9rem;color:rgba(255,255,255,.6);margin-top:10px;letter-spacing:2px;text-transform:uppercase}
+/* Active workout overlay */
+#ws-active-ov{position:absolute;inset:0;z-index:40;display:none;pointer-events:none}
+#ws-active-ov.on{display:block}
+.ws-rep-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);text-align:center;pointer-events:none}
+.ws-rep-big-num{font-family:var(--fd);font-size:min(32vw,7rem);font-weight:900;color:rgba(255,255,255,.75);line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.ws-rep-target{font-size:1.3rem;font-weight:600;color:rgba(255,255,255,.45);margin-top:4px;font-family:var(--fd)}
+.ws-active-btns{position:absolute;top:max(env(safe-area-inset-top,44px),44px);right:12px;display:flex;flex-direction:column;gap:8px;pointer-events:all}
+.ws-active-btn{padding:7px 14px;border-radius:50px;font-size:.72rem;font-weight:700;border:none;cursor:pointer;backdrop-filter:blur(12px);letter-spacing:.4px;-webkit-backdrop-filter:blur(12px)}
+.ws-active-pause{background:rgba(255,255,255,.18);color:#fff}
+.ws-active-skip{background:rgba(249,115,22,.25);color:#f97316;border:1px solid rgba(249,115,22,.3)}
+.ws-active-end{background:rgba(239,68,68,.22);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
+#ws-paused-ov{position:absolute;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;pointer-events:all;z-index:5}
+#ws-paused-ov.on{display:flex}
+.ws-paused-title{font-size:1.5rem;font-weight:900;color:#fff}
+.ws-paused-resume{padding:14px 36px;background:linear-gradient(135deg,var(--or),var(--or2));border-radius:50px;border:none;color:#fff;font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:0 6px 22px rgba(249,115,22,.4)}
 </style>
 </head>
 <body>
@@ -2009,6 +2036,28 @@ body::-webkit-scrollbar{display:none}
         </div>
         <!-- Workout context label -->
         <div class="cam-ws-ctx" id="cam-ws-ctx" style="display:none"></div>
+      </div>
+      <!-- ── Workout Countdown Overlay (A→B transition) ── -->
+      <div id="ws-countdown-ov">
+        <div class="ws-cd-ex-name" id="ws-cd-ex-name"></div>
+        <div class="ws-cd-num" id="ws-cd-num">10</div>
+        <div class="ws-cd-label">preparati</div>
+      </div>
+      <!-- ── Workout Active Overlay (State B) ── -->
+      <div id="ws-active-ov">
+        <div class="ws-rep-center">
+          <div class="ws-rep-big-num" id="ws-rep-big">0</div>
+          <div class="ws-rep-target" id="ws-rep-target">/12</div>
+        </div>
+        <div class="ws-active-btns">
+          <button class="ws-active-btn ws-active-pause" id="ws-active-pause-btn" onclick="wsTogglePauseCam()">⏸ Pausa</button>
+          <button class="ws-active-btn ws-active-skip" onclick="wsOnSetDone(true)">⏭ Salta</button>
+          <button class="ws-active-btn ws-active-end" onclick="wsOnSetDone(true)">■ Termina Set</button>
+        </div>
+        <div id="ws-paused-ov">
+          <div class="ws-paused-title">⏸ In Pausa</div>
+          <button class="ws-paused-resume" onclick="wsTogglePauseCam()">▶ Riprendi</button>
+        </div>
       </div>
       <!-- Camera Summary Overlay (inside cam-ov) -->
       <div class="cam-summary-ov" id="cam-summary-ov">
@@ -3348,7 +3397,8 @@ let ws = {
   active:false, planIdx:-1, planName:'', exercises:[], exIdx:0, setNum:1,
   resting:false, restSec:0, _restTotal:0, totalSec:0, paused:false, timer:null,
   calories:0, exerciseTimeSec:0, setWeights:{}, moodPre:0, moodPost:0,
-  tutorialPhase:false
+  tutorialPhase:false,
+  countdownSec:0, countdownTimer:null
 };
 
 // Progression helpers
@@ -3419,13 +3469,11 @@ function startWorkoutSession(planIdx) {
     toast('Aggiungi esercizi prima di avviare!', 're');
     return;
   }
-  // Store planIdx and show pre-workout mood picker
-  ws._pendingPlanIdx = planIdx;
-  ws.moodPre = 0; ws.moodPost = 0;
-  document.getElementById('mood-pre-ov').classList.add('on');
+  _doStartWorkoutSession(planIdx);
 }
 
 function moodSelectPre(val) {
+  // kept for backward compat — no longer shown
   ws.moodPre = val;
   document.getElementById('mood-pre-ov').classList.remove('on');
   _doStartWorkoutSession(ws._pendingPlanIdx);
@@ -3444,8 +3492,7 @@ function _doStartWorkoutSession(planIdx) {
   ws.exIdx = 0; ws.setNum = 1; ws.totalSec = 0;
   ws.resting = false; ws.restSec = 0; ws._restTotal = 0; ws.paused = false;
   ws.calories = 0; ws.exerciseTimeSec = 0; ws.setWeights = {}; ws.tutorialPhase = true;
-  // If mood is low, suggest lighter intensity
-  if (ws.moodPre <= 2) toast('💡 Energia bassa — considera pesi più leggeri oggi', 'or');
+  ws.countdownSec = 0; if (ws.countdownTimer) { clearInterval(ws.countdownTimer); ws.countdownTimer = null; }
   document.getElementById('ws-ov').classList.add('on');
   document.getElementById('ws-vignette').classList.add('on');
   renderWsView();
@@ -3491,6 +3538,107 @@ function wsAdvance() {
 function wsStartSet() {
   ws.tutorialPhase = false;
   renderWsView();
+}
+
+// ── NEW SESSION FLOW: State A → B → C ────────────────
+
+function wsStartCountdown() {
+  var ex = ws.exercises[ws.exIdx];
+  unlockSpeech();
+  // Fallback to manual mode if exercise has no pose tracking
+  if (!POSE_EXERCISES[ex.id]) {
+    ws.tutorialPhase = false;
+    renderWsView();
+    return;
+  }
+  // Parse target reps from plan string (e.g. "12" or "10-12")
+  var repsMatch = ('' + ex.reps).match(/(\d+)/);
+  var targetReps = repsMatch ? parseInt(repsMatch[1]) : 12;
+  // Configure CAM state
+  CAM.exercise = ex.id;
+  CAM.targetReps = targetReps;
+  CAM.reps = 0; CAM.phase = 'up'; CAM.frameScores = [];
+  CAM.failedChecks = {}; CAM.sessionActive = false;
+  CAM.startTime = 0; CAM.formTipGiven = false;
+  CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
+  CAM._errorSince = 0; CAM._correctionTime = 0;
+  document.getElementById('cam-target-reps').value = targetReps;
+  // Prime visible rep counter
+  document.getElementById('ws-rep-big').textContent = '0';
+  document.getElementById('ws-rep-target').textContent = '/' + targetReps;
+  // Open cam-ov in workout mode (hides bar, close button, form score)
+  var camOv = document.getElementById('cam-ov');
+  camOv.classList.add('on', 'ws-mode');
+  // Reset overlay states
+  document.getElementById('ws-active-ov').classList.remove('on');
+  document.getElementById('ws-paused-ov').classList.remove('on');
+  document.getElementById('ws-active-pause-btn').textContent = '⏸ Pausa';
+  // Show countdown
+  ws.countdownSec = 10;
+  var exDef = POSE_EXERCISES[ex.id];
+  var cdLabel = (exDef ? exDef.name : ex.name) + ' — Set ' + ws.setNum + '/' + (parseInt(ex.sets) || 3) + ' · ' + targetReps + ' rep';
+  document.getElementById('ws-cd-ex-name').textContent = cdLabel;
+  document.getElementById('ws-cd-num').textContent = ws.countdownSec;
+  document.getElementById('ws-countdown-ov').classList.add('on');
+  ws.countdownTimer = setInterval(function() {
+    ws.countdownSec--;
+    if (ws.countdownSec <= 0) {
+      clearInterval(ws.countdownTimer);
+      ws.countdownTimer = null;
+      wsBeginActivePhase();
+    } else {
+      document.getElementById('ws-cd-num').textContent = ws.countdownSec;
+    }
+  }, 1000);
+}
+
+function wsBeginActivePhase() {
+  document.getElementById('ws-countdown-ov').classList.remove('on');
+  document.getElementById('ws-active-ov').classList.add('on');
+  ws.paused = false;
+  startCamera();
+}
+
+function wsOnSetDone(manual) {
+  // Cancel any running countdown
+  if (ws.countdownTimer) { clearInterval(ws.countdownTimer); ws.countdownTimer = null; }
+  // Stop camera
+  stopCamera();
+  // Close cam-ov workout mode
+  var camOv = document.getElementById('cam-ov');
+  camOv.classList.remove('on', 'ws-mode');
+  document.getElementById('ws-countdown-ov').classList.remove('on');
+  document.getElementById('ws-active-ov').classList.remove('on');
+  document.getElementById('ws-paused-ov').classList.remove('on');
+  _camOvWsCtx = null;
+  ws.paused = false;
+  var ex = ws.exercises[ws.exIdx];
+  var ts = parseInt(ex.sets) || 3;
+  // Check if this was the very last set of the last exercise
+  if (ws.exIdx >= ws.exercises.length - 1 && ws.setNum >= ts) {
+    wsFinish(); return;
+  }
+  // Start rest phase (State C)
+  var smartSec = wsSmartRest(ex, ws.setNum, ts, 0);
+  ws.resting = true;
+  ws.restSec = smartSec;
+  ws._restTotal = smartSec;
+  ws.tutorialPhase = false;
+  renderWsView();
+}
+
+function wsTogglePauseCam() {
+  ws.paused = !ws.paused;
+  var btn = document.getElementById('ws-active-pause-btn');
+  var pausedOv = document.getElementById('ws-paused-ov');
+  if (ws.paused) {
+    btn.textContent = '▶ Riprendi';
+    pausedOv.classList.add('on');
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  } else {
+    btn.textContent = '⏸ Pausa';
+    pausedOv.classList.remove('on');
+  }
 }
 
 function wsCompleteSet() {
@@ -3654,35 +3802,25 @@ function renderWsView() {
     '<div class="ws-progress-label">' + (ws.exIdx + 1) + '/' + total + ' esercizi</div>' + _deloadBanner;
 
   if (ws.tutorialPhase) {
-    // ── TUTORIAL PHASE ──────────────────────────────
-    var exData = EXERCISES.find(function(e) { return e.id === ex.id; });
-    var steps = (exData && exData.steps) ? exData.steps : [];
-    var stepsHtml = '';
-    if (steps.length > 0) {
-      stepsHtml = '<ol class="ws-tutorial-steps">';
-      steps.slice(0, 3).forEach(function(s) { stepsHtml += '<li>' + wsEsc(s) + '</li>'; });
-      stepsHtml += '</ol>';
-    }
+    // ── STATE A: TUTORIAL / SETUP ─────────────────────
     content.innerHTML =
       progressBar +
       '<div class="ws-tutorial">' +
-        '<div class="ws-tutorial-header">Prossimo Esercizio</div>' +
+        '<div class="ws-tutorial-header">Set ' + ws.setNum + ' di ' + ts + '</div>' +
         '<div class="ws-tutorial-name">' + wsEsc(ex.name) + '</div>' +
-        '<div class="ws-ex-info" style="margin-top:4px">Set ' + ws.setNum + ' di ' + ts + ' &middot; ' + wsEsc(ex.reps) + ' rep</div>' +
+        '<div class="ws-ex-info" style="margin-top:4px">' + wsEsc(ex.reps) + ' ripetizioni</div>' +
         '<div class="ws-tutorial-media">' +
           '<div class="ws-tutorial-emoji">' + ex.emoji + '</div>' +
           (ex.gif ? '<img class="ws-tutorial-gif" src="' + ex.gif + '" alt="" onerror="this.style.display=\'none\'">' : '') +
         '</div>' +
-        stepsHtml +
-        '<button class="ws-tutorial-start-btn" onclick="wsStartSet()">INIZIA SET</button>' +
+        '<button class="ws-tutorial-start-btn" onclick="wsStartCountdown()">▶ INIZIA SERIE</button>' +
       '</div>' +
       '<div class="ws-controls">' +
-        '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '▶ Riprendi' : '⏸ Pausa') + '</button>' +
-        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">⏭ Salta</button>' +
+        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">⏭ Salta Esercizio</button>' +
         '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">■ Termina</button>' +
       '</div>';
   } else if (ws.resting) {
-    // ── REST PHASE (glassmorphism) ──────────────────
+    // ── STATE C: RECOVERY ─────────────────────────────
     var nextInfo = ws.setNum < ts
       ? 'Set ' + (ws.setNum + 1) + ' di ' + ts + ' · ' + wsEsc(ex.name)
       : (ws.exIdx + 1 < total ? wsEsc(ws.exercises[ws.exIdx + 1].name) : 'Fine!');
@@ -3712,15 +3850,8 @@ function renderWsView() {
           '<button class="ws-rest-adj-btn" onclick="wsAdjRest(15)">+15s</button>' +
         '</div>' +
         '<div class="ws-rest-next">Prossimo: ' + nextInfo + '</div>' +
-        '<div class="ws-weight-label">🏋️ Peso utilizzato</div>' +
-        '<div class="ws-weight-row">' +
-          '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">−2.5</button>' +
-          '<div class="ws-weight-display"><input type="number" id="ws-weight-input" inputmode="decimal" step="0.5" min="0" value="" placeholder="0"><span class="ws-weight-unit">kg</span></div>' +
-          '<button class="ws-weight-adj" onclick="wsAdjWeight(2.5)">+2.5</button>' +
-        '</div>' +
         '<button class="ws-btn-skip" onclick="wsSkipRest()">Salta Recupero →</button>' +
         '<div class="ws-controls" style="margin-top:12px">' +
-          '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '▶ Riprendi' : '⏸ Pausa') + '</button>' +
           '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">■ Termina</button>' +
         '</div>' +
       '</div>';
@@ -5341,8 +5472,8 @@ const CAM = {
   exercise: 'squat', angles: {}, targetReps: 12,
   lastVoiceTime: 0, lastVoiceMsg: '', voiceEnabled: true,
   sessionActive: false, failedChecks: {}, startTime: 0, formTipGiven: false,
-  // New visual states
-  scanActive: false, lastPoseTime: 0
+  scanActive: false, lastPoseTime: 0,
+  _errorSince: 0, _correctionTime: 0
 };
 
 // Exercise definitions for MediaPipe angle analysis — Big 20 bodyweight
@@ -5840,6 +5971,21 @@ function speakRepCount(reps, target) {
   }
 }
 
+// Speak a form correction — max once every 7 seconds (separate throttle from rep count)
+function speakCorrection(text) {
+  if (!('speechSynthesis' in window)) return;
+  var now = Date.now();
+  if (now - (CAM._correctionTime || 0) < 7000) return;
+  CAM._correctionTime = now;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'it-IT'; u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0;
+  var voices = window.speechSynthesis.getVoices();
+  var itVoice = voices.find(function(v) { return v.lang && (v.lang.indexOf('it') === 0); });
+  if (itVoice) u.voice = itVoice;
+  window.speechSynthesis.speak(u);
+}
+
 function showCamSummary() {
   var exDef = POSE_EXERCISES[CAM.exercise];
   var duration = Math.round((Date.now() - CAM.startTime) / 1000);
@@ -5889,6 +6035,8 @@ function closeCamSummary() {
 }
 
 function onPoseResults(results) {
+  // Skip frame if workout is paused
+  if (ws.paused) return;
   var canvas = document.getElementById('cam-canvas');
   var video = document.getElementById('cam-video');
   if (!canvas || !video) return;
@@ -5979,10 +6127,13 @@ function onPoseResults(results) {
 
   document.getElementById('cam-angle-tags').innerHTML = '';
 
-  // Voice feedback
-  if (voiceWarnings.length > 0 && CAM.reps === 3 && !CAM.formTipGiven) {
-    CAM.formTipGiven = true;
-    speak(voiceWarnings[0]);
+  // Voice corrections: trigger after 2s of continuous error, max 1 every 7s
+  var _vcNow = Date.now();
+  if (voiceWarnings.length > 0) {
+    if (!CAM._errorSince) CAM._errorSince = _vcNow;
+    if (_vcNow - CAM._errorSince >= 2000) speakCorrection(voiceWarnings[0]);
+  } else {
+    CAM._errorSince = 0;
   }
 
   // Rep counting
@@ -5999,6 +6150,9 @@ function onPoseResults(results) {
       if (!CAM.sessionActive) { CAM.sessionActive = true; CAM.startTime = Date.now(); }
       document.getElementById('cam-rep-badge').textContent = CAM.reps;
       document.getElementById('cstat-rep').textContent = CAM.reps;
+      // Update workout active overlay rep counter
+      var repBig = document.getElementById('ws-rep-big');
+      if (repBig) repBig.textContent = CAM.reps;
       var ctrlReps = document.getElementById('cam-ctrl-reps');
       if (ctrlReps) ctrlReps.textContent = CAM.reps;
       var pct = Math.min(100, Math.round((CAM.reps / CAM.targetReps) * 100));
@@ -6009,7 +6163,9 @@ function onPoseResults(results) {
       document.getElementById('cstat-cal').textContent = CAM.calories;
       speakRepCount(CAM.reps, CAM.targetReps);
       if (CAM.reps >= CAM.targetReps) {
-        setTimeout(function() { showCamSummary(); }, 800);
+        setTimeout(function() {
+          if (ws.active) { wsOnSetDone(false); } else { showCamSummary(); }
+        }, 800);
       }
     }
   }
