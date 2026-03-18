@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8"/>
@@ -368,14 +368,18 @@ body::-webkit-scrollbar{display:none}
 .hero-btn-primary{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;box-shadow:0 5px 18px rgba(249,115,22,.3)}
 .hero-btn-secondary{background:var(--s8);color:var(--t2);border:1px solid var(--s7);box-shadow:none}
 
-/* ── WEEKLY STREAK ROW ── */
-.weekly-streak{margin:12px 16px 0;display:flex;gap:6px;justify-content:space-between}
-.streak-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:12px;background:var(--s9);border:1px solid var(--s8);transition:all .3s var(--spring)}
-.streak-day.done{background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(249,115,22,.06));border-color:rgba(249,115,22,.4)}
-.streak-day.today{border-color:var(--or);box-shadow:0 0 8px rgba(249,115,22,.25)}
-.streak-day-name{font-size:.58rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
-.streak-day-ico{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
-.streak-day.done .streak-day-ico svg{filter:drop-shadow(0 0 4px #f97316)}
+/* ── REATTORE DI COSTANZA ── */
+.weekly-streak{margin:12px 16px 0;display:flex;gap:0;justify-content:space-between;position:relative}
+.streak-day-r{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:10px;background:var(--s9);border:1px solid var(--s8);transition:all .3s var(--spring);position:relative;overflow:visible}
+.streak-day-r.done{background:rgba(0,220,255,.08);border-color:rgba(0,220,255,.35);box-shadow:0 0 6px rgba(0,220,255,.2)}
+.streak-day-r.done.beam-mid::after,.streak-day-r.done.beam-start::after{content:'';position:absolute;top:50%;right:-1px;width:calc(100% + 2px);height:3px;background:linear-gradient(90deg,rgba(0,220,255,.7),rgba(0,220,255,.9));box-shadow:0 0 8px rgba(0,220,255,.8);transform:translateY(-50%);z-index:0;animation:fracturePulse 2s ease-in-out infinite}
+.streak-day-r.done.beam-end::after,.streak-day-r.done.beam-solo::after{content:none}
+.streak-day-r.fracture::before{content:'';position:absolute;top:0;left:50%;width:2px;height:100%;background:linear-gradient(180deg,transparent,rgba(255,0,60,.8),transparent);transform:translateX(-50%);animation:fracturePulse .6s ease-in-out infinite alternate}
+.streak-day-r.today{border-color:var(--or);box-shadow:0 0 10px rgba(249,115,22,.3)}
+.streak-day-name-r{font-size:.56rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;position:relative;z-index:1}
+.streak-day-ico-r{width:22px;height:22px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.streak-day-r.done .streak-day-ico-r svg{filter:drop-shadow(0 0 5px #00dcff)}
+@keyframes fracturePulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
 
 /* ── NUTRITION PILL ── */
 .nutri-pill{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:10px;font-size:.72rem}
@@ -1339,25 +1343,37 @@ body::-webkit-scrollbar{display:none}
   .app{border-radius:40px;box-shadow:0 0 0 1px #1e293b,0 40px 100px rgba(0,0,0,.8);height:88vh;max-height:900px}
 }
 
-/* ── AI COACH ── */
-.aicoach-body{display:flex;flex-direction:column;height:calc(100% - 52px)}
-.aicoach-msgs{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:10px}
-.aicoach-msg{display:flex}
-.aicoach-msg.bot{justify-content:flex-start}
-.aicoach-msg.user{justify-content:flex-end}
-.aicoach-bubble{max-width:82%;padding:10px 14px;border-radius:16px;font-size:.82rem;line-height:1.5}
-.aicoach-bubble.bot{background:var(--s8);border:1px solid var(--s7);color:var(--t1);border-bottom-left-radius:4px}
-.aicoach-bubble.user{background:var(--or);color:#fff;border-bottom-right-radius:4px}
-.aicoach-input-row{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--s8);background:var(--bg)}
-.aicoach-input{flex:1;background:var(--s9);border:1px solid var(--s8);border-radius:20px;padding:10px 16px;color:var(--t1);font-size:.85rem;outline:none}
-.aicoach-input:focus{border-color:var(--or)}
-.aicoach-send{width:40px;height:40px;border-radius:50%;background:var(--or);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.aicoach-send svg{stroke:#fff}
-.aicoach-typing{display:flex;gap:4px;padding:10px 14px}
-.aicoach-typing span{width:6px;height:6px;border-radius:50%;background:var(--t3);animation:aicDot .8s infinite}
-.aicoach-typing span:nth-child(2){animation-delay:.15s}
-.aicoach-typing span:nth-child(3){animation-delay:.3s}
-@keyframes aicDot{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+/* ── JARVIS TERMINAL (AI COACH) ── */
+.jarvis-ov{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.jarvis-ov.on{transform:translateY(0)}
+.jarvis-topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(0,220,255,.2)}
+.jarvis-back{background:none;border:none;color:rgba(0,220,255,.8);cursor:pointer;padding:6px;display:flex;align-items:center}
+.jarvis-title{font-family:var(--fd);font-size:.85rem;font-weight:700;letter-spacing:3px;color:rgba(0,220,255,.9);text-transform:uppercase}
+.jarvis-core-wrap{display:flex;justify-content:center;align-items:center;padding:18px 0 10px;flex-shrink:0}
+.jarvis-core{position:relative;width:70px;height:70px;display:flex;align-items:center;justify-content:center;animation:jarvisPulse 2.5s ease-in-out infinite}
+.jarvis-core-glyph{font-size:1.8rem;color:#00dcff;text-shadow:0 0 20px #00dcff,0 0 40px rgba(0,220,255,.5);z-index:1}
+.jarvis-ring{position:absolute;border-radius:50%;border:1px solid rgba(0,220,255,.4);animation:jarvisRing 3s linear infinite}
+.jarvis-ring.r1{width:90px;height:90px;animation-duration:3s}
+.jarvis-ring.r2{width:110px;height:110px;animation-duration:4s;animation-direction:reverse;border-style:dashed}
+.jarvis-ring.r3{width:130px;height:130px;animation-duration:6s;opacity:.4}
+.jarvis-core.thinking .jarvis-core-glyph{animation:jarvisThink .5s steps(2) infinite}
+@keyframes jarvisPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(0,220,255,.5))}50%{filter:drop-shadow(0 0 18px rgba(0,220,255,.9))}}
+@keyframes jarvisThink{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}
+@keyframes jarvisRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes jBlink{0%,100%{opacity:1}50%{opacity:0}}
+.jarvis-terminal{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:6px;font-family:"Courier New",monospace;font-size:.78rem}
+.jarvis-line{color:rgba(0,220,255,.75);line-height:1.6;word-break:break-word}
+.jarvis-user-line{text-align:right;color:rgba(255,255,255,.85)}
+.jarvis-user-line::before{content:'› ';color:rgba(0,220,255,.6)}
+.jarvis-bot-line{color:#00dcff}
+.jarvis-bot-line::before{content:'▶ AURA  ';color:rgba(0,220,255,.5);font-size:.7rem}
+.jarvis-sys-line{color:rgba(0,220,255,.35);font-size:.7rem;font-style:italic}
+.jarvis-cursor-blink{display:inline-block;width:8px;height:1em;background:#00dcff;vertical-align:text-bottom;animation:jBlink .7s step-end infinite}
+.jarvis-input-row{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid rgba(0,220,255,.15);background:#000;flex-shrink:0}
+.jarvis-prompt{color:rgba(0,220,255,.6);font-family:"Courier New",monospace;font-size:.85rem;flex-shrink:0}
+.jarvis-input{flex:1;background:transparent;border:none;border-bottom:1px solid rgba(0,220,255,.3);color:#00dcff;font-family:"Courier New",monospace;font-size:.85rem;padding:6px 0;outline:none;caret-color:#00dcff}
+.jarvis-input::placeholder{color:rgba(0,220,255,.25)}
+.jarvis-send{background:none;border:1px solid rgba(0,220,255,.4);color:#00dcff;font-family:"Courier New",monospace;padding:6px 10px;cursor:pointer;border-radius:4px;font-size:.78rem;flex-shrink:0}
 
 /* ── PROGRESS PHOTOS ── */
 .progphoto-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -2457,24 +2473,30 @@ body::-webkit-scrollbar{display:none}
   </div>
 </div>
 
-<!-- AI COACH OVERLAY -->
-<div class="legal-ov" id="aicoach-ov">
-  <div class="legal-topbar">
-    <button class="legal-back" onclick="closeAICoach()">
+<!-- AI COACH OVERLAY — JARVIS TERMINAL -->
+<div class="jarvis-ov" id="aicoach-ov">
+  <div class="jarvis-topbar">
+    <button class="jarvis-back" onclick="closeAICoach()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="legal-page-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg> AI Coach</div>
+    <div class="jarvis-title">◈ AURA COACH</div>
   </div>
-  <div class="aicoach-body">
-    <div class="aicoach-msgs" id="aicoach-msgs">
-      <div class="aicoach-msg bot"><div class="aicoach-bubble bot">Ciao! Sono il tuo AI Coach AURA 🤖<br>Chiedimi qualsiasi cosa su allenamento, dieta, recupero, progressi o integratori!</div></div>
+  <div class="jarvis-core-wrap">
+    <div class="jarvis-core" id="jarvis-core">
+      <div class="jarvis-ring r1"></div>
+      <div class="jarvis-ring r2"></div>
+      <div class="jarvis-ring r3"></div>
+      <div class="jarvis-core-glyph">◈</div>
     </div>
-    <div class="aicoach-input-row">
-      <input class="aicoach-input" id="aicoach-input" placeholder="Scrivi una domanda..." maxlength="500">
-      <button class="aicoach-send" onclick="sendAICoachMsg()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
+  </div>
+  <div class="jarvis-terminal" id="aicoach-msgs">
+    <div class="jarvis-sys-line">[ AURA COACH v2.0 — SISTEMA PRONTO ]</div>
+    <div class="jarvis-bot-line">Ciao! Sono il tuo AI Coach AURA.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chiedimi qualsiasi cosa su allenamento, dieta, recupero o progressi.</div>
+  </div>
+  <div class="jarvis-input-row">
+    <span class="jarvis-prompt">›</span>
+    <input class="jarvis-input" id="aicoach-input" placeholder="Invia richiesta..." maxlength="500" autocomplete="off" spellcheck="false">
+    <button class="jarvis-send" onclick="sendAICoachMsg()">↵</button>
   </div>
 </div>
 
@@ -3089,76 +3111,34 @@ function ensureFirebase() {
 // ── EXERCISE LIBRARY DATA — BIG 20 ───────────────────────
 // 20 esercizi fondamentali multiarticolari con supporto MediaPipe CV
 const EXERCISES = [
-  // PETTO (3)
-  {id:'bench',name:'Panca Piana',muscle:'Petto',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bench-Press.gif',
-   desc:'Esercizio fondamentale multiarticolare per petto, spalle anteriori e tricipiti.',
-   steps:['Sdraiati sulla panca, piedi piatti a terra','Impugna il bilanciere leggermente più largo delle spalle','Abbassa lentamente al centro del petto (gomiti a 45°)','Spingi esplosivamente fino a distensione quasi completa']},
-  {id:'incline_db',name:'Panca Inclinata Manubri',muscle:'Petto',emoji:'💪',diff:'Intermedio',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif',
-   desc:'Variante inclinata per enfatizzare il petto alto e i fasci clavicolari.',
-   steps:['Imposta la panca a 30-45°','Tieni i manubri alle spalle con gomiti larghi','Spingi verso l\'alto convergendo leggermente','Abbassa con controllo fino allo stretch del petto']},
-  {id:'pushup',name:'Push-Up',muscle:'Petto',emoji:'🧑‍💻',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Push-Up.gif',
-   desc:'Fondamentale a corpo libero per petto, spalle e tricipiti.',
-   steps:['Posizionati in plank alto, mani larghezza spalle','Core e glutei contratti durante tutto il movimento','Abbassa il petto sfiorando il pavimento','Spingi esplosivamente tornando in posizione di plank']},
-  // SCHIENA (4)
-  {id:'deadlift',name:'Stacco da Terra',muscle:'Schiena',emoji:'💪',diff:'Avanzato',sets:4,reps:'5-6',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Deadlift.gif',
-   desc:'Re degli esercizi compositi. Coinvolge tutta la catena posteriore.',
-   steps:['Piedi alla larghezza dei fianchi, bilanciere sulle tibie','Schiena neutra, petto alto, sguardo avanti','Distendi anche e ginocchia simultaneamente','Termina in piedi con anche completamente estese']},
-  {id:'pullup',name:'Trazioni alla Sbarra',muscle:'Schiena',emoji:'🧗',diff:'Avanzato',sets:4,reps:'6-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pull-Up.gif',
-   desc:'Fondamentale a corpo libero per dorsali e bicipiti.',
-   steps:['Impugna la sbarra più larga delle spalle (presa prona)','Parti a braccia distese, coprire il petto','Tira portando il mento sopra la sbarra stringendo le scapole','Scendi lentamente controllando l\'eccentrica']},
-  {id:'row',name:'Rematore Bilanciere',muscle:'Schiena',emoji:'🚣',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bent-Over-Row.gif',
-   desc:'Fondamentale per lo spessore della schiena, trapezi e bicipiti.',
-   steps:['Busto inclinato a 45°, schiena neutra','Impugna il bilanciere a larghezza spalle (presa prona)','Tira verso l\'ombelico stringendo le scapole','Abbassa controllando il peso per tutto il range']},
-  {id:'lat_pull',name:'Lat Machine',muscle:'Schiena',emoji:'⬇️',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif',
-   desc:'Alternativa guidata alle trazioni, ideale per sviluppare i dorsali.',
-   steps:['Seduto, coscie bloccate sotto i pad','Impugna la barra più larga delle spalle','Tira verso il petto superiore sporgendo leggermente il busto','Risali lentamente mantenendo tensione sui dorsali']},
-  // GAMBE (4)
-  {id:'squat',name:'Squat con Bilanciere',muscle:'Gambe',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/BARBELL-SQUAT.gif',
-   desc:'Fondamentale assoluto per quadricipiti, glutei e core.',
-   steps:['Bilanciere sulle spalle (trapezio alto o basso)','Piedi larghezza spalle, punte leggermente fuori','Scendi mantenendo il petto alto fino a cosce parallele','Risali spingendo con i talloni, ginocchia allineate alle punte']},
-  {id:'leg_press',name:'Leg Press',muscle:'Gambe',emoji:'🦵',diff:'Principiante',sets:4,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Leg-Press.gif',
-   desc:'Pressa che isola quadricipiti e glutei con guida sicura.',
-   steps:['Seduto, piedi larghezza spalle sulla pedana','Rilascia i fermi di sicurezza','Piega le ginocchia portando la pedana verso il petto (90°)','Spingi la pedana senza bloccare le ginocchia in lockout']},
-  {id:'lunge',name:'Affondi Alternati',muscle:'Gambe',emoji:'🏃',diff:'Principiante',sets:3,reps:'12 per gamba',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lunges.gif',
-   desc:'Esercizio unilaterale per quadricipiti, glutei e stabilità.',
-   steps:['In piedi con manubri ai fianchi','Passo avanti lungo, abbassa il ginocchio posteriore verso terra','Il ginocchio anteriore non deve superare la punta del piede','Spingi col tallone anteriore per tornare in posizione']},
-  {id:'rdl',name:'Stacco Rumeno',muscle:'Gambe',emoji:'🦶',diff:'Intermedio',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/06/Barbell-Romanian-Deadlift.gif',
-   desc:'Fondamentale per femorali e glutei con enfasi sull\'eccentrica.',
-   steps:['In piedi con bilanciere, ginocchia leggermente flesse','Spingi i fianchi indietro inclinando il busto','Scendi finché senti lo stretch nei femorali (no schiena arrotondata)','Risali contraendo i glutei e riportando le anche in avanti']},
-  // SPALLE (2)
-  {id:'ohp',name:'Military Press',muscle:'Spalle',emoji:'🏋️',diff:'Intermedio',sets:4,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Overhead-Press.gif',
-   desc:'Fondamentale per deltoidi anteriori e medi, tricipiti e core.',
-   steps:['In piedi, bilanciere all\'altezza delle clavicole','Core contratto, piedi larghezza spalle','Spingi il bilanciere verticalmente sopra la testa','Abbassa lentamente fino alle clavicole mantenendo i gomiti avanti']},
-  {id:'dips',name:'Dips alle Parallele',muscle:'Spalle',emoji:'🤸',diff:'Avanzato',sets:3,reps:'8-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Chest-Dip.gif',
-   desc:'Composto per tricipiti, petto e deltoidi anteriori.',
-   steps:['Sospenditi alle parallele con braccia distese','Inclina leggermente il busto in avanti (20-30°) per il petto','Piega i gomiti fino a braccio parallelo al pavimento','Spingi esplosivamente tornando alla posizione di partenza']},
-  // BRACCIA (2)
-  {id:'curl',name:'Curl con Bilanciere',muscle:'Braccia',emoji:'💪',diff:'Principiante',sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Curl.gif',
-   desc:'Fondamentale per i bicipiti con carico bilanciale ottimale.',
-   steps:['In piedi con bilanciere in presa supina','Gomiti fissi contro i fianchi per tutto il movimento','Fletti le braccia portando il bilanciere all\'altezza delle spalle','Abbassa lentamente controllando la fase eccentrica']},
-  {id:'tri_push',name:'Push-down Tricipiti',muscle:'Braccia',emoji:'⬇️',diff:'Principiante',sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pushdown.gif',
-   desc:'Isolamento efficiente dei tricipiti al cavo con tensione costante.',
-   steps:['Al cavo alto con barra o corda','Gomiti fissi ai fianchi (non devono muoversi)','Distendi le braccia spingendo verso il basso fino a lockout','Torna lentamente con controllo alla posizione di partenza']},
-  // CORE (2)
-  {id:'plank',name:'Plank',muscle:'Core',emoji:'🧘',diff:'Principiante',sets:3,reps:'30-60 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Front-Plank.gif',
-   desc:'Fondamentale isometrico per stabilità del core e colonna vertebrale.',
-   steps:['Avambracci e punte dei piedi come appoggio','Corpo in linea retta dalla testa ai talloni','Core, glutei e quadricipiti contratti','Respira normalmente, non cedere ai fianchi']},
-  {id:'crunch',name:'Crunch',muscle:'Core',emoji:'🦴',diff:'Principiante',sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Crunch.gif',
-   desc:'Esercizio classico e sicuro per i retti addominali.',
-   steps:['Sdraiato, ginocchia piegate, piedi a terra','Mani incrociate sul petto o alle tempie (non tirare il collo)','Contrai gli addominali sollevando solo spalle e testa','Espira in salita, scendi senza toccare completamente terra']},
-  // CARDIO (3)
-  {id:'burpee',name:'Burpees',muscle:'Cardio',emoji:'🔥',diff:'Avanzato',sets:4,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Burpee.gif',
-   desc:'Full-body ad alta intensità: forza, cardio ed esplosività.',
-   steps:['In piedi, scendi in squat con mani a terra','Salta i piedi indietro in plank (esegui un piegamento opzionale)','Riporta i piedi alle mani','Salta esplosivamente con braccia sopra la testa']},
-  {id:'jump_rope',name:'Salto con la Corda',muscle:'Cardio',emoji:'⭕',diff:'Principiante',sets:3,reps:'2-3 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2022/02/Jump-Rope.gif',
-   desc:'Cardio altamente efficiente per coordinazione e resistenza cardiaca.',
-   steps:['Impugna la corda con le mani ai fianchi','Ruota la corda solo con i polsi, non con le braccia intere','Salta con piccoli rimbalzi sugli avampiedi (non talloni)','Mantieni il core attivo e uno sguardo fisso avanti']},
-  {id:'run',name:'Corsa',muscle:'Cardio',emoji:'🏃',diff:'Principiante',sets:1,reps:'20-40 min',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Run.gif',
-   desc:'Base cardio fondamentale per resistenza aerobica e consumo calorico.',
-   steps:['Riscaldamento 5 min a passo veloce','Ritmo costante in zona cardiaca 2-3 (puo parlare ma con fatica)','Postura eretta, braccia rilassate oscillanti avanti-dietro','Defaticamento 5 min a passo lento + stretching']},
+  // GAMBE
+  {id:'squat',         name:'Squat a corpo libero',    muscle:'Gambe',  emoji:'🦵',diff:'Principiante', sets:4,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Squat.gif',         desc:'Il fondamentale del lower body. Costruisce quadricipiti, glutei e posteriori.',steps:['Piedi larghezza spalle, punte leggermente aperte','Schiena neutra, petto alto, sguardo avanti','Piega le ginocchia spingendole verso le punte dei piedi','Scendi fino a cosce parallele, poi spingi coi talloni']},
+  {id:'lunge_f',       name:'Affondi frontali',        muscle:'Gambe',  emoji:'🚶',diff:'Principiante', sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lunge.gif',          desc:'Rinforza quadricipiti, glutei e migliorae l\'equilibrio.',steps:['In piedi, passo avanti lungo','Scendi finché il ginocchio posteriore sfiora terra','Ginocchio frontale mai oltre la punta del piede','Spingi col tallone anteriore per tornare su']},
+  {id:'lunge_b',       name:'Affondi posteriori',      muscle:'Gambe',  emoji:'↩️',diff:'Principiante', sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Reverse-Lunge.gif',  desc:'Variante con meno stress sul ginocchio, ottima per mobilità anca.',steps:['In piedi, fai un passo indietro','Scendi verticalmente con il busto eretto','Ginocchio posteriore verso terra','Spingi col piede anteriore e torna su']},
+  {id:'bulgarian',     name:'Squat Bulgaro',           muscle:'Gambe',  emoji:'🏔️',diff:'Intermedio',   sets:3,reps:'8-10',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Bulgarian-Split-Squat.gif',desc:'Split squat avanzato per glutei e quad, grande attivazione monolaterale.',steps:['Piede posteriore su una sedia/panca','Scendi fino al ginocchio posteriore vicino a terra','Busto eretto, ginocchio anteriore sopra il piede','Spingi col tallone anteriore per salire']},
+  {id:'lateral_lunge', name:'Affondi laterali',        muscle:'Gambe',  emoji:'↔️',diff:'Principiante', sets:3,reps:'10-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Side-Lunge.gif',     desc:'Sviluppa adduttori e abduttori, migliora la mobilità laterale.',steps:['In piedi, passo laterale ampio','Piega il ginocchio del lato in cui ti sposti','Schiena dritta, busto leggermente inclinato','Spingi col tallone per tornare al centro']},
+  {id:'calf_raise',    name:'Sollevamento polpacci',   muscle:'Gambe',  emoji:'👣',diff:'Principiante', sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Standing-Calf-Raise.gif',desc:'Isola e sviluppa i polpacci (gastrocnemio e soleo).',steps:['In piedi su una superficie piana','Sali sulle punte dei piedi più in alto possibile','Tieniti un secondo in cima','Scendi lentamente per il massimo stretch']},
+  {id:'glute_bridge',  name:'Ponte per i glutei',      muscle:'Gambe',  emoji:'🍑',diff:'Principiante', sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Glute-Bridge.gif',   desc:'Attiva glutei, core e posteriori. Ottimo per chi sta seduto molto.',steps:['Sdraiato, ginocchia piegate, piedi a terra','Spingi i fianchi verso il soffitto contraendo i glutei','Tieni un secondo in cima con i glutei stretti','Scendi lentamente senza toccare terra']},
+  // PETTO
+  {id:'pushup',        name:'Piegamenti sulle braccia',muscle:'Petto',  emoji:'💪',diff:'Principiante', sets:4,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Push-Up.gif',       desc:'Fondamentale a corpo libero per petto, spalle e tricipiti.',steps:['Plank alto, mani larghezza spalle','Core e glutei contratti','Abbassa il petto sfiorando il pavimento (gomiti a 45°)','Spingi esplosivamente tornando in plank']},
+  {id:'pike_pushup',   name:'Pike Push-ups',           muscle:'Spalle', emoji:'🔺',diff:'Intermedio',   sets:3,reps:'8-12',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pike-Push-up.gif',  desc:'Sposta il carico sulle spalle formando una V con il corpo.',steps:['Posizione a V con fianchi alti','Testa punta verso il pavimento','Piega i gomiti abbassando la testa tra le mani','Spingi per tornare alla V']},
+  {id:'dips_chair',    name:'Dips su sedia',           muscle:'Braccia',emoji:'🪑',diff:'Principiante', sets:3,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Triceps-Dip.gif',   desc:'Isola i tricipiti usando solo una sedia come appoggio.',steps:['Mani sul bordo di una sedia, gambe distese','Abbassa il corpo piegando i gomiti a 90°','Schiena vicina alla sedia, non allontanarti','Spingi coi tricipiti per tornare su']},
+  // CORE
+  {id:'plank',         name:'Plank',                   muscle:'Core',   emoji:'🧘',diff:'Principiante', sets:3,reps:'30-60 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Front-Plank.gif',  desc:'Isometrico fondamentale per la stabilità del core e della colonna.',steps:['Avambracci e punte dei piedi come appoggio','Corpo in linea retta testa-talloni','Core, glutei e quads contratti','Respira normalmente, non alzare né abbassare i fianchi']},
+  {id:'side_plank',    name:'Plank laterale',          muscle:'Core',   emoji:'◀️',diff:'Principiante', sets:3,reps:'20-40 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Side-Plank.gif',   desc:'Rinforza il core laterale (obliqui e quadrato dei lombi).',steps:['Appoggiati su un avambraccio e il bordo del piede','Corpo in linea retta laterale','Bacino alto — non lasciarlo scendere','Spingi il fianco verso il soffitto']},
+  {id:'crunch',        name:'Crunch addominali',       muscle:'Core',   emoji:'🦴',diff:'Principiante', sets:3,reps:'15-20',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Crunch.gif',          desc:'Classico e sicuro per i retti addominali.',steps:['Sdraiato, ginocchia piegate, piedi a terra','Mani alle tempie (non tirare il collo)','Solleva spalle e testa contraendo gli addominali','Espira in salita, scendi senza toccare completamente terra']},
+  {id:'vup',           name:'Addominali a V',          muscle:'Core',   emoji:'🔱',diff:'Intermedio',   sets:3,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/V-Up.gif',            desc:'Versione avanzata del crunch: coinvolge retti superiori e inferiori.',steps:['Sdraiato disteso, braccia sopra la testa','Solleva contemporaneamente gambe tese e busto','Tocca i piedi o le tibie con le mani','Scendi lentamente senza toccare terra completamente']},
+  {id:'russian_twist', name:'Russian Twist',           muscle:'Core',   emoji:'🌀',diff:'Principiante', sets:3,reps:'20 (10/lato)',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Russian-Twist.gif',desc:'Lavora sugli obliqui con una rotazione del busto controllata.',steps:['Seduto a 45°, ginocchia piegate e piedi sollevati','Mani giunte al petto o con un peso','Ruota il busto a destra e sinistra alternando','Respira normalmente, movimento lento e ampio']},
+  // SCHIENA
+  {id:'superman',      name:'Estensioni lombari',      muscle:'Schiena',emoji:'🦸',diff:'Principiante', sets:3,reps:'12-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Superman.gif',       desc:'Rinforza la catena posteriore: lombari, glutei e posteriori coscia.',steps:['Sdraiato a pancia in giù, braccia tese in avanti','Solleva contemporaneamente petto, braccia e cosce','Tieni 1-2 secondi in cima contraendo glutei e lombari','Sguardo a terra per non iperestendere il collo']},
+  // CARDIO
+  {id:'mountain_climber',name:'Mountain Climbers',     muscle:'Cardio', emoji:'🧗',diff:'Intermedio',   sets:3,reps:'20-30 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Mountain-Climber.gif',desc:'Esercizio cardio totale: core, spalle e cardio in un unico movimento.',steps:['Posizione di plank alto','Porta alternamente le ginocchia verso il petto','Mantieni i fianchi stabili (non rimbalzare)','Più veloce per cardio, più lento per core']},
+  {id:'burpee',         name:'Burpees',                muscle:'Cardio', emoji:'🔥',diff:'Avanzato',     sets:3,reps:'10-15',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Burpee.gif',          desc:'Full-body ad alta intensità: forza, cardio ed esplosività.',steps:['In piedi → squat con mani a terra','Salta i piedi indietro in plank (opzionale un piegamento)','Riporta i piedi alle mani','Salta esplosivamente con braccia sopra la testa']},
+  {id:'jumping_jack',   name:'Jumping Jacks',          muscle:'Cardio', emoji:'⭐',diff:'Principiante', sets:3,reps:'30-45 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Jumping-Jack.gif',  desc:'Riscaldamento e cardio classico, attiva tutto il corpo.',steps:['In piedi con gambe unite e braccia lungo i fianchi','Salta aprendo gambe e portando le braccia sopra la testa','Salta tornando alla posizione iniziale','Mantieni un ritmo regolare']},
+  {id:'high_knees',     name:'Ginocchia al petto',     muscle:'Cardio', emoji:'🏃',diff:'Principiante', sets:3,reps:'30-45 sec',gif:'https://fitnessprogramer.com/wp-content/uploads/2021/02/High-Knees.gif',   desc:'Cardio a basso impatto: migliora la coordinazione e brucia calorie.',steps:['In piedi, corri sul posto','Solleva le ginocchia sopra la linea dei fianchi','Busto eretto — non piegarti indietro','Pompa le braccia al ritmo delle gambe']},
 ];
 
-const MUSCLE_GROUPS = ['Tutti','Petto','Schiena','Gambe','Spalle','Braccia','Core','Cardio'];
+const MUSCLE_GROUPS = ['Tutti','Gambe','Petto','Spalle','Braccia','Core','Schiena','Cardio'];
 let exlibFilter = 'Tutti';
 
 function openExerciseLibrary() {
@@ -5250,16 +5230,31 @@ function renderHome() {
       '</div>';
   }
 
-  // Weekly streak row
+  // Reattore di Costanza — streak beam renderer
   var streakEl = document.getElementById('weekly-streak');
   if (streakEl) {
     var days = getWeeklyStreakData();
-    var fireIcoSvg = '<svg viewBox="0 0 24 24" fill="var(--or)" stroke="none" width="14" height="14"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg>';
+    var neonIcoSvg = '<svg viewBox="0 0 24 24" fill="#00dcff" stroke="none" width="14" height="14"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg>';
     var emptyIcoSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--s6)" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="9"/></svg>';
-    streakEl.innerHTML = days.map(function(d) {
-      return '<div class="streak-day' + (d.done ? ' done' : '') + (d.today ? ' today' : '') + '">' +
-        '<div class="streak-day-name">' + d.name + '</div>' +
-        '<div class="streak-day-ico">' + (d.done ? fireIcoSvg : emptyIcoSvg) + '</div>' +
+    streakEl.innerHTML = days.map(function(d, i) {
+      var prev = i > 0 ? days[i - 1] : null;
+      var next = i < days.length - 1 ? days[i + 1] : null;
+      var classes = ['streak-day-r'];
+      if (d.done) {
+        classes.push('done');
+        var hasPrev = prev && prev.done;
+        var hasNext = next && next.done;
+        if (hasPrev && hasNext) classes.push('beam-mid');
+        else if (!hasPrev && hasNext) classes.push('beam-start');
+        else if (hasPrev && !hasNext) classes.push('beam-end');
+        else classes.push('beam-solo');
+      } else {
+        if (prev && prev.done) classes.push('fracture');
+      }
+      if (d.today) classes.push('today');
+      return '<div class="' + classes.join(' ') + '">' +
+        '<div class="streak-day-name-r">' + d.name + '</div>' +
+        '<div class="streak-day-ico-r">' + (d.done ? neonIcoSvg : emptyIcoSvg) + '</div>' +
       '</div>';
     }).join('');
   }
@@ -5350,21 +5345,230 @@ const CAM = {
   scanActive: false, lastPoseTime: 0
 };
 
-// Exercise definitions for MediaPipe angle analysis — Big 20
+// Exercise definitions for MediaPipe angle analysis — Big 20 bodyweight
 // errorJoints: landmark indices to highlight red when check fails
 const POSE_EXERCISES = {
+  // 1. Squat a corpo libero — Hip-Knee-Ankle
   squat: {
-    name: 'Squat con Bilanciere',
-    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip:[11,23,25] },
-    repAngle: 'knee_l', downThresh: 130, upThresh: 145,
+    name: 'Squat a corpo libero',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip_l:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 100, upThresh: 160,
     checks: [
-      { name:'Ginocchia', errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<20;}, ok:'Ginocchia simmetriche', warn:'Ginocchia asimmetriche', voice:'Ginocchia asimmetriche, allineale!' },
-      { name:'Profondità', errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<130;}, ok:'Buona profondità', warn:'Scendi di più', voice:'Scendi di più, cosce parallele!' },
-      { name:'Schiena', errorJoints:[11,12,23,24], fn:function(a){return (a.hip||0)>45;}, ok:'Schiena dritta', warn:'Schiena troppo inclinata', voice:'Tieni la schiena dritta!' }
+      { name:'Ginocchia',   errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<15;}, ok:'Ginocchia allineate', warn:'⚠ Ginocchia che collassano', voice:'Mantieni le ginocchia fuori, sulle punte!' },
+      { name:'Schiena',     errorJoints:[23,24], fn:function(a){return (a.hip_l||90)>50;}, ok:'Schiena neutra', warn:'⚠ Schiena curva', voice:'Tieni il petto alto, schiena neutra!' },
+      { name:'Profondità',  errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<100;}, ok:'Buona profondità', warn:'⚠ Scendi di più', voice:'Scendi fino a cosce parallele!' }
     ]
   },
-  bench: {
-    name: 'Panca Piana',
+  // 2. Piegamenti sulle braccia — Push-up
+  pushup: {
+    name: 'Piegamenti sulle braccia',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], body:[11,23,27] },
+    repAngle: 'elbow_l', downThresh: 90, upThresh: 160,
+    checks: [
+      { name:'Allineamento', errorJoints:[23,24], fn:function(a){return (a.body||180)>160;}, ok:'Corpo allineato', warn:'⚠ Sedere troppo alto/basso', voice:'Corpo dritto come una tavola!' },
+      { name:'Simmetria',    errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<20;}, ok:'Gomiti simmetrici', warn:'⚠ Gomiti asimmetrici', voice:'Gomiti simmetrici!' },
+      { name:'Profondità',   errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<90;}, ok:'Buona profondità', warn:'⚠ Scendi di più', voice:'Scendi con il petto verso terra!' }
+    ]
+  },
+  // 3. Affondi frontali
+  lunge_f: {
+    name: 'Affondi frontali',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28] },
+    repAngle: 'knee_l', downThresh: 90, upThresh: 160,
+    checks: [
+      { name:'Ginocchio',    errorJoints:[25,27], fn:function(a){return (a.knee_l||180)>90;}, ok:'Ginocchio ok', warn:'⚠ Ginocchio supera la punta', voice:'Ginocchio dietro alla punta del piede!' },
+      { name:'Profondità',   errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<90;}, ok:'Buona profondità', warn:'⚠ Scendi di più', voice:'Scendi finché il ginocchio sfiora terra!' },
+      { name:'Simmetria',    errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<30;}, ok:'Bilanciato', warn:'⚠ Peso mal distribuito', voice:'Distribuisci il peso uniformemente!' }
+    ]
+  },
+  // 4. Affondi posteriori
+  lunge_b: {
+    name: 'Affondi posteriori',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], shoulder_l:[13,11,23] },
+    repAngle: 'knee_l', downThresh: 90, upThresh: 160,
+    checks: [
+      { name:'Busto',        errorJoints:[11,12], fn:function(a){return (a.shoulder_l||90)>70;}, ok:'Busto eretto', warn:'⚠ Busto che collassa avanti', voice:'Tieni il busto eretto, non piegarti!' },
+      { name:'Profondità',   errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<90;}, ok:'Buona profondità', warn:'⚠ Scendi di più', voice:'Abbassa il ginocchio posteriore verso terra!' },
+      { name:'Simmetria',    errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<25;}, ok:'Bilanciato', warn:'⚠ Sbilanciato', voice:'Peso sul tallone anteriore!' }
+    ]
+  },
+  // 5. Squat Bulgaro
+  bulgarian: {
+    name: 'Squat Bulgaro',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip_l:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 90, upThresh: 160,
+    checks: [
+      { name:'Stabilità',    errorJoints:[23,24], fn:function(a){return Math.abs((a.hip_l||90)-(a.knee_l||90))<40;}, ok:'Stabile', warn:'⚠ Oscillazione eccessiva', voice:'Mantieni l\'equilibrio, core stretto!' },
+      { name:'Profondità',   errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<90;}, ok:'Buona profondità', warn:'⚠ Scendi di più', voice:'Scendi finché il ginocchio sfiora terra!' },
+      { name:'Schiena',      errorJoints:[11,12], fn:function(a){return (a.hip_l||90)>55;}, ok:'Schiena neutra', warn:'⚠ Schiena troppo inclinata', voice:'Tieni il busto eretto!' }
+    ]
+  },
+  // 6. Ponte per i glutei — Shoulder-Hip-Knee
+  glute_bridge: {
+    name: 'Ponte per i glutei',
+    joints: { hip_l:[11,23,25], hip_r:[12,24,26] },
+    repAngle: 'hip_l', downThresh: 130, upThresh: 170,
+    checks: [
+      { name:'Estensione',   errorJoints:[23,24], fn:function(a){return (a.hip_l||90)>170;}, ok:'Estensione completa', warn:'⚠ Mancata estensione', voice:'Spingi i fianchi verso il soffitto!' },
+      { name:'Simmetria',    errorJoints:[23,24], fn:function(a){return Math.abs((a.hip_l||180)-(a.hip_r||180))<12;}, ok:'Fianchi allineati', warn:'⚠ Fianchi asimmetrici', voice:'Tieni i fianchi allo stesso livello!' },
+      { name:'Glutei',       errorJoints:[23,24,25,26], fn:function(a){return (a.hip_l||90)>160;}, ok:'Glutei attivi', warn:'⚠ Contrai i glutei', voice:'Contrai i glutei in cima al movimento!' }
+    ]
+  },
+  // 7. Dips su sedia
+  dips_chair: {
+    name: 'Dips su sedia',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
+    repAngle: 'elbow_l', downThresh: 90, upThresh: 160,
+    checks: [
+      { name:'Profondità',   errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<90;}, ok:'Buona profondità', warn:'⚠ Scendi di più (90°)', voice:'Piega i gomiti a 90 gradi!' },
+      { name:'Spalle',       errorJoints:[11,12], fn:function(a){return (a.shoulder_l||90)<50;}, ok:'Spalle basse', warn:'⚠ Spalle che si alzano', voice:'Abbassa le spalle, non alzarle alle orecchie!' },
+      { name:'Simmetria',    errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<18;}, ok:'Simmetrico', warn:'⚠ Asimmetrico', voice:'Spingi uniformemente su entrambi i lati!' }
+    ]
+  },
+  // 8. Plank — isometrico
+  plank: {
+    name: 'Plank',
+    joints: { body:[11,23,27], hip_l:[11,23,25] },
+    repAngle: 'body', downThresh: 155, upThresh: 185,
+    checks: [
+      { name:'Core basso',   errorJoints:[23,24], fn:function(a){return (a.body||0)>160;}, ok:'Fianchi corretti', warn:'⚠ Fianchi troppo bassi', voice:'Alza i fianchi, corpo in linea!' },
+      { name:'Core alto',    errorJoints:[23,24], fn:function(a){return (a.body||0)<185;}, ok:'No picco', warn:'⚠ Fianchi troppo alti', voice:'Abbassa leggermente i fianchi!' },
+      { name:'Stabilità',    errorJoints:[11,12,23,24], fn:function(a){return Math.abs((a.hip_l||165)-165)<25;}, ok:'Core stabile', warn:'⚠ Tieni la posizione', voice:'Core contratto!' }
+    ]
+  },
+  // 9. Plank Laterale
+  side_plank: {
+    name: 'Plank laterale',
+    joints: { body:[11,23,27], hip_l:[11,23,25] },
+    repAngle: 'body', downThresh: 155, upThresh: 185,
+    checks: [
+      { name:'Bacino',       errorJoints:[23,24], fn:function(a){return (a.body||0)>160;}, ok:'Bacino alto', warn:'⚠ Bacino che cede', voice:'Alza il bacino, tienilo in linea!' },
+      { name:'Allineamento', errorJoints:[11,12,23,24,25,26], fn:function(a){return Math.abs((a.body||165)-165)<20;}, ok:'Allineato', warn:'⚠ Corpo non allineato', voice:'Corpo in linea retta dalla testa ai piedi!' },
+      { name:'Core',         errorJoints:[23,24], fn:function(a){return (a.hip_l||90)>75;}, ok:'Core attivo', warn:'⚠ Attiva il core', voice:'Contrai core e glutei!' }
+    ]
+  },
+  // 10. Crunch addominali
+  crunch: {
+    name: 'Crunch addominali',
+    joints: { torso:[11,23,25], shoulder_l:[13,11,23] },
+    repAngle: 'torso', downThresh: 145, upThresh: 160,
+    checks: [
+      { name:'Contrazione',  errorJoints:[11,12,23,24], fn:function(a){return (a.torso||180)<155;}, ok:'Buona contrazione', warn:'⚠ Contrai gli addominali', voice:'Contrai i retti!' },
+      { name:'Collo',        errorJoints:[15,16], fn:function(a){return (a.shoulder_l||45)<50;}, ok:'Collo libero', warn:'⚠ Non tirare il collo', voice:'Mani alle tempie, non tirare il collo!' },
+      { name:'Controllo',    errorJoints:[11,12], fn:function(a){return (a.shoulder_l||45)>20;}, ok:'Controllato', warn:'⚠ Movimento brusco', voice:'Movimento lento e controllato!' }
+    ]
+  },
+  // 11. Pike Push-ups
+  pike_pushup: {
+    name: 'Pike Push-ups',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], hip_l:[11,23,25] },
+    repAngle: 'elbow_l', downThresh: 90, upThresh: 160,
+    checks: [
+      { name:'Posizione V',  errorJoints:[23,24], fn:function(a){return (a.hip_l||90)<80;}, ok:'V stretta', warn:'⚠ Abbassa i fianchi (V aperta)', voice:'Mantieni i fianchi alti a formare una V stretta!' },
+      { name:'Simmetria',    errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<20;}, ok:'Simmetrico', warn:'⚠ Asimmetrico', voice:'Spingi uniformemente!' },
+      { name:'Profondità',   errorJoints:[13,14,15,16], fn:function(a){return (a.elbow_l||180)<90;}, ok:'Buona profondità', warn:'⚠ Scendi di più', voice:'Porta la testa verso terra!' }
+    ]
+  },
+  // 12. Mountain Climbers
+  mountain_climber: {
+    name: 'Mountain Climbers',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip_l:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 95, upThresh: 155,
+    checks: [
+      { name:'Bacino stabile',errorJoints:[23,24], fn:function(a){return Math.abs((a.hip_l||90)-90)<25;}, ok:'Bacino stabile', warn:'⚠ Bacino rimbalza', voice:'Tieni il bacino basso e stabile!' },
+      { name:'Range',         errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<95;}, ok:'Buon range', warn:'⚠ Porta il ginocchio più al petto', voice:'Ginocchio verso il petto!' },
+      { name:'Plank',         errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||90)>140;}, ok:'Base solida', warn:'⚠ Mantieni il plank', voice:'Tieni il core contratto nel plank!' }
+    ]
+  },
+  // 13. Burpees
+  burpee: {
+    name: 'Burpees',
+    joints: { knee_l:[23,25,27], hip_l:[11,23,25], elbow_l:[11,13,15] },
+    repAngle: 'knee_l', downThresh: 110, upThresh: 155,
+    checks: [
+      { name:'Atterraggio',  errorJoints:[25,26], fn:function(a){return (a.knee_l||180)<170;}, ok:'Atterraggio morbido', warn:'⚠ Atterraggio troppo rigido', voice:'Atterraggio morbido sulle ginocchia!' },
+      { name:'Plank',         errorJoints:[23,24,25,26], fn:function(a){return (a.hip_l||0)>140;}, ok:'Plank corretto', warn:'⚠ Allinea i fianchi', voice:'Corpo in linea nel plank!' },
+      { name:'Core',          errorJoints:[11,12,23,24], fn:function(a){return Math.abs((a.hip_l||180)-(a.elbow_l||180))>45;}, ok:'Core attivo', warn:'⚠ Attiva il core', voice:'Core contratto!' }
+    ]
+  },
+  // 14. Jumping Jacks
+  jumping_jack: {
+    name: 'Jumping Jacks',
+    joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], knee_l:[23,25,27] },
+    repAngle: 'elbow_l', downThresh: 90, upThresh: 155,
+    checks: [
+      { name:'Braccia',      errorJoints:[15,16,13,14], fn:function(a){return (a.elbow_l||180)>150;}, ok:'Braccia estese', warn:'⚠ Estendi le braccia sopra la testa', voice:'Braccia completamente sopra la testa!' },
+      { name:'Simmetria',    errorJoints:[13,14], fn:function(a){return Math.abs((a.elbow_l||180)-(a.elbow_r||180))<20;}, ok:'Simmetrico', warn:'⚠ Braccia asimmetriche', voice:'Usa entrambe le braccia simmetricamente!' },
+      { name:'Ritmo',         errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<175;}, ok:'Gambe aperte', warn:'⚠ Apri più le gambe', voice:'Apri le gambe al ritmo delle braccia!' }
+    ]
+  },
+  // 15. High Knees
+  high_knees: {
+    name: 'Ginocchia al petto',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], shoulder_l:[13,11,23] },
+    repAngle: 'knee_l', downThresh: 100, upThresh: 155,
+    checks: [
+      { name:'Altezza',      errorJoints:[25,26], fn:function(a){return (a.knee_l||180)<100;}, ok:'Ginocchia alte', warn:'⚠ Solleva il ginocchio sopra l\'anca', voice:'Ginocchio sopra la linea dell\'anca!' },
+      { name:'Busto',        errorJoints:[11,12], fn:function(a){return (a.shoulder_l||90)>75;}, ok:'Busto eretto', warn:'⚠ Non inclinare all\'indietro', voice:'Busto eretto, non piegarti indietro!' },
+      { name:'Ritmo',         errorJoints:[25,26,27,28], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))>15;}, ok:'Alternanza corretta', warn:'⚠ Alterna le gambe', voice:'Alterna velocemente le gambe!' }
+    ]
+  },
+  // 16. Estensioni lombari (Superman)
+  superman: {
+    name: 'Estensioni lombari',
+    joints: { shoulder_l:[13,11,23], hip_l:[11,23,25], body:[11,23,27] },
+    repAngle: 'body', downThresh: 160, upThresh: 200,
+    checks: [
+      { name:'Sollevamento', errorJoints:[11,12,23,24], fn:function(a){return (a.body||0)>170;}, ok:'Buon sollevamento', warn:'⚠ Solleva petto e cosce', voice:'Solleva petto e cosce contemporaneamente!' },
+      { name:'Collo',        errorJoints:[0], fn:function(a){return (a.shoulder_l||90)>60;}, ok:'Collo neutro', warn:'⚠ Non iper-estendere il collo', voice:'Sguardo a terra, collo neutro!' },
+      { name:'Simmetria',    errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||90)>160;}, ok:'Glutei attivi', warn:'⚠ Contrai i glutei', voice:'Contrai glutei e lombari in cima!' }
+    ]
+  },
+  // 17. V-Ups
+  vup: {
+    name: 'Addominali a V',
+    joints: { knee_l:[23,25,27], torso:[11,23,25], hip_l:[11,23,25] },
+    repAngle: 'hip_l', downThresh: 130, upThresh: 175,
+    checks: [
+      { name:'Ginocchia',    errorJoints:[25,26], fn:function(a){return (a.knee_l||180)>155;}, ok:'Gambe tese', warn:'⚠ Ginocchia troppo piegate', voice:'Tendi le gambe più possibile!' },
+      { name:'Chiusura',     errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||180)<130;}, ok:'Buona chiusura', warn:'⚠ Chiudi più forte', voice:'Porta le mani verso i piedi!' },
+      { name:'Controllo',    errorJoints:[11,12,23,24], fn:function(a){return (a.torso||180)<155;}, ok:'Controllato', warn:'⚠ Abbassa lentamente', voice:'Scendi lentamente senza toccare terra!' }
+    ]
+  },
+  // 18. Russian Twist
+  russian_twist: {
+    name: 'Russian Twist',
+    joints: { shoulder_l:[13,11,23], shoulder_r:[14,12,24], hip_l:[11,23,25] },
+    repAngle: 'shoulder_l', downThresh: 50, upThresh: 85,
+    checks: [
+      { name:'Torsione',     errorJoints:[11,12], fn:function(a){return Math.abs((a.shoulder_l||90)-(a.shoulder_r||90))>10;}, ok:'Buona torsione', warn:'⚠ Ruota le spalle di più', voice:'Ruota le spalle fino al fianco!' },
+      { name:'Gambe',        errorJoints:[27,28], fn:function(a){return (a.hip_l||90)>60;}, ok:'Gambe sollevate', warn:'⚠ Tenere le gambe sollevate', voice:'Tieni i piedi sollevati da terra!' },
+      { name:'Bilanciamento', errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||90)>45;}, ok:'Bilanciato', warn:'⚠ Angolo 45° del busto', voice:'Mantieni il busto a 45 gradi!' }
+    ]
+  },
+  // 19. Affondi laterali
+  lateral_lunge: {
+    name: 'Affondi laterali',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip_l:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 100, upThresh: 160,
+    checks: [
+      { name:'Ginocchio',    errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))>20;}, ok:'Asimmetria corretta', warn:'⚠ Ginocchio non segue la punta', voice:'Ginocchio nella direzione della punta del piede!' },
+      { name:'Profondità',   errorJoints:[25,26,27,28], fn:function(a){return (a.knee_l||180)<100;}, ok:'Buona profondità', warn:'⚠ Piegati di più', voice:'Piega fino a coscia parallela!' },
+      { name:'Schiena',      errorJoints:[11,12,23,24], fn:function(a){return (a.hip_l||90)>55;}, ok:'Schiena neutra', warn:'⚠ Schiena inclinata', voice:'Schiena neutra, non inclinare il busto!' }
+    ]
+  },
+  // 20. Sollevamento polpacci
+  calf_raise: {
+    name: 'Sollevamento polpacci',
+    joints: { knee_l:[23,25,27], knee_r:[24,26,28], hip_l:[11,23,25] },
+    repAngle: 'knee_l', downThresh: 155, upThresh: 180,
+    checks: [
+      { name:'Ginocchio',    errorJoints:[25,26], fn:function(a){return (a.knee_l||180)>165;}, ok:'Ginocchia tese', warn:'⚠ Non piegare le ginocchia', voice:'Tieni le ginocchia quasi tese!' },
+      { name:'Simmetria',    errorJoints:[25,26], fn:function(a){return Math.abs((a.knee_l||180)-(a.knee_r||180))<10;}, ok:'Simmetrico', warn:'⚠ Distribuzione peso asimmetrica', voice:'Peso uguale su entrambe i piedi!' },
+      { name:'Range',        errorJoints:[27,28], fn:function(a){return (a.knee_l||180)>170;}, ok:'Punta massima', warn:'⚠ Sali sulla punta dei piedi', voice:'Vai più in alto sulla punta!' }
+    ]
+  }
+};
     joints: { elbow_l:[11,13,15], elbow_r:[12,14,16], shoulder_l:[13,11,23] },
     repAngle: 'elbow_l', downThresh: 105, upThresh: 150,
     checks: [
@@ -5841,46 +6045,70 @@ function onPoseResults(results) {
 
 // ── AURA EFFECT — segmentation → cyan glow ───────────
 function drawAuraEffect(ctx, results, w, h) {
-  var tmpCanvas = document.createElement('canvas');
-  tmpCanvas.width = w;
-  tmpCanvas.height = h;
-  var tmpCtx = tmpCanvas.getContext('2d');
+  // Cache offscreen canvases on the CAM object to avoid re-creating every frame
+  if (!CAM._auraCanvas || CAM._auraCanvas.width !== w || CAM._auraCanvas.height !== h) {
+    CAM._auraCanvas = document.createElement('canvas');
+    CAM._auraCanvas.width = w; CAM._auraCanvas.height = h;
+    CAM._erosCanvas = document.createElement('canvas');
+    CAM._erosCanvas.width = w; CAM._erosCanvas.height = h;
+  }
+  var aCtx = CAM._auraCanvas.getContext('2d');
+  var eCtx = CAM._erosCanvas.getContext('2d');
 
-  // Draw segmentation mask mirrored to match video
-  tmpCtx.save();
-  tmpCtx.translate(w, 0);
-  tmpCtx.scale(-1, 1);
-  tmpCtx.drawImage(results.segmentationMask, 0, 0, w, h);
-  tmpCtx.restore();
+  // Step 1: Draw mirrored segmentation mask as cyan silhouette on auraCanvas
+  aCtx.clearRect(0, 0, w, h);
+  aCtx.save();
+  aCtx.translate(w, 0);
+  aCtx.scale(-1, 1);
+  aCtx.drawImage(results.segmentationMask, 0, 0, w, h);
+  aCtx.restore();
 
-  // Manipulate pixels: person area → cyan aura, background → transparent
-  var imageData = tmpCtx.getImageData(0, 0, w, h);
-  var data = imageData.data;
-  for (var i = 0; i < data.length; i += 4) {
-    var maskVal = data[i]; // red channel = mask value
-    if (maskVal > 128) {
-      data[i]     = 0;    // R
-      data[i + 1] = 220;  // G
-      data[i + 2] = 255;  // B
-      data[i + 3] = 180;  // A
+  // Colorize: person pixels → cyan, background → transparent
+  var id = aCtx.getImageData(0, 0, w, h);
+  var d = id.data;
+  for (var i = 0; i < d.length; i += 4) {
+    if (d[i] > 128) {
+      d[i] = 0; d[i+1] = 220; d[i+2] = 255; d[i+3] = 255;
     } else {
-      data[i + 3] = 0;    // fully transparent for background
+      d[i+3] = 0;
     }
   }
-  tmpCtx.putImageData(imageData, 0, 0);
+  aCtx.putImageData(id, 0, 0);
 
-  // Draw outer glow (large blur)
-  ctx.save();
-  ctx.filter = 'blur(18px)';
-  ctx.globalAlpha = 0.55;
-  ctx.drawImage(tmpCanvas, 0, 0);
-  ctx.restore();
+  // Step 2: Draw auraCanvas to erosCanvas with blur to get expanded interior fill
+  eCtx.clearRect(0, 0, w, h);
+  eCtx.filter = 'blur(10px)';
+  eCtx.drawImage(CAM._auraCanvas, 0, 0);
+  eCtx.filter = 'none';
 
-  // Draw inner glow (sharp)
+  // Threshold erosCanvas: alpha > 225 → solid fill (interior body shape)
+  var ed = eCtx.getImageData(0, 0, w, h);
+  var epx = ed.data;
+  for (var j = 0; j < epx.length; j += 4) {
+    if (epx[j+3] > 225) {
+      epx[j] = 0; epx[j+1] = 220; epx[j+2] = 255; epx[j+3] = 255;
+    } else {
+      epx[j+3] = 0;
+    }
+  }
+  eCtx.putImageData(ed, 0, 0);
+
+  // Step 3: destination-out on auraCanvas — carve out the interior, leaving ONLY the ring
+  aCtx.globalCompositeOperation = 'destination-out';
+  aCtx.drawImage(CAM._erosCanvas, 0, 0);
+  aCtx.globalCompositeOperation = 'source-over';
+
+  // Step 4: Draw ring to main canvas with multiple blur passes for neon glow
   ctx.save();
-  ctx.filter = 'blur(6px)';
-  ctx.globalAlpha = 0.75;
-  ctx.drawImage(tmpCanvas, 0, 0);
+  ctx.filter = 'blur(20px)';
+  ctx.globalAlpha = 0.45;
+  ctx.drawImage(CAM._auraCanvas, 0, 0);
+  ctx.filter = 'blur(8px)';
+  ctx.globalAlpha = 0.65;
+  ctx.drawImage(CAM._auraCanvas, 0, 0);
+  ctx.filter = 'blur(2px)';
+  ctx.globalAlpha = 0.9;
+  ctx.drawImage(CAM._auraCanvas, 0, 0);
   ctx.restore();
 }
 
@@ -5929,10 +6157,30 @@ async function startCamera() {
     return;
   }
   try {
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
-      audio: false
-    });
+    cameraStream = await (async function getWideCamera() {
+      // 1. Try ultra-wide lens by device label
+      try {
+        var devices = await navigator.mediaDevices.enumerateDevices();
+        var videos = devices.filter(function(d) { return d.kind === 'videoinput'; });
+        var wide = videos.find(function(d) { return /ultra|wide|0\.5|UW/i.test(d.label); });
+        if (wide) return await navigator.mediaDevices.getUserMedia({
+          video: { deviceId: { exact: wide.deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+      } catch(e) {}
+      // 2. Try environment camera with zoom constraint
+      try {
+        return await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 }, zoom: { ideal: 0 } },
+          audio: false
+        });
+      } catch(e) {}
+      // 3. Fallback: front camera
+      return await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+        audio: false
+      });
+    })();
     video.srcObject = cameraStream;
     await video.play();
     video.style.display = 'block';
@@ -7718,143 +7966,118 @@ function generateAIPlanWithLLM(user) {
 }
 
 function generateAIPlan(user) {
-  var goal = user.goal || 'massa';
+  var goal  = user.goal  || 'massa';
   var level = user.level || 'intermedio';
-  var freq = user.freq || '4-5';
-  var sex = user.sex || 'M';
-  var age = user.age || 25;
-  var weight = user.weight || 75;
-
-  // Parse frequency
+  var freq  = user.freq  || '4-5';
   var daysPerWeek = freq === '1-2' ? 2 : freq === '2-3' ? 3 : 5;
 
-  // Level multipliers
+  // ── Big 20 exercise pool by category ──────────────────────────────────────
+  var LOWER     = ['squat','lunge_f','lunge_b','bulgarian','lateral_lunge','calf_raise','glute_bridge'];
+  var UPPER     = ['pushup','pike_pushup','dips_chair'];
+  var CORE      = ['plank','side_plank','crunch','vup','russian_twist'];
+  var BACK      = ['superman'];
+  var CARDIO    = ['mountain_climber','burpee','jumping_jack','high_knees'];
+
+  // goal-based parameters
+  var setsMin, setsMax, repsStr, restSec;
+  if (goal === 'massa') {
+    setsMin = 4; setsMax = 5; repsStr = '6-10'; restSec = 120;
+  } else if (goal === 'dimagrimento' || goal === 'resistenza') {
+    setsMin = 3; setsMax = 3; repsStr = '15-20'; restSec = 45;
+  } else { // benessere
+    setsMin = 3; setsMax = 4; repsStr = '12-15'; restSec = 75;
+  }
   var setsMult = level === 'principiante' ? 0.75 : level === 'avanzato' ? 1.25 : 1;
-  var diffFilter = level === 'principiante'
-    ? ['Principiante']
-    : level === 'avanzato'
-      ? ['Principiante','Intermedio','Avanzato']
-      : ['Principiante','Intermedio'];
 
-  // Get available exercises by muscle group
-  function exByMuscle(m) {
-    return EXERCISES.filter(function(e) {
-      return e.muscle === m && diffFilter.indexOf(e.diff) >= 0;
-    });
-  }
   function pickN(arr, n) {
-    var shuffled = arr.slice().sort(function() { return Math.random() - 0.5; });
-    return shuffled.slice(0, Math.min(n, shuffled.length));
+    var s = arr.slice().sort(function() { return Math.random() - 0.5; });
+    return s.slice(0, Math.min(n, s.length));
   }
-  function adjustSets(ex, mult) {
-    return {
-      id: ex.id,
-      sets: Math.max(2, Math.round(ex.sets * mult)),
-      reps: ex.reps,
-      rest: ex.muscle === 'Cardio' ? 60 : (goal === 'massa' ? 120 : goal === 'resistenza' ? 45 : 90)
-    };
+  function makeEx(id) {
+    var sets = Math.max(2, Math.round(((setsMin + setsMax) / 2) * setsMult));
+    return { id: id, sets: sets, reps: repsStr, rest: restSec };
   }
 
-  // Define splits based on frequency and goal
+  // ── Split definitions ──────────────────────────────────────────────────────
   var splits;
-  if (daysPerWeek <= 3) {
-    // Full body split
-    if (goal === 'dimagrimento' || goal === 'resistenza') {
+  if (daysPerWeek <= 2) {
+    splits = [
+      { name: 'Full Body A', ids: pickN(LOWER,3).concat(pickN(UPPER,2)).concat(pickN(CORE,2)) },
+      { name: 'Full Body B', ids: pickN(LOWER,2).concat(pickN(UPPER,2)).concat(pickN(CARDIO,2)).concat(pickN(BACK,1)) }
+    ];
+  } else if (daysPerWeek === 3) {
+    if (goal === 'massa') {
       splits = [
-        { name: 'Full Body + Cardio A', muscles: [['Petto',1],['Schiena',1],['Gambe',1],['Core',1],['Cardio',1]] },
-        { name: 'Full Body + Cardio B', muscles: [['Spalle',1],['Gambe',1],['Schiena',1],['Braccia',1],['Cardio',1]] },
-        { name: 'HIIT + Core', muscles: [['Gambe',1],['Petto',1],['Spalle',1],['Core',2],['Cardio',1]] }
+        { name: 'Lower Body',   ids: pickN(LOWER,4).concat(pickN(CORE,2)) },
+        { name: 'Upper & Core', ids: pickN(UPPER,3).concat(pickN(CORE,3)) },
+        { name: 'Full Body',    ids: pickN(LOWER,2).concat(pickN(UPPER,2)).concat(pickN(CARDIO,2)) }
       ];
     } else {
       splits = [
-        { name: 'Full Body A', muscles: [['Petto',2],['Schiena',2],['Gambe',1],['Braccia',1]] },
-        { name: 'Full Body B', muscles: [['Gambe',2],['Spalle',2],['Braccia',1],['Core',1]] },
-        { name: 'Full Body C', muscles: [['Schiena',2],['Petto',1],['Gambe',2],['Core',1]] }
+        { name: 'Gambe & Glutei',  ids: pickN(LOWER,4).concat(pickN(CORE,2)) },
+        { name: 'Cardio & Core',   ids: pickN(CARDIO,4).concat(pickN(CORE,2)) },
+        { name: 'Full Body HIIT',  ids: pickN(LOWER,2).concat(pickN(UPPER,2)).concat(pickN(CARDIO,2)) }
       ];
     }
   } else if (daysPerWeek === 4) {
     if (goal === 'massa') {
       splits = [
-        { name: 'Petto & Tricipiti', muscles: [['Petto',3],['Braccia',2]] },
-        { name: 'Schiena & Bicipiti', muscles: [['Schiena',3],['Braccia',2]] },
-        { name: 'Gambe & Glutei', muscles: [['Gambe',4],['Core',1]] },
-        { name: 'Spalle & Core', muscles: [['Spalle',3],['Core',2]] }
-      ];
-    } else if (goal === 'dimagrimento') {
-      splits = [
-        { name: 'Upper Body + Cardio', muscles: [['Petto',2],['Schiena',2],['Cardio',1]] },
-        { name: 'Lower Body + Core', muscles: [['Gambe',3],['Core',2]] },
-        { name: 'Push + HIIT', muscles: [['Petto',1],['Spalle',2],['Braccia',1],['Cardio',1]] },
-        { name: 'Pull + Cardio', muscles: [['Schiena',2],['Gambe',1],['Braccia',1],['Cardio',1]] }
-      ];
-    } else if (goal === 'benessere') {
-      splits = [
-        { name: 'Upper Body', muscles: [['Petto',2],['Schiena',2],['Spalle',1]] },
-        { name: 'Lower Body', muscles: [['Gambe',3],['Core',1]] },
-        { name: 'Functional + Core', muscles: [['Spalle',1],['Braccia',2],['Core',2]] },
-        { name: 'Full Body Light', muscles: [['Petto',1],['Schiena',1],['Gambe',1],['Cardio',1]] }
+        { name: 'Lower A (Quad)',    ids: pickN(LOWER,4).concat(pickN(CORE,1)) },
+        { name: 'Upper & Spalle',   ids: pickN(UPPER,3).concat(pickN(BACK,1)).concat(pickN(CORE,2)) },
+        { name: 'Lower B (Post.)',  ids: ['glute_bridge','lunge_b','bulgarian','squat','calf_raise'] },
+        { name: 'Core & Braccia',   ids: pickN(CORE,4).concat(pickN(UPPER,2)) }
       ];
     } else {
-      // resistenza
       splits = [
-        { name: 'Cardio + Upper', muscles: [['Cardio',2],['Petto',1],['Schiena',1]] },
-        { name: 'Legs + Endurance', muscles: [['Gambe',3],['Cardio',1]] },
-        { name: 'Intervals + Core', muscles: [['Cardio',2],['Core',2],['Spalle',1]] },
-        { name: 'Full Endurance', muscles: [['Gambe',1],['Schiena',1],['Cardio',2],['Core',1]] }
+        { name: 'Gambe & Glutei',   ids: pickN(LOWER,4).concat(pickN(CORE,1)) },
+        { name: 'Cardio A',         ids: pickN(CARDIO,4).concat(pickN(CORE,1)) },
+        { name: 'Upper & Schiena',  ids: pickN(UPPER,3).concat(pickN(BACK,1)).concat(pickN(CORE,2)) },
+        { name: 'Cardio B + Core',  ids: pickN(CARDIO,3).concat(pickN(CORE,3)) }
       ];
     }
   } else {
-    // 5-6 days — PPL or advanced
+    // 5-6 giorni
     if (goal === 'massa') {
       splits = [
-        { name: 'Push (Petto Focus)', muscles: [['Petto',3],['Spalle',1],['Braccia',1]] },
-        { name: 'Pull (Schiena Focus)', muscles: [['Schiena',3],['Braccia',2]] },
-        { name: 'Gambe A (Quad)', muscles: [['Gambe',4],['Core',1]] },
-        { name: 'Push (Spalle Focus)', muscles: [['Spalle',3],['Petto',1],['Braccia',1]] },
-        { name: 'Pull (Dorsali Focus)', muscles: [['Schiena',3],['Braccia',2]] },
-        { name: 'Gambe B (Post.)', muscles: [['Gambe',3],['Core',2]] }
+        { name: 'Lower A',         ids: ['squat','lunge_f','bulgarian','calf_raise','glute_bridge'] },
+        { name: 'Push',            ids: ['pushup','pike_pushup','dips_chair'].concat(pickN(CORE,2)) },
+        { name: 'Lower B',         ids: ['lunge_b','lateral_lunge','glute_bridge','squat','calf_raise'] },
+        { name: 'Core & Schiena',  ids: pickN(CORE,4).concat(pickN(BACK,1)) },
+        { name: 'Full Upper',      ids: pickN(UPPER,3).concat(pickN(CORE,2)) },
+        { name: 'HIIT Attivo',     ids: pickN(CARDIO,4).concat(pickN(LOWER,2)) }
       ];
     } else {
       splits = [
-        { name: 'Upper Push + Cardio', muscles: [['Petto',2],['Spalle',1],['Braccia',1],['Cardio',1]] },
-        { name: 'Lower + Core', muscles: [['Gambe',3],['Core',2]] },
-        { name: 'Upper Pull', muscles: [['Schiena',3],['Braccia',2]] },
-        { name: 'HIIT + Full Body', muscles: [['Cardio',2],['Gambe',1],['Core',1]] },
-        { name: 'Upper Strength', muscles: [['Petto',1],['Schiena',1],['Spalle',2],['Braccia',1]] },
-        { name: 'Legs + Cardio', muscles: [['Gambe',3],['Cardio',1]] }
+        { name: 'Lower + Glutei',  ids: pickN(LOWER,4).concat(pickN(CORE,1)) },
+        { name: 'HIIT A',          ids: pickN(CARDIO,4).concat(pickN(UPPER,1)) },
+        { name: 'Core & Schiena',  ids: pickN(CORE,4).concat(pickN(BACK,1)) },
+        { name: 'Upper + Cardio',  ids: pickN(UPPER,3).concat(pickN(CARDIO,2)) },
+        { name: 'HIIT B',          ids: pickN(CARDIO,4).concat(pickN(LOWER,2)) },
+        { name: 'Full Body Light', ids: pickN(LOWER,2).concat(pickN(UPPER,1)).concat(pickN(CORE,2)).concat(pickN(CARDIO,1)) }
       ];
     }
   }
 
-  // Take only daysPerWeek splits
   splits = splits.slice(0, daysPerWeek);
 
-  // Build the actual workout plans
+  // Build plans
   var plans = [];
-  var dayNames = Array.from({length: daysPerWeek}, function(_, i) { return 'Giorno ' + (i + 1); });
-
   splits.forEach(function(split, di) {
     var exercises = [];
-    var usedIds = new Set();
-
-    split.muscles.forEach(function(pair) {
-      var muscle = pair[0], count = pair[1];
-      var available = exByMuscle(muscle).filter(function(e) { return !usedIds.has(e.id); });
-      var picked = pickN(available, count);
-      picked.forEach(function(ex) {
-        usedIds.add(ex.id);
-        exercises.push(adjustSets(ex, setsMult));
-      });
+    var seen = {};
+    split.ids.forEach(function(id) {
+      if (seen[id]) return;
+      seen[id] = true;
+      exercises.push(makeEx(id));
     });
-
     plans.push({
-      name: dayNames[di] + ' — ' + split.name,
+      name: 'Giorno ' + (di + 1) + ' — ' + split.name,
       exercises: exercises,
       _aiGenerated: true
     });
   });
 
-  // Add age/weight-based notes to user
+  // Save plan metadata
   var u = getUser();
   if (u) {
     u.aiPlanGeneratedAt = new Date().toISOString();
@@ -7917,19 +8140,56 @@ function sendAICoachMsg() {
   if (!q) return;
   input.value = '';
   var msgs = document.getElementById('aicoach-msgs');
-  msgs.innerHTML += '<div class="aicoach-msg user"><div class="aicoach-bubble user">' + q.replace(/</g,'&lt;') + '</div></div>';
-  msgs.innerHTML += '<div class="aicoach-msg bot" id="aicoach-typing"><div class="aicoach-typing"><span></span><span></span><span></span></div></div>';
+  var core = document.getElementById('jarvis-core');
+
+  // Append user line
+  var userLine = document.createElement('div');
+  userLine.className = 'jarvis-line jarvis-user-line';
+  userLine.textContent = q.replace(/</g,'&lt;');
+  msgs.appendChild(userLine);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Thinking state
+  if (core) core.classList.add('thinking');
+  var thinkLine = document.createElement('div');
+  thinkLine.className = 'jarvis-line jarvis-sys-line';
+  thinkLine.innerHTML = '[ ELABORAZIONE<span class="jarvis-cursor-blink"> </span> ]';
+  msgs.appendChild(thinkLine);
   msgs.scrollTop = msgs.scrollHeight;
 
   _aiHistory.push({ role: 'user', parts: [{ text: q }] });
 
   callGeminiCoach(q).then(function(answer) {
-    var typing = document.getElementById('aicoach-typing');
-    if (typing) typing.remove();
+    if (core) core.classList.remove('thinking');
+    thinkLine.remove();
     _aiHistory.push({ role: 'model', parts: [{ text: answer }] });
-    msgs.innerHTML += '<div class="aicoach-msg bot"><div class="aicoach-bubble bot">' + answer + '</div></div>';
+    // Clean HTML tags for terminal display
+    var cleanText = answer.replace(/<br\s*\/?>/gi, '\n').replace(/<strong>(.*?)<\/strong>/gi, '$1').replace(/<[^>]+>/g, '');
+    var botLine = document.createElement('div');
+    botLine.className = 'jarvis-line jarvis-bot-line';
+    msgs.appendChild(botLine);
     msgs.scrollTop = msgs.scrollHeight;
+    typewriterEffect(botLine, cleanText, msgs);
   });
+}
+
+function typewriterEffect(el, text, container) {
+  var i = 0;
+  el.textContent = '';
+  var cursor = document.createElement('span');
+  cursor.className = 'jarvis-cursor-blink';
+  cursor.textContent = ' ';
+  el.appendChild(cursor);
+  var iv = setInterval(function() {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i]), cursor);
+      i++;
+      if (container) container.scrollTop = container.scrollHeight;
+    } else {
+      clearInterval(iv);
+      cursor.remove();
+    }
+  }, 18);
 }
 
 function getCoachSystemPrompt() {
