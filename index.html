@@ -1647,6 +1647,17 @@ body::-webkit-scrollbar{display:none}
 .cam-ov.ws-mode .cam-qs{display:none!important}
 .cam-ov.ws-mode .cam-status{display:none!important}
 .cam-ov.ws-mode #cam-fb-box{display:none!important}
+/* ═══ AURA VISION — THE ARC ═══ */
+.vision-arc-wrap{position:absolute;bottom:calc(env(safe-area-inset-bottom,20px) + 160px);left:50%;transform:translateX(-50%);z-index:15;display:none;flex-direction:column;align-items:center;pointer-events:none}
+.vision-arc-wrap.active{display:flex}
+.vision-arc-wrap svg{filter:drop-shadow(0 2px 12px rgba(0,0,0,.5))}
+.vision-correction{font-family:var(--fd);font-size:.78rem;font-weight:700;color:#f97316;text-align:center;margin-top:4px;transition:opacity .4s,color .4s;text-shadow:0 1px 8px rgba(0,0,0,.8);letter-spacing:.3px;max-width:240px}
+/* ═══ AURA VISION — REP COUNTER ═══ */
+.vision-rep-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:12;pointer-events:none;display:none;align-items:center;justify-content:center}
+.vision-rep-wrap.active{display:flex}
+.vision-rep-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.vision-rep-num{font-family:var(--fd);font-size:2.8rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.vision-rep-target{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:600;margin-top:2px}
 /* Countdown overlay */
 #ws-countdown-ov{position:absolute;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.72);pointer-events:all}
 #ws-countdown-ov.on{display:flex}
@@ -1946,9 +1957,9 @@ body::-webkit-scrollbar{display:none}
     <div class="cam-ov" id="cam-ov">
       <!-- Video feed -->
       <video id="cam-video" playsinline autoplay muted></video>
-      <!-- MediaPipe canvas -->
+      <!-- Canvas per skeleton + video mirror -->
       <canvas id="cam-canvas"></canvas>
-      <!-- Skeleton placeholder (shown when camera is off) -->
+      <!-- Skeleton placeholder (camera spenta) -->
       <svg viewBox="0 0 200 380" id="skel-overlay">
         <circle cx="100" cy="44" r="17" class="skn"/>
         <line x1="100" y1="61" x2="100" y2="90" class="skl"/>
@@ -1970,22 +1981,45 @@ body::-webkit-scrollbar{display:none}
         <circle cx="68" cy="212" r="5" class="skn"/><circle cx="132" cy="212" r="5" class="skn"/>
         <circle cx="62" cy="295" r="5" class="skn"/><circle cx="138" cy="295" r="5" class="skn"/>
       </svg>
-      <!-- Feedback badges -->
-      <div id="cam-fb-box"></div>
-      <!-- Angle tag canvas overlay -->
-      <div id="cam-angle-tags"></div>
-      <!-- Form score (top-left) -->
-      <div class="qs" id="cam-qs">
-        <div class="qn" id="cam-score">--</div>
-        <div class="ql">Forma</div>
-      </div>
-      <!-- Status chip (top-right) — class changes: live/nolight/rec/off -->
+
+      <!-- Flash feedback per rep -->
+      <div id="vision-rep-flash" style="position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;z-index:5;border-radius:inherit"></div>
+
+      <!-- Status badge (top-right) -->
       <div class="cam-status off" id="cam-status-badge">SPENTA</div>
-      <!-- Close button -->
+
+      <!-- Close button (top-left) -->
       <button class="cam-ov-close" onclick="closeCameraOv()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="17" height="17"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <!-- Bottom control bar -->
+
+      <!-- ═══ THE ARC — Form Gauge ═══ -->
+      <div class="vision-arc-wrap" id="vision-arc-wrap">
+        <svg viewBox="0 0 240 140" width="240" height="140" id="vision-arc-svg">
+          <path d="M 30 130 A 90 90 0 0 1 80 45" stroke="#f43f5e" stroke-width="8" fill="none" opacity="0.25" stroke-linecap="round"/>
+          <path d="M 80 45 A 90 90 0 0 1 160 45" stroke="#f97316" stroke-width="8" fill="none" opacity="0.25" stroke-linecap="round"/>
+          <path d="M 160 45 A 90 90 0 0 1 210 130" stroke="#22c55e" stroke-width="8" fill="none" opacity="0.25" stroke-linecap="round"/>
+          <line id="vision-arc-needle" x1="120" y1="130" x2="120" y2="50" stroke="#f97316" stroke-width="3" stroke-linecap="round" transform="rotate(0 120 130)" style="transition:transform .3s ease-out,stroke .3s"/>
+          <circle cx="120" cy="130" r="5" fill="#fff"/>
+        </svg>
+        <div class="vision-correction" id="vision-correction" style="opacity:0"></div>
+      </div>
+
+      <!-- ═══ REP COUNTER — Grande, Centrale ═══ -->
+      <div class="vision-rep-wrap" id="vision-rep-wrap">
+        <svg viewBox="0 0 100 100" width="90" height="90">
+          <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+          <circle id="vision-rep-progress" cx="50" cy="50" r="40" stroke="#f97316" stroke-width="4" fill="none"
+                  stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
+                  transform="rotate(-90 50 50)" style="transition:stroke-dashoffset .4s var(--spring)"/>
+        </svg>
+        <div class="vision-rep-inner">
+          <div class="vision-rep-num" id="vision-rep-num">0</div>
+          <div class="vision-rep-target" id="vision-rep-target-label"></div>
+        </div>
+      </div>
+
+      <!-- ═══ BOTTOM CONTROL BAR ═══ -->
       <div class="cam-ov-bar">
         <!-- Exercise pills -->
         <div class="cam-pills-row" id="cam-pills-row">
@@ -1998,7 +2032,7 @@ body::-webkit-scrollbar{display:none}
             <button class="cam-pill" data-ex="lunge" onclick="camSelectPill('lunge')">Affondi</button>
           </div>
         </div>
-        <!-- Hidden compat elements (IDs required by existing JS) -->
+        <!-- Hidden compat elements (IDs richiesti da JS esistente) -->
         <div style="display:none">
           <input type="number" id="cam-target-reps" value="12" min="1" max="100">
           <div id="cam-progress-fill" style="width:0%"></div>
@@ -2019,6 +2053,9 @@ body::-webkit-scrollbar{display:none}
           <span id="cam-led"></span>
           <span id="cam-status-text">Spenta</span>
           <div id="cam-status-chip"></div>
+          <div id="cam-fb-box"></div>
+          <div id="cam-angle-tags"></div>
+          <div class="qs" id="cam-qs"><div class="qn" id="cam-score">--</div><div class="ql">Forma</div></div>
         </div>
         <!-- Main control row -->
         <div class="cam-ctrl-main">
@@ -2037,35 +2074,50 @@ body::-webkit-scrollbar{display:none}
         <!-- Workout context label -->
         <div class="cam-ws-ctx" id="cam-ws-ctx" style="display:none"></div>
       </div>
-      <!-- ── Workout Countdown Overlay (A→B transition) ── -->
+
+      <!-- ═══ Workout Countdown Overlay ═══ -->
       <div id="ws-countdown-ov">
         <div class="ws-cd-ex-name" id="ws-cd-ex-name"></div>
         <div class="ws-cd-num" id="ws-cd-num">10</div>
         <div class="ws-cd-label">preparati</div>
       </div>
-      <!-- ── Workout Active Overlay (State B) ── -->
+
+      <!-- ═══ Workout Active Overlay ═══ -->
       <div id="ws-active-ov">
         <div class="ws-rep-center">
           <div class="ws-rep-big-num" id="ws-rep-big">0</div>
           <div class="ws-rep-target" id="ws-rep-target">/12</div>
         </div>
         <div class="ws-active-btns">
-          <button class="ws-active-btn ws-active-pause" id="ws-active-pause-btn" onclick="wsTogglePauseCam()">⏸ Pausa</button>
-          <button class="ws-active-btn ws-active-skip" onclick="wsOnSetDone(true)">⏭ Salta</button>
-          <button class="ws-active-btn ws-active-end" onclick="wsOnSetDone(true)">■ Termina Set</button>
+          <button class="ws-active-btn ws-active-pause" id="ws-active-pause-btn" onclick="wsTogglePauseCam()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pausa
+          </button>
+          <button class="ws-active-btn ws-active-skip" onclick="wsOnSetDone(true)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg> Salta
+          </button>
+          <button class="ws-active-btn ws-active-end" onclick="wsOnSetDone(true)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="6" y="6" width="12" height="12" rx="1"/></svg> Fine Set
+          </button>
         </div>
         <div id="ws-paused-ov">
-          <div class="ws-paused-title">⏸ In Pausa</div>
-          <button class="ws-paused-resume" onclick="wsTogglePauseCam()">▶ Riprendi</button>
+          <div class="ws-paused-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            In Pausa
+          </div>
+          <button class="ws-paused-resume" onclick="wsTogglePauseCam()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="5,3 19,12 5,21"/></svg>
+            Riprendi
+          </button>
         </div>
       </div>
-      <!-- Camera Summary Overlay (inside cam-ov) -->
+
+      <!-- Camera Summary Overlay -->
       <div class="cam-summary-ov" id="cam-summary-ov">
         <div class="legal-topbar">
           <button class="legal-back" onclick="closeCamSummary()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
           </button>
-          <div class="legal-page-title">Riepilogo Esercizio</div>
+          <div class="legal-page-title">Performance</div>
         </div>
         <div class="cam-summary-body" id="cam-summary-body"></div>
       </div>
@@ -3562,6 +3614,10 @@ function wsStartCountdown() {
   CAM.startTime = 0; CAM.formTipGiven = false;
   CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
   CAM._errorSince = 0; CAM._correctionTime = 0;
+  // Reset AURA VISION modules
+  RepCounter.reset();
+  FormAnalyzer.reset();
+  VoiceCoach.reset();
   document.getElementById('cam-target-reps').value = targetReps;
   // Prime visible rep counter
   document.getElementById('ws-rep-big').textContent = '0';
@@ -3572,7 +3628,8 @@ function wsStartCountdown() {
   // Reset overlay states
   document.getElementById('ws-active-ov').classList.remove('on');
   document.getElementById('ws-paused-ov').classList.remove('on');
-  document.getElementById('ws-active-pause-btn').textContent = '⏸ Pausa';
+  var pauseBtn = document.getElementById('ws-active-pause-btn');
+  if (pauseBtn) pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pausa';
   // Show countdown
   ws.countdownSec = 10;
   var exDef = POSE_EXERCISES[ex.id];
@@ -3632,11 +3689,11 @@ function wsTogglePauseCam() {
   var btn = document.getElementById('ws-active-pause-btn');
   var pausedOv = document.getElementById('ws-paused-ov');
   if (ws.paused) {
-    btn.textContent = '▶ Riprendi';
+    if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg> Riprendi';
     pausedOv.classList.add('on');
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    VoiceCoach.reset();
   } else {
-    btn.textContent = '⏸ Pausa';
+    if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pausa';
     pausedOv.classList.remove('on');
   }
 }
@@ -5787,56 +5844,580 @@ function speakCorrection(text) {
   window.speechSynthesis.speak(u);
 }
 
-function showCamSummary() {
+// ═══════════════════════════════════════════════════════
+// AURA VISION — 6 MODULI
+// ═══════════════════════════════════════════════════════
+
+const PoseEngine = {
+  angles: {},
+  landmarks: null,
+  visibility: {},
+
+  calcAngle(lm, a, b, c) {
+    var la = lm[a], lb = lm[b], lc = lm[c];
+    if (!la || !lb || !lc) return null;
+    if (la.visibility < 0.4 || lb.visibility < 0.4 || lc.visibility < 0.4) return null;
+    var ab = { x: la.x - lb.x, y: la.y - lb.y };
+    var cb = { x: lc.x - lb.x, y: lc.y - lb.y };
+    var dot = ab.x * cb.x + ab.y * cb.y;
+    var mag = Math.sqrt(ab.x*ab.x + ab.y*ab.y) * Math.sqrt(cb.x*cb.x + cb.y*cb.y);
+    if (mag === 0) return null;
+    return Math.round(Math.acos(Math.max(-1, Math.min(1, dot / mag))) * (180 / Math.PI));
+  },
+
+  update(lm, exerciseDef) {
+    this.landmarks = lm;
+    this.angles = {};
+    Object.keys(exerciseDef.joints).forEach(key => {
+      var idx = exerciseDef.joints[key];
+      var angle = this.calcAngle(lm, idx[0], idx[1], idx[2]);
+      if (angle !== null) this.angles[key] = angle;
+    });
+  }
+};
+
+const RepCounter = {
+  reps: 0,
+  phase: 'neutral',
+  phaseFrames: 0,
+  HYSTERESIS: 4,
+  currentRepStart: 0,
+  eccentricDuration: 0,
+  concentricDuration: 0,
+  eccentricEntryTime: 0,
+  minROM: 999,
+  repQualities: [],
+  partialReps: 0,
+
+  getROMThreshold(exerciseDef, userLevel) {
+    var base = exerciseDef.downThresh;
+    var mult = userLevel === 'principiante' ? 0.85 : userLevel === 'avanzato' ? 0.95 : 0.90;
+    return Math.round(exerciseDef.upThresh - (exerciseDef.upThresh - base) * mult);
+  },
+
+  update(angle, exerciseDef, formScore, userLevel) {
+    if (angle === undefined || angle === null) return null;
+    var downThresh = exerciseDef.downThresh;
+    var upThresh = exerciseDef.upThresh;
+    var romThresh = this.getROMThreshold(exerciseDef, userLevel);
+    var now = Date.now();
+    var result = null;
+
+    switch (this.phase) {
+      case 'neutral':
+        if (angle < upThresh - 10) {
+          this.phaseFrames++;
+          if (this.phaseFrames >= this.HYSTERESIS) {
+            this.phase = 'eccentric';
+            this.phaseFrames = 0;
+            this.currentRepStart = now;
+            this.eccentricEntryTime = now;
+            this.minROM = angle;
+          }
+        } else { this.phaseFrames = 0; }
+        break;
+
+      case 'eccentric':
+        if (angle < this.minROM) this.minROM = angle;
+        if (angle > upThresh - 15) {
+          this.phaseFrames++;
+          if (this.phaseFrames >= this.HYSTERESIS) {
+            this.eccentricDuration = now - this.eccentricEntryTime;
+            this.phase = 'concentric';
+            this.phaseFrames = 0;
+          }
+        } else { this.phaseFrames = 0; }
+        break;
+
+      case 'concentric':
+        if (angle > upThresh) {
+          this.phaseFrames++;
+          if (this.phaseFrames >= this.HYSTERESIS) {
+            this.concentricDuration = now - (this.eccentricEntryTime + this.eccentricDuration);
+            var romReached = this.minROM <= romThresh;
+            var tempoOk = this.eccentricDuration >= 300 && this.eccentricDuration <= 5000;
+            if (romReached && tempoOk) {
+              this.reps++;
+              var quality = this._calcRepQuality(formScore, romThresh);
+              this.repQualities.push(quality);
+              result = 'rep';
+            } else if (this.minROM <= romThresh + 15) {
+              this.partialReps++;
+              result = 'partial';
+            }
+            this.phase = 'neutral';
+            this.phaseFrames = 0;
+            this.minROM = 999;
+          }
+        } else { this.phaseFrames = 0; }
+        break;
+    }
+    return result;
+  },
+
+  _calcRepQuality(formScore, romThresh) {
+    var romPct = Math.min(100, Math.round((1 - this.minROM / romThresh) * 100 + 50));
+    var ecMs = this.eccentricDuration;
+    var tempoScore = ecMs >= 800 && ecMs <= 3000 ? 100 : ecMs >= 400 ? 70 : 40;
+    var score = Math.round(formScore * 0.4 + romPct * 0.35 + tempoScore * 0.25);
+    return {
+      score: Math.max(0, Math.min(100, score)),
+      rom: romPct,
+      tempo: tempoScore,
+      form: formScore,
+      eccentricMs: Math.round(ecMs),
+      concentricMs: Math.round(this.concentricDuration)
+    };
+  },
+
+  reset() {
+    this.reps = 0; this.phase = 'neutral'; this.phaseFrames = 0;
+    this.repQualities = []; this.partialReps = 0; this.minROM = 999;
+    this.eccentricDuration = 0; this.concentricDuration = 0;
+  },
+
+  getAverageQuality() {
+    if (this.repQualities.length === 0) return 0;
+    return Math.round(this.repQualities.reduce((s, q) => s + q.score, 0) / this.repQualities.length);
+  }
+};
+
+const FormAnalyzer = {
+  score: 0,
+  frameScores: [],
+  currentChecks: [],
+  priorityError: null,
+  failedChecks: {},
+  _lastPriorityChange: 0,
+
+  update(angles, exerciseDef) {
+    var okCount = 0;
+    var checks = [];
+    var worstCheck = null;
+    var worstScore = 0;
+    exerciseDef.checks.forEach(ch => {
+      var pass = ch.fn(angles);
+      checks.push({ name: ch.name, pass: pass, ok: ch.ok, warn: ch.warn, voice: ch.voice, errorJoints: ch.errorJoints });
+      if (pass) {
+        okCount++;
+      } else {
+        if (!this.failedChecks[ch.name]) this.failedChecks[ch.name] = 0;
+        this.failedChecks[ch.name]++;
+        if (this.failedChecks[ch.name] > worstScore) {
+          worstCheck = { name: ch.name, voice: ch.voice, errorJoints: ch.errorJoints || [] };
+          worstScore = this.failedChecks[ch.name];
+        }
+      }
+    });
+    this.currentChecks = checks;
+    var now = Date.now();
+    if (worstCheck && now - this._lastPriorityChange > 2000) {
+      if (!this.priorityError || this.priorityError.name !== worstCheck.name) {
+        this.priorityError = worstCheck;
+        this._lastPriorityChange = now;
+      }
+    }
+    if (!worstCheck) this.priorityError = null;
+    var framePct = Math.round((okCount / exerciseDef.checks.length) * 100);
+    this.frameScores.push(framePct);
+    if (this.frameScores.length > 60) this.frameScores.shift();
+    this.score = Math.round(this.frameScores.reduce((a, b) => a + b, 0) / this.frameScores.length);
+    return this.score;
+  },
+
+  reset() {
+    this.score = 0; this.frameScores = []; this.currentChecks = [];
+    this.priorityError = null; this.failedChecks = {};
+  }
+};
+
+const FeedbackRenderer = {
+  _lastCorrectionText: '',
+  _arcNeedle: null,
+  _corrLabel: null,
+  _repNum: null,
+  _repProgress: null,
+  _skelCanvas: null,
+
+  init() {
+    this._arcNeedle = document.getElementById('vision-arc-needle');
+    this._corrLabel = document.getElementById('vision-correction');
+    this._repNum = document.getElementById('vision-rep-num');
+    this._repProgress = document.getElementById('vision-rep-progress');
+    this._skelCanvas = document.getElementById('vision-skel-canvas');
+  },
+
+  updateArc(score) {
+    if (!this._arcNeedle) return;
+    var angle = -90 + (score / 100) * 180;
+    this._arcNeedle.setAttribute('transform', 'rotate(' + angle + ' 120 130)');
+    var col = score >= 75 ? '#22c55e' : score >= 45 ? '#f97316' : '#f43f5e';
+    this._arcNeedle.setAttribute('stroke', col);
+  },
+
+  updateCorrection(error) {
+    if (!this._corrLabel) return;
+    var text = error ? error.name : '';
+    if (text !== this._lastCorrectionText) {
+      this._lastCorrectionText = text;
+      this._corrLabel.textContent = text;
+      this._corrLabel.style.opacity = text ? '1' : '0';
+      this._corrLabel.style.color = text ? '#f97316' : '#22c55e';
+    }
+  },
+
+  updateReps(reps, target) {
+    if (this._repNum) this._repNum.textContent = reps;
+    if (this._repProgress) {
+      var circ = 251.3;
+      var pct = Math.min(reps / target, 1);
+      this._repProgress.setAttribute('stroke-dashoffset', String(circ * (1 - pct)));
+    }
+  },
+
+  drawSkeleton(ctx, lm, w, h, exerciseDef, failingJoints) {
+    if (!lm || !ctx) return;
+    var relevantJoints = new Set();
+    Object.values(exerciseDef.joints).forEach(indices => {
+      indices.forEach(i => relevantJoints.add(i));
+    });
+    var connections = [
+      [11,13],[13,15],[12,14],[14,16],
+      [11,23],[12,24],
+      [23,25],[25,27],[24,26],[26,28],
+      [11,12],[23,24]
+    ];
+    var failSet = new Set(failingJoints || []);
+    connections.forEach(([a, b]) => {
+      if (!relevantJoints.has(a) && !relevantJoints.has(b)) return;
+      var la = lm[a], lb = lm[b];
+      if (!la || !lb || la.visibility < 0.4 || lb.visibility < 0.4) return;
+      var x1 = (1 - la.x) * w, y1 = la.y * h;
+      var x2 = (1 - lb.x) * w, y2 = lb.y * h;
+      var isError = failSet.has(a) || failSet.has(b);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = isError ? '#f43f5e' : '#00dcff';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.shadowColor = isError ? '#f43f5e' : '#00dcff';
+      ctx.shadowBlur = 6;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    });
+    relevantJoints.forEach(i => {
+      var l = lm[i];
+      if (!l || l.visibility < 0.4) return;
+      var x = (1 - l.x) * w, y = l.y * h;
+      var isError = failSet.has(i);
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = isError ? '#f43f5e' : '#00dcff';
+      ctx.shadowColor = isError ? '#f43f5e' : '#00dcff';
+      ctx.shadowBlur = 4;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+  },
+
+  flashRep(type) {
+    var el = document.getElementById('vision-rep-flash');
+    if (!el) return;
+    el.style.background = type === 'rep' ? 'rgba(34,197,94,0.3)' : 'rgba(249,115,22,0.3)';
+    el.style.opacity = '1';
+    setTimeout(() => { el.style.opacity = '0'; }, 300);
+  }
+};
+
+const VoiceCoach = {
+  enabled: true,
+  _lastCorrection: '',
+  _lastCorrectionTime: 0,
+  _lastRepAnnounce: 0,
+  _consecutiveGoodReps: 0,
+  _errorStartTime: 0,
+
+  speakCorrection(errorText) {
+    if (!this.enabled || !errorText) { this._errorStartTime = 0; return; }
+    if (!('speechSynthesis' in window)) return;
+    var now = Date.now();
+    if (!this._errorStartTime) { this._errorStartTime = now; return; }
+    if (now - this._errorStartTime < 3000) return;
+    if (now - this._lastCorrectionTime < 10000) return;
+    if (errorText === this._lastCorrection && now - this._lastCorrectionTime < 15000) return;
+    this._speak(errorText);
+    this._lastCorrection = errorText;
+    this._lastCorrectionTime = now;
+  },
+
+  announceRep(reps, target, quality) {
+    if (!this.enabled) return;
+    var pct = reps / target;
+    var now = Date.now();
+    if (now - this._lastRepAnnounce < 2000) return;
+    if (reps === target) {
+      this._speak('Completato!');
+      this._lastRepAnnounce = now;
+    } else if (pct >= 0.75 && reps === Math.ceil(target * 0.75)) {
+      this._speak('Ultime ' + (target - reps) + '!');
+      this._lastRepAnnounce = now;
+    } else if (pct >= 0.50 && reps === Math.ceil(target * 0.50)) {
+      this._speak('Meta! ' + reps + ' su ' + target);
+      this._lastRepAnnounce = now;
+    } else if (pct >= 0.25 && reps === Math.ceil(target * 0.25)) {
+      this._speak(reps + ' su ' + target);
+      this._lastRepAnnounce = now;
+    }
+    if (quality && quality.score >= 80) {
+      this._consecutiveGoodReps++;
+      if (this._consecutiveGoodReps === 5) {
+        setTimeout(() => this._speak('Ottima forma, continua!'), 500);
+      }
+    } else {
+      this._consecutiveGoodReps = 0;
+    }
+  },
+
+  adaptiveTip(repQualities) {
+    if (repQualities.length < 3) return;
+    var last3 = repQualities.slice(-3);
+    var avgForm = last3.reduce((s, q) => s + q.form, 0) / 3;
+    if (avgForm < 50) {
+      this._speak('Rallenta il movimento e concentrati sulla tecnica');
+    }
+  },
+
+  _speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = 'it-IT'; u.rate = 1.05; u.pitch = 1.0; u.volume = 1.0;
+    var voices = window.speechSynthesis.getVoices();
+    var itVoice = voices.find(v => v.lang && v.lang.indexOf('it') === 0);
+    if (itVoice) u.voice = itVoice;
+    window.speechSynthesis.speak(u);
+  },
+
+  reset() {
+    this._lastCorrection = '';
+    this._lastCorrectionTime = 0;
+    this._lastRepAnnounce = 0;
+    this._consecutiveGoodReps = 0;
+    this._errorStartTime = 0;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  }
+};
+
+const SessionRecorder = {
+  startTime: 0,
+  repTimestamps: [],
+  formOverTime: [],
+  _lastSample: 0,
+  exercise: '',
+  targetReps: 12,
+
+  start(exercise, targetReps) {
+    this.startTime = Date.now();
+    this.exercise = exercise;
+    this.targetReps = targetReps;
+    this.repTimestamps = [];
+    this.formOverTime = [];
+    this._lastSample = 0;
+  },
+
+  recordRep(quality) {
+    this.repTimestamps.push({ time: Date.now() - this.startTime, quality: quality, reps: this.repTimestamps.length + 1 });
+  },
+
+  sampleForm(score) {
+    var now = Date.now();
+    if (now - this._lastSample < 2000) return;
+    this._lastSample = now;
+    this.formOverTime.push({ time: now - this.startTime, score: score });
+  },
+
+  getDuration() {
+    return Math.round((Date.now() - this.startTime) / 1000);
+  },
+
+  getCalories(exerciseId, userWeight) {
+    var MET_TABLE = {
+      squat: 5.0, pushup: 3.8, lunge_f: 4.5, lunge_b: 4.5, bulgarian: 5.5,
+      glute_bridge: 3.5, dips_chair: 4.0, pike_pushup: 4.2,
+      plank: 3.0, side_plank: 3.0, crunch: 3.5, vup: 4.5, russian_twist: 3.8,
+      superman: 3.0, mountain_climber: 8.0, burpee: 8.5, jumping_jack: 5.5,
+      high_knees: 7.0, lateral_lunge: 4.5, calf_raise: 3.0,
+      deadlift: 6.0, lunge: 4.5, shoulder_press: 3.8, bicep_curl: 3.0
+    };
+    var met = MET_TABLE[exerciseId] || 4.0;
+    var hours = this.getDuration() / 3600;
+    return Math.round(met * (userWeight || 70) * hours);
+  },
+
+  getComparison() {
+    var key = 'aura_vision_history';
+    try {
+      var history = JSON.parse(localStorage.getItem(key)) || [];
+      var prev = history.filter(h => h.exercise === this.exercise).slice(-1)[0];
+      return prev || null;
+    } catch(e) { return null; }
+  },
+
+  save() {
+    var key = 'aura_vision_history';
+    var history = [];
+    try { history = JSON.parse(localStorage.getItem(key)) || []; } catch(e) {}
+    history.push({
+      date: new Date().toISOString().slice(0, 10),
+      exercise: this.exercise,
+      reps: this.repTimestamps.length,
+      targetReps: this.targetReps,
+      avgQuality: RepCounter.getAverageQuality(),
+      formScore: FormAnalyzer.score,
+      duration: this.getDuration()
+    });
+    if (history.length > 100) history = history.slice(-100);
+    localStorage.setItem(key, JSON.stringify(history));
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+
+function showVisionSummary() {
+  stopCamera();
+  SessionRecorder.save();
+
   var exDef = POSE_EXERCISES[CAM.exercise];
-  var duration = Math.round((Date.now() - CAM.startTime) / 1000);
+  var duration = SessionRecorder.getDuration();
   var mm = String(Math.floor(duration / 60)).padStart(2, '0');
   var ss = String(duration % 60).padStart(2, '0');
-  var grade, gradeEmoji, gradeColor;
-  if (CAM.formScore >= 90) { grade = 'Eccellente'; gradeEmoji = '🏆'; gradeColor = '#22c55e'; }
-  else if (CAM.formScore >= 75) { grade = 'Buono'; gradeEmoji = '💪'; gradeColor = '#22c55e'; }
-  else if (CAM.formScore >= 55) { grade = 'Discreto'; gradeEmoji = '👍'; gradeColor = '#f97316'; }
-  else { grade = 'Da Migliorare'; gradeEmoji = '📝'; gradeColor = '#ef4444'; }
+  var avgQ = RepCounter.getAverageQuality();
+  var calories = SessionRecorder.getCalories(CAM.exercise, (getUser() || {}).weight);
+  var formScore = FormAnalyzer.score;
+  var reps = RepCounter.reps;
+  var partials = RepCounter.partialReps;
 
-  // Find worst checks
-  var tips = [];
-  var sortedChecks = Object.keys(CAM.failedChecks).sort(function(a,b) { return CAM.failedChecks[b] - CAM.failedChecks[a]; });
-  sortedChecks.slice(0, 3).forEach(function(key) {
-    var cnt = CAM.failedChecks[key];
-    if (cnt > 5) tips.push(key);
+  var grade, gradeColor;
+  if (avgQ >= 85) { grade = 'Eccellente'; gradeColor = '#22c55e'; }
+  else if (avgQ >= 70) { grade = 'Buono'; gradeColor = '#22c55e'; }
+  else if (avgQ >= 50) { grade = 'Discreto'; gradeColor = '#f97316'; }
+  else { grade = 'Da Migliorare'; gradeColor = '#f43f5e'; }
+
+  var prev = SessionRecorder.getComparison();
+  var deltaHtml = '';
+  if (prev) {
+    var formDelta = formScore - prev.formScore;
+    var sign = formDelta >= 0 ? '+' : '';
+    var col = formDelta >= 0 ? '#22c55e' : '#f43f5e';
+    deltaHtml = '<div style="font-size:.78rem;color:' + col + ';margin-top:4px">' + sign + formDelta + '% forma vs ultima volta</div>';
+  }
+
+  var sparkHtml = '';
+  if (SessionRecorder.formOverTime.length >= 3) {
+    var points = SessionRecorder.formOverTime;
+    var svgW = 200, svgH = 40;
+    var pathD = points.map(function(p, i) {
+      var x = (i / (points.length - 1)) * svgW;
+      var y = svgH - (p.score / 100) * svgH;
+      return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }).join(' ');
+    sparkHtml = '<div style="margin:8px 0"><div style="font-size:.68rem;color:var(--t3);margin-bottom:4px">Forma nel tempo</div>' +
+      '<svg viewBox="0 0 ' + svgW + ' ' + svgH + '" width="100%" height="40" style="display:block">' +
+      '<path d="' + pathD + '" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>' +
+      '</svg></div>';
+  }
+
+  var topTip = '';
+  var sortedFails = Object.keys(FormAnalyzer.failedChecks).sort(function(a, b) {
+    return FormAnalyzer.failedChecks[b] - FormAnalyzer.failedChecks[a];
   });
+  if (sortedFails.length > 0 && FormAnalyzer.failedChecks[sortedFails[0]] > 5) {
+    topTip = sortedFails[0];
+  }
+
+  var goodReps = RepCounter.repQualities.filter(function(q) { return q.score >= 75; }).length;
+  var okReps = RepCounter.repQualities.filter(function(q) { return q.score >= 45 && q.score < 75; }).length;
+  var poorReps = RepCounter.repQualities.filter(function(q) { return q.score < 45; }).length;
 
   var body = document.getElementById('cam-summary-body');
-  var html = '<div class="cam-summary-grade">' + gradeEmoji + '</div>';
-  html += '<div class="cam-summary-title" style="color:' + gradeColor + '">' + grade + '</div>';
-  html += '<div class="cam-summary-sub">' + exDef.name + ' · ' + CAM.reps + '/' + CAM.targetReps + ' ripetizioni</div>';
-  html += '<div class="cam-summary-grid">';
-  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + CAM.formScore + '</div><div class="cam-summary-card-lbl">Forma</div></div>';
-  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + CAM.symScore + '</div><div class="cam-summary-card-lbl">Simmetria</div></div>';
-  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + mm + ':' + ss + '</div><div class="cam-summary-card-lbl">Durata</div></div>';
-  html += '<div class="cam-summary-card"><div class="cam-summary-card-val">' + CAM.calories + '</div><div class="cam-summary-card-lbl">Calorie</div></div>';
+  var html = '<div style="padding:30px 20px;text-align:center">';
+  html += '<div style="font-family:var(--fd);font-size:2rem;font-weight:900;color:' + gradeColor + ';margin-bottom:4px">' + grade + '</div>';
+  html += '<div style="font-size:.85rem;color:var(--t3)">' + exDef.name + '</div>';
+  html += deltaHtml;
+
+  var repPct = Math.min(reps / CAM.targetReps, 1);
+  var repCirc = 2 * Math.PI * 48;
+  var repOffset = repCirc * (1 - repPct);
+  html += '<div style="position:relative;width:120px;height:120px;margin:20px auto">';
+  html += '<svg viewBox="0 0 120 120" width="120" height="120">';
+  html += '<circle cx="60" cy="60" r="48" stroke="var(--s8)" stroke-width="6" fill="none"/>';
+  html += '<circle cx="60" cy="60" r="48" stroke="' + gradeColor + '" stroke-width="6" fill="none" stroke-dasharray="' + repCirc.toFixed(1) + '" stroke-dashoffset="' + repOffset.toFixed(1) + '" stroke-linecap="round" transform="rotate(-90 60 60)"/>';
+  html += '</svg>';
+  html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">';
+  html += '<div style="font-family:var(--fd);font-size:1.8rem;font-weight:900;color:var(--t1)">' + reps + '</div>';
+  html += '<div style="font-size:.68rem;color:var(--t3)">/ ' + CAM.targetReps + ' rep</div>';
+  html += '</div></div>';
+  if (partials > 0) {
+    html += '<div style="font-size:.72rem;color:var(--or);margin-bottom:8px">' + partials + ' rep parziali (ROM insufficiente)</div>';
+  }
+
+  html += sparkHtml;
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0">';
+  html += '<div style="background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px 8px">';
+  html += '<div style="font-family:var(--fd);font-weight:800;font-size:1.2rem;color:var(--or)">' + formScore + '</div>';
+  html += '<div style="font-size:.65rem;color:var(--t3);margin-top:2px">Forma</div></div>';
+  html += '<div style="background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px 8px">';
+  html += '<div style="font-family:var(--fd);font-weight:800;font-size:1.2rem;color:var(--or)">' + mm + ':' + ss + '</div>';
+  html += '<div style="font-size:.65rem;color:var(--t3);margin-top:2px">Durata</div></div>';
+  html += '<div style="background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px 8px">';
+  html += '<div style="font-family:var(--fd);font-weight:800;font-size:1.2rem;color:var(--or)">' + calories + '</div>';
+  html += '<div style="font-size:.65rem;color:var(--t3);margin-top:2px">Calorie</div></div>';
   html += '</div>';
-  if (tips.length > 0) {
-    html += '<div class="cam-summary-tips"><div class="cam-summary-tips-title">📝 Consigli per migliorare</div>';
-    tips.forEach(function(t) { html += '<div class="cam-summary-tip">⚠ ' + t + '</div>'; });
+
+  if (reps > 0) {
+    html += '<div style="display:flex;gap:6px;justify-content:center;margin:8px 0;font-size:.72rem">';
+    if (goodReps > 0) html += '<span style="color:#22c55e;font-weight:700">' + goodReps + ' ottime</span>';
+    if (okReps > 0) html += '<span style="color:#f97316;font-weight:700">' + okReps + ' discrete</span>';
+    if (poorReps > 0) html += '<span style="color:#f43f5e;font-weight:700">' + poorReps + ' deboli</span>';
     html += '</div>';
   }
-  html += '<button class="cam-summary-close" onclick="closeCamSummary()">Chiudi</button>';
+
+  if (topTip) {
+    html += '<div style="background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px;margin:12px 0;text-align:left">';
+    html += '<div style="font-weight:700;font-size:.82rem;margin-bottom:4px;display:flex;align-items:center;gap:6px">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" width="16" height="16"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/></svg>';
+    html += 'Suggerimento AURA</div>';
+    html += '<div style="font-size:.78rem;color:var(--t2)">Lavora su: <strong style="color:var(--t1)">' + escapeHtml(topTip) + '</strong></div>';
+    html += '</div>';
+  }
+
+  html += '<button style="width:100%;padding:1rem;background:var(--or);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;font-family:var(--fd);margin-top:16px" onclick="closeCamSummary()">Chiudi</button>';
+  html += '</div>';
+
   body.innerHTML = html;
   document.getElementById('cam-summary-ov').classList.add('on');
 
   // Voice summary
-  var voiceMsg = grade + '! Hai completato ' + CAM.reps + ' ripetizioni di ' + exDef.name + ' con un punteggio forma di ' + CAM.formScore + ' su 100.';
-  if (tips.length > 0) voiceMsg += ' Consiglio: lavora su ' + tips[0] + '.';
-  setTimeout(function() { speak(voiceMsg); }, 500);
+  setTimeout(function() {
+    VoiceCoach._speak(grade + '! ' + reps + ' ripetizioni completate.');
+  }, 500);
 }
 
+// Keep showCamSummary as alias for backward compatibility
+function showCamSummary() { showVisionSummary(); }
+
 function closeCamSummary() {
+  VoiceCoach.reset();
   document.getElementById('cam-summary-ov').classList.remove('on');
 }
 
+}
+
+var _brightnessCheckFrame = 0;
+
 function onPoseResults(results) {
-  // Skip frame if workout is paused
   if (ws.paused) return;
   var canvas = document.getElementById('cam-canvas');
   var video = document.getElementById('cam-video');
@@ -5853,245 +6434,97 @@ function onPoseResults(results) {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   ctx.restore();
 
-  // Light check every 30 frames
-  var brightness = checkBrightness(video);
-  var badge = document.getElementById('cam-status-badge');
-  if (brightness < 35) {
-    CAM.lowLight = true;
-    badge.className = 'cam-status nolight';
-    badge.textContent = 'LUCE BASSA';
-    document.getElementById('cam-fb-box').innerHTML = '<div class="fb err">⚠ Migliora l\'illuminazione</div>';
-    return;
-  } else {
-    if (CAM.lowLight) { CAM.lowLight = false; toast('💡 Luce ok!', 'gr'); }
-    badge.className = 'cam-status live';
-    badge.textContent = 'TRACKING';
+  // 1. BRIGHTNESS CHECK — ogni 30 frame
+  _brightnessCheckFrame++;
+  if (_brightnessCheckFrame >= 30) {
+    _brightnessCheckFrame = 0;
+    var brightness = checkBrightness(video);
+    var badge = document.getElementById('cam-status-badge');
+    if (brightness < 35) {
+      badge.className = 'cam-status nolight';
+      badge.textContent = 'LUCE BASSA';
+      return;
+    } else {
+      badge.className = 'cam-status live';
+      badge.textContent = 'TRACKING';
+    }
   }
 
   var hasPose = results.poseLandmarks && results.poseLandmarks.length > 0;
-
-  // ── AURA SEGMENTATION EFFECT ──────────────────────
-  if (results.segmentationMask) {
-    drawAuraEffect(ctx, results, canvas.width, canvas.height);
-  }
-
   if (!hasPose) {
-    badge.className = 'cam-status nolight';
-    badge.textContent = 'POSIZIONATI';
-    document.getElementById('cam-fb-box').innerHTML = '<div class="fb warn">Posizionati nell\'inquadratura</div>';
-    CAM.scanActive = false;
+    document.getElementById('cam-status-badge').className = 'cam-status nolight';
+    document.getElementById('cam-status-badge').textContent = 'POSIZIONATI';
     return;
   }
 
-  CAM.scanActive = true;
-  CAM.lastPoseTime = Date.now();
+  // Activates vision UI on first valid frame
+  var arcWrap = document.getElementById('vision-arc-wrap');
+  var repWrap = document.getElementById('vision-rep-wrap');
+  if (arcWrap) arcWrap.classList.add('active');
+  if (repWrap) repWrap.classList.add('active');
+
   var lm = results.poseLandmarks;
   var w = canvas.width, h = canvas.height;
-
-  // Calculate angles
   var exDef = POSE_EXERCISES[CAM.exercise];
-  CAM.angles = {};
-  Object.keys(exDef.joints).forEach(function(key) {
-    var idx = exDef.joints[key];
-    var a = lm[idx[0]], b = lm[idx[1]], c = lm[idx[2]];
-    if (a.visibility > 0.4 && b.visibility > 0.4 && c.visibility > 0.4) {
-      CAM.angles[key] = Math.round(calcAngle(a, b, c));
-    }
-  });
+  if (!exDef) return;
 
-  // Collect failing check error joints for red overlay
-  var failingJoints = [];
-  var fbBox = document.getElementById('cam-fb-box');
-  var fbHtml = '';
-  var okCount = 0;
-  var voiceWarnings = [];
-  exDef.checks.forEach(function(ch) {
-    var pass = ch.fn(CAM.angles);
-    if (pass) {
-      okCount++;
-      fbHtml += '<div class="fb ok">' + ch.ok + '</div>';
-    } else {
-      fbHtml += '<div class="fb warn">' + ch.warn + '</div>';
-      if (ch.voice) voiceWarnings.push(ch.voice);
-      if (ch.errorJoints) failingJoints = failingJoints.concat(ch.errorJoints);
-      var warnKey = ch.warn.replace('⚠ ', '');
-      if (!CAM.failedChecks[warnKey]) CAM.failedChecks[warnKey] = 0;
-      CAM.failedChecks[warnKey]++;
-    }
-  });
-  fbBox.innerHTML = fbHtml;
+  // 2. POSE ENGINE
+  PoseEngine.update(lm, exDef);
 
-  // ── ERROR JOINT OVERLAYS (red glow) ───────────────
-  if (failingJoints.length > 0) {
-    drawErrorOverlays(ctx, lm, w, h, failingJoints);
+  // 3. FORM ANALYZER
+  var formScore = FormAnalyzer.update(PoseEngine.angles, exDef);
+
+  // 4. REP COUNTER
+  var repAngle = PoseEngine.angles[exDef.repAngle];
+  var userLevel = (getUser() || {}).level || 'intermedio';
+  var repResult = RepCounter.update(repAngle, exDef, formScore, userLevel);
+
+  if (repResult === 'rep') {
+    var quality = RepCounter.repQualities[RepCounter.repQualities.length - 1];
+    SessionRecorder.recordRep(quality);
+    FeedbackRenderer.updateReps(RepCounter.reps, CAM.targetReps);
+    FeedbackRenderer.flashRep('rep');
+    VoiceCoach.announceRep(RepCounter.reps, CAM.targetReps, quality);
+    VoiceCoach.adaptiveTip(RepCounter.repQualities);
+    // Sync visible counters
+    var repBig = document.getElementById('ws-rep-big');
+    if (repBig) repBig.textContent = RepCounter.reps;
+    var ctrlReps = document.getElementById('cam-ctrl-reps');
+    if (ctrlReps) ctrlReps.textContent = RepCounter.reps;
+    document.getElementById('cstat-rep').textContent = RepCounter.reps;
+    // Auto-complete al target
+    if (RepCounter.reps >= CAM.targetReps) {
+      setTimeout(function() {
+        stopCamera();
+        if (ws.active) { wsOnSetDone(false); } else { showVisionSummary(); }
+      }, 800);
+    }
+  } else if (repResult === 'partial') {
+    FeedbackRenderer.flashRep('partial');
   }
 
-  document.getElementById('cam-angle-tags').innerHTML = '';
+  // 5. FEEDBACK RENDERER
+  FeedbackRenderer.updateArc(formScore);
+  FeedbackRenderer.updateCorrection(FormAnalyzer.priorityError);
+  var failingJoints = FormAnalyzer.priorityError ? FormAnalyzer.priorityError.errorJoints : [];
+  FeedbackRenderer.drawSkeleton(ctx, lm, w, h, exDef, failingJoints);
 
-  // Voice corrections: trigger after 2s of continuous error, max 1 every 7s
-  var _vcNow = Date.now();
-  if (voiceWarnings.length > 0) {
-    if (!CAM._errorSince) CAM._errorSince = _vcNow;
-    if (_vcNow - CAM._errorSince >= 2000) speakCorrection(voiceWarnings[0]);
+  // 6. VOICE COACH
+  if (FormAnalyzer.priorityError) {
+    VoiceCoach.speakCorrection(FormAnalyzer.priorityError.voice);
   } else {
-    CAM._errorSince = 0;
+    VoiceCoach._errorStartTime = 0;
   }
 
-  // Rep counting
-  var repAngle = CAM.angles[exDef.repAngle];
-  var repBadge = document.getElementById('cam-rep-badge');
-  if (repAngle !== undefined) {
-    repBadge.textContent = CAM.reps + (CAM.phase === 'down' ? ' ↓' : ' ↑');
-    repBadge.title = exDef.repAngle + ': ' + repAngle + '°';
-    if (CAM.phase === 'up' && repAngle < exDef.downThresh) {
-      CAM.phase = 'down';
-    } else if (CAM.phase === 'down' && repAngle > exDef.upThresh) {
-      CAM.phase = 'up';
-      CAM.reps++;
-      if (!CAM.sessionActive) { CAM.sessionActive = true; CAM.startTime = Date.now(); }
-      document.getElementById('cam-rep-badge').textContent = CAM.reps;
-      document.getElementById('cstat-rep').textContent = CAM.reps;
-      // Update workout active overlay rep counter
-      var repBig = document.getElementById('ws-rep-big');
-      if (repBig) repBig.textContent = CAM.reps;
-      var ctrlReps = document.getElementById('cam-ctrl-reps');
-      if (ctrlReps) ctrlReps.textContent = CAM.reps;
-      var pct = Math.min(100, Math.round((CAM.reps / CAM.targetReps) * 100));
-      document.getElementById('cam-progress-fill').style.width = pct + '%';
-      document.getElementById('cam-progress-label').textContent = CAM.reps + '/' + CAM.targetReps;
-      var u = getUser(), wt = (u && u.weight) ? u.weight : 70;
-      CAM.calories = Math.round(CAM.reps * 0.4 * (wt / 70));
-      document.getElementById('cstat-cal').textContent = CAM.calories;
-      speakRepCount(CAM.reps, CAM.targetReps);
-      if (CAM.reps >= CAM.targetReps) {
-        setTimeout(function() {
-          if (ws.active) { wsOnSetDone(false); } else { showCamSummary(); }
-        }, 800);
-      }
-    }
-  }
+  // 7. SESSION RECORDER
+  SessionRecorder.sampleForm(formScore);
 
-  // Form score
-  var formPct = Math.round((okCount / exDef.checks.length) * 100);
-  CAM.frameScores.push(formPct);
-  if (CAM.frameScores.length > 60) CAM.frameScores.shift();
-  CAM.formScore = Math.round(CAM.frameScores.reduce(function(a, b) { return a + b; }, 0) / CAM.frameScores.length);
-
-  var scoreEl = document.getElementById('cam-score');
-  scoreEl.textContent = CAM.formScore;
-  scoreEl.style.color = CAM.formScore >= 80 ? '#22c55e' : (CAM.formScore >= 50 ? '#f97316' : '#ef4444');
-  document.getElementById('cstat-form').textContent = CAM.formScore;
-  document.getElementById('cstat-form').style.color = CAM.formScore >= 80 ? 'var(--gr)' : 'var(--or)';
+  // 8. UI NUMERICA
   var ctrlScore = document.getElementById('cam-ctrl-score');
-  if (ctrlScore) { ctrlScore.textContent = CAM.formScore; ctrlScore.style.color = CAM.formScore >= 80 ? '#22c55e' : (CAM.formScore >= 50 ? '#f97316' : '#ef4444'); }
-
-  // Symmetry
-  var symKeys = Object.keys(CAM.angles);
-  var leftKeys = symKeys.filter(function(k) { return k.indexOf('_l') > -1; });
-  var symTotal = 0, symCount = 0;
-  leftKeys.forEach(function(lk) {
-    var rk = lk.replace('_l', '_r');
-    if (CAM.angles[rk] !== undefined) {
-      symTotal += 100 - Math.min(100, Math.abs(CAM.angles[lk] - CAM.angles[rk]) * 3);
-      symCount++;
-    }
-  });
-  CAM.symScore = symCount > 0 ? Math.round(symTotal / symCount) : 100;
-  document.getElementById('cstat-sym').textContent = CAM.symScore;
-}
-
-// ── AURA EFFECT — segmentation → cyan glow ───────────
-function drawAuraEffect(ctx, results, w, h) {
-  // Cache offscreen canvases on the CAM object to avoid re-creating every frame
-  if (!CAM._auraCanvas || CAM._auraCanvas.width !== w || CAM._auraCanvas.height !== h) {
-    CAM._auraCanvas = document.createElement('canvas');
-    CAM._auraCanvas.width = w; CAM._auraCanvas.height = h;
-    CAM._erosCanvas = document.createElement('canvas');
-    CAM._erosCanvas.width = w; CAM._erosCanvas.height = h;
+  if (ctrlScore) {
+    ctrlScore.textContent = formScore;
+    ctrlScore.style.color = formScore >= 75 ? '#22c55e' : formScore >= 45 ? '#f97316' : '#f43f5e';
   }
-  var aCtx = CAM._auraCanvas.getContext('2d');
-  var eCtx = CAM._erosCanvas.getContext('2d');
-
-  // Step 1: Draw mirrored segmentation mask as cyan silhouette on auraCanvas
-  aCtx.clearRect(0, 0, w, h);
-  aCtx.save();
-  aCtx.translate(w, 0);
-  aCtx.scale(-1, 1);
-  aCtx.drawImage(results.segmentationMask, 0, 0, w, h);
-  aCtx.restore();
-
-  // Colorize: person pixels → cyan, background → transparent
-  var id = aCtx.getImageData(0, 0, w, h);
-  var d = id.data;
-  for (var i = 0; i < d.length; i += 4) {
-    if (d[i] > 128) {
-      d[i] = 0; d[i+1] = 220; d[i+2] = 255; d[i+3] = 255;
-    } else {
-      d[i+3] = 0;
-    }
-  }
-  aCtx.putImageData(id, 0, 0);
-
-  // Step 2: Draw auraCanvas to erosCanvas with blur to get expanded interior fill
-  eCtx.clearRect(0, 0, w, h);
-  eCtx.filter = 'blur(10px)';
-  eCtx.drawImage(CAM._auraCanvas, 0, 0);
-  eCtx.filter = 'none';
-
-  // Threshold erosCanvas: alpha > 225 → solid fill (interior body shape)
-  var ed = eCtx.getImageData(0, 0, w, h);
-  var epx = ed.data;
-  for (var j = 0; j < epx.length; j += 4) {
-    if (epx[j+3] > 225) {
-      epx[j] = 0; epx[j+1] = 220; epx[j+2] = 255; epx[j+3] = 255;
-    } else {
-      epx[j+3] = 0;
-    }
-  }
-  eCtx.putImageData(ed, 0, 0);
-
-  // Step 3: destination-out on auraCanvas — carve out the interior, leaving ONLY the ring
-  aCtx.globalCompositeOperation = 'destination-out';
-  aCtx.drawImage(CAM._erosCanvas, 0, 0);
-  aCtx.globalCompositeOperation = 'source-over';
-
-  // Step 4: Draw ring to main canvas with multiple blur passes for neon glow
-  ctx.save();
-  ctx.filter = 'blur(20px)';
-  ctx.globalAlpha = 0.45;
-  ctx.drawImage(CAM._auraCanvas, 0, 0);
-  ctx.filter = 'blur(8px)';
-  ctx.globalAlpha = 0.65;
-  ctx.drawImage(CAM._auraCanvas, 0, 0);
-  ctx.filter = 'blur(2px)';
-  ctx.globalAlpha = 0.9;
-  ctx.drawImage(CAM._auraCanvas, 0, 0);
-  ctx.restore();
-}
-
-// ── ERROR OVERLAYS — red radial gradient at bad joints ─
-function drawErrorOverlays(ctx, lm, w, h, failingJoints) {
-  var seen = {};
-  failingJoints.forEach(function(jointIdx) {
-    if (seen[jointIdx]) return;
-    seen[jointIdx] = true;
-    var lmk = lm[jointIdx];
-    if (!lmk || lmk.visibility < 0.3) return;
-    var x = (1 - lmk.x) * w;
-    var y = lmk.y * h;
-    var radius = Math.max(w, h) * 0.09;
-    var grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    grad.addColorStop(0, 'rgba(244,63,94,0.85)');
-    grad.addColorStop(1, 'rgba(244,63,94,0)');
-    ctx.save();
-    ctx.filter = 'blur(10px)';
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  });
 }
 
 
@@ -6108,7 +6541,7 @@ async function startCamera() {
     document.getElementById('cam-status-badge').textContent = 'AVVIO';
     await ensureMediaPipe();
   } catch(e) {
-    toast('⚠ Errore caricamento MediaPipe', 're');
+    toast('Errore caricamento MediaPipe', 're');
     document.getElementById('cam-status-badge').className = 'cam-status off';
     document.getElementById('cam-status-badge').textContent = 'ERRORE';
     return;
@@ -6165,6 +6598,22 @@ async function startCamera() {
     document.getElementById('cam-status-badge').className = 'cam-status rec';
     document.getElementById('cam-status-badge').textContent = 'AVVIO';
 
+    // Init AURA VISION modules
+    RepCounter.reset();
+    FormAnalyzer.reset();
+    VoiceCoach.reset();
+    FeedbackRenderer.init();
+    SessionRecorder.start(CAM.exercise, CAM.targetReps);
+    var rTgtLbl = document.getElementById('vision-rep-target-label');
+    if (rTgtLbl) rTgtLbl.textContent = '/ ' + CAM.targetReps;
+    FeedbackRenderer.updateReps(0, CAM.targetReps);
+    _brightnessCheckFrame = 0;
+    // Hide vision UI until first pose detected
+    var arcWrap = document.getElementById('vision-arc-wrap');
+    var repWrap = document.getElementById('vision-rep-wrap');
+    if (arcWrap) arcWrap.classList.remove('active');
+    if (repWrap) repWrap.classList.remove('active');
+
     // Init MediaPipe Pose
     if (!mpPose) {
       mpPose = new Pose({
@@ -6175,8 +6624,8 @@ async function startCamera() {
       mpPose.setOptions({
         modelComplexity: 1,
         smoothLandmarks: true,
-        enableSegmentation: true,
-        smoothSegmentation: true,
+        enableSegmentation: false,
+        smoothSegmentation: false,
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5
       });
@@ -6195,30 +6644,26 @@ async function startCamera() {
     });
     mpCamera.start();
     poseRunning = true;
-    toast('📹 Camera IA accesa — MediaPipe attivo', 'gr');
+    toast('Camera IA accesa', 'gr');
   } catch (err) {
     console.log('Camera error:', err);
-    var fbBox = document.getElementById('cam-fb-box');
     var badge = document.getElementById('cam-status-badge');
     badge.className = 'cam-status off';
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
       badge.textContent = 'ERRORE';
-      if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Permesso fotocamera negato</strong><br><br>Per usare la Camera IA devi consentire l\'accesso alla fotocamera.<br><br>👉 Vai nelle <strong>Impostazioni del browser</strong> → Sito → Fotocamera → Consenti<br><br>Poi riprova.</div>';
-      toast('📷 Permesso fotocamera negato. Controlla le impostazioni del browser.', 're');
+      toast('Permesso fotocamera negato. Controlla le impostazioni del browser.', 're');
     } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
       badge.textContent = 'ERRORE';
-      if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Nessuna fotocamera rilevata</strong><br><br>Il dispositivo non ha una fotocamera disponibile.</div>';
-      toast('📷 Nessuna fotocamera trovata sul dispositivo.', 're');
+      toast('Nessuna fotocamera trovata sul dispositivo.', 're');
     } else {
       badge.textContent = 'ERRORE';
-      if (fbBox) fbBox.innerHTML = '<div class="fb warn" style="font-size:.82rem;padding:16px;text-align:center;line-height:1.5">📷 <strong>Camera non disponibile</strong><br><br>Errore: ' + (err.message || 'sconosciuto') + '<br>Riprova.</div>';
-      toast('📹 Camera non disponibile. Controlla i permessi.', 're');
+      toast('Camera non disponibile. Controlla i permessi.', 're');
     }
   }
 }
 
 function stopCamera() {
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  VoiceCoach.reset();
   if (mpCamera) { mpCamera.stop(); mpCamera = null; }
   poseRunning = false;
   if (cameraStream) {
@@ -6231,6 +6676,11 @@ function stopCamera() {
   var skel = document.getElementById('skel-overlay');
   if (video) { video.srcObject = null; video.style.display = 'none'; }
   if (canvas) { canvas.style.display = 'none'; var cx = canvas.getContext('2d'); cx.clearRect(0,0,canvas.width,canvas.height); }
+  // Hide vision UI
+  var arcWrap = document.getElementById('vision-arc-wrap');
+  var repWrap = document.getElementById('vision-rep-wrap');
+  if (arcWrap) arcWrap.classList.remove('active');
+  if (repWrap) repWrap.classList.remove('active');
   if (skel) skel.style.display = 'block';
   document.getElementById('cam-status-text').textContent = 'Spenta';
   document.getElementById('cam-led').style.background = 'var(--t3)';
@@ -6325,6 +6775,14 @@ function camSelectPill(exId) {
   document.getElementById('cam-progress-label').textContent = '0/' + tgt;
   var cr = document.getElementById('cam-ctrl-reps'); if (cr) cr.textContent = '0';
   var cs = document.getElementById('cam-ctrl-score'); if (cs) { cs.textContent = '--'; cs.style.color = '#fff'; }
+  // Reset AURA VISION modules
+  RepCounter.reset();
+  FormAnalyzer.reset();
+  VoiceCoach.reset();
+  CAM.targetReps = tgt;
+  FeedbackRenderer.updateReps(0, tgt);
+  var rTgtLbl = document.getElementById('vision-rep-target-label');
+  if (rTgtLbl) rTgtLbl.textContent = '/ ' + tgt;
 }
 
 // Toggle camera session from start button
@@ -6342,8 +6800,7 @@ function toggleCamSession() {
     btn.classList.add('running');
     // Announce start
     setTimeout(function() {
-      CAM.lastVoiceTime = 0; CAM.lastVoiceMsg = '';
-      speak('Sessione avviata. VAI!');
+      VoiceCoach._speak('Sessione avviata. VAI!');
     }, 1000);
   }
 }
