@@ -897,6 +897,23 @@ body::-webkit-scrollbar{display:none}
 .ob-sum-label{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .ob-sum-val{font-family:var(--fb);font-weight:500;font-size:.95rem;color:var(--t1)}
 
+/* ── Onboarding Goal Grid ── */
+.ob-goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.ob-goal-card{background:var(--s9);border:1px solid var(--s8);border-radius:14px;padding:14px;cursor:pointer;transition:all .2s var(--spring);text-align:center}
+.ob-goal-card:active{transform:scale(.97)}
+.ob-goal-card.sel{border-color:var(--or);background:#f9731612}
+.ob-goal-card svg{margin-bottom:6px;color:var(--t2);transition:color .2s}
+.ob-goal-card.sel svg{color:var(--or)}
+.ob-goal-label{font-weight:700;font-size:.88rem;color:var(--t1)}
+.ob-goal-sub{font-size:.7rem;color:var(--t3);margin-top:2px}
+/* ── Segmented Control ── */
+.ob-seg-label{font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+.ob-segmented{display:flex;background:var(--s8);border-radius:12px;padding:3px;margin-bottom:12px}
+.ob-seg{flex:1;padding:10px 0;text-align:center;border-radius:10px;border:none;background:transparent;font-size:.82rem;font-weight:600;color:var(--t3);cursor:pointer;transition:all .25s var(--spring);font-family:var(--fb)}
+.ob-seg small{font-size:.62rem;color:var(--t4);font-weight:400}
+.ob-seg.sel{background:var(--or);color:#fff;box-shadow:0 4px 14px #f9731630}
+.ob-seg.sel small{color:rgba(255,255,255,.7)}
+
 /* ── ONBOARDING AI STEP ── */
 .ob-ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:16px;padding:20px}
 .ob-ai-spinner{width:64px;height:64px;border-radius:50%;border:4px solid var(--s7);border-top-color:var(--or);animation:aiSpin 1s linear infinite}
@@ -1837,43 +1854,50 @@ body::-webkit-scrollbar{display:none}
       <div class="ob-bar" id="ob-b1"></div>
       <div class="ob-bar" id="ob-b2"></div>
       <div class="ob-bar" id="ob-b3"></div>
-      <div class="ob-bar" id="ob-b4"></div>
-      <div class="ob-bar" id="ob-b5"></div>
     </div>
     <div class="ob-scroll">
 
-      <!-- Step 0: Obiettivo -->
+      <!-- Step 0: Obiettivo + Livello -->
       <div class="ob-step on" data-step="0">
-        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-        <div class="ob-title">Qual è il tuo obiettivo?</div>
-        <div class="ob-desc">AURA personalizzerà allenamenti, dieta e recupero in base alla tua scelta.</div>
-        <div class="ob-options" id="ob-goal-opts">
-          <div class="ob-opt sel" data-val="massa"><div class="ob-opt-text"><div class="ob-opt-label">Massa Muscolare</div><div class="ob-opt-sub">Ipertrofia e forza progressiva</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="dimagrimento"><div class="ob-opt-text"><div class="ob-opt-label">Dimagrimento</div><div class="ob-opt-sub">Deficit calorico e cardio mirati</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt" data-val="benessere"><div class="ob-opt-text"><div class="ob-opt-label">Benessere Generale</div><div class="ob-opt-sub">Equilibrio corpo-mente, mobilità</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt" data-val="resistenza"><div class="ob-opt-text"><div class="ob-opt-label">Resistenza</div><div class="ob-opt-sub">Cardio, endurance e stamina</div></div><div class="ob-check"></div></div>
+        <div class="ob-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="40" height="40"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="ob-title">Chi sei?</div>
+        <div class="ob-desc">AURA si adatterà completamente al tuo profilo.</div>
+        <div class="ob-goal-grid" id="ob-goal-opts">
+          <div class="ob-goal-card sel" data-val="massa">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M6.5 6.5h11M6 12H4a1 1 0 01-1-1V7a1 1 0 011-1h2M18 12h2a1 1 0 001-1V7a1 1 0 00-1-1h-2M6 18H4a1 1 0 01-1-1v-4a1 1 0 011-1h2M18 18h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2M6.5 17.5h11"/></svg>
+            <div class="ob-goal-label">Massa</div>
+            <div class="ob-goal-sub">Ipertrofia e forza</div>
+          </div>
+          <div class="ob-goal-card" data-val="dimagrimento">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg>
+            <div class="ob-goal-label">Dimagrimento</div>
+            <div class="ob-goal-sub">Deficit e cardio</div>
+          </div>
+          <div class="ob-goal-card" data-val="benessere">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M4 20h16M12 4v16M8 8l4-4 4 4"/></svg>
+            <div class="ob-goal-label">Benessere</div>
+            <div class="ob-goal-sub">Equilibrio e mobilità</div>
+          </div>
+          <div class="ob-goal-card" data-val="resistenza">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <div class="ob-goal-label">Resistenza</div>
+            <div class="ob-goal-sub">Cardio e stamina</div>
+          </div>
         </div>
-        <div class="ob-footer"><div class="ob-nav"><button class="cta" style="flex:1" id="ob-next-0">Avanti →</button></div></div>
+        <div class="ob-seg-label">Il tuo livello</div>
+        <div class="ob-segmented" id="ob-level-seg">
+          <button class="ob-seg" data-val="principiante">Principiante</button>
+          <button class="ob-seg sel" data-val="intermedio">Intermedio</button>
+          <button class="ob-seg" data-val="avanzato">Avanzato</button>
+        </div>
+        <div class="ob-footer"><div class="ob-nav"><button class="cta" style="flex:1" id="ob-next-0">Avanti</button></div></div>
       </div>
 
-      <!-- Step 1: Livello -->
+      <!-- Step 1: Misure + Frequenza -->
       <div class="ob-step" data-step="1">
-        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
-        <div class="ob-title">Qual è il tuo livello?</div>
-        <div class="ob-desc">Scegli il livello che ti descrive meglio. AURA si adatterà di conseguenza.</div>
-        <div class="ob-options" id="ob-level-opts">
-          <div class="ob-opt" data-val="principiante"><div class="ob-opt-text"><div class="ob-opt-label">Principiante</div><div class="ob-opt-sub">0-6 mesi di allenamento</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt sel" data-val="intermedio"><div class="ob-opt-text"><div class="ob-opt-label">Intermedio</div><div class="ob-opt-sub">6 mesi - 2 anni</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="avanzato"><div class="ob-opt-text"><div class="ob-opt-label">Avanzato</div><div class="ob-opt-sub">2+ anni di allenamento costante</div></div><div class="ob-check"></div></div>
-        </div>
-        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-1">← Indietro</button><button class="cta" style="flex:1" id="ob-next-1">Avanti →</button></div></div>
-      </div>
-
-      <!-- Step 2: Misure fisiche -->
-      <div class="ob-step" data-step="2">
-        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><path d="M17 21l-5-3-5 3V5a2 2 0 012-2h6a2 2 0 012 2z"/></svg></div>
-        <div class="ob-title">Le tue misure</div>
-        <div class="ob-desc">Servono per calcolare calorie, macros e obiettivi personalizzati.</div>
+        <div class="ob-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="40" height="40"><path d="M17 21l-5-3-5 3V5a2 2 0 012-2h6a2 2 0 012 2z"/></svg></div>
+        <div class="ob-title">I tuoi dati</div>
+        <div class="ob-desc">Per calcolare calorie, macros e volume ottimale.</div>
         <div class="ob-input-row">
           <div class="ob-input-group">
             <div class="ob-input-label">Peso</div>
@@ -1894,38 +1918,28 @@ body::-webkit-scrollbar{display:none}
           <div class="ob-input-group">
             <div class="ob-input-label">Sesso</div>
             <div style="display:flex;gap:8px;margin-top:2px">
-              <button type="button" class="ob-opt sel" data-val="M" id="ob-sex-m" style="flex:1;padding:10px;border-radius:12px;justify-content:center"><span>♂ Uomo</span></button>
-              <button type="button" class="ob-opt" data-val="F" id="ob-sex-f" style="flex:1;padding:10px;border-radius:12px;justify-content:center"><span>♀ Donna</span></button>
+              <button type="button" class="ob-opt sel" data-val="M" id="ob-sex-m" style="flex:1;padding:10px;border-radius:12px;justify-content:center"><span>Uomo</span></button>
+              <button type="button" class="ob-opt" data-val="F" id="ob-sex-f" style="flex:1;padding:10px;border-radius:12px;justify-content:center"><span>Donna</span></button>
             </div>
           </div>
         </div>
-        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-2">← Indietro</button><button class="cta" style="flex:1" id="ob-next-2">Avanti →</button></div></div>
-      </div>
-
-      <!-- Step 3: Frequenza -->
-      <div class="ob-step" data-step="3">
-        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        <div class="ob-title">Quante volte ti alleni?</div>
-        <div class="ob-desc">AURA pianificherà la tua settimana in base alla tua disponibilità.</div>
-        <div class="ob-options" id="ob-freq-opts">
-          <div class="ob-opt" data-val="1-2"><span class="ob-opt-ico" style="color:#22c55e">●</span><div class="ob-opt-text"><div class="ob-opt-label">1-2 volte</div><div class="ob-opt-sub">Ideale per iniziare o mantenersi attivi</div></div><div class="ob-check"></div></div>
-          <div class="ob-opt sel" data-val="2-3"><span class="ob-opt-ico" style="color:var(--or)">●</span><div class="ob-opt-text"><div class="ob-opt-label">2-3 volte</div><div class="ob-opt-sub">Buon equilibrio allenamento/recupero</div></div><div class="ob-check">✓</div></div>
-          <div class="ob-opt" data-val="4-5"><span class="ob-opt-ico" style="color:var(--re)">●</span><div class="ob-opt-text"><div class="ob-opt-label">4-5 volte</div><div class="ob-opt-sub">Allenamento intensivo progressivo</div></div><div class="ob-check"></div></div>
+        <div class="ob-seg-label">Frequenza allenamento</div>
+        <div class="ob-segmented" id="ob-freq-seg">
+          <button class="ob-seg" data-val="1-2">1-2x <small>sett.</small></button>
+          <button class="ob-seg sel" data-val="3-4">3-4x <small>sett.</small></button>
+          <button class="ob-seg" data-val="5-6">5-6x <small>sett.</small></button>
         </div>
-        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-3">← Indietro</button><button class="cta" style="flex:1" id="ob-next-3">Avanti →</button></div></div>
+        <div class="ob-footer"><div class="ob-nav">
+          <button class="ob-back" id="ob-back-1">Indietro</button>
+          <button class="cta" style="flex:1" id="ob-next-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+            Genera Piano
+          </button>
+        </div></div>
       </div>
 
-      <!-- Step 4: Riepilogo -->
-      <div class="ob-step" data-step="4">
-        <div class="ob-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg></div>
-        <div class="ob-title">Perfetto! Ecco il riepilogo</div>
-        <div class="ob-desc">AURA è pronto a creare il tuo piano personalizzato.</div>
-        <div class="ob-summary" id="ob-summary"></div>
-        <div class="ob-footer"><div class="ob-nav"><button class="ob-back" id="ob-back-4">← Modifica</button><button class="cta" style="flex:1" id="ob-finish"><svg class="ico" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg> Genera il mio Piano IA</button></div></div>
-      </div>
-
-      <!-- Step 5: AI Generation -->
-      <div class="ob-step" data-step="5">
+      <!-- Step 2: AI Generation -->
+      <div class="ob-step" data-step="2">
         <div class="ob-ai-loading" id="ob-ai-loading">
           <div class="ob-ai-spinner"></div>
           <div class="ob-ai-title">AURA sta creando<br>il tuo piano personalizzato</div>
@@ -1939,7 +1953,7 @@ body::-webkit-scrollbar{display:none}
           </div>
         </div>
         <div class="ob-ai-done" id="ob-ai-done">
-          <div class="ob-ai-done-emoji"><svg class="ico ico-lg" viewBox="0 0 24 24" style="width:2.5rem;height:2.5rem;stroke:var(--or)"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+          <div class="ob-ai-done-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="40" height="40"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
           <div class="ob-ai-done-title">Piano Pronto!</div>
           <div class="ob-ai-done-sub" id="ob-ai-done-sub">Ho creato un programma personalizzato basato sui tuoi dati.</div>
           <div class="ob-ai-plan-preview" id="ob-ai-plan-preview"></div>
@@ -8301,11 +8315,10 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════
 
 let obStep = 0;
-const obData = { goal:'massa', level:'intermedio', weight:'', height:'', age:'', sex:'M', freq:'4-5' };
+const obData = { goal:'massa', level:'intermedio', weight:'', height:'', age:'', sex:'M', freq:'3-4' };
 
 function startOnboarding() {
   obStep = 0;
-  // Pre-fill goal from registration if set
   const u = getUser();
   if (u && u.goal) obData.goal = u.goal;
   renderObStep();
@@ -8320,20 +8333,25 @@ function renderObStep() {
   document.querySelectorAll('.ob-step').forEach(s => s.classList.remove('on'));
   const step = document.querySelector('.ob-step[data-step="'+obStep+'"]');
   if (step) step.classList.add('on');
-  // Progress bars
-  for (let i = 0; i < 6; i++) {
+  // Progress bars (4 bars)
+  for (let i = 0; i < 4; i++) {
     const b = document.getElementById('ob-b'+i);
     if (!b) continue;
     b.classList.remove('done','cur');
     if (i < obStep) b.classList.add('done');
     else if (i === obStep) b.classList.add('cur');
   }
-  // If summary step, build it
-  if (obStep === 4) buildObSummary();
-  // Sync selected options
-  syncObOpts('ob-goal-opts', obData.goal);
-  syncObOpts('ob-level-opts', obData.level);
-  syncObOpts('ob-freq-opts', obData.freq);
+  // Sync goal grid
+  document.querySelectorAll('.ob-goal-card').forEach(c => {
+    c.classList.toggle('sel', c.dataset.val === obData.goal);
+  });
+  // Sync segmented controls
+  document.querySelectorAll('#ob-level-seg .ob-seg').forEach(s => {
+    s.classList.toggle('sel', s.dataset.val === obData.level);
+  });
+  document.querySelectorAll('#ob-freq-seg .ob-seg').forEach(s => {
+    s.classList.toggle('sel', s.dataset.val === obData.freq);
+  });
   // Sync sex buttons
   document.getElementById('ob-sex-m').classList.toggle('sel', obData.sex==='M');
   document.getElementById('ob-sex-f').classList.toggle('sel', obData.sex==='F');
@@ -8343,27 +8361,24 @@ function renderObStep() {
   if (obData.dob) document.getElementById('ob-age').value = obData.dob;
 }
 
-function syncObOpts(containerId, val) {
-  const c = document.getElementById(containerId);
-  if (!c) return;
-  c.querySelectorAll('.ob-opt').forEach(o => {
-    const isSel = o.dataset.val === val;
-    o.classList.toggle('sel', isSel);
-    const ch = o.querySelector('.ob-check');
-    if (ch) ch.textContent = isSel ? '✓' : '';
-  });
-}
+function buildObSummary() { /* no-op: summary step removed */ }
 
-// Option click handlers
-['ob-goal-opts','ob-level-opts','ob-freq-opts'].forEach(id => {
-  const container = document.getElementById(id);
-  if (!container) return;
-  container.addEventListener('click', e => {
-    const opt = e.target.closest('.ob-opt');
-    if (!opt || !opt.dataset.val) return;
-    const key = id === 'ob-goal-opts' ? 'goal' : id === 'ob-level-opts' ? 'level' : 'freq';
-    obData[key] = opt.dataset.val;
-    syncObOpts(id, obData[key]);
+// Goal grid click handler
+document.getElementById('ob-goal-opts').addEventListener('click', function(e) {
+  const card = e.target.closest('.ob-goal-card');
+  if (!card || !card.dataset.val) return;
+  obData.goal = card.dataset.val;
+  document.querySelectorAll('.ob-goal-card').forEach(c => c.classList.toggle('sel', c.dataset.val === obData.goal));
+});
+
+// Segmented control click handlers
+['ob-level-seg', 'ob-freq-seg'].forEach(function(id) {
+  document.getElementById(id).addEventListener('click', function(e) {
+    const seg = e.target.closest('.ob-seg');
+    if (!seg || !seg.dataset.val) return;
+    const key = id === 'ob-level-seg' ? 'level' : 'freq';
+    obData[key] = seg.dataset.val;
+    this.querySelectorAll('.ob-seg').forEach(s => s.classList.toggle('sel', s.dataset.val === obData[key]));
   });
 });
 
@@ -8371,69 +8386,38 @@ function syncObOpts(containerId, val) {
 document.getElementById('ob-sex-m').addEventListener('click', () => { obData.sex='M'; document.getElementById('ob-sex-m').classList.add('sel'); document.getElementById('ob-sex-f').classList.remove('sel'); });
 document.getElementById('ob-sex-f').addEventListener('click', () => { obData.sex='F'; document.getElementById('ob-sex-f').classList.add('sel'); document.getElementById('ob-sex-m').classList.remove('sel'); });
 
-// Navigation
-for (let i = 0; i < 4; i++) {
-  document.getElementById('ob-next-'+i).addEventListener('click', () => {
-    // Validate step 2 (measures)
-    if (i === 2) {
-      const w = document.getElementById('ob-weight').value;
-      const h = document.getElementById('ob-height').value;
-      const a = document.getElementById('ob-age').value;
-      if (!w || !h || !a) { toast('⚠️ Compila tutti i campi.', 're'); return; }
-      if (+w < 30 || +w > 250) { toast('⚠️ Peso non valido.', 're'); return; }
-      if (+h < 100 || +h > 230) { toast('⚠️ Altezza non valida.', 're'); return; }
-      const _dob = new Date(a); const _today = new Date();
-      let _age = _today.getFullYear() - _dob.getFullYear();
-      const _dm = _today.getMonth() - _dob.getMonth();
-      if (_dm < 0 || (_dm === 0 && _today.getDate() < _dob.getDate())) _age--;
-      if (_age < 13 || _age > 100) { toast('⚠️ Data di nascita non valida.', 're'); return; }
-      obData.weight = +w; obData.height = +h; obData.age = _age; obData.dob = a;
-    }
-    obStep = i + 1;
-    renderObStep();
-  });
-}
-for (let i = 1; i <= 4; i++) {
-  document.getElementById('ob-back-'+i).addEventListener('click', () => {
-    // Save inputs before going back
-    const w = document.getElementById('ob-weight').value;
-    const h = document.getElementById('ob-height').value;
-    const a = document.getElementById('ob-age').value;
-    if (w) obData.weight = +w;
-    if (h) obData.height = +h;
-    if (a) {
-      obData.dob = a;
-      const _d = new Date(a); const _t = new Date();
-      let _ag = _t.getFullYear() - _d.getFullYear();
-      const _m = _t.getMonth() - _d.getMonth();
-      if (_m < 0 || (_m === 0 && _t.getDate() < _d.getDate())) _ag--;
-      if (_ag >= 13 && _ag <= 100) obData.age = _ag;
-    }
-    obStep = i - 1;
-    renderObStep();
-  });
-}
+// Step 0 → Step 1
+document.getElementById('ob-next-0').addEventListener('click', () => {
+  obStep = 1;
+  renderObStep();
+});
 
-function buildObSummary() {
-  const goalLabels = { massa:'Massa Muscolare', dimagrimento:'Dimagrimento', benessere:'Benessere', resistenza:'Resistenza' };
-  const lvlLabels = { principiante:'Principiante', intermedio:'Intermedio', avanzato:'Avanzato' };
-  const freqLabels = { '1-2':'1-2 volte/sett.', '2-3':'2-3 volte/sett.', '4-5':'4-5 volte/sett.' };
-  const rows = [
-    ['Obiettivo', goalLabels[obData.goal]||obData.goal],
-    ['Livello', lvlLabels[obData.level]||obData.level],
-    ['Fisico', obData.weight+'kg · '+obData.height+'cm · '+obData.age+' anni · '+(obData.sex==='M'?'Uomo':'Donna')],
-    ['Frequenza', freqLabels[obData.freq]||obData.freq],
-  ];
-  document.getElementById('ob-summary').innerHTML = rows.map(([l,v]) =>
-    `<div class="ob-sum-item"><span class="ob-sum-label">${l}</span><span class="ob-sum-val">${v}</span></div>`
-  ).join('');
-}
+// Step 1 ← Step 0
+document.getElementById('ob-back-1').addEventListener('click', () => {
+  obStep = 0;
+  renderObStep();
+});
 
-// Finish onboarding — triggers AI plan generation
-document.getElementById('ob-finish').addEventListener('click', () => {
+// Step 1 → Step 2: validate + save + generate
+document.getElementById('ob-next-1').addEventListener('click', () => {
+  const w = document.getElementById('ob-weight').value;
+  const h = document.getElementById('ob-height').value;
+  const a = document.getElementById('ob-age').value;
+  if (!w || !h || !a) { toast('Compila tutti i campi.', 're'); return; }
+  if (+w < 30 || +w > 250) { toast('Peso non valido.', 're'); return; }
+  if (+h < 100 || +h > 230) { toast('Altezza non valida.', 're'); return; }
+  const _dob = new Date(a); const _today = new Date();
+  let _age = _today.getFullYear() - _dob.getFullYear();
+  const _dm = _today.getMonth() - _dob.getMonth();
+  if (_dm < 0 || (_dm === 0 && _today.getDate() < _dob.getDate())) _age--;
+  if (_age < 13 || _age > 100) { toast('Data di nascita non valida.', 're'); return; }
+  obData.weight = +w; obData.height = +h; obData.age = _age; obData.dob = a;
+  // Map new freq values to internal freq used by plan generator
+  // '3-4' → '4-5', '5-6' → '4-5', '1-2' stays '1-2'
+  var freqMap = { '1-2':'1-2', '3-4':'4-5', '5-6':'4-5' };
+  var internalFreq = freqMap[obData.freq] || '4-5';
   const user = getUser();
   if (!user) return;
-  // Merge onboarding data
   Object.assign(user, {
     goal: obData.goal,
     level: obData.level,
@@ -8441,17 +8425,15 @@ document.getElementById('ob-finish').addEventListener('click', () => {
     height: obData.height,
     age: obData.age,
     sex: obData.sex,
-    freq: obData.freq,
+    freq: internalFreq,
     _needsOnboarding: false
   });
   setUser(user);
-  // Also update the stored account
   const stored = JSON.parse(localStorage.getItem(ACCT_KEY) || '[]');
   const idx = stored.findIndex(a => a.email === user.email);
   if (idx >= 0) { Object.assign(stored[idx], user); localStorage.setItem(ACCT_KEY, JSON.stringify(stored)); }
   applyUserData(user);
-  // Go to AI generation step
-  obStep = 5;
+  obStep = 2;
   renderObStep();
   runAIPlanGeneration(user);
 });
