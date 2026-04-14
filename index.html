@@ -692,16 +692,27 @@ body::-webkit-scrollbar{display:none}
 .diet-loading{text-align:center;padding:40px 20px;color:var(--t3);font-size:.85rem}
 
 /* ══════ PROFILE ══════ */
-.prof-header{padding:14px 20px;display:flex;align-items:center;gap:14px}
-.prof-name{font-family:var(--fd);font-size:1.3rem;font-weight:800}
-.prof-tag{font-size:.72rem;color:var(--or);margin:3px 0}
-.prof-since{font-size:.68rem;color:var(--t3)}
-
-.pstats{display:flex;background:var(--s8);border-radius:16px;overflow:hidden;margin-bottom:12px}
-.psi{flex:1;text-align:center;padding:.85rem .4rem}
-.psv{font-family:var(--fd);font-size:1.3rem;font-weight:800}
-.psl{font-size:.68rem;color:var(--t3);margin-top:2px}
-.psep{width:1px;height:34px;background:var(--s7);align-self:center}
+/* ═══ PROFILE — APPLE STYLE ═══ */
+.pf-header{display:flex;align-items:center;gap:14px;padding:14px 20px}
+.pf-info{flex:1;min-width:0}
+.pf-name{font-family:var(--fd);font-weight:800;font-size:1.15rem;color:var(--t1)}
+.pf-level{font-size:.75rem;color:var(--or);font-weight:600;display:flex;align-items:center;gap:4px;margin-top:2px}
+.pf-since{font-size:.65rem;color:var(--t3);margin-top:2px}
+.pf-stats{display:flex;background:var(--s9);border:1px solid rgba(255,255,255,.06);border-radius:18px;overflow:hidden;margin-bottom:12px}
+.pf-stat{flex:1;text-align:center;padding:14px 4px}
+.pf-stat-val{font-family:var(--fd);font-weight:800;font-size:1.25rem;color:var(--t1)}
+.pf-stat-label{font-size:.65rem;color:var(--t3);margin-top:3px}
+.pf-stat-sep{width:1px;height:30px;background:var(--s7);align-self:center;flex-shrink:0}
+.pf-progress-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pf-prog-card{background:var(--s9);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;cursor:pointer;transition:all .2s var(--spring)}
+.pf-prog-card:active{transform:scale(.97);background:var(--s8)}
+.pf-prog-title{font-weight:700;font-size:.82rem;color:var(--t1);margin-top:8px}
+.pf-prog-val{font-family:var(--fd);font-weight:800;font-size:1.05rem;margin-top:2px}
+.pf-prog-info{font-size:.68rem;color:var(--t3);margin-top:2px}
+.pf-section-header{display:flex;justify-content:space-between;align-items:center;padding:0 4px 8px;font-family:var(--fd);font-size:.72rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3)}
+.pf-section-count{font-size:.68rem;color:var(--t4);font-weight:500;letter-spacing:0;text-transform:none}
+.pf-integ-collapsed{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.pf-integ-collapsed.pf-integ-open{max-height:300px}
 
 .whi{display:flex;align-items:center;gap:10px;padding:.68rem 0;border-bottom:1px solid var(--s8)}
 .whi:last-child{border-bottom:none}
@@ -713,14 +724,6 @@ body::-webkit-scrollbar{display:none}
 .whb{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.64rem;font-weight:800;flex-shrink:0}
 .whb.ok{background:#22c55e15;border:1px solid #22c55e35;color:var(--gr)}
 .whb.rs{background:var(--s8);border:1px solid var(--s7);color:var(--t4)}
-
-.hwg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.hwc{display:flex;flex-direction:column;gap:6px}
-.hwico{font-size:1.4rem}
-.hwn{font-weight:700;font-size:.83rem}
-.hwd{font-size:.7rem;color:var(--t3);line-height:1.35;flex:1}
-.btn-hw2{padding:.38rem .85rem;background:var(--or);color:#fff;border-radius:8px;font-size:.72rem;font-weight:700;border:none;cursor:pointer;align-self:flex-start;transition:all .18s}
-.btn-hw2:active{background:var(--or2)}
 
 .sitem{display:flex;align-items:center;justify-content:space-between;padding:.8rem 0;border-bottom:1px solid var(--s8);font-size:.83rem;cursor:pointer}
 .sitem:last-child{border-bottom:none}
@@ -2391,117 +2394,82 @@ body::-webkit-scrollbar{display:none}
     <input type="file" id="prof-photo-input" accept="image/*" hidden>
     <!-- ══ PROFILE ══ -->
     <div class="tab" id="tab-profile">
-      <div class="prof-header">
+      <!-- ZONA 1: Header -->
+      <div class="pf-header">
         <div class="prof-av-wrap" id="prof-av-wrap" onclick="document.getElementById('prof-photo-input').click()">
           <div class="av av-xl" id="prof-av">L</div>
-          <div class="cam-badge"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="cam-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" width="13" height="13"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
         </div>
-        <div>
-          <div class="prof-name">Luca Pipia</div>
-          <div class="prof-tag" id="prof-tag"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lv.1 — Principiante</div>
-          <div class="prof-since" id="prof-since">Membro da Gennaio 2024</div>
-          <div style="display:flex;gap:6px;margin-top:8px">
-            <div class="chip chip-or" style="font-size:.65rem;display:flex;align-items:center;gap:6px" id="prof-streak-chip">Loading...</div>
-            <div class="chip chip-gr" style="font-size:.65rem" id="prof-goal-chip"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Massa</div>
+        <div class="pf-info">
+          <div class="pf-name" id="pf-name">Luca Pipia</div>
+          <div class="pf-level" id="prof-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Lv.1 — Principiante
           </div>
+          <div class="pf-since" id="prof-since">Membro da Gennaio 2024</div>
         </div>
       </div>
 
       <div style="padding:0 16px">
-        <!-- Stats (reali) -->
-        <div class="pstats" id="prof-pstats">
-          <div class="psi"><div class="psv" id="ps-workouts">0</div><div class="psl">Allenamenti</div></div>
-          <div class="psep"></div>
-          <div class="psi"><div class="psv" id="ps-streak">0</div><div class="psl">Streak <svg class="ico" viewBox="0 0 24 24"><path d="M12 22c4.97 0 7-3.58 7-7 0-3.5-2-6-3-7.5-.5 2.5-2 3.5-3.5 2C11 8 12.5 5 10 2 9 4 7 6 6 9s-1 4.5-1 6c0 3.87 2.03 7 7 7z"/></svg></div></div>
-          <div class="psep"></div>
-          <div class="psi"><div class="psv" id="ps-points">0</div><div class="psl">Punti</div></div>
-          <div class="psep"></div>
-          <div class="psi"><div class="psv" id="ps-adherence">0%</div><div class="psl">Aderenza</div></div>
+        <!-- ZONA 2: Stats -->
+        <div class="pf-stats" id="prof-pstats">
+          <div class="pf-stat"><div class="pf-stat-val" id="ps-workouts">0</div><div class="pf-stat-label">Allenamenti</div></div>
+          <div class="pf-stat-sep"></div>
+          <div class="pf-stat"><div class="pf-stat-val" id="ps-streak">0</div><div class="pf-stat-label">Streak</div></div>
+          <div class="pf-stat-sep"></div>
+          <div class="pf-stat"><div class="pf-stat-val" id="ps-points">0</div><div class="pf-stat-label">XP</div></div>
+          <div class="pf-stat-sep"></div>
+          <div class="pf-stat"><div class="pf-stat-val" id="ps-adherence">0%</div><div class="pf-stat-label">Aderenza</div></div>
         </div>
 
-        <!-- Liquid XP Bar -->
+        <!-- XP Bar -->
         <div class="xp-bar-wrap" id="xp-bar-container">
           <div class="xp-header"><span class="xp-lvl" id="xp-lvl-label">Livello 1</span><span class="xp-next" id="xp-next-label">0 / 1000 XP</span></div>
-          <div class="xp-bar">
-            <div class="xp-liquid" id="xp-fill" style="transform:scaleX(0)">
-              <div class="xp-wave"></div>
-            </div>
-          </div>
+          <div class="xp-bar"><div class="xp-liquid" id="xp-fill" style="transform:scaleX(0)"><div class="xp-wave"></div></div></div>
           <div class="xp-label" id="xp-label">1000 XP per il prossimo livello</div>
         </div>
-        
-        <!-- Workout Heatmap -->
-        <div style="margin:0.5rem 0">
-          <div class="section-title" style="font-size:1rem;margin-bottom:0.5rem">📊 La tua attività</div>
-          <div id="workout-heatmap-container"></div>
-        </div>
-        <div class="section-divider"></div>
 
-        <!-- Badge -->
-        <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center">Badge & Achievement <span style="font-size:.7rem;color:var(--t4);font-weight:400" id="badge-count">0/0</span></div>
+        <!-- ZONA 3: Progressi Grid -->
+        <div class="pf-progress-grid">
+          <div class="pf-prog-card" onclick="openProgress();switchProgTab('peso')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 3v18M4 8l8-5 8 5M4 8v5a8 8 0 0016 0V8"/></svg>
+            <div class="pf-prog-title">Peso</div>
+            <div class="pf-prog-val" id="prof-peso-val" style="color:var(--or)">—</div>
+            <div class="pf-prog-info" id="prof-peso-delta"></div>
+          </div>
+          <div class="pf-prog-card" onclick="openProgress();switchProgTab('forza')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <div class="pf-prog-title">Forza</div>
+            <div class="pf-prog-val" id="prof-forza-val" style="color:var(--gr)">—</div>
+            <div class="pf-prog-info" id="prof-forza-info"></div>
+          </div>
+          <div class="pf-prog-card" onclick="openBodyMeasure()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--bl)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <div class="pf-prog-title">Corpo</div>
+            <div class="pf-prog-val" id="prof-corpo-val" style="color:var(--bl)">—</div>
+            <div class="pf-prog-info" id="prof-corpo-info"></div>
+          </div>
+          <div class="pf-prog-card" onclick="openProgressPhotos()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--pu)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <div class="pf-prog-title">Foto</div>
+            <div class="pf-prog-val" id="prof-foto-val" style="color:var(--pu)">—</div>
+            <div class="pf-prog-info" id="prof-foto-info"></div>
+          </div>
+        </div>
+
+        <!-- ZONA 4: Badge -->
+        <div class="pf-section-header">
+          <span>Badge</span>
+          <span class="pf-section-count" id="badge-count">0/0</span>
+        </div>
         <div class="badges-scroll" id="badges-grid"></div>
 
-        <!-- Store -->
-        <div class="sec-title">Store</div>
-        <div class="card" style="padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="openStore()">
-          <div style="display:flex;align-items:center;gap:14px">
-            <div style="width:42px;height:42px;border-radius:12px;background:var(--or)15;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg class="ico ico-lg" viewBox="0 0 24 24" style="color:var(--or)"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 001.95-1.57L22 7H6"/></svg>
-            </div>
-            <div>
-              <div style="font-weight:700;font-size:.9rem">AURA Store</div>
-              <div style="font-size:.73rem;color:var(--t3)">Esplora i nostri prodotti.</div>
-            </div>
-          </div>
-          <span class="sarr">›</span>
-        </div>
-
-        <!-- Abbonamento & Referral -->
-        <div class="sec-title">Abbonamento</div>
-        <div class="card" style="background:linear-gradient(135deg,#f9731612,var(--s9));border-color:#f9731630;padding:14px;margin-bottom:10px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div>
-              <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Piano Annuale</div>
-              <div style="font-size:.72rem;color:var(--t3)">39,99€/anno — risparmi il 33%</div>
-            </div>
-            <button class="btn btn-or btn-sm" onclick="showAnnualPlan()">Scopri →</button>
-          </div>
-        </div>
-        <div class="card" style="padding:14px;margin-bottom:10px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div>
-              <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg> Invita un Amico</div>
-              <div style="font-size:.72rem;color:var(--t3)">Ottieni 1 mese gratis per ogni invito</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="openReferral()">Invita →</button>
-          </div>
-        </div>
-        <div class="card" style="padding:14px;margin-bottom:10px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div>
-              <div style="font-weight:700;font-size:.88rem"><svg class="ico" viewBox="0 0 24 24"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2zM13 5v2M13 17v2M13 11v2"/></svg> Hai un codice?</div>
-              <div style="font-size:.72rem;color:var(--t3)">Riscatta il codice referral di un amico</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="redeemReferral()">Riscatta</button>
-          </div>
-        </div>
-
-        <!-- Integrazioni -->
-        <div class="sec-title">Integrazioni</div>
-        <div class="card" style="padding:0 14px">
-          <div class="sitem" onclick="openWearable()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/><path d="M3.5 12h4l2.5-5 3 10 2.5-5h5"/></svg> Fascia HR Bluetooth</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="toast('Apple Health non disponibile su questo browser. Usa Safari su iOS.','bl')"><span><svg class="ico" viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 00-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 00-7.65 7.65L12 20.65l8.42-8.42a5.4 5.4 0 000-7.65z"/></svg> Apple Health</span><span class="sarr">›</span></div>
-          <div class="sitem" onclick="toast('Connettendo Strava...','or')"><span><svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Strava</span><span class="sarr">›</span></div>
-          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="6" width="14" height="12" rx="2"/><path d="M12 10v2l1 1M7 2h10M7 22h10"/></svg> Apple Watch</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:.7rem;color:var(--t3)">Non connesso</span></div></div>
-          <div class="sitem" onclick="toast('Esportazione avviata!','gr')"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Esporta dati</span><span class="sarr">›</span></div>
-        </div>
-
-        <!-- Settings -->
-        <div class="sec-title">Impostazioni</div>
-        <div class="card" style="padding:0 14px">
-          <div class="sitem" onclick="openEditProfile()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg> Modifica dati personali</span><span class="sarr">›</span></div>
-          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg> Notifiche AURA</span><div class="tog on" id="tog-notif"></div></div>
-          <div class="sitem" style="flex-direction:column;align-items:flex-start;gap:10px;padding:14px 0">
+        <!-- ZONA 5: Impostazioni -->
+        <div class="pf-section-header" style="margin-top:6px"><span>Impostazioni</span></div>
+        <div class="card" style="padding:0 14px;margin-bottom:12px">
+          <div class="sitem" onclick="openEditProfile()"><span><svg class="ico" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg> Modifica profilo</span><span class="sarr">›</span></div>
+          <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg> Notifiche</span><div class="tog on" id="tog-notif"></div></div>
+          <div class="sitem" style="flex-direction:column;align-items:flex-start;gap:8px;padding:12px 0">
             <span style="display:flex;align-items:center;gap:8px"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg> Lingua</span>
             <div class="lang-pills">
               <button class="lang-pill on" id="lang-it" onclick="applyLang('it')">IT</button>
@@ -2510,9 +2478,16 @@ body::-webkit-scrollbar{display:none}
             </div>
           </div>
           <div class="sitem"><span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Tema chiaro</span><div class="tog" id="tog-theme" onclick="applyTheme(this.classList.contains('on')?'dark':'light')"></div></div>
+          <div class="sitem" id="pf-integ-toggle" onclick="document.getElementById('pf-integ-list').classList.toggle('pf-integ-open')"><span><svg class="ico" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Integrazioni</span><span class="sarr">›</span></div>
+          <div id="pf-integ-list" class="pf-integ-collapsed">
+            <div class="sitem" onclick="openWearable()" style="padding-left:20px"><span>Fascia HR Bluetooth</span><span class="sarr">›</span></div>
+            <div class="sitem" onclick="toast('Apple Health non disponibile su questo browser.','bl')" style="padding-left:20px"><span>Apple Health</span><span class="sarr">›</span></div>
+            <div class="sitem" onclick="toast('Connettendo Strava...','or')" style="padding-left:20px"><span>Strava</span><span class="sarr">›</span></div>
+            <div class="sitem" onclick="toast('Esportazione avviata!','gr')" style="padding-left:20px"><span>Esporta dati</span><span class="sarr">›</span></div>
+          </div>
           <div class="sitem" onclick="openLegal('privacy-ov')"><span>Privacy Policy</span><span class="sarr">›</span></div>
           <div class="sitem" onclick="openLegal('terms-ov')"><span>Termini di Servizio</span><span class="sarr">›</span></div>
-          <div class="sitem" id="logout-btn"><span style="color:var(--re)">Esci dall'account</span><span class="sarr" style="color:var(--re)">›</span></div>
+          <div class="sitem" id="logout-btn"><span style="color:var(--re)"><svg class="ico" viewBox="0 0 24 24" style="stroke:var(--re)"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Esci</span></div>
         </div>
 
         <div style="height:8px"></div>
@@ -4428,6 +4403,95 @@ function updateProfileStats() {
   renderDiary();
   // XP & Levels & Badges
   updateXPandBadges();
+
+  // ── Profile Progress Grid ──
+  (function updateProfProgress() {
+    var prog = getProgress();
+    var bm = getBM();
+    var photos = [];
+    try { photos = JSON.parse(localStorage.getItem('aura_progress_photos') || '[]'); } catch(e) {}
+
+    // Peso
+    var pesoVal = document.getElementById('prof-peso-val');
+    var pesoDelta = document.getElementById('prof-peso-delta');
+    if (pesoVal) {
+      var pesoEntries = (prog.peso || []).slice().sort(function(a,b) { return a.date.localeCompare(b.date); });
+      if (pesoEntries.length > 0) {
+        var lastPeso = pesoEntries[pesoEntries.length - 1];
+        pesoVal.textContent = lastPeso.val + ' kg';
+        if (pesoEntries.length >= 2) {
+          var prevPeso = pesoEntries[pesoEntries.length - 2];
+          var diff = (lastPeso.val - prevPeso.val).toFixed(1);
+          var sign = diff > 0 ? '+' : '';
+          pesoDelta.textContent = sign + diff + ' kg';
+          pesoDelta.style.color = diff <= 0 ? 'var(--gr)' : 'var(--or)';
+        }
+      } else {
+        pesoVal.textContent = '—';
+        if (pesoDelta) pesoDelta.textContent = 'Nessun dato';
+      }
+    }
+
+    // Forza
+    var forzaVal = document.getElementById('prof-forza-val');
+    var forzaInfo = document.getElementById('prof-forza-info');
+    if (forzaVal) {
+      var forzaEntries = prog.forza || [];
+      if (forzaEntries.length > 0) {
+        var lastForza = forzaEntries[forzaEntries.length - 1];
+        forzaVal.textContent = lastForza.val + ' kg';
+        if (forzaInfo) forzaInfo.textContent = 'PR ' + lastForza.ex;
+      } else {
+        forzaVal.textContent = '—';
+        if (forzaInfo) forzaInfo.textContent = 'Nessun record';
+      }
+    }
+
+    // Corpo
+    var corpoVal = document.getElementById('prof-corpo-val');
+    var corpoInfo = document.getElementById('prof-corpo-info');
+    if (corpoVal) {
+      var totalMeasures = 0;
+      var lastMeasureDate = null;
+      Object.keys(bm).forEach(function(key) {
+        var entries = bm[key] || [];
+        totalMeasures += entries.length;
+        entries.forEach(function(e) {
+          if (!lastMeasureDate || e.date > lastMeasureDate) lastMeasureDate = e.date;
+        });
+      });
+      corpoVal.textContent = totalMeasures > 0 ? totalMeasures + ' misure' : '—';
+      if (corpoInfo) {
+        if (lastMeasureDate) {
+          var daysAgo = Math.floor((Date.now() - new Date(lastMeasureDate).getTime()) / 86400000);
+          corpoInfo.textContent = daysAgo === 0 ? 'Oggi' : daysAgo + 'gg fa';
+        } else {
+          corpoInfo.textContent = 'Nessuna';
+        }
+      }
+    }
+
+    // Foto
+    var fotoVal = document.getElementById('prof-foto-val');
+    var fotoInfo = document.getElementById('prof-foto-info');
+    if (fotoVal) {
+      fotoVal.textContent = photos.length > 0 ? photos.length + ' foto' : '—';
+      if (fotoInfo) {
+        if (photos.length > 0) {
+          var lastPhoto = photos[photos.length - 1];
+          var daysAgoP = Math.floor((Date.now() - new Date(lastPhoto.date).getTime()) / 86400000);
+          fotoInfo.textContent = daysAgoP === 0 ? 'Oggi' : daysAgoP + 'gg fa';
+        } else {
+          fotoInfo.textContent = 'Nessuna';
+        }
+      }
+    }
+
+    // Update profile name
+    var pfName = document.getElementById('pf-name');
+    var u = getUser();
+    if (pfName && u) pfName.textContent = u.name || 'Utente';
+  })();
 }
 
 function renderDiary() {
