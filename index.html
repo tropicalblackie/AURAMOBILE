@@ -395,7 +395,6 @@ body::-webkit-scrollbar{display:none}
 .ws-tutorial-name{font-family:var(--fd);font-size:1.4rem;font-weight:900;color:var(--t1);text-align:center;line-height:1.1}
 .ws-tutorial-meta{font-size:.78rem;color:var(--t2);text-align:center}
 .ws-tutorial-media{position:relative;width:100%;max-width:260px;aspect-ratio:1/1;background:var(--s9);border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--s8)}
-.ws-tutorial-emoji{font-size:4rem;z-index:1}
 .ws-tutorial-gif{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
 .ws-tutorial-steps{width:100%;display:flex;flex-direction:column;gap:6px}
 .ws-tutorial-step{display:flex;align-items:flex-start;gap:8px;font-size:.76rem;color:var(--t2);line-height:1.4}
@@ -1247,9 +1246,9 @@ body::-webkit-scrollbar{display:none}
 /* Exercise detail modal */
 .exdet-ov{position:absolute;inset:0;z-index:3700;display:none;flex-direction:column;background:var(--bg)}
 .exdet-ov.on{display:flex;animation:fadeUp .32s var(--spring) forwards}
-.exdet-hero{height:200px;background:var(--s8);display:flex;align-items:center;justify-content:center;position:relative}
-.exdet-hero img{height:100%;object-fit:contain}
-.exdet-hero-emoji{font-size:3rem}
+.exdet-hero{background:var(--s9)}
+.exdet-hero img{width:100%;border-radius:10px;display:block}
+.exdet-video-label{font-size:.68rem;font-weight:700;color:var(--or);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
 .exdet-body{padding:20px}
 .exdet-name{font-family:var(--fd);font-size:1.3rem;font-weight:800;margin-bottom:4px}
 .exdet-muscle{font-size:.78rem;color:var(--or);font-weight:600;margin-bottom:10px}
@@ -1289,7 +1288,7 @@ body::-webkit-scrollbar{display:none}
 .ws-progress-fill{height:100%;background:var(--or);border-radius:2px;transition:width .3s}
 .ws-progress-label{text-align:center;font-size:.72rem;color:var(--t4);margin-bottom:16px}
 .ws-card{background:var(--s9);border:1px solid var(--s8);border-radius:18px;padding:20px;margin:0 20px 16px;text-align:center}
-.ws-ex-emoji{font-size:2.2rem;margin-bottom:8px}
+.ws-ex-gif{width:100%;border-radius:10px;margin:8px 0 12px;max-height:160px;object-fit:contain}
 .ws-ex-name{font-family:var(--fd);font-weight:800;font-size:1.15rem;margin-bottom:4px}
 .ws-ex-info{color:var(--t3);font-size:.82rem;margin-bottom:12px}
 .ws-ex-gif{width:100%;max-width:240px;border-radius:14px;margin:0 auto 16px;display:block}
@@ -1412,36 +1411,36 @@ body::-webkit-scrollbar{display:none}
 }
 
 /* ── JARVIS TERMINAL (AI COACH) ── */
-.jarvis-ov{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.jarvis-ov{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
 .jarvis-ov.on{transform:translateY(0)}
-.jarvis-topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(0,220,255,.2)}
-.jarvis-back{background:none;border:none;color:rgba(0,220,255,.8);cursor:pointer;padding:6px;display:flex;align-items:center}
-.jarvis-title{font-family:var(--fd);font-size:.85rem;font-weight:700;letter-spacing:3px;color:rgba(0,220,255,.9);text-transform:uppercase}
+.jarvis-topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--s7)}
+.jarvis-back{background:none;border:none;color:var(--t2);cursor:pointer;padding:6px;display:flex;align-items:center}
+.jarvis-title{font-family:var(--fd);font-size:.85rem;font-weight:700;letter-spacing:2px;color:var(--t1);text-transform:uppercase}
 .jarvis-core-wrap{display:flex;justify-content:center;align-items:center;padding:18px 0 10px;flex-shrink:0}
 .jarvis-core{position:relative;width:70px;height:70px;display:flex;align-items:center;justify-content:center;animation:jarvisPulse 2.5s ease-in-out infinite}
-.jarvis-core-glyph{font-size:1.8rem;color:#00dcff;text-shadow:0 0 20px #00dcff,0 0 40px rgba(0,220,255,.5);z-index:1}
-.jarvis-ring{position:absolute;border-radius:50%;border:1px solid rgba(0,220,255,.4);animation:jarvisRing 3s linear infinite}
+.jarvis-core-glyph{font-size:1.8rem;color:var(--or);text-shadow:0 0 20px #f9731660,0 0 40px rgba(249,115,22,.3);z-index:1}
+.jarvis-ring{position:absolute;border-radius:50%;border:1px solid rgba(249,115,22,.3);animation:jarvisRing 3s linear infinite}
 .jarvis-ring.r1{width:90px;height:90px;animation-duration:3s}
 .jarvis-ring.r2{width:110px;height:110px;animation-duration:4s;animation-direction:reverse;border-style:dashed}
-.jarvis-ring.r3{width:130px;height:130px;animation-duration:6s;opacity:.4}
+.jarvis-ring.r3{width:130px;height:130px;animation-duration:6s;opacity:.3}
 .jarvis-core.thinking .jarvis-core-glyph{animation:jarvisThink .5s steps(2) infinite}
-@keyframes jarvisPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(0,220,255,.5))}50%{filter:drop-shadow(0 0 18px rgba(0,220,255,.9))}}
+@keyframes jarvisPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(249,115,22,.4))}50%{filter:drop-shadow(0 0 18px rgba(249,115,22,.8))}}
 @keyframes jarvisThink{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}
 @keyframes jarvisRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes jBlink{0%,100%{opacity:1}50%{opacity:0}}
-.jarvis-terminal{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:6px;font-family:"Courier New",monospace;font-size:.78rem}
-.jarvis-line{color:rgba(0,220,255,.75);line-height:1.6;word-break:break-word}
-.jarvis-user-line{text-align:right;color:rgba(255,255,255,.85)}
-.jarvis-user-line::before{content:'› ';color:rgba(0,220,255,.6)}
-.jarvis-bot-line{color:#00dcff}
-.jarvis-bot-line::before{content:'▶ AURA  ';color:rgba(0,220,255,.5);font-size:.7rem}
-.jarvis-sys-line{color:rgba(0,220,255,.35);font-size:.7rem;font-style:italic}
-.jarvis-cursor-blink{display:inline-block;width:8px;height:1em;background:#00dcff;vertical-align:text-bottom;animation:jBlink .7s step-end infinite}
-.jarvis-input-row{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid rgba(0,220,255,.15);background:#000;flex-shrink:0}
-.jarvis-prompt{color:rgba(0,220,255,.6);font-family:"Courier New",monospace;font-size:.85rem;flex-shrink:0}
-.jarvis-input{flex:1;background:transparent;border:none;border-bottom:1px solid rgba(0,220,255,.3);color:#00dcff;font-family:"Courier New",monospace;font-size:.85rem;padding:6px 0;outline:none;caret-color:#00dcff}
-.jarvis-input::placeholder{color:rgba(0,220,255,.25)}
-.jarvis-send{background:none;border:1px solid rgba(0,220,255,.4);color:#00dcff;font-family:"Courier New",monospace;padding:6px 10px;cursor:pointer;border-radius:4px;font-size:.78rem;flex-shrink:0}
+.jarvis-terminal{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:6px;font-family:var(--fb);font-size:.85rem}
+.jarvis-line{color:var(--t2);line-height:1.6;word-break:break-word}
+.jarvis-user-line{text-align:right;color:var(--t1);background:var(--s8);border-radius:14px 14px 4px 14px;padding:10px 14px;max-width:85%;align-self:flex-end}
+.jarvis-bot-line{color:var(--t1);background:var(--s9);border:1px solid var(--s8);border-radius:4px 14px 14px 14px;padding:10px 14px;max-width:90%;align-self:flex-start;line-height:1.55}
+.jarvis-sys-line{color:var(--t4);font-size:.72rem;text-align:center;padding:4px 0}
+.jarvis-cursor-blink{display:inline-block;width:8px;height:1em;background:var(--or);vertical-align:text-bottom;animation:jBlink .7s step-end infinite}
+.jarvis-input-row{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid var(--s7);background:var(--s9);flex-shrink:0}
+.jarvis-prompt{color:var(--or);font-size:.9rem;flex-shrink:0}
+.jarvis-input{flex:1;background:var(--s8);border:1px solid var(--s7);border-radius:12px;color:var(--t1);font-family:var(--fb);font-size:.88rem;padding:10px 14px;outline:none;caret-color:var(--or)}
+.jarvis-input::placeholder{color:var(--t4)}
+.jarvis-input:focus{border-color:var(--or);box-shadow:0 0 0 3px #f9731618}
+.jarvis-send{background:var(--or);border:none;color:#fff;font-family:var(--fb);padding:10px 14px;cursor:pointer;border-radius:12px;font-size:.88rem;font-weight:700;flex-shrink:0;transition:opacity .15s}
+.jarvis-send:active{opacity:.8}
 
 /* ── PROGRESS PHOTOS ── */
 .progphoto-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -2987,6 +2986,13 @@ body::-webkit-scrollbar{display:none}
     <span id="ws-total-time" style="margin-left:auto;font-family:var(--fd);font-size:.85rem;color:var(--or)">00:00</span>
   </div>
   <div class="legal-scroll" style="padding:12px 20px 20px" id="ws-content"></div>
+  <!-- Demo video overlay -->
+  <div id="ws-demo-ov" style="display:none;position:absolute;inset:0;z-index:200;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px">
+    <div id="ws-demo-name" style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--t1);text-align:center"></div>
+    <div style="font-size:.78rem;color:var(--or);font-weight:600;letter-spacing:.5px;text-transform:uppercase">Video dimostrativo</div>
+    <img id="ws-demo-gif" src="" alt="" style="max-width:100%;max-height:40vh;border-radius:12px;object-fit:contain">
+    <button onclick="wsCloseDemoAndStart()" style="margin-top:8px;background:var(--or);color:#fff;border:none;border-radius:14px;padding:14px 32px;font-size:1rem;font-weight:700;font-family:var(--fd);cursor:pointer;letter-spacing:.5px">Inizia Serie</button>
+  </div>
 </div>
 
 <!-- ═══ EDIT PROFILE OVERLAY ═══ -->
@@ -3313,13 +3319,13 @@ function renderExerciseLibrary() {
   const el = document.getElementById('exlib-list');
   if (list.length === 0) { el.innerHTML = '<div class="prog-empty"><b>Nessun esercizio trovato</b>Prova un altro filtro</div>'; return; }
   el.innerHTML = list.map(e => {
-    const thumb = '<span class="ex-thumb-emoji">'+e.emoji+'</span>'+(e.gif?'<img src="'+e.gif+'" loading="lazy" onerror="this.remove()">':'');
+    const thumb = e.gif ? '<img class="ex-thumb-gif" src="'+e.gif+'" loading="lazy" alt="'+e.name+'" onerror="this.style.display=\'none\'">' : '';
     return '<div class="ex-card" onclick="openExDetail(\'' + e.id + '\')">' +
       '<div class="ex-thumb">' + thumb + '</div>' +
       '<div class="ex-info"><div class="ex-info-name">' + e.name + '</div>' +
       '<div class="ex-info-muscle">' + e.muscle + ' · ' + e.diff + '</div>' +
       '<div class="ex-info-desc">' + e.desc + '</div>' +
-      '<div class="ex-info-meta"><span>📊 ' + e.sets + 'x' + e.reps + '</span></div></div>' +
+      '<div class="ex-info-meta"><span>' + e.sets + ' serie · ' + e.reps + ' rep</span></div></div>' +
       '<button class="ex-add-btn" onclick="event.stopPropagation();addExToCurrentPlan(\'' + e.id + '\')">+</button></div>';
   }).join('');
 }
@@ -3328,10 +3334,11 @@ function openExDetail(id) {
   const e = EXERCISES.find(x => x.id === id);
   if (!e) return;
   document.getElementById('exdet-title').textContent = e.name;
-  const heroEmoji = '<span class="exdet-hero-emoji">'+e.emoji+'</span>';
-  const hero = e.gif ? heroEmoji+'<img src="'+e.gif+'" alt="'+e.name+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" onerror="this.remove()">' : heroEmoji;
+  const hero = e.gif
+    ? '<div class="exdet-video-label">Video dimostrativo</div><img src="'+e.gif+'" alt="'+e.name+'" style="width:100%;border-radius:10px;display:block" onerror="this.parentElement.style.display=\'none\'">'
+    : '';
   document.getElementById('exdet-content').innerHTML =
-    '<div class="exdet-hero" style="position:relative">' + hero + '</div>' +
+    (hero ? '<div class="exdet-hero" style="padding:12px 16px 0">' + hero + '</div>' : '') +
     '<div class="exdet-body">' +
     '<div class="exdet-name">' + e.name + '</div>' +
     '<div class="exdet-muscle">' + e.muscle + ' · ' + e.diff + ' · ' + e.sets + 'x' + e.reps + '</div>' +
@@ -3698,7 +3705,21 @@ function wsStartSet() {
   renderWsView();
 }
 
-// ── NEW SESSION FLOW: State A → B → C ────────────────
+function wsShowDemo() {
+  var ex = ws.exercises[ws.exIdx];
+  var ov = document.getElementById('ws-demo-ov');
+  if (!ov || !ex.gif) { wsStartSet(); return; }
+  document.getElementById('ws-demo-gif').src = ex.gif;
+  document.getElementById('ws-demo-name').textContent = ex.name;
+  ov.style.display = 'flex';
+  ws._demoTimer = setTimeout(wsCloseDemoAndStart, 4000);
+}
+function wsCloseDemoAndStart() {
+  clearTimeout(ws._demoTimer);
+  var ov = document.getElementById('ws-demo-ov');
+  if (ov) ov.style.display = 'none';
+  wsStartSet();
+}
 
 function wsStartCountdown() {
   var ex = ws.exercises[ws.exIdx];
@@ -3973,14 +3994,13 @@ function renderWsView() {
         '<div class="ws-tutorial-name">' + wsEsc(ex.name) + '</div>' +
         '<div class="ws-ex-info" style="margin-top:4px">' + wsEsc(ex.reps) + ' ripetizioni</div>' +
         '<div class="ws-tutorial-media">' +
-          '<div class="ws-tutorial-emoji">' + ex.emoji + '</div>' +
           (ex.gif ? '<img class="ws-tutorial-gif" src="' + ex.gif + '" alt="" onerror="this.style.display=\'none\'">' : '') +
         '</div>' +
-        '<button class="ws-tutorial-start-btn" onclick="wsStartCountdown()">▶ INIZIA SERIE</button>' +
+        '<button class="ws-tutorial-start-btn" onclick="wsShowDemo()">Guarda Demo e Inizia</button>' +
       '</div>' +
       '<div class="ws-controls">' +
-        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">⏭ Salta Esercizio</button>' +
-        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">■ Termina</button>' +
+        '<button class="ws-ctrl-skip" onclick="wsSkipExercise()">Salta Esercizio</button>' +
+        '<button class="ws-ctrl-stop" onclick="stopWorkoutSession()">Termina</button>' +
       '</div>';
   } else if (ws.resting) {
     // ── STATE C: RECOVERY ─────────────────────────────
@@ -4029,17 +4049,16 @@ function renderWsView() {
     content.innerHTML =
       progressBar +
       '<div class="ws-card">' +
-        '<div class="ws-ex-emoji">' + ex.emoji + '</div>' +
         '<div class="ws-ex-name">' + wsEsc(ex.name) + '</div>' +
         '<div class="ws-ex-info">Set ' + ws.setNum + ' di ' + ts + ' · ' + wsEsc(ex.reps) + ' rep</div>' +
         (ex.gif ? '<img class="ws-ex-gif" src="' + ex.gif + '" alt="">' : '') +
-        '<div class="ws-weight-label">🏋️ Peso utilizzato</div>' +
+        '<div class="ws-weight-label">Peso utilizzato</div>' +
         '<div class="ws-weight-row">' +
           '<button class="ws-weight-adj" onclick="wsAdjWeight(-2.5)">−2.5</button>' +
           '<div class="ws-weight-display"><input type="number" id="ws-weight-input" inputmode="decimal" step="0.5" min="0" value="' + (lastW || '') + '" placeholder="0"><span class="ws-weight-unit">kg</span></div>' +
           '<button class="ws-weight-adj" onclick="wsAdjWeight(2.5)">+2.5</button>' +
         '</div>' +
-        '<button class="ws-btn-set" onclick="wsCompleteSet()">✓ Set Completato</button>' +
+        '<button class="ws-btn-set" onclick="wsCompleteSet()">Set Completato</button>' +
       '</div>' +
       '<div class="ws-controls">' +
         '<button class="ws-ctrl-pause" onclick="wsTogglePause()">' + (ws.paused ? '▶ Riprendi' : '⏸ Pausa') + '</button>' +
@@ -4861,52 +4880,6 @@ function initScrollIndicator() {
 function initMicroInteractions() {
   initScrollIndicator();
 }
-
-// Calculate current streak
-function calculateStreak() {
-  const workouts = getCompletedWorkouts();
-  if (workouts.length === 0) return 0;
-  
-  const today = new Date().toISOString().slice(0, 10);
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-  
-  // Group workouts by date
-  const workoutDates = [...new Set(workouts.map(w => w.date))].sort().reverse();
-  
-  let streak = 0;
-  let checkDate = today;
-  
-  // Check if user worked out today or yesterday
-  if (!workoutDates.includes(today) && !workoutDates.includes(yesterday)) {
-    return 0;
-  }
-  
-  // Start from today or yesterday
-  if (workoutDates.includes(today)) {
-    streak = 1;
-    checkDate = today;
-  } else if (workoutDates.includes(yesterday)) {
-    streak = 1; 
-    checkDate = yesterday;
-  }
-  
-  // Count consecutive days backwards
-  let currentDate = new Date(checkDate);
-  for (let i = 1; i < workoutDates.length; i++) {
-    currentDate.setDate(currentDate.getDate() - 1);
-    const prevDay = currentDate.toISOString().slice(0, 10);
-    
-    if (workoutDates.includes(prevDay)) {
-      streak++;
-    } else {
-      break;
-    }
-  }
-  
-  return streak;
-}
-
-// Initialize all micro-interactions
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initMicroInteractions);
 } else {
@@ -8253,6 +8226,8 @@ document.getElementById('form-register').addEventListener('submit', function(e) 
   const createdAt = new Date().toISOString();
   stored.push({ name, email, pwd, goal, createdAt });
   localStorage.setItem(ACCT_KEY, JSON.stringify(stored));
+  // Clear any residual progress data from previous users on this device
+  ['aura_progress','aura_completed_workouts','aura_ws_progression','aura_badges','aura_progress_photos'].forEach(function(k){ localStorage.removeItem(k); });
   const user = { name, email, goal, createdAt, _needsOnboarding:true };
   setUser(user);
   // Mark as logged in this session
