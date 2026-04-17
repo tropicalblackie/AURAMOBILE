@@ -6160,9 +6160,8 @@ const RepCounter = {
           this.phaseFrames++;
           if (this.phaseFrames >= this.HYSTERESIS) {
             this.concentricDuration = now - (this.eccentricEntryTime + this.eccentricDuration);
-            var romReached = this.minROM <= romThresh;
-            var tempoOk = this.eccentricDuration >= 300 && this.eccentricDuration <= 5000;
-            if (romReached && tempoOk) {
+            var tempoOk = this.eccentricDuration >= 200 && this.eccentricDuration <= 8000;
+            if (tempoOk) {
               this.reps++;
               var quality = this._calcRepQuality(formScore, romThresh);
               this.repQualities.push(quality);
@@ -6729,16 +6728,12 @@ function onPoseResults(results) {
 
   // 5. FEEDBACK RENDERER
   FeedbackRenderer.updateArc(formScore);
-  FeedbackRenderer.updateCorrection(FormAnalyzer.priorityError);
-  var failingJoints = FormAnalyzer.priorityError ? FormAnalyzer.priorityError.errorJoints : [];
+  FeedbackRenderer.updateCorrection(null);
+  var failingJoints = [];
   FeedbackRenderer.drawSkeleton(ctx, lm, w, h, exDef, failingJoints);
 
   // 6. VOICE COACH
-  if (FormAnalyzer.priorityError) {
-    VoiceCoach.speakCorrection(FormAnalyzer.priorityError.voice);
-  } else {
-    VoiceCoach._errorStartTime = 0;
-  }
+  VoiceCoach._errorStartTime = 0;
 
   // 7. SESSION RECORDER
   SessionRecorder.sampleForm(formScore);
