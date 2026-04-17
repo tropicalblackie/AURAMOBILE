@@ -6156,19 +6156,16 @@ const RepCounter = {
         break;
 
       case 'concentric':
-        if (angle > upThresh) {
+        if (angle > upThresh - 5) {
           this.phaseFrames++;
           if (this.phaseFrames >= this.HYSTERESIS) {
             this.concentricDuration = now - (this.eccentricEntryTime + this.eccentricDuration);
-            var tempoOk = this.eccentricDuration >= 200 && this.eccentricDuration <= 8000;
-            if (tempoOk) {
+            var romDropped = this.minROM < upThresh - 20;
+            if (romDropped) {
               this.reps++;
               var quality = this._calcRepQuality(formScore, romThresh);
               this.repQualities.push(quality);
               result = 'rep';
-            } else if (this.minROM <= romThresh + 15) {
-              this.partialReps++;
-              result = 'partial';
             }
             this.phase = 'neutral';
             this.phaseFrames = 0;
