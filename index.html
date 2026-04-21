@@ -3786,6 +3786,8 @@ function wsOpenCamera(ex) {
   document.getElementById('ws-rep-target').textContent = '/' + targetReps;
   var camOv = document.getElementById('cam-ov');
   camOv.classList.add('on', 'ws-mode');
+  // Hide workout overlay - camera takes full screen
+  document.getElementById('ws-ov').style.display = 'none';
   document.getElementById('ws-active-ov').classList.remove('on');
   document.getElementById('ws-paused-ov').classList.remove('on');
   var pauseBtn = document.getElementById('ws-active-pause-btn');
@@ -3877,6 +3879,8 @@ function wsOnSetDone(manual) {
   // Close cam-ov workout mode
   var camOv = document.getElementById('cam-ov');
   camOv.classList.remove('on', 'ws-mode');
+  // Restore workout overlay
+  document.getElementById('ws-ov').style.display = '';
   document.getElementById('ws-countdown-ov').classList.remove('on');
   document.getElementById('ws-active-ov').classList.remove('on');
   document.getElementById('ws-paused-ov').classList.remove('on');
@@ -7029,6 +7033,9 @@ function closeCameraOv() {
   }
   _camOvWsCtx = null;
   document.getElementById('cam-ov').classList.remove('on');
+  // Restore workout overlay if it exists
+  var wsOv = document.getElementById('ws-ov');
+  if (wsOv) wsOv.style.display = '';
 }
 
 function camSelectPill(exId) {
