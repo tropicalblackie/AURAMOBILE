@@ -3841,7 +3841,21 @@ function wsBeginActivePhase() {
   document.getElementById('ws-countdown-ov').classList.remove('on');
   document.getElementById('ws-active-ov').classList.add('on');
   ws.paused = false;
-  startCamera();
+
+  // Start camera with timeout + error handling
+  var cameraTimeout = setTimeout(function() {
+    toast('❌ Camera timeout - riprova', 're');
+    wsOnSetDone();
+  }, 8000);
+
+  startCamera().catch(function(err) {
+    clearTimeout(cameraTimeout);
+    console.error('Camera startup failed:', err);
+    toast('❌ Camera fallita: ' + (err.message || 'sconosciuto'), 're');
+    wsOnSetDone();
+  }).then(function() {
+    clearTimeout(cameraTimeout);
+  });
 }
 
 function wsOnSetDone(manual) {
