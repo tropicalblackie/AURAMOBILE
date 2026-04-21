@@ -3237,14 +3237,25 @@ var _mediaPipeReady = null;
 function ensureMediaPipe() {
   if (_mediaPipeReady) return _mediaPipeReady;
   if (typeof Pose !== 'undefined' && typeof Camera !== 'undefined') {
+    console.log('✓ MediaPipe already loaded');
     _mediaPipeReady = Promise.resolve();
     return _mediaPipeReady;
   }
+  console.log('📚 Loading MediaPipe libraries...');
   _mediaPipeReady = loadScripts([
     'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
     'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
     'https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js'
-  ]);
+  ]).then(function() {
+    console.log('✓ MediaPipe loaded successfully');
+    if (typeof Pose === 'undefined' || typeof Camera === 'undefined') {
+      throw new Error('MediaPipe libraries defined but not available');
+    }
+  }).catch(function(err) {
+    console.error('✗ MediaPipe loading failed:', err);
+    _mediaPipeReady = null;
+    throw err;
+  });
   return _mediaPipeReady;
 }
 
@@ -6780,13 +6791,28 @@ async function startCamera() {
   var canvas = document.getElementById('cam-canvas');
   var skel = document.getElementById('skel-overlay');
 
+  if (!video || !canvas || !skel) {
+    console.error('Missing camera elements:', {video: !!video, canvas: !!canvas, skel: !!skel});
+    toast('❌ Errore UI - elementi mancanti', 're');
+    return;
+  }
+
   // Lazy-load MediaPipe libs on first use
   try {
     document.getElementById('cam-status-badge').className = 'cam-status rec';
-    document.getElementById('cam-status-badge').textContent = 'AVVIO';
-    await ensureMediaPipe();
+    document.getElementById('cam-status-badge').textContent = 'CARICAMENTO';
+    console.log('🔧 Starting camera initialization...');
+
+    // Load with 12s timeout
+    var mpPromise = ensureMediaPipe();
+    var timeoutPromise = new Promise(function(_, reject) {
+      setTimeout(function() { reject(new Error('MediaPipe load timeout')); }, 12000);
+    });
+    await Promise.race([mpPromise, timeoutPromise]);
+    console.log('✓ MediaPipe ready');
   } catch(e) {
-    toast('Errore caricamento MediaPipe', 're');
+    console.error('MediaPipe error:', e);
+    toast('❌ ' + (e.message === 'MediaPipe load timeout' ? 'WiFi lento - riprova' : 'Errore librerie AI'), 're');
     document.getElementById('cam-status-badge').className = 'cam-status off';
     document.getElementById('cam-status-badge').textContent = 'ERRORE';
     return;
