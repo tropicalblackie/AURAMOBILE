@@ -3237,14 +3237,25 @@ var _mediaPipeReady = null;
 function ensureMediaPipe() {
   if (_mediaPipeReady) return _mediaPipeReady;
   if (typeof Pose !== 'undefined' && typeof Camera !== 'undefined') {
+    console.log('✓ MediaPipe already loaded');
     _mediaPipeReady = Promise.resolve();
     return _mediaPipeReady;
   }
+  console.log('📚 Loading MediaPipe libraries...');
   _mediaPipeReady = loadScripts([
     'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
     'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
     'https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js'
-  ]);
+  ]).then(function() {
+    console.log('✓ MediaPipe loaded successfully');
+    if (typeof Pose === 'undefined' || typeof Camera === 'undefined') {
+      throw new Error('MediaPipe libraries defined but not available');
+    }
+  }).catch(function(err) {
+    console.error('✗ MediaPipe loading failed:', err);
+    _mediaPipeReady = null;
+    throw err;
+  });
   return _mediaPipeReady;
 }
 
@@ -3273,26 +3284,26 @@ function ensureFirebase() {
 const EXERCISES = [
   // GAMBE
   {id:'squat',         name:'Squat a corpo libero',    muscle:'Gambe',  emoji:'🦵',diff:'Principiante', sets:4,reps:'12-15',gif:'https://upload.wikimedia.org/wikipedia/commons/4/4f/Squats_wbs.gif',                   desc:'Il fondamentale del lower body. Costruisce quadricipiti, glutei e posteriori.',steps:['Piedi larghezza spalle, punte leggermente aperte','Schiena neutra, petto alto, sguardo avanti','Piega le ginocchia spingendole verso le punte dei piedi','Scendi fino a cosce parallele, poi spingi coi talloni']},
-  {id:'lunge_f',       name:'Affondi frontali',        muscle:'Gambe',  emoji:'🚶',diff:'Principiante', sets:3,reps:'10-12',gif:'https://media.tenor.com/images/0c3ce7d0a6c3e0b8c3c3c3c3/tenor.gif',                   desc:'Rinforza quadricipiti, glutei e migliora l\'equilibrio.',steps:['In piedi, passo avanti lungo','Scendi finché il ginocchio posteriore sfiora terra','Ginocchio frontale mai oltre la punta del piede','Spingi col tallone anteriore per tornare su']},
-  {id:'lunge_b',       name:'Affondi posteriori',      muscle:'Gambe',  emoji:'↩️',diff:'Principiante', sets:3,reps:'10-12',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Variante con meno stress sul ginocchio, ottima per mobilità anca.',steps:['In piedi, fai un passo indietro','Scendi verticalmente con il busto eretto','Ginocchio posteriore verso terra','Spingi col piede anteriore e torna su']},
-  {id:'bulgarian',     name:'Squat Bulgaro',           muscle:'Gambe',  emoji:'🏔️',diff:'Intermedio',   sets:3,reps:'8-10', gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Split squat avanzato per glutei e quad, grande attivazione monolaterale.',steps:['Piede posteriore su una sedia/panca','Scendi fino al ginocchio posteriore vicino a terra','Busto eretto, ginocchio anteriore sopra il piede','Spingi col tallone anteriore per salire']},
-  {id:'lateral_lunge', name:'Affondi laterali',        muscle:'Gambe',  emoji:'↔️',diff:'Principiante', sets:3,reps:'10-12',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Sviluppa adduttori e abduttori, migliora la mobilità laterale.',steps:['In piedi, passo laterale ampio','Piega il ginocchio del lato in cui ti sposti','Schiena dritta, busto leggermente inclinato','Spingi col tallone per tornare al centro']},
-  {id:'calf_raise',    name:'Sollevamento polpacci',   muscle:'Gambe',  emoji:'👣',diff:'Principiante', sets:3,reps:'15-20',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Isola e sviluppa i polpacci (gastrocnemio e soleo).',steps:['In piedi su una superficie piana','Sali sulle punte dei piedi più in alto possibile','Tieniti un secondo in cima','Scendi lentamente per il massimo stretch']},
-  {id:'glute_bridge',  name:'Ponte per i glutei',      muscle:'Gambe',  emoji:'🍑',diff:'Principiante', sets:3,reps:'15-20',gif:'https://media.tenor.com/images/placeholder-exercise.gif',             desc:'Attiva glutei, core e posteriori. Ottimo per chi sta seduto molto.',steps:['Sdraiato, ginocchia piegate, piedi a terra','Spingi i fianchi verso il soffitto contraendo i glutei','Tieni un secondo in cima con i glutei stretti','Scendi lentamente senza toccare terra']},
+  {id:'lunge_f',       name:'Affondi frontali',        muscle:'Gambe',  emoji:'🚶',diff:'Principiante', sets:3,reps:'10-12',gif:'https://www.youtube.com/embed/Z2gRFHWM0eM?start=0&end=30',                   desc:'Rinforza quadricipiti, glutei e migliora l\'equilibrio.',steps:['In piedi, passo avanti lungo','Scendi finché il ginocchio posteriore sfiora terra','Ginocchio frontale mai oltre la punta del piede','Spingi col tallone anteriore per tornare su']},
+  {id:'lunge_b',       name:'Affondi posteriori',      muscle:'Gambe',  emoji:'↩️',diff:'Principiante', sets:3,reps:'10-12',gif:'https://www.youtube.com/embed/Bq9BbdmVzdo?start=0&end=30',                                                                                    desc:'Variante con meno stress sul ginocchio, ottima per mobilità anca.',steps:['In piedi, fai un passo indietro','Scendi verticalmente con il busto eretto','Ginocchio posteriore verso terra','Spingi col piede anteriore e torna su']},
+  {id:'bulgarian',     name:'Squat Bulgaro',           muscle:'Gambe',  emoji:'🏔️',diff:'Intermedio',   sets:3,reps:'8-10', gif:'https://www.youtube.com/embed/Ov0sZvHxxMI?start=0&end=30',                                                                                    desc:'Split squat avanzato per glutei e quad, grande attivazione monolaterale.',steps:['Piede posteriore su una sedia/panca','Scendi fino al ginocchio posteriore vicino a terra','Busto eretto, ginocchio anteriore sopra il piede','Spingi col tallone anteriore per salire']},
+  {id:'lateral_lunge', name:'Affondi laterali',        muscle:'Gambe',  emoji:'↔️',diff:'Principiante', sets:3,reps:'10-12',gif:'https://www.youtube.com/embed/G90LhFSNxu4?start=0&end=30',                                                                                    desc:'Sviluppa adduttori e abduttori, migliora la mobilità laterale.',steps:['In piedi, passo laterale ampio','Piega il ginocchio del lato in cui ti sposti','Schiena dritta, busto leggermente inclinato','Spingi col tallone per tornare al centro']},
+  {id:'calf_raise',    name:'Sollevamento polpacci',   muscle:'Gambe',  emoji:'👣',diff:'Principiante', sets:3,reps:'15-20',gif:'https://www.youtube.com/embed/6lh6z3kl08A?start=0&end=30',                                                                                    desc:'Isola e sviluppa i polpacci (gastrocnemio e soleo).',steps:['In piedi su una superficie piana','Sali sulle punte dei piedi più in alto possibile','Tieniti un secondo in cima','Scendi lentamente per il massimo stretch']},
+  {id:'glute_bridge',  name:'Ponte per i glutei',      muscle:'Gambe',  emoji:'🍑',diff:'Principiante', sets:3,reps:'15-20',gif:'https://www.youtube.com/embed/wZvwZpZoMXo?start=0&end=30',             desc:'Attiva glutei, core e posteriori. Ottimo per chi sta seduto molto.',steps:['Sdraiato, ginocchia piegate, piedi a terra','Spingi i fianchi verso il soffitto contraendo i glutei','Tieni un secondo in cima con i glutei stretti','Scendi lentamente senza toccare terra']},
   // PETTO
   {id:'pushup',        name:'Piegamenti sulle braccia',muscle:'Petto',  emoji:'💪',diff:'Principiante', sets:4,reps:'10-15',gif:'https://upload.wikimedia.org/wikipedia/commons/8/8f/Pushups.gif',                  desc:'Fondamentale a corpo libero per petto, spalle e tricipiti.',steps:['Plank alto, mani larghezza spalle','Core e glutei contratti','Abbassa il petto sfiorando il pavimento (gomiti a 45°)','Spingi esplosivamente tornando in plank']},
-  {id:'pike_pushup',   name:'Pike Push-ups',           muscle:'Spalle', emoji:'🔺',diff:'Intermedio',   sets:3,reps:'8-12', gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Sposta il carico sulle spalle formando una V con il corpo.',steps:['Posizione a V con fianchi alti','Testa punta verso il pavimento','Piega i gomiti abbassando la testa tra le mani','Spingi per tornare alla V']},
-  {id:'dips_chair',    name:'Dips su sedia',           muscle:'Braccia',emoji:'🪑',diff:'Principiante', sets:3,reps:'10-15',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Isola i tricipiti usando solo una sedia come appoggio.',steps:['Mani sul bordo di una sedia, gambe distese','Abbassa il corpo piegando i gomiti a 90°','Schiena vicina alla sedia, non allontanarti','Spingi coi tricipiti per tornare su']},
+  {id:'pike_pushup',   name:'Pike Push-ups',           muscle:'Spalle', emoji:'🔺',diff:'Intermedio',   sets:3,reps:'8-12', gif:'https://www.youtube.com/embed/r_t9Nv_u3Ek?start=0&end=30',                                                                                    desc:'Sposta il carico sulle spalle formando una V con il corpo.',steps:['Posizione a V con fianchi alti','Testa punta verso il pavimento','Piega i gomiti abbassando la testa tra le mani','Spingi per tornare alla V']},
+  {id:'dips_chair',    name:'Dips su sedia',           muscle:'Braccia',emoji:'🪑',diff:'Principiante', sets:3,reps:'10-15',gif:'https://www.youtube.com/embed/QVpP_xPp0Cc?start=0&end=30',                                                                                    desc:'Isola i tricipiti usando solo una sedia come appoggio.',steps:['Mani sul bordo di una sedia, gambe distese','Abbassa il corpo piegando i gomiti a 90°','Schiena vicina alla sedia, non allontanarti','Spingi coi tricipiti per tornare su']},
   // CORE
-  {id:'plank',         name:'Plank',                   muscle:'Core',   emoji:'🧘',diff:'Principiante', sets:3,reps:'30-60 sec',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                desc:'Isometrico fondamentale per la stabilità del core e della colonna.',steps:['Avambracci e punte dei piedi come appoggio','Corpo in linea retta testa-talloni','Core, glutei e quads contratti','Respira normalmente, non alzare né abbassare i fianchi']},
-  {id:'side_plank',    name:'Plank laterale',          muscle:'Core',   emoji:'◀️',diff:'Principiante', sets:3,reps:'20-40 sec',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                               desc:'Rinforza il core laterale (obliqui e quadrato dei lombi).',steps:['Appoggiati su un avambraccio e il bordo del piede','Corpo in linea retta laterale','Bacino alto — non lasciarlo scendere','Spingi il fianco verso il soffitto']},
+  {id:'plank',         name:'Plank',                   muscle:'Core',   emoji:'🧘',diff:'Principiante', sets:3,reps:'30-60 sec',gif:'https://www.youtube.com/embed/1z2jJJV8cuY?start=0&end=30',                desc:'Isometrico fondamentale per la stabilità del core e della colonna.',steps:['Avambracci e punte dei piedi come appoggio','Corpo in linea retta testa-talloni','Core, glutei e quads contratti','Respira normalmente, non alzare né abbassare i fianchi']},
+  {id:'side_plank',    name:'Plank laterale',          muscle:'Core',   emoji:'◀️',diff:'Principiante', sets:3,reps:'20-40 sec',gif:'https://www.youtube.com/embed/lWxawJvC4jI?start=0&end=30',                                                                               desc:'Rinforza il core laterale (obliqui e quadrato dei lombi).',steps:['Appoggiati su un avambraccio e il bordo del piede','Corpo in linea retta laterale','Bacino alto — non lasciarlo scendere','Spingi il fianco verso il soffitto']},
   {id:'crunch',        name:'Crunch addominali',       muscle:'Core',   emoji:'🦴',diff:'Principiante', sets:3,reps:'15-20',gif:'https://upload.wikimedia.org/wikipedia/commons/a/a0/Situps.gif',                 desc:'Classico e sicuro per i retti addominali.',steps:['Sdraiato, ginocchia piegate, piedi a terra','Mani alle tempie (non tirare il collo)','Solleva spalle e testa contraendo gli addominali','Espira in salita, scendi senza toccare completamente terra']},
-  {id:'vup',           name:'Addominali a V',          muscle:'Core',   emoji:'🔱',diff:'Intermedio',   sets:3,reps:'10-15',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                                    desc:'Versione avanzata del crunch: coinvolge retti superiori e inferiori.',steps:['Sdraiato disteso, braccia sopra la testa','Solleva contemporaneamente gambe tese e busto','Tocca i piedi o le tibie con le mani','Scendi lentamente senza toccare terra completamente']},
-  {id:'russian_twist', name:'Russian Twist',           muscle:'Core',   emoji:'🌀',diff:'Principiante', sets:3,reps:'20 (10/lato)',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                                                                            desc:'Lavora sugli obliqui con una rotazione del busto controllata.',steps:['Seduto a 45°, ginocchia piegate e piedi sollevati','Mani giunte al petto o con un peso','Ruota il busto a destra e sinistra alternando','Respira normalmente, movimento lento e ampio']},
+  {id:'vup',           name:'Addominali a V',          muscle:'Core',   emoji:'🔱',diff:'Intermedio',   sets:3,reps:'10-15',gif:'https://www.youtube.com/embed/gJfEiCe90B0?start=0&end=30',                                                                                    desc:'Versione avanzata del crunch: coinvolge retti superiori e inferiori.',steps:['Sdraiato disteso, braccia sopra la testa','Solleva contemporaneamente gambe tese e busto','Tocca i piedi o le tibie con le mani','Scendi lentamente senza toccare terra completamente']},
+  {id:'russian_twist', name:'Russian Twist',           muscle:'Core',   emoji:'🌀',diff:'Principiante', sets:3,reps:'20 (10/lato)',gif:'https://www.youtube.com/embed/1349XnVhy5I?start=0&end=30',                                                                            desc:'Lavora sugli obliqui con una rotazione del busto controllata.',steps:['Seduto a 45°, ginocchia piegate e piedi sollevati','Mani giunte al petto o con un peso','Ruota il busto a destra e sinistra alternando','Respira normalmente, movimento lento e ampio']},
   // SCHIENA
-  {id:'superman',      name:'Estensioni lombari',      muscle:'Schiena',emoji:'🦸',diff:'Principiante', sets:3,reps:'12-15',gif:'https://media.tenor.com/images/placeholder-exercise.gif',                desc:'Rinforza la catena posteriore: lombari, glutei e posteriori coscia.',steps:['Sdraiato a pancia in giù, braccia tese in avanti','Solleva contemporaneamente petto, braccia e cosce','Tieni 1-2 secondi in cima contraendo glutei e lombari','Sguardo a terra per non iperestendere il collo']},
+  {id:'superman',      name:'Estensioni lombari',      muscle:'Schiena',emoji:'🦸',diff:'Principiante', sets:3,reps:'12-15',gif:'https://www.youtube.com/embed/xONbHR9qfLc?start=0&end=30',                desc:'Rinforza la catena posteriore: lombari, glutei e posteriori coscia.',steps:['Sdraiato a pancia in giù, braccia tese in avanti','Solleva contemporaneamente petto, braccia e cosce','Tieni 1-2 secondi in cima contraendo glutei e lombari','Sguardo a terra per non iperestendere il collo']},
   // CARDIO
-  {id:'mountain_climber',name:'Mountain Climbers',     muscle:'Cardio', emoji:'🧗',diff:'Intermedio',   sets:3,reps:'20-30 sec',gif:'https://media.tenor.com/images/placeholder-exercise.gif',    desc:'Esercizio cardio totale: core, spalle e cardio in un unico movimento.',steps:['Posizione di plank alto','Porta alternamente le ginocchia verso il petto','Mantieni i fianchi stabili (non rimbalzare)','Più veloce per cardio, più lento per core']},
+  {id:'mountain_climber',name:'Mountain Climbers',     muscle:'Cardio', emoji:'🧗',diff:'Intermedio',   sets:3,reps:'20-30 sec',gif:'https://www.youtube.com/embed/nmwgirgXLYM?start=0&end=30',    desc:'Esercizio cardio totale: core, spalle e cardio in un unico movimento.',steps:['Posizione di plank alto','Porta alternamente le ginocchia verso il petto','Mantieni i fianchi stabili (non rimbalzare)','Più veloce per cardio, più lento per core']},
   {id:'burpee',         name:'Burpees',                muscle:'Cardio', emoji:'🔥',diff:'Avanzato',     sets:3,reps:'10-15',gif:'https://upload.wikimedia.org/wikipedia/commons/d/df/Burpee.gif',                   desc:'Full-body ad alta intensità: forza, cardio ed esplosività.',steps:['In piedi → squat con mani a terra','Salta i piedi indietro in plank (opzionale un piegamento)','Riporta i piedi alle mani','Salta esplosivamente con braccia sopra la testa']},
   {id:'jumping_jack',   name:'Jumping Jacks',          muscle:'Cardio', emoji:'⭐',diff:'Principiante', sets:3,reps:'30-45 sec',gif:'https://upload.wikimedia.org/wikipedia/commons/a/ac/Jumpingjacks.gif',        desc:'Riscaldamento e cardio classico, attiva tutto il corpo.',steps:['In piedi con gambe unite e braccia lungo i fianchi','Salta aprendo gambe e portando le braccia sopra la testa','Salta tornando alla posizione iniziale','Mantieni un ritmo regolare']},
   {id:'high_knees',     name:'Ginocchia al petto',     muscle:'Cardio', emoji:'🏃',diff:'Principiante', sets:3,reps:'30-45 sec',gif:'https://upload.wikimedia.org/wikipedia/commons/4/4e/High_knees.gif',           desc:'Cardio a basso impatto: migliora la coordinazione e brucia calorie.',steps:['In piedi, corri sul posto','Solleva le ginocchia sopra la linea dei fianchi','Busto eretto — non piegarti indietro','Pompa le braccia al ritmo delle gambe']},
@@ -6780,13 +6791,28 @@ async function startCamera() {
   var canvas = document.getElementById('cam-canvas');
   var skel = document.getElementById('skel-overlay');
 
+  if (!video || !canvas || !skel) {
+    console.error('Missing camera elements:', {video: !!video, canvas: !!canvas, skel: !!skel});
+    toast('❌ Errore UI - elementi mancanti', 're');
+    return;
+  }
+
   // Lazy-load MediaPipe libs on first use
   try {
     document.getElementById('cam-status-badge').className = 'cam-status rec';
-    document.getElementById('cam-status-badge').textContent = 'AVVIO';
-    await ensureMediaPipe();
+    document.getElementById('cam-status-badge').textContent = 'CARICAMENTO';
+    console.log('🔧 Starting camera initialization...');
+
+    // Load with 12s timeout
+    var mpPromise = ensureMediaPipe();
+    var timeoutPromise = new Promise(function(_, reject) {
+      setTimeout(function() { reject(new Error('MediaPipe load timeout')); }, 12000);
+    });
+    await Promise.race([mpPromise, timeoutPromise]);
+    console.log('✓ MediaPipe ready');
   } catch(e) {
-    toast('Errore caricamento MediaPipe', 're');
+    console.error('MediaPipe error:', e);
+    toast('❌ ' + (e.message === 'MediaPipe load timeout' ? 'WiFi lento - riprova' : 'Errore librerie AI'), 're');
     document.getElementById('cam-status-badge').className = 'cam-status off';
     document.getElementById('cam-status-badge').textContent = 'ERRORE';
     return;
